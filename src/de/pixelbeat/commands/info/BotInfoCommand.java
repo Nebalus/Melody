@@ -18,7 +18,10 @@ public class BotInfoCommand implements ServerCommand{
 
 	private int membersDeserving = 0;
 	
-
+	public BotInfoCommand() {
+		
+	}
+	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
 		Guild guild = channel.getGuild();
@@ -43,9 +46,12 @@ public class BotInfoCommand implements ServerCommand{
 		channel.sendMessage(builder.build()).queue();
 		membersDeserving = 0;
 	}
-
 	
-	public static String botstart() {
+	public int getCooldown() {
+		return 5;
+	}
+	
+	public String botstart() {
 		Date date = new Date(PixelBeat.startuptime);
 		String DateFormat = new SimpleDateFormat("EEE, d MMM HH:mm:ss yyyy").format(date);
 		return DateFormat;

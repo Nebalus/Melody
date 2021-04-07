@@ -1,6 +1,5 @@
 package de.pixelbeat.music;
 
-import java.awt.Color;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,11 +12,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import de.pixelbeat.ConsoleLogger;
 import de.pixelbeat.LiteSQL;
 import de.pixelbeat.PixelBeat;
-import de.pixelbeat.utils.Misc;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceDeafenEvent;

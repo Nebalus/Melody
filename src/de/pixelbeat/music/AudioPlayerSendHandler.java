@@ -1,6 +1,5 @@
 package de.pixelbeat.music;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -27,8 +26,7 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
 
 	  @Override
 	  public ByteBuffer provide20MsAudio() {
-	    ((Buffer) buffer).flip();
-	    return buffer;
+	    return buffer.flip();
 	  }
 
 	  @Override
