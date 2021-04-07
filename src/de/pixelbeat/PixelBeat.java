@@ -48,7 +48,7 @@ public class PixelBeat {
 	
 	public static int uptime; 
 	public static long startuptime; 
-	public static String version = "Alpha 0.3";
+	public static String version = "Alpha 0.4.1a";
 	
 	public static final Color HEXEmbeld = Color.decode("#32a87f");
 	public static final Color HEXEmbeldError = Color.decode("#db3b9e");
@@ -90,9 +90,9 @@ public class PixelBeat {
 		if(hasDisplay) {
 			LoadingGUI.bar.setValue(15);
 		}
-		MusicUtil.loadDomains();
-		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault("Your Token");
-		configureMemoryUsage(builder);   
+		MusicUtil.loadDomains();//
+		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault("Tokan");
+		configureMemoryUsage(builder);   //
 		if(hasDisplay) {
 			LoadingGUI.bar.setValue(50);
 		}

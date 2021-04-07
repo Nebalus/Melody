@@ -149,6 +149,7 @@ public class TrackScheduler extends AudioEventAdapter{
 		 EmbedBuilder builder = new EmbedBuilder();
 		 builder.setDescription("An error occured.");
 		 builder.addField("Errorcode",exception.getMessage()+"", false);
+		 exception.printStackTrace();
 		 MusicUtil.sendEmbled(guildid, builder);
 	 }
 }
