@@ -2,7 +2,6 @@ package de.pixelbeat.commands.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
-import de.pixelbeat.ConsoleLogger;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
@@ -22,7 +21,6 @@ public class SkipCommand implements ServerCommand{
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
 		String[] args = message.getContentDisplay().split(" ");
-		long guild = m.getGuild().getIdLong();
 		GuildVoiceState state;
 		if((state = m.getVoiceState()) != null) {
 			VoiceChannel vc;

@@ -16,6 +16,7 @@ import de.pixelbeat.commands.music.QueueCommand;
 import de.pixelbeat.commands.music.ResumeCommand;
 import de.pixelbeat.commands.music.SkipCommand;
 import de.pixelbeat.commands.music.StopCommand;
+import de.pixelbeat.commands.music.TrackinfoCommand;
 import de.pixelbeat.commands.music.VolumeCommand;
 import de.pixelbeat.commands.types.ServerCommand;
 import net.dv8tion.jda.api.entities.Member;
@@ -46,6 +47,8 @@ public class CommandManager {
 		this.commands.put("stop",new StopCommand());
 		this.commands.put("l",new LeaveCommand());
 		this.commands.put("leave",new LeaveCommand());
+		this.commands.put("trackinfo",new TrackinfoCommand());
+		this.commands.put("ti",new TrackinfoCommand());
 		
 		this.commands.put("queue",new QueueCommand());
 		this.commands.put("q",new QueueCommand());

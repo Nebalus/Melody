@@ -12,7 +12,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import de.pixelbeat.ConsoleLogger;
 import de.pixelbeat.LiteSQL;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.utils.Emojis;
@@ -145,11 +144,9 @@ public class TrackScheduler extends AudioEventAdapter{
 	  @Override
 	  public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
 		 long guildid = PixelBeat.INSTANCE.playerManager.getGuildByPlayerHash(player.hashCode());
-		 Guild guild = PixelBeat.INSTANCE.shardMan.getGuildById(guildid);	
 		 EmbedBuilder builder = new EmbedBuilder();
 		 builder.setDescription("An error occured.");
 		 builder.addField("Errorcode",exception.getMessage()+"", false);
-		 exception.printStackTrace();
 		 MusicUtil.sendEmbled(guildid, builder);
 	 }
 }

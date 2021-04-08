@@ -1,10 +1,8 @@
 package de.pixelbeat.utils;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.pixelbeat.ConsoleLogger;
 import de.pixelbeat.LiteSQL;
 import de.pixelbeat.PixelBeat;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -98,6 +96,7 @@ public class Misc {
 	}
 	
 	public static void sendEmbled(TextChannel channel, EmbedBuilder builder) {				
+		
 		builder.setColor(PixelBeat.HEXEmbeld);
 		channel.sendMessage(builder.build()).queue();
 	}
@@ -116,4 +115,5 @@ public class Misc {
 		//Würde eine JSON Codierung Empfelen
 		return 0l;
 	}
+
 }

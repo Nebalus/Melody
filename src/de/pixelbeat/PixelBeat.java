@@ -1,24 +1,21 @@
 package de.pixelbeat;
 
 import java.awt.Color;
-import java.awt.HeadlessException;
+import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.CodeSource;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.security.auth.login.LoginException;
-import javax.swing.JFrame;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
-import de.pixelbeat.gui.LoadingGUI;
-import de.pixelbeat.gui.MainGUI;
 import de.pixelbeat.listeners.CommandListener;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
@@ -56,72 +53,52 @@ public class PixelBeat {
 	
 	public static Boolean hasDisplay = false;
 	
-	public static void main(String[] args) {	
-		try {
-		JFrame testfordisplay = new JFrame();
-		hasDisplay = true;
-		}catch(HeadlessException | ExceptionInInitializerError e) {
-			ConsoleLogger.error("Bot", "No Display port found!!! :(");	
-			hasDisplay = false;
-		}
-		if(hasDisplay) {
-			new LoadingGUI();
-		}
-		
+	public static void main(String[] args) {		
 		try {
 			new PixelBeat();
 		} catch (LoginException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}
-		if(hasDisplay) {
-			new MainGUI();
-		}
 	}
 	
 	public PixelBeat() throws LoginException, IllegalArgumentException {
+		
+		    String fonts[] = 
+		      GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+
+		    for ( int i = 0; i < fonts.length; i++ )
+		    {
+		      System.out.println(fonts[i]);
+		    }
+		  
 		Long startupMillis;
 		startupMillis = System.currentTimeMillis();
 		INSTANCE = this;
-		if(hasDisplay) {
-			LoadingGUI.bar.setValue(5);
-		}
 		LiteSQL.connect();
 		Json.connect();
-		if(hasDisplay) {
-			LoadingGUI.bar.setValue(15);
-		}
-		MusicUtil.loadDomains();//
-		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault("Tokan");
-		configureMemoryUsage(builder);   //
-		if(hasDisplay) {
-			LoadingGUI.bar.setValue(50);
-		}
+
+		MusicUtil.loadDomains();
+		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault("YOUR TOKEN");
+		configureMemoryUsage(builder);   
+	
 		builder.addEventListeners(new CommandListener() , new MusicUtil());
 		builder.setActivity(Activity.playing("booting myself..."));
 		
 		this.audioPlayerManager = new DefaultAudioPlayerManager();
 		this.playerManager = new PlayerManager();
 		this.cmdMan = new CommandManager();
-		if(hasDisplay) {
-			LoadingGUI.bar.setValue(60);
-		}
 		
 		this.shardMan = builder.build();
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
 		AudioSourceManagers.registerLocalSource(audioPlayerManager);
 		audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
-		if(hasDisplay) {	
-			LoadingGUI.bar.setValue(90);
-		}
+		
 		startupMillis = System.currentTimeMillis() - startupMillis;
 		uptime = 0;
 		startuptime = System.currentTimeMillis();
 		
 		runLoop();
 		shutdown();
-		if(hasDisplay) {
-			LoadingGUI.bar.setValue(100);
-		}
 		ConsoleLogger.info("Bot", "Pixel-Beat online! ("+startupMillis+"ms)");
 	}
 	
@@ -143,9 +120,6 @@ public class PixelBeat {
 					Json.setTotalOnlineTime(Json.getTotalOnlineTime()+1l);
 					onCaculatingPlayedMusik();
 					//onCaculatingHeardMusic();
-					if(hasDisplay) {
-						MainGUI.updateUptime(Misc.uptime(uptime));
-					}
 				}
 			}
 			
@@ -275,7 +249,7 @@ public class PixelBeat {
 								+ " `-` When you dont like something in my config then you can easyly change it by typing `"+Misc.getGuildPrefix(g.getIdLong())+"config help`\n"
 								+ " `-` To change my prefix just type `"+Misc.getGuildPrefix(g.getIdLong())+"config prefix [newprefix]`\n"
 								+ " \n"
-								+ "**Otherwise have fun listening to the music from my service** ðŸŽ¶\n"
+								+ "**Otherwise have fun listening to the music from my service** "+ Emojis.MUSIC_NOTE+" \n"
 								+ "PS: Thanks a lot for your support, that you added me to your discord server! "+g.getJDA().getEmoteById(Emojis.ANIMATED_HEARTS).getAsMention()).queue();
 						try {
 							PreparedStatement ps = LiteSQL.getConnection().prepareStatement("INSERT INTO general(guildid,channelid) VALUES(?,?)");
@@ -342,7 +316,26 @@ public class PixelBeat {
 	    // Large guilds will only provide online members in their setup and thus reduce bandwidth if chunking is disabled.
 	    builder.setLargeThreshold(50);
 	}
+	
+	
 	public CommandManager getCmdMan() {
 		return cmdMan;
 	}
+	//gibt den Pfad dieser Jar-Datei zurück
+    public String getCurrentJarPath() {
+        String path = getJarPath();
+        if(path.endsWith(".jar")) {
+            return path.substring(0, path.lastIndexOf("/"));
+        }
+        return path;
+    }
+    
+    //gibt den absoluten Pfad inklusive Dateiname dieser Anwendung zurück
+    public String getJarPath() {
+        final CodeSource source = this.getClass().getProtectionDomain().getCodeSource();
+        if (source != null) {
+            return source.getLocation().getPath().replaceAll("%20", " ");
+        }
+        return null;
+    }
 }
