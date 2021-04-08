@@ -1,13 +1,11 @@
 package de.pixelbeat.commands;
 
-import java.nio.channels.Channel;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import de.pixelbeat.LiteSQL;
 import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.utils.Misc;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;

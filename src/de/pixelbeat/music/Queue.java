@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import de.pixelbeat.ConsoleLogger;
 import net.dv8tion.jda.api.entities.Member;
 
 public class Queue {

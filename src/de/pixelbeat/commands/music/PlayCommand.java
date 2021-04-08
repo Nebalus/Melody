@@ -2,7 +2,6 @@ package de.pixelbeat.commands.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
-import de.pixelbeat.ConsoleLogger;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.AudioLoadResult;
