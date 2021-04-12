@@ -14,6 +14,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import de.pixelbeat.LiteSQL;
 import de.pixelbeat.PixelBeat;
+import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
 import de.pixelbeat.utils.Misc;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -24,13 +25,14 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public class TrackScheduler extends AudioEventAdapter{
 
+	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
 	
 	@Override
 	public void onPlayerPause(AudioPlayer player) {
 		long guildid = PixelBeat.INSTANCE.playerManager.getGuildByPlayerHash(player.hashCode());
 		
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setDescription(Emojis.PAUSE+" Bot paused");
+		builder.setDescription(Emojis.PAUSE+" "+mf.format(guildid, "music.track.pause"));
 		MusicUtil.sendEmbled(guildid, builder);		
 	}
 	
@@ -39,7 +41,7 @@ public class TrackScheduler extends AudioEventAdapter{
 		long guildid = PixelBeat.INSTANCE.playerManager.getGuildByPlayerHash(player.hashCode());
 		
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setDescription(Emojis.RESUME+" Bot resumed");
+		builder.setDescription(Emojis.RESUME+" "+mf.format(guildid, "music.track.resume"));
 		MusicUtil.sendEmbled(guildid, builder);		
 	}
 	
@@ -60,8 +62,7 @@ public class TrackScheduler extends AudioEventAdapter{
 			
 			String url = info.uri;
 			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", false);
-			builder.addField("**Length**", MusicUtil.getTime(info,0l),true);
-			//builder.addField("Position in the queue", queue.getcurrentqueuesize()+"" ,true);
+			builder.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(info,0l),true);
 			
 			builder.setFooter("Requested by "+ m.getUser().getAsTag());
 			builder.setTimestamp(OffsetDateTime.now());

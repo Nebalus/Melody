@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.pixelbeat.commands.ConfigCommand;
 import de.pixelbeat.commands.info.BotInfoCommand;
+import de.pixelbeat.commands.info.GithubCommand;
 import de.pixelbeat.commands.info.InviteCommand;
 import de.pixelbeat.commands.info.PingCommand;
 import de.pixelbeat.commands.music.JoinCommand;
@@ -60,6 +61,7 @@ public class CommandManager {
 		this.commands.put("ping",new PingCommand());
 		this.commands.put("config",new ConfigCommand());
 		this.commands.put("invite",new InviteCommand());
+		this.commands.put("github",new GithubCommand());
 		
 		this.commands.put("loop",new LoopCommand());
 	}

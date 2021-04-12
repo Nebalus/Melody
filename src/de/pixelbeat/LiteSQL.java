@@ -16,8 +16,7 @@ public class LiteSQL {
 	private static Statement stmt;
 	public static void connect() {
 		conn = null;
-		
-			try {
+		try {
 			File file = new File("Datenbank.db");
 			if(!file.exists()) {
 				file.createNewFile();
@@ -28,10 +27,9 @@ public class LiteSQL {
 			ConsoleLogger.info("SQLDatabase", "Verbindung zur Datenbank hergestellt");
 			stmt = conn.createStatement();
 			onCreate();
-			} catch (SQLException | IOException e1) {
-				e1.printStackTrace();
-			}
-		
+		} catch (SQLException | IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	
@@ -48,13 +46,13 @@ public class LiteSQL {
 	
 	
 	 public static boolean isConnected() {
-	    	return (conn == null ? false : true);
-	    }
+	    return (conn == null ? false : true);
+	 }
 	 
 	 
 	 public static Connection getConnection() {
-	    	return conn;
-	    }
+	    return conn;
+	 }
 	
 	 
 	public static void onUpdate(String sql) {
@@ -73,8 +71,8 @@ public class LiteSQL {
 		}
 			return null;
 	}
-		public static void onCreate() {
-			LiteSQL.onUpdate("CREATE TABLE IF NOT EXISTs general(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, channelid INTEGER, volume INTEGER, pitch INTEGER, speed INTEGER , djrole INTEGER, prefix VARCHAR, ispremium BOOLEAN, voteskip BOOLEAN)");
-			LiteSQL.onUpdate("CREATE TABLE IF NOT EXISTs userdata(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, userid INTEGER)");	
-		}
+	public static void onCreate() {
+		LiteSQL.onUpdate("CREATE TABLE IF NOT EXISTs general(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, channelid INTEGER, volume INTEGER, pitch INTEGER, speed INTEGER , djrole INTEGER, prefix VARCHAR, ispremium BOOLEAN, voteskip BOOLEAN, language VARCHAR)");
+		LiteSQL.onUpdate("CREATE TABLE IF NOT EXISTs userdata(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, userid INTEGER)");	
+	}
 }

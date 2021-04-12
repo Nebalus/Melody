@@ -17,4 +17,5 @@ public class Emojis {
 	public final static String SINGLE_LOOP = "🔂";
 	public final static String QUEUE_LOOP = "🔁";
 	public final static String MUSIC_NOTE = "🎶";
+	public final static String INFINITY = "∞";
 }

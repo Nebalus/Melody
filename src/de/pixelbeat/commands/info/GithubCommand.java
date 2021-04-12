@@ -6,10 +6,11 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class InviteCommand implements ServerCommand{
+public class GithubCommand implements ServerCommand{
 
 	
+	
 	public void performCommand(Member m, TextChannel channel, Message message) {
-		channel.sendMessage(PixelBeat.INSTANCE.getMessageFormatter().format(channel.getGuild().getIdLong(), "feedback.info.invite", m.getAsMention(), "https://discord.com/oauth2/authorize?client_id=801856678063898644&scope=bot&permissions=8")).queue();
+		channel.sendMessage(PixelBeat.INSTANCE.getMessageFormatter().format(channel.getGuild().getIdLong(), "feedback.info.github", m.getAsMention(), "https://github.com/Nebalus/PixelBeat/")).queue();
 	}
 }

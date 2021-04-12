@@ -3,6 +3,7 @@ package de.pixelbeat.listeners;
 import java.util.List;
 
 import de.pixelbeat.PixelBeat;
+import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
 import de.pixelbeat.utils.Misc;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -14,6 +15,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class CommandListener extends ListenerAdapter{
 
+	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
 	
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
@@ -34,11 +36,11 @@ public class CommandListener extends ListenerAdapter{
 			
 					if(args.length > 0){
 						if(!PixelBeat.INSTANCE.getCmdMan().perform(args[0], event.getMember(), channel, event.getMessage())) {
-							channel.sendMessage(event.getJDA().getEmoteById(Emojis.ANIMATED_THINKING_EMOJI).getAsMention()+" `hmm, it looks like I don't know this command. Please use "+prefix+"help to see the command list.`").queue();
+							channel.sendMessage(event.getJDA().getEmoteById(Emojis.ANIMATED_THINKING_EMOJI).getAsMention()+" "+mf.format(guild.getIdLong(), "feedback.info.unknown-command",prefix)).queue();
 						}
 					}
 				}else if(MentionedUsers.contains(channel.getJDA().getSelfUser())) {
-					event.getChannel().sendMessage("**My prefix on this server is `"+prefix+"`**").queue();
+					event.getChannel().sendMessage(mf.format(guild.getIdLong(), "feedback.info.prefix",prefix)).queue();
 				}
 			}
 		}

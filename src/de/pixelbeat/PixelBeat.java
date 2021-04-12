@@ -20,6 +20,7 @@ import de.pixelbeat.listeners.CommandListener;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.music.PlayerManager;
+import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
 import de.pixelbeat.utils.Misc;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -39,13 +40,14 @@ public class PixelBeat {
 	public static PixelBeat INSTANCE;
 	public ShardManager shardMan;
 	private CommandManager cmdMan;
+	private MessageFormatter messageformatter;
 	private Thread loop;
 	public AudioPlayerManager audioPlayerManager;
 	public PlayerManager playerManager;
 	
 	public static int uptime; 
 	public static long startuptime; 
-	public static String version = "Alpha 0.4.1a";
+	public static String version = "Alpha 0.4.3";
 	
 	public static final Color HEXEmbeld = Color.decode("#32a87f");
 	public static final Color HEXEmbeldError = Color.decode("#db3b9e");
@@ -70,13 +72,13 @@ public class PixelBeat {
 		    {
 		      System.out.println(fonts[i]);
 		    }
-		  
 		Long startupMillis;
 		startupMillis = System.currentTimeMillis();
 		INSTANCE = this;
 		LiteSQL.connect();
+		messageformatter = new MessageFormatter();
 		Json.connect();
-
+		
 		MusicUtil.loadDomains();
 		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault("YOUR TOKEN");
 		configureMemoryUsage(builder);   
@@ -337,5 +339,8 @@ public class PixelBeat {
             return source.getLocation().getPath().replaceAll("%20", " ");
         }
         return null;
+    }
+    public MessageFormatter getMessageFormatter() {
+		return messageformatter;
     }
 }

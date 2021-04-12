@@ -23,7 +23,7 @@ public class Json {
 				file.createNewFile();
 				generateJsonFile(file);		
 			
-				JSONObject json = getJsonObject();
+				JSONObject json = getJsonObject(file);
 				json.put("PlayedMusicTime", 0l);
 				json.put("TotalOnlineTime", 0l);
 				FileWriter fw = new FileWriter(new File(file.getAbsolutePath()));
@@ -41,7 +41,7 @@ public class Json {
 		JSONObject json;
 		Long time = 0l;
 		try {
-			json = getJsonObject();
+			json = getJsonObject(file);
 			time = json.getLong("PlayedMusicTime");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,7 +51,7 @@ public class Json {
 	
 	public static void setPlayedMusicTime(Long time) {
 		try {
-			JSONObject json = getJsonObject();
+			JSONObject json = getJsonObject(file);
 			json.put("PlayedMusicTime", time);
 			FileWriter fw1 = new FileWriter(new File(file.getAbsolutePath()));
 			fw1.write(json.toString());
@@ -66,7 +66,7 @@ public class Json {
 		JSONObject json;
 		Long time = 0l;
 		try {
-			json = getJsonObject();
+			json = getJsonObject(file);
 			time = json.getLong("TotalOnlineTime");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,7 +76,7 @@ public class Json {
 	
 	public static void setTotalOnlineTime(Long time) {
 		try {
-			JSONObject json = getJsonObject();
+			JSONObject json = getJsonObject(file);
 			json.put("TotalOnlineTime", time);
 			FileWriter fw1 = new FileWriter(new File(file.getAbsolutePath()));
 			fw1.write(json.toString());
@@ -96,7 +96,7 @@ public class Json {
 			e.printStackTrace();
 		}
 	}
-	public static JSONObject getJsonObject() throws Exception {
+	public static JSONObject getJsonObject(File file) throws Exception {
 		String content = new String(Files.readAllBytes(Paths.get(file.toURI())), "UTF-8");
 		JSONObject json = new JSONObject(content);
 		return json;
