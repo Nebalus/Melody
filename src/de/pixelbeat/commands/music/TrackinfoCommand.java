@@ -6,6 +6,7 @@ import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
+import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Images;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -14,6 +15,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class TrackinfoCommand implements ServerCommand{
 
+	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
 		MusicUtil.updateChannel(channel);

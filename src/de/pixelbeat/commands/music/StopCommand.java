@@ -7,6 +7,7 @@ import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.music.Queue;
+import de.pixelbeat.speechpackets.MessageFormatter;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -15,6 +16,8 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public class StopCommand implements ServerCommand{
 
+	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
 		GuildVoiceState state;
@@ -34,5 +37,4 @@ public class StopCommand implements ServerCommand{
 			}
 		}	
 	}
-
 }

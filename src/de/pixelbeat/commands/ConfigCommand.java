@@ -4,7 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import de.pixelbeat.LiteSQL;
+import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
+import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Misc;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -12,16 +14,18 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 public class ConfigCommand implements ServerCommand{
-	public String SETTINGS_PREFIX_USAGE = "";
+	
+	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
 		String[] args = message.getContentDisplay().split(" ");
+		Long guildid = channel.getGuild().getIdLong();
 		if(args.length == 1) {
 			
 		}else if(args.length == 2) {
 			if(args[1].equalsIgnoreCase("prefix")) {
-				channel.sendMessage("**My prefix is ``"+Misc.getGuildPrefix(channel.getGuild().getIdLong())+"``**").queue();
+				channel.sendMessage(mf.format(guildid, "feedback.info.prefix",Misc.getGuildPrefix(channel.getGuild().getIdLong()))).queue();
 			}
 		}else if(args.length == 3) {
 			if(args[1].equalsIgnoreCase("prefix")) {

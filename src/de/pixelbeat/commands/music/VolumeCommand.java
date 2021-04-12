@@ -6,6 +6,7 @@ import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
+import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -14,6 +15,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class VolumeCommand implements ServerCommand{
 
+	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
 		String[] args = message.getContentDisplay().split(" ");
@@ -39,12 +42,12 @@ public class VolumeCommand implements ServerCommand{
 						EmbedBuilder builder = new EmbedBuilder();			
 						builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+ " " +m.getAsMention() + " the min volume you can use is 1!");
 						MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
-						}
-					}else {
-						EmbedBuilder builder = new EmbedBuilder();			
-						builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+ " " +m.getAsMention() + " the max volume you can use is 200!");
-						MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
-						}
+					}
+				}else {
+					EmbedBuilder builder = new EmbedBuilder();			
+					builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+ " " +m.getAsMention() + " the max volume you can use is 200!");
+					MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
+				}
 					
 			}catch(NumberFormatException e) {
 				EmbedBuilder builder = new EmbedBuilder();

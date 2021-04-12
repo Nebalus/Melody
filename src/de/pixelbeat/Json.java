@@ -96,8 +96,8 @@ public class Json {
 			e.printStackTrace();
 		}
 	}
-	public static JSONObject getJsonObject(File file) throws Exception {
-		String content = new String(Files.readAllBytes(Paths.get(file.toURI())), "UTF-8");
+	public static JSONObject getJsonObject(File jsonfile) throws Exception {
+		String content = new String(Files.readAllBytes(Paths.get(jsonfile.toURI())), "UTF-8");
 		JSONObject json = new JSONObject(content);
 		return json;
 	}

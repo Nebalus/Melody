@@ -6,6 +6,7 @@ import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.Queue;
+import de.pixelbeat.speechpackets.MessageFormatter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -13,6 +14,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class QueueCommand implements ServerCommand{
 
+	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
 		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(channel.getGuild().getIdLong());
@@ -40,7 +43,7 @@ public class QueueCommand implements ServerCommand{
 			}
 			list = list + "**"+(size-1)+" **\n";
 		}else {
-			list = "Oops im currently not playing any music!";
+			list = "Oops currently i am not playing any music!";
 		}
 		builder.setDescription(list);
 		channel.sendMessage(builder.build()).queue();
