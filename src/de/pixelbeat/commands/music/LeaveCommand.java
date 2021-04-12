@@ -6,6 +6,7 @@ import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
+import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -17,6 +18,8 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 public class LeaveCommand implements ServerCommand{
 
+	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
 		GuildVoiceState state;
@@ -33,15 +36,13 @@ public class LeaveCommand implements ServerCommand{
 				message.addReaction("U+1F44C").queue();
 			}else {
 				EmbedBuilder builder = new EmbedBuilder();
-				builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" I am probably not in a voice channel");
+				builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
 				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
 			}
-		}
-		else {
+		}else {
 			EmbedBuilder builder = new EmbedBuilder();
-			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" I am probably not in a voice channel");
+			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
 			MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
 		}
 	}
-
 }

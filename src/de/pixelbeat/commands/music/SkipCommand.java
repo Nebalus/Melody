@@ -7,6 +7,7 @@ import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.music.Queue;
+import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -17,7 +18,8 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public class SkipCommand implements ServerCommand{
 
-
+	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
 		String[] args = message.getContentDisplay().split(" ");

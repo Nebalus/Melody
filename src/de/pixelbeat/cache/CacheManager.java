@@ -3,7 +3,6 @@ package de.pixelbeat.cache;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.pixelbeat.PixelBeat;
-import de.pixelbeat.music.MusicController;
 
 public class CacheManager {
 

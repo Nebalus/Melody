@@ -1,6 +1,10 @@
 package de.pixelbeat.speechpackets;
 
 import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
@@ -15,9 +19,13 @@ public class MessageFormatter {
 	
 	public MessageFormatter() {
 		for (Languages language : Languages.values()) {
-			File file = new File(MessageFormatter.class.getResource("/de/pixelbeat/speechpackets/"+language.getFileName()).getPath());
 			try {
+				InputStream link = getClass().getResourceAsStream("/de/pixelbeat/speechpackets/"+language.getFileName());
+				File file = new File(language.getFileName());
+				Files.copy(link, file.getAbsoluteFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
+				
 				getJSONMessage.put(language, Json.getJsonObject(file));
+					
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

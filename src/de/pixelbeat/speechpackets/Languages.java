@@ -2,8 +2,8 @@ package de.pixelbeat.speechpackets;
 
 public enum Languages {
 
-	ENGLISH("English","English.json","EN");
-	//GERMAN("Deutsch", "German.json", "DE");
+	ENGLISH("English","English.json","EN"),
+	GERMAN("Deutsch", "German.json", "DE");
 	
 	String name;
 	String file;

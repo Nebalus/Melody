@@ -44,7 +44,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 								.addField(mf.format(guildid, "music.track.channel"), track.getInfo().author , true)
 								.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
 								.addField(mf.format(guildid, "music.track.position-in-queue"), QueueSize+"", true)
-								.addField(mf.format(guildid, "music.track.added-to-queue"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller)))+"", false);;
+								.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller)))+"", false);;
 							
 						if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
 							String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
@@ -76,7 +76,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 							.addField(mf.format(guildid, "music.track.channel"), track.getInfo().author , true)
 							.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
 							.addField(mf.format(guildid, "music.track.position-in-queue"), QueueSize+"", true)
-							.addField(mf.format(guildid, "music.track.added-to-queue"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller)))+"", false);
+							.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller)))+"", false);
 					
 					if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
 						String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
@@ -98,7 +98,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 						.addField(mf.format(guildid, "music.track.channel"), track.getInfo().author , true)
 						.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
 						.addField(mf.format(guildid, "music.track.position-in-queue"), QueueSize+"", true)
-						.addField(mf.format(guildid, "music.track.added-to-queue"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller)))+"", false);
+						.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller)))+"", false);
 				
 				if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
 					String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");

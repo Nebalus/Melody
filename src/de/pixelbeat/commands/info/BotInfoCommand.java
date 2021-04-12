@@ -17,11 +17,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class BotInfoCommand implements ServerCommand{
 
 	private int membersDeserving = 0;
-	
-	public BotInfoCommand() {
-		
-	}
-	
+
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
 		Guild guild = channel.getGuild();
@@ -34,16 +30,15 @@ public class BotInfoCommand implements ServerCommand{
 		builder.setColor(0x23cba7);
 		builder.setThumbnail(guild.getSelfMember().getUser().getAvatarUrl());
 		builder.setDescription(PixelBeat.INSTANCE.getMessageFormatter().format(channel.getGuild().getIdLong(), "feedback.info.botinfo",
-				"JDA",
-				PixelBeat.version,
-				serversRunning,
-				membersDeserving,
-				Misc.uptime(PixelBeat.uptime),
-				botstart(),
-				Misc.uptime(Json.getTotalOnlineTime()),
-				Misc.uptime(Json.getPlayedMusicTime()),
-				channel.getGuild().getSelfMember().getAsMention()
-				));
+			"JDA",
+			PixelBeat.version,
+			serversRunning,
+			membersDeserving,
+			Misc.uptime(PixelBeat.uptime),
+			botstart(),
+			Misc.uptime(Json.getTotalOnlineTime()),
+			Misc.uptime(Json.getPlayedMusicTime()),
+			channel.getGuild().getSelfMember().getAsMention()));
 		builder.setFooter("Made by Tyten#1665 with <3");
 		channel.sendMessage(builder.build()).queue();
 		membersDeserving = 0;
