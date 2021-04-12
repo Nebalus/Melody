@@ -33,15 +33,17 @@ public class BotInfoCommand implements ServerCommand{
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(0x23cba7);
 		builder.setThumbnail(guild.getSelfMember().getUser().getAvatarUrl());
-		builder.setDescription("Framework: JDA\n"
-				+ "Version: "+PixelBeat.version+"\n"
-				+ "Running on servers: "+serversRunning+"\n"
-				+ "Deserving members: "+membersDeserving+"\n"
-				+ "Uptime: "+Misc.uptime(PixelBeat.uptime)+"\n"
-				+ "Bot-Start: "+botstart()+"\n"
-				+ "Totaltimeonline: "+Misc.uptime(Json.getTotalOnlineTime())+"\n"
-				+ " \n"
-				+ "At the time you look at this, "+Misc.getUserInt()+" people listened for "+Misc.uptime(Json.getPlayedMusicTime())+" to music thru "+channel.getGuild().getSelfMember().getAsMention()+"!\n");
+		builder.setDescription(PixelBeat.INSTANCE.getMessageFormatter().format(channel.getGuild().getIdLong(), "feedback.info.botinfo",
+				"JDA",
+				PixelBeat.version,
+				serversRunning,
+				membersDeserving,
+				Misc.uptime(PixelBeat.uptime),
+				botstart(),
+				Misc.uptime(Json.getTotalOnlineTime()),
+				Misc.uptime(Json.getPlayedMusicTime()),
+				channel.getGuild().getSelfMember().getAsMention()
+				));
 		builder.setFooter("Made by Tyten#1665 with <3");
 		channel.sendMessage(builder.build()).queue();
 		membersDeserving = 0;
