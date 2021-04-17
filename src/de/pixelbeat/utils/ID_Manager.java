@@ -1,23 +1,19 @@
 package de.pixelbeat.utils;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class ID_Manager{
-
-		public static int zufall1;
-		public static int zufall2;
-		public static int zufall3;
-		public static int zufall4;
-		
-		public static ArrayList<String> getIDs = new ArrayList<String>();
-		
 		
 	public static String generateID() {
 		String zufallstr1;
 		String zufallstr2;
 		String zufallstr3;
 		String zufallstr4;
+		
+		int zufall1;
+		int zufall2;
+		int zufall3;
+		int zufall4;
 		
 		Random r = new Random();
 		zufall1 = r.nextInt(9999);
@@ -68,12 +64,6 @@ public class ID_Manager{
 				zufallstr4 = "0"+zufall4;
 		}
 		String genID = zufallstr1+"-"+zufallstr2+"-"+zufallstr3+"-"+zufallstr4;
-		if(getIDs.contains(genID)) {
-			return generateID();
-		}
-		getIDs.add(genID);
-		return genID;
-	}
-	
-	
+		return generateID();
+	}	
 }
