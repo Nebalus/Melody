@@ -53,12 +53,12 @@ public class PlayCommand implements ServerCommand{
 					}					
 				}else {
 					EmbedBuilder builder = new EmbedBuilder();
-					builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.user.bot-not-in-vc"));
+					builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.user-not-in-vc"));
 					MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
 				}
 			}else {
 				EmbedBuilder builder = new EmbedBuilder();
-				builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.user.bot-not-in-vc"));
+				builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.user-not-in-vc"));
 				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
 			}
 		}else {

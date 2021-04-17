@@ -37,6 +37,7 @@ public class BotInfoCommand implements ServerCommand{
 			Misc.uptime(PixelBeat.uptime),
 			botstart(),
 			Misc.uptime(Json.getTotalOnlineTime()),
+			Misc.getUserInt(),
 			Misc.uptime(Json.getPlayedMusicTime()),
 			channel.getGuild().getSelfMember().getAsMention()));
 		builder.setFooter("Made by Tyten#1665 with <3");

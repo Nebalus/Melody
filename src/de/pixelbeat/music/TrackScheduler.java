@@ -58,13 +58,12 @@ public class TrackScheduler extends AudioEventAdapter{
 			AudioTrackInfo info = track.getInfo();
 			Member m;
 			m = queue.getuserwhoqueued(0);
-			builder.setDescription(guild.getJDA().getEmoteById(Emojis.ANIMATED_PLAYING).getAsMention()+" Currently playing: "+ info.title);
-			
+			builder.setDescription(guild.getJDA().getEmoteById(Emojis.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guildid, "music.track.currently-playing")+ info.title);
 			String url = info.uri;
 			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", false);
 			builder.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(info,0l),true);
 			
-			builder.setFooter("Requested by "+ m.getUser().getAsTag());
+			builder.setFooter(mf.format(guildid, "music.user.who-requested")+ m.getUser().getAsTag());
 			builder.setTimestamp(OffsetDateTime.now());
 			if(url.startsWith("https://www.youtube.com/watch?v=")) {
 				String videoID = url.replace("https://www.youtube.com/watch?v=", "");

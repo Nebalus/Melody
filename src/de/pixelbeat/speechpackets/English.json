@@ -2,6 +2,7 @@
     "language.name": "English",
     "language.region": "Amerika",
     "language.code": "en_us",
+    
     "feedback.info.invite": "{0} here is my invite link which you can add me to your Discord server:\n\n Invitelink: {1}",
     "feedback.info.github": "{0} here is my Github page which you can see my Source Code:\n\n Github: {1}",
     "feedback.info.ping": "The latency of the bot is %dms",
@@ -10,9 +11,17 @@
     "feedback.info.unknown-command": "`hmm, it looks like I don't know this command. Please use {0}help to see the command list.`",
     "feedback.info.error.bot-no-permmisions": "I don't have enough permissions, please give me the following **Permisions**: `{0}`",
     "feedback.info.error.user-no-permmisions": "You don't have enough permissions **Permisions**: `{0}`",
+   
     "feedback.music.bot-not-in-vc": "I am not in a voice channel",
     "feedback.music.user-not-in-vc": "You are not in a voice channel",
     "feedback.music.error.non-whitelisted-domain": "The domain **{0}** is not whitelisted in my system",
+    
+    "music.user.who-requested": "Requested by ",
+    
+    "music.track.author": "Author: {0}",
+    "music.track.author-null": "Nobody",
+    "music.track.playing-nothing": "Nothing playing...",
+    "music.track.currently-playing": "Currently playing: ",
     "music.track.resume": "Bot resumed",
     "music.track.pause": "Bot paused",
     "music.track.length": "**Song Duration**",
@@ -20,6 +29,7 @@
     "music.track.added-to-queue": "Song added to queue",
     "music.track.position-in-queue": "**Position in queue**",
     "music.track.time-until-playing": "**Estimated time until playing**",
+    
     "music.playlist.empty": "The playlist you sent does not contain any songs or is set to private :(",
     "music.playlist.added-to-queue": "Playlist added to queue",
     "music.playlist.length": "**Playlist duration**",

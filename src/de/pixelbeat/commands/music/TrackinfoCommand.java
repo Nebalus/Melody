@@ -6,7 +6,6 @@ import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
-import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Images;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -14,8 +13,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 public class TrackinfoCommand implements ServerCommand{
-
-	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
@@ -25,9 +22,9 @@ public class TrackinfoCommand implements ServerCommand{
 		try {
 			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(channel.getGuild().getIdLong());
 			AudioTrack audiotrack = controller.getPlayer().getPlayingTrack();
-			channel.sendFile( Images.tracktojpg(audiotrack.getInfo().title,audiotrack.getPosition(),audiotrack.getDuration(),audiotrack.getInfo().author), "trackinfo.png").embed(builder.build()).queue();	
+			channel.sendFile(Images.tracktopng(audiotrack.getInfo().title,audiotrack.getPosition(),audiotrack.getDuration(),audiotrack.getInfo().author,channel.getGuild().getIdLong(),controller.getQueue().getWhoQueued().get(0)), "trackinfo.png").embed(builder.build()).queue();	
 		}catch (NullPointerException e) {
-			channel.sendFile( Images.tracktojpg(null,0,0,null), "trackinfo.png").embed(builder.build()).queue();	
+			channel.sendFile(Images.tracktopng(null,0,0,null,channel.getGuild().getIdLong(),null), "trackinfo.png").embed(builder.build()).queue();	
 		}
 	}
 }

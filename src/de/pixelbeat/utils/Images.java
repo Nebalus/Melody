@@ -6,14 +6,21 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
 import de.pixelbeat.PixelBeat;
+import de.pixelbeat.speechpackets.MessageFormatter;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Member;
 
 public class Images {
 
-	public static File tracktojpg(String trackname,long trackplaytime, long tracklength, String trackauthor) {
+	private static MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	
+	public static File tracktopng(String trackname,long trackplaytime, long tracklength, String trackauthor, Long guildid, Member userqueued) {
 		try {
 			BufferedImage background = ImageIO.read((Images.class.getResource("/trackinfo.png")));
 			
@@ -57,9 +64,10 @@ public class Images {
 					}
 			    }    
 			}else {
-				currenttrackname = "Nothing playing...";
+				
+				currenttrackname = mf.format(guildid,"music.track.playing-nothing");
 				}
-			graph.drawString("Currenty playing: "+currenttrackname, 69, 90);
+			graph.drawString(mf.format(guildid, "music.track.currently-playing")+currenttrackname, 69, 90);
 			
 			//Author text
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 23));
@@ -67,9 +75,9 @@ public class Images {
 			if(trackauthor != null) {
 				currenttrackauthor = trackauthor;
 			}else {
-				currenttrackauthor = "Nobody";
+				currenttrackauthor = mf.format(guildid, "music.track.author-null");
 			}
-			graph.drawString("Author: "+currenttrackauthor, 119, 160);
+			graph.drawString(mf.format(guildid, "music.track.author",currenttrackauthor), 119, 160);
 		
 			//Playing text
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 20));
@@ -90,8 +98,26 @@ public class Images {
 			}
 			graph.drawString(currenttracklength, 960,250);
 			
-			graph.dispose();
+			//Requested by text
+			graph.setFont(new Font("SansSerif",Font.PLAIN, 23));
+			graph.drawString(mf.format(guildid, "music.user.who-requested"), 25,height-95);
 			
+			graph.setFont(new Font("SansSerif",Font.PLAIN, 36));
+			
+			if(userqueued != null) {
+				InputStream avatar;
+				avatar = new URL(userqueued.getUser().getAvatarUrl()).openStream();
+				BufferedImage buffavatar = ImageIO.read(avatar);
+				graph.drawImage(buffavatar, 50, height-75, 50, 50, null);
+				graph.drawString(userqueued.getUser().getAsTag(), 112, height-35);
+			}else {
+				BufferedImage buffavatar = ImageIO.read((Images.class.getResource("/default-avatar.png")));
+				graph.drawImage(buffavatar, 50, height-75, 50, 50, null);	
+				graph.drawString("Nobody#0042", 112, height-35);
+			}	
+			
+			graph.dispose();
+		
 			
 			File images = new File(PixelBeat.INSTANCE.getCurrentJarPath()+"/images/");
 			if(!images.exists()) {

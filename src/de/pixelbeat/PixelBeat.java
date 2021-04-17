@@ -47,7 +47,7 @@ public class PixelBeat {
 	
 	public static int uptime; 
 	public static long startuptime; 
-	public static String version = "Alpha 0.4.3";
+	public static String version = "Alpha 0.4.4";
 	
 	public static final Color HEXEmbeld = Color.decode("#32a87f");
 	public static final Color HEXEmbeldError = Color.decode("#db3b9e");
@@ -80,8 +80,8 @@ public class PixelBeat {
 		Json.connect();
 		
 		MusicUtil.loadDomains();
-		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault("YOUR TOKEN");
-		configureMemoryUsage(builder);   
+		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault("");
+		configureMemoryUsage(builder); 
 	
 		builder.addEventListeners(new CommandListener() , new MusicUtil());
 		builder.setActivity(Activity.playing("booting myself..."));
