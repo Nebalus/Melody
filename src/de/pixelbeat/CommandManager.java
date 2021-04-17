@@ -15,7 +15,7 @@ import de.pixelbeat.commands.music.PlayCommand;
 import de.pixelbeat.commands.music.PlaylistCommand;
 import de.pixelbeat.commands.music.QueueCommand;
 import de.pixelbeat.commands.music.ResumeCommand;
-import de.pixelbeat.commands.music.SkipCommand;
+import de.pixelbeat.commands.music.NextCommand;
 import de.pixelbeat.commands.music.StopCommand;
 import de.pixelbeat.commands.music.TrackinfoCommand;
 import de.pixelbeat.commands.music.VolumeCommand;
@@ -42,20 +42,27 @@ public class CommandManager {
 		
 		this.commands.put("v",new VolumeCommand());
 		this.commands.put("volume",new VolumeCommand());
+		this.commands.put("vol",new VolumeCommand());
 		
 		this.commands.put("pause",new PauseCommand());
+		
 		this.commands.put("resume",new ResumeCommand());
+		this.commands.put("unpause",new ResumeCommand());
+		
 		this.commands.put("stop",new StopCommand());
+		
 		this.commands.put("l",new LeaveCommand());
 		this.commands.put("leave",new LeaveCommand());
+		
 		this.commands.put("trackinfo",new TrackinfoCommand());
 		this.commands.put("ti",new TrackinfoCommand());
 		
 		this.commands.put("queue",new QueueCommand());
 		this.commands.put("q",new QueueCommand());
 	
-		this.commands.put("skip", new SkipCommand());
-		this.commands.put("s", new SkipCommand());
+		this.commands.put("skip", new NextCommand());
+		this.commands.put("next", new NextCommand());
+		this.commands.put("n", new NextCommand());
 		
 		this.commands.put("botinfo",new BotInfoCommand());
 		this.commands.put("ping",new PingCommand());
