@@ -33,7 +33,7 @@ public class MessageFormatter {
 	}
 	
 	public String format(Long guildid, String key, Object... args) {
-		String message = "Json-Error";
+		String message = "JSON-Error {"+key+"}";
 	    try {
 			JSONObject json = getJSONMessage.get(getLanguageFromGuild(guildid));
 			message = json.getString(key);
