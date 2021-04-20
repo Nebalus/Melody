@@ -11,7 +11,6 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-
 import de.pixelbeat.LiteSQL;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.speechpackets.MessageFormatter;
@@ -56,25 +55,23 @@ public class TrackScheduler extends AudioEventAdapter{
 		if(queue.isLoop() == false && queue.isLoopQueue() == false) {
 			EmbedBuilder builder = new EmbedBuilder();
 			AudioTrackInfo info = track.getInfo();
-			Member m;
-			m = queue.getuserwhoqueued(0);
 			builder.setDescription(guild.getJDA().getEmoteById(Emojis.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guildid, "music.track.currently-playing")+ info.title);
 			String url = info.uri;
 			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", false);
 			builder.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(info,0l),true);
-			
+			Member m = queue.currentplaying.getWhoQueued();
 			builder.setFooter(mf.format(guildid, "music.user.who-requested")+ m.getUser().getAsTag());
 			builder.setTimestamp(OffsetDateTime.now());
 			if(url.startsWith("https://www.youtube.com/watch?v=")) {
 				String videoID = url.replace("https://www.youtube.com/watch?v=", "");
 			
-				//builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
-				builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
+				builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
+				//builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
 				MusicUtil.sendEmbled(guildid, builder);							
 			}else {
 				MusicUtil.sendEmbled(guildid, builder);
 			}
-				
+
 			VoiceChannel vc;
 			if((vc = controller.getGuild().getSelfMember().getVoiceState().getChannel()) != null) {
 				for(Member vcm : vc.getMembers()) {

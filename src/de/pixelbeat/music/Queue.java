@@ -76,15 +76,12 @@ public class Queue {
 			if(user != null) {
 				return user;
 			}
-			return null;
-		}catch(IndexOutOfBoundsException e) {
-			
-		}
+		}catch(IndexOutOfBoundsException e) {}
 		return null;	
 	}
 	
 	public Boolean trackexist() {
-		if(	this.controller.getPlayer().getPlayingTrack() == null) {
+		if(this.controller.getPlayer().getPlayingTrack() == null) {
 			return false;
 		}
 		return true;	
@@ -108,22 +105,22 @@ public class Queue {
 	
 	public boolean clearall() {
 		if(this.queuelist.size() >= 1) {
-				queuelist.clear();	
-				return true;
+			queuelist.clear();	
+			return true;
 		}
 		return false;
 	}
 	
 	public boolean nextexist() {
 		if(this.queuelist.size() >= 1) {
-				return true;
+			return true;
 		}
 		return false;
 	}
 	
 	public void addTrackToQueue(AudioTrack track, Member m) {
 		this.queuelist.add(new QueuedTrack(track, m));
-		if(controller.getPlayer().getPlayingTrack() == null) {
+		if(!trackexist()) {
 			next();
 		}
 	}

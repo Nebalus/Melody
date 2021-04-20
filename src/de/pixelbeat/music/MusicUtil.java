@@ -66,10 +66,8 @@ public class MusicUtil extends ListenerAdapter{
 	public static void sendEmbled(long guildid, EmbedBuilder builder) {		
 		TextChannel channel;
 		if((channel = getChannel(guildid)) != null) {
-			EmbedBuilder builder1 = new EmbedBuilder();
-			builder1 = builder;
-			builder1.setColor(PixelBeat.HEXEmbeld);
-			channel.sendMessage(builder1.build()).queue();
+			builder.setColor(PixelBeat.HEXEmbeld);
+			channel.sendMessage(builder.build()).queue();
 		}			
 	}
 	
