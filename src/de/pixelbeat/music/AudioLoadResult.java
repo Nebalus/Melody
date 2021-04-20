@@ -55,7 +55,6 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 					}
 				}
 				queue.addTrackToQueue(track,userWhoQueued);	
-				
 			}else {
 				queue.play(track);
 			}
