@@ -18,13 +18,20 @@ public class PlayerManager {
 		
 		if(this.controller.containsKey(guildid)) {
 			mc = this.controller.get(guildid);
-		}
-		else {
+		}else {
 			mc = new MusicController(PixelBeat.INSTANCE.shardMan.getGuildById(guildid));
 		
 			this.controller.put(guildid, mc);
 		}
 		return mc;
+	}
+	
+	public boolean clearController(long guildid) {	
+		if(this.controller.containsKey(guildid)) {
+			this.controller.remove(guildid);
+			return true;
+		}
+		return false;
 	}
 	
 	public long getGuildByPlayerHash(int hash) {

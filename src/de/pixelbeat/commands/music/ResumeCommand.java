@@ -7,8 +7,6 @@ import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.speechpackets.MessageFormatter;
-import de.pixelbeat.utils.Emojis;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -30,9 +28,7 @@ public class ResumeCommand implements ServerCommand{
 			AudioPlayer player = controller.getPlayer();
 			player.setPaused(false);
 		}else {
-			EmbedBuilder builder = new EmbedBuilder();
-			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
-			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
+			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
 		}
 	}
 }

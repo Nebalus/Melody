@@ -8,9 +8,7 @@ import de.pixelbeat.music.AudioLoadResult;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.speechpackets.MessageFormatter;
-import de.pixelbeat.utils.Emojis;
 import de.pixelbeat.utils.Misc;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -26,7 +24,6 @@ public class PlaylistCommand implements ServerCommand{
 	public void performCommand(Member m, TextChannel channel, Message message) {
 		String[] args = message.getContentDisplay().split(" ");
 		MusicUtil.updateChannel(channel);
-		EmbedBuilder builder = new EmbedBuilder();
 		if(args.length > 1) {
 			GuildVoiceState state;
 			VoiceChannel vc;
@@ -42,16 +39,13 @@ public class PlaylistCommand implements ServerCommand{
 					final String uri = url;
 					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, true, false, false));
 				}else {
-					builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomaene(url)));
-					MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
+					MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomaene(url)));
 				}					
 			}else {
-				builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.user-not-in-vc"));
-				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
+				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.user-not-in-vc"));
 			}
 		}else {
-			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" Please use "+Misc.getGuildPrefix(channel.getGuild().getIdLong())+"playlist <url>");
-			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
+			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), "Please use "+Misc.getGuildPrefix(channel.getGuild().getIdLong())+"playlist <url>");
 		}
 	}
 }

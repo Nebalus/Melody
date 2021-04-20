@@ -23,14 +23,13 @@ public class QueueCommand implements ServerCommand{
 		EmbedBuilder builder = new EmbedBuilder();
 		Queue queue = controller.getQueue();
 		
-		
 		builder.setTitle("**Queue for "+channel.getGuild().getName()+"**");
 		
 		String list = null;
 		
 		if(controller.getPlayer().getPlayingTrack() != null) {
-			list = "Currently playing:\n"
-					+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | Requested by: "+queue.currentplaying.getWhoQueued().getUser().getAsTag()+" \n"
+			list = mf.format(channel.getGuild().getIdLong(), "music.track.currently-playing")+"\n"
+					+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(channel.getGuild().getIdLong(), "music.user.who-requested")+queue.currentplaying.getWhoQueued().getUser().getAsTag()+" \n"
 					+ " \n";
 			int size = 1;
 			for(QueuedTrack qt : queue.getQueuelist()) {
@@ -39,14 +38,14 @@ public class QueueCommand implements ServerCommand{
 					if(size == 1) {
 						list = list + "In queue:\n";
 					}
-						list = list + "``"+size+"`` - ["+ at.getInfo().title+"]("+at.getInfo().uri+") | ``Requested by: "+qt.getWhoQueued().getUser().getAsTag()+"``\n"
+						list = list + "``"+size+"`` - ["+ at.getInfo().title+"]("+at.getInfo().uri+") | ``"+mf.format(channel.getGuild().getIdLong(), "music.user.who-requested")+qt.getWhoQueued().getUser().getAsTag()+"``\n"
 								+ " \n";
 				}
 				size++;
 			}
 			list = list + "**"+(size-1)+" **\n";
 		}else {
-			list = "Oops currently i am not playing any music!";
+			list = mf.format(channel.getGuild().getIdLong(), "music.info.currently-playing-null");
 		}
 		builder.setDescription(list);
 		channel.sendMessage(builder.build()).queue();

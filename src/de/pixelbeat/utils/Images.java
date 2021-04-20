@@ -62,8 +62,7 @@ public class Images {
 						currentcharacters++;
 					}
 			    }    
-			}else {
-				
+			}else {	
 				currenttrackname = mf.format(guildid,"music.track.playing-nothing");
 				}
 			graph.drawString(mf.format(guildid, "music.track.currently-playing")+currenttrackname, 69, 90);
@@ -79,9 +78,7 @@ public class Images {
 			graph.drawString(mf.format(guildid, "music.track.author",currenttrackauthor), 119, 160);
 		
 			//Playing text
-			graph.setFont(new Font("SansSerif",Font.PLAIN, 20));
-			
-			
+			graph.setFont(new Font("SansSerif",Font.PLAIN, 20));	
 			
 			String currenttrackplaytime = getTimeFormat(trackplaytime);
 			if(currenttrackplaytime == null) {
@@ -105,7 +102,11 @@ public class Images {
 			
 			if(userqueued != null) {
 				InputStream avatar;
-				avatar = new URL(userqueued.getUser().getAvatarUrl()).openStream();
+				try {
+					avatar = new URL(userqueued.getUser().getAvatarUrl()).openStream();
+				}catch (Exception e) {
+					avatar = new URL(userqueued.getUser().getDefaultAvatarUrl()).openStream();
+				}
 				BufferedImage buffavatar = ImageIO.read(avatar);
 				graph.drawImage(buffavatar, 50, height-75, 50, 50, null);
 				graph.drawString(userqueued.getUser().getAsTag(), 112, height-35);
@@ -113,10 +114,8 @@ public class Images {
 				BufferedImage buffavatar = ImageIO.read((Images.class.getResource("/default-avatar.png")));
 				graph.drawImage(buffavatar, 50, height-75, 50, 50, null);	
 				graph.drawString("Nobody#0042", 112, height-35);
-			}	
-			
-			graph.dispose();
-		
+			}		
+			graph.dispose();	
 			
 			File images = new File(PixelBeat.INSTANCE.getCurrentJarPath()+"/images/");
 			if(!images.exists()) {
@@ -134,15 +133,13 @@ public class Images {
 		return null;
 	}
 	
-	private static String getTimeFormat(Long time) {
-		
+	private static String getTimeFormat(Long time) {		
 		if(time >= 1000) {
 			long sekunden = time/1000;
 			long minuten = sekunden/60;
 			long stunden = minuten/60;
 			sekunden %= 60;
 			minuten %= 60;
-			
 			String timeformat = "";
 			
 			if(stunden > 0) {

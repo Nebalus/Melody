@@ -8,7 +8,6 @@ import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -25,7 +24,6 @@ public class LoopCommand implements ServerCommand{
 
 		GuildVoiceState state;
 		VoiceChannel vc;
-		EmbedBuilder builder = new EmbedBuilder();
 		if((state = m.getGuild().getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
 			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());
 			AudioPlayer player = controller.getPlayer();
@@ -38,12 +36,10 @@ public class LoopCommand implements ServerCommand{
 					channel.sendMessage(Emojis.SINGLE_LOOP+mf.format(channel.getGuild().getIdLong(), "music.info.loop-enabled")).queue();
 				}	
 			}else {
-				builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+mf.format(channel.getGuild().getIdLong(), "music.info.currently-playing-null"));
-				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
+				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "music.info.currently-playing-null"));
 			}				
 		}else {
-			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
-			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
+			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
 		}
 	}
 }
