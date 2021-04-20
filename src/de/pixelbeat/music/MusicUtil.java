@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import de.pixelbeat.ConsoleLogger;
@@ -228,8 +227,8 @@ public class MusicUtil extends ListenerAdapter{
 		Queue queue = controller.getQueue();
 		AudioPlayer player = controller.getPlayer();
 		Long timeUntil = 0l;
-		for(AudioTrack track1 : queue.getQueuelist()) {
-			timeUntil = timeUntil + track1.getDuration();
+		for(QueuedTrack track1 : queue.getQueuelist()) {
+			timeUntil = timeUntil + track1.getTrack().getDuration();
 		}
 		timeUntil = timeUntil + player.getPlayingTrack().getDuration() - player.getPlayingTrack().getPosition();
 		return timeUntil;
