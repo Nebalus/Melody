@@ -15,6 +15,7 @@ import de.pixelbeat.commands.music.PlayCommand;
 import de.pixelbeat.commands.music.PlaylistCommand;
 import de.pixelbeat.commands.music.QueueCommand;
 import de.pixelbeat.commands.music.ResumeCommand;
+import de.pixelbeat.commands.music.ShuffelCommand;
 import de.pixelbeat.commands.music.NextCommand;
 import de.pixelbeat.commands.music.StopCommand;
 import de.pixelbeat.commands.music.TrackinfoCommand;
@@ -70,6 +71,8 @@ public class CommandManager {
 		this.commands.put("config",new ConfigCommand());
 		this.commands.put("invite",new InviteCommand());
 		this.commands.put("github",new GithubCommand());
+		
+		this.commands.put("shuffel",new ShuffelCommand());
 		
 		this.commands.put("loop",new LoopCommand());
 	}
