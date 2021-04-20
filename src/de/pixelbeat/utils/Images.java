@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.speechpackets.MessageFormatter;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 
 public class Images {
