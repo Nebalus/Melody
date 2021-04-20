@@ -27,6 +27,8 @@ public class StopCommand implements ServerCommand{
 			queue.clearall();
 			MusicUtil.getVoiceAfkTime.put(channel.getGuild().getIdLong(), 600l);
 			message.addReaction("U+1F44C").queue();
+		}else {
+			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "music.info.currently-playing-null"));
 		}	
 	}
 }

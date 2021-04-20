@@ -22,7 +22,13 @@ public class TrackinfoCommand implements ServerCommand{
 		try {
 			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(channel.getGuild().getIdLong());
 			AudioTrack audiotrack = controller.getPlayer().getPlayingTrack();
-			channel.sendFile(Images.tracktopng(audiotrack.getInfo().title,audiotrack.getPosition(),audiotrack.getDuration(),audiotrack.getInfo().author,channel.getGuild().getIdLong(),controller.getQueue().currentplaying.getWhoQueued()), "trackinfo.png").embed(builder.build()).queue();	
+			channel.sendFile(Images.tracktopng(audiotrack.getInfo().title
+					,audiotrack.getPosition()
+					,audiotrack.getDuration()
+					,audiotrack.getInfo().author
+					,channel.getGuild().getIdLong()
+					,controller.getQueue().currentplaying.getWhoQueued())
+					, "trackinfo.png").embed(builder.build()).queue();	
 		}catch (NullPointerException e) {
 			channel.sendFile(Images.tracktopng(null,0,0,null,channel.getGuild().getIdLong(),null), "trackinfo.png").embed(builder.build()).queue();	
 		}

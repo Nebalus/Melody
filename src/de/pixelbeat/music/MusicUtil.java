@@ -11,6 +11,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import de.pixelbeat.ConsoleLogger;
 import de.pixelbeat.LiteSQL;
 import de.pixelbeat.PixelBeat;
+import de.pixelbeat.utils.Emojis;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -30,8 +31,7 @@ public class MusicUtil extends ListenerAdapter{
 	
 	public static ArrayList<String> verifiedurl = new ArrayList<String>();
 	
-	public static void updateChannel(TextChannel channel) {
-		
+	public static void updateChannel(TextChannel channel) {	
 		try {
 			ResultSet set = LiteSQL.onQuery("SELECT channelid FROM general WHERE guildid = " + channel.getGuild().getIdLong());
 			if(set.next()) {
@@ -39,53 +39,50 @@ public class MusicUtil extends ListenerAdapter{
 					LiteSQL.onUpdate("UPDATE general SET channelid = " + channel.getIdLong() + " WHERE guildid = "+ channel.getGuild().getIdLong());
 				}
 			}
-
 		}catch(SQLException ex) {
 			ex.printStackTrace();
-		}
-		
+		}	
 	}
-	public static void sendEmbled(long guildid, EmbedBuilder builder) {
+	
+	private static TextChannel getChannel(long guildid) {
 		ResultSet set = LiteSQL.onQuery("SELECT channelid FROM general WHERE guildid = "+guildid);
-		EmbedBuilder builder1 = new EmbedBuilder();
-		builder1 = builder;
-		builder1.setColor(PixelBeat.HEXEmbeld);
 		try {
 			if(set.next()) {
 				long channelid = set.getLong("channelid");
-				
 				Guild guild;
 				if((guild = PixelBeat.INSTANCE.shardMan.getGuildById(guildid)) != null) {
 					TextChannel channel;
 					if((channel = guild.getTextChannelById(channelid)) != null) {
-						channel.sendMessage(builder1.build()).queue();
+						return channel;
 					}
 				}
 			}
 		}catch(SQLException ex) {
 			ex.printStackTrace();	
 		}
+		return null;
 	}
-	public static void sendEmbledError(long guildid, EmbedBuilder builder) {
-		ResultSet set = LiteSQL.onQuery("SELECT channelid FROM general WHERE guildid = "+guildid);
-		
-		try {
-			if(set.next()) {
-				long channelid = set.getLong("channelid");
-				
-				Guild guild;
-				if((guild = PixelBeat.INSTANCE.shardMan.getGuildById(guildid)) != null) {
-					TextChannel channel;
-					if((channel = guild.getTextChannelById(channelid)) != null) {
-						builder.setColor(PixelBeat.HEXEmbeldError);
-						channel.sendMessage(builder.build()).queue();
-					}
-				}
-			}
-		}catch(SQLException ex) {
-			
-		}
+	
+	public static void sendEmbled(long guildid, EmbedBuilder builder) {		
+		TextChannel channel;
+		if((channel = getChannel(guildid)) != null) {
+			EmbedBuilder builder1 = new EmbedBuilder();
+			builder1 = builder;
+			builder1.setColor(PixelBeat.HEXEmbeld);
+			channel.sendMessage(builder1.build()).queue();
+		}			
 	}
+	
+	public static void sendEmbledError(long guildid, String errormessage) {
+		TextChannel channel;
+		if((channel = getChannel(guildid)) != null) {
+			EmbedBuilder builder = new EmbedBuilder();
+			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+errormessage);
+			builder.setColor(PixelBeat.HEXEmbeldError);
+			channel.sendMessage(builder.build()).queue();
+		}				
+	}
+	
 	public static int getVolume(Long GuildID) {
 		try {
 			ResultSet rs = LiteSQL.onQuery("SELECT volume FROM general WHERE guildid = " + GuildID);	
@@ -99,6 +96,7 @@ public class MusicUtil extends ListenerAdapter{
 		}
 		return 50;
 	}
+	
 	public static Boolean setVolume(Long GuildID, int volume) {
 		ResultSet set = LiteSQL.onQuery("SELECT volume FROM general WHERE guildid = " + GuildID);
 		try {
@@ -168,10 +166,9 @@ public class MusicUtil extends ListenerAdapter{
 					}
 				}
 			}
-		}catch(IllegalStateException e) {
-			
-		}
+		}catch(IllegalStateException e) {}
 	}
+	
 	public static void AFKManager(Guild g) {
 		if(getVoiceAfkTime.containsKey(g.getIdLong())) {
 			Long time = getVoiceAfkTime.get(g.getIdLong());
@@ -184,24 +181,19 @@ public class MusicUtil extends ListenerAdapter{
 			}
 		}
 	}
+	
 	public static void MusicKiller(Guild g) {
 		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(g.getIdLong());
 		AudioPlayer player = controller.getPlayer();
-		Queue queue = controller.getQueue();
 		GuildVoiceState state;
+		VoiceChannel vc;
 		
 		player.stopTrack();
-		queue.clearall();
-		if(queue.isLoop()) {
-			queue.setLoop(false);	
+		if((state = g.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
+			AudioManager manager = vc.getGuild().getAudioManager();
+			manager.closeAudioConnection();
 		}
-		if((state = g.getSelfMember().getVoiceState()) != null) {
-			VoiceChannel vc;
-			if((vc = state.getChannel()) != null) {
-				AudioManager manager = vc.getGuild().getAudioManager();
-				manager.closeAudioConnection();
-			}
-		}
+		PixelBeat.INSTANCE.playerManager.clearController(g.getIdLong());
 		getVoiceAfkTime.remove(g.getIdLong());
 	}
 	
@@ -223,6 +215,7 @@ public class MusicUtil extends ListenerAdapter{
 		}
 		return null;
 	}
+	
 	public static Long getTimeUntil(MusicController controller) {
 		Queue queue = controller.getQueue();
 		AudioPlayer player = controller.getPlayer();
@@ -234,10 +227,6 @@ public class MusicUtil extends ListenerAdapter{
 		return timeUntil;
 	}
 	
-	public static String getUserbyId(Long userid, Guild guild) {
-		
-		return null;
-	}
 	public static Boolean isUrlVerified(String url) {
 		String uri = getDomaene(url);
 		if(uri != null) {
@@ -247,6 +236,7 @@ public class MusicUtil extends ListenerAdapter{
 		}
 		return false;
 	}
+	
 	public static String getDomaene(String url) {
 		if(url.startsWith("http://") || url.startsWith("https://")) {
 			String[] args = url.split("/");
@@ -254,6 +244,7 @@ public class MusicUtil extends ListenerAdapter{
 		}
 		return null;
 	}
+	
 	public static void loadDomains() {
 		verifiedurl.add("www.youtube.com");	
 		verifiedurl.add("music.youtube.com");	

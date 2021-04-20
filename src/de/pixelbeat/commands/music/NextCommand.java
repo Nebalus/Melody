@@ -44,16 +44,14 @@ public class NextCommand implements ServerCommand{
 							MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
 						}
 					}else {
-						builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+mf.format(channel.getGuild().getIdLong(), "music.info.currently-playing-null"));
-						MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
+						MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "music.info.currently-playing-null"));
 					}
 				}catch(NumberFormatException e) {
 					e.printStackTrace();
 				}
 			}
 		}else {
-			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
-			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
+			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
 		}
 	}
 }

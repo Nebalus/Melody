@@ -127,12 +127,9 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 					.addField(mf.format(guildid, "music.playlist.time-until-playing"),  (MusicUtil.getTimeUntil(controller) - timeUntil == 0l ? "Now" : MusicUtil.getTime(null, MusicUtil.getTimeUntil(controller) - timeUntil))+"", true)
 					.addField(mf.format(guildid, "music.playlist.length"), MusicUtil.getTime(null,timeUntil), false);
 			
-			
 			MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
 		}else {
-			EmbedBuilder builder = new EmbedBuilder()
-					.setDescription(userWhoQueued.getAsMention()+ " "+mf.format(guildid, "music.playlist.empty"));
-				MusicUtil.sendEmbledError(controller.getGuild().getIdLong(), builder);
+				MusicUtil.sendEmbledError(controller.getGuild().getIdLong(), userWhoQueued.getAsMention()+ " "+mf.format(guildid, "music.playlist.empty"));
 			}
 		}
 	}
@@ -144,9 +141,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 				.setDescription("Sorry but I don't know that :(");	
 		MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
 		}else {
-			EmbedBuilder builder = new EmbedBuilder()
-					.setDescription("Hmm "+userWhoQueued.getAsMention()+" it seems that the link you sent does not contains a song/stream :(");
-			MusicUtil.sendEmbledError(controller.getGuild().getIdLong(), builder);
+			MusicUtil.sendEmbledError(controller.getGuild().getIdLong(), "Hmm "+userWhoQueued.getAsMention()+" it seems that the link you sent does not contains a song/stream :(");
 		}
 	}
 
