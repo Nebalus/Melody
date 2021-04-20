@@ -61,6 +61,7 @@ public class CommandManager {
 		this.commands.put("q",new QueueCommand());
 	
 		this.commands.put("skip", new NextCommand());
+		this.commands.put("s", new NextCommand());
 		this.commands.put("next", new NextCommand());
 		this.commands.put("n", new NextCommand());
 		

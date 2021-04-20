@@ -64,6 +64,6 @@ public class ID_Manager{
 				zufallstr4 = "0"+zufall4;
 		}
 		String genID = zufallstr1+"-"+zufallstr2+"-"+zufallstr3+"-"+zufallstr4;
-		return generateID();
+		return genID;
 	}	
 }

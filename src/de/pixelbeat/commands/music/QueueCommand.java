@@ -22,6 +22,8 @@ public class QueueCommand implements ServerCommand{
 		Queue queue = controller.getQueue();
 		EmbedBuilder builder = new EmbedBuilder();
 		
+		
+		
 		builder.setTitle("**Queue for "+channel.getGuild().getName()+"**");
 		
 		String list = null;
