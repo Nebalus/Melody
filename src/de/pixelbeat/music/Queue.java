@@ -136,6 +136,12 @@ public class Queue {
 			next();
 		}
 	}
+	/*
+	public void shuffel() {
+		Collections.shuffle ;
+	}
+	
+	*/
 	public MusicController getController() {
 		return controller;
 	}
@@ -164,4 +170,5 @@ public class Queue {
 	public void setWhoQueuedId(List<Long> whoqueuedid) {
 		this.whoqueuedid = whoqueuedid;
 	}
+	
 }
