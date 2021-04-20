@@ -24,31 +24,24 @@ public class LoopCommand implements ServerCommand{
 		MusicUtil.updateChannel(channel);
 
 		GuildVoiceState state;
-		if((state = m.getGuild().getSelfMember().getVoiceState()) != null) {
-			VoiceChannel vc;
-			if((vc = state.getChannel()) != null) {
-				MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());
-				AudioPlayer player = controller.getPlayer();
-				if(player.getPlayingTrack() != null) {
-					if(controller.getQueue().isLoop()) {
-						controller.getQueue().setLoop(false);
-						channel.sendMessage(Emojis.SINGLE_LOOP+" ** disabled!**").queue();
-					}else {
-						controller.getQueue().setLoop(true);
-						channel.sendMessage(Emojis.SINGLE_LOOP+" ** enabled!**").queue();
-					}	
+		VoiceChannel vc;
+		EmbedBuilder builder = new EmbedBuilder();
+		if((state = m.getGuild().getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
+			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());
+			AudioPlayer player = controller.getPlayer();
+			if(player.getPlayingTrack() != null) {
+				if(controller.getQueue().isLoop()) {
+					controller.getQueue().setLoop(false);
+					channel.sendMessage(Emojis.SINGLE_LOOP+mf.format(channel.getGuild().getIdLong(), "music.info.loop-disabled")).queue();
 				}else {
-					EmbedBuilder builder = new EmbedBuilder();
-					builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" Currently i am not playing a track");
-					MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
-				}				
+					controller.getQueue().setLoop(true);
+					channel.sendMessage(Emojis.SINGLE_LOOP+mf.format(channel.getGuild().getIdLong(), "music.info.loop-enabled")).queue();
+				}	
 			}else {
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
+				builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+mf.format(channel.getGuild().getIdLong(), "music.info.currently-playing-null"));
 				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
-			}
+			}				
 		}else {
-			EmbedBuilder builder = new EmbedBuilder();
 			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
 			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
 		}

@@ -23,18 +23,11 @@ public class PauseCommand implements ServerCommand{
 		MusicUtil.updateChannel(channel);
 
 		GuildVoiceState state;
-		if((state = m.getGuild().getSelfMember().getVoiceState()) != null) {
-			VoiceChannel vc;
-			if((vc = state.getChannel()) != null) {
-				MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());
-				AudioPlayer player = controller.getPlayer();
-				player.setPaused(true);
-						
-			}else {
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
-				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
-			}
+		VoiceChannel vc;
+		if((state = m.getGuild().getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
+			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());
+			AudioPlayer player = controller.getPlayer();
+			player.setPaused(true);
 		}else {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
