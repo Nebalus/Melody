@@ -22,23 +22,17 @@ public class LeaveCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
-		GuildVoiceState state;
 		MusicUtil.updateChannel(channel);
-		if((state = m.getGuild().getSelfMember().getVoiceState()) != null) {
-			VoiceChannel vc;
-			if((vc = state.getChannel()) != null) {
-				MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());
-				AudioManager manager = vc.getGuild().getAudioManager();
-				AudioPlayer player = controller.getPlayer();
+		GuildVoiceState state;
+		VoiceChannel vc;
+		if((state = m.getGuild().getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
+			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());
+			AudioManager manager = vc.getGuild().getAudioManager();
+			AudioPlayer player = controller.getPlayer();
 				
-				player.stopTrack();
-				manager.closeAudioConnection();
-				message.addReaction("U+1F44C").queue();
-			}else {
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
-				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
-			}
+			player.stopTrack();
+			manager.closeAudioConnection();
+			message.addReaction("U+1F44C").queue();
 		}else {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));

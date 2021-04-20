@@ -3,7 +3,6 @@ package de.pixelbeat.speechpackets;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.util.HashMap;

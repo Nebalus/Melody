@@ -22,23 +22,17 @@ public class JoinCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
-		GuildVoiceState state;
 		MusicUtil.updateChannel(channel);
-		if((state = m.getVoiceState()) != null) {
-			VoiceChannel vc;
-			if((vc = state.getChannel()) != null) {
-				AudioManager manager = vc.getGuild().getAudioManager();
-				manager.openAudioConnection(vc);
-				MusicController controller = PixelBeat.INSTANCE.playerManager.getController(channel.getGuild().getIdLong());
-				AudioPlayer player = controller.getPlayer();
-				player.setPaused(false);
-				if(player.getPlayingTrack() == null) {
-					MusicUtil.getVoiceAfkTime.put(vc.getGuild().getIdLong(), 600l);
-				}
-			}else {
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.user-not-in-vc"));
-				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
+		GuildVoiceState state;
+		VoiceChannel vc;
+		if((state = m.getVoiceState()) != null && (vc = state.getChannel()) != null) {
+			AudioManager manager = vc.getGuild().getAudioManager();
+			manager.openAudioConnection(vc);
+			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(channel.getGuild().getIdLong());
+			AudioPlayer player = controller.getPlayer();
+			player.setPaused(false);
+			if(player.getPlayingTrack() == null) {
+				MusicUtil.getVoiceAfkTime.put(vc.getGuild().getIdLong(), 600l);
 			}
 		}else {
 			EmbedBuilder builder = new EmbedBuilder();

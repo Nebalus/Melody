@@ -22,39 +22,38 @@ public class NextCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message) {
-		String[] args = message.getContentDisplay().split(" ");
+		MusicUtil.updateChannel(channel);
 		GuildVoiceState state;
-		if((state = m.getVoiceState()) != null) {
-			VoiceChannel vc;
-			if((vc = state.getChannel()) != null) {
-				MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());
-				MusicUtil.updateChannel(channel);
-				if(args.length == 1) {
-					try {
-						AudioPlayer player = controller.getPlayer();
-						Queue queue = controller.getQueue();
-						if(player.getPlayingTrack() != null) {
-							player.stopTrack();
-							if(queue.nextexist()) {
-								EmbedBuilder builder = new EmbedBuilder();
-								builder.setDescription(Emojis.NEXT_TITLE+" Track skipped");
-								MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
-								queue.next();
-							}else {
-								EmbedBuilder builder = new EmbedBuilder();
-								builder.setDescription(Emojis.NEXT_TITLE+" Track skipped, could not find the next track");
-								MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
-							}
+		VoiceChannel vc;
+		EmbedBuilder builder = new EmbedBuilder();
+		if((state = m.getGuild().getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
+			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());
+			String[] args = message.getContentDisplay().split(" ");
+			if(args.length == 1) {
+				try {
+					AudioPlayer player = controller.getPlayer();
+					Queue queue = controller.getQueue();
+					if(player.getPlayingTrack() != null) {
+						player.stopTrack();
+						if(queue.nextexist()) {
+							builder.setDescription(Emojis.NEXT_TITLE+" Track skipped");
+							MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
+							queue.next();
 						}else {
-							EmbedBuilder builder = new EmbedBuilder();
-							builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" Currently i am not playing a track");
-							MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
+							builder.setDescription(Emojis.NEXT_TITLE+" Track skipped, could not find the next track");
+							MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
 						}
-					}catch(NumberFormatException e) {
-						e.printStackTrace();
+					}else {
+						builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+mf.format(channel.getGuild().getIdLong(), "music.info.currently-playing-null"));
+						MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
 					}
+				}catch(NumberFormatException e) {
+					e.printStackTrace();
 				}
 			}
+		}else {
+			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
+			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), builder);
 		}
 	}
 }
