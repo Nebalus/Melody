@@ -50,7 +50,7 @@ public class PlayCommand implements ServerCommand{
 				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.user-not-in-vc"));
 			}
 		}else {
-			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), "Please use "+Utils.getGuildPrefix(channel.getGuild().getIdLong())+"play <url/search query>");
+			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.info.command-usage",Utils.getGuildPrefix(channel.getGuild().getIdLong())+"play <url/search query>"));
 		}
 	}
 }
