@@ -45,7 +45,7 @@ public class PlaylistCommand implements ServerCommand{
 				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.user-not-in-vc"));
 			}
 		}else {
-			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), "Please use "+Utils.getGuildPrefix(channel.getGuild().getIdLong())+"playlist <url>");
+			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.info.command-usage",Utils.getGuildPrefix(channel.getGuild().getIdLong())+"playlist <url>"));
 		}
 	}
 }
