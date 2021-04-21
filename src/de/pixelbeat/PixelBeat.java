@@ -80,7 +80,7 @@ public class PixelBeat {
 		Json.connect();
 		
 		MusicUtil.loadDomains();
-		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault("");
+		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(null);
 		configureMemoryUsage(builder); 
 	
 		builder.addEventListeners(new CommandListener() , new MusicUtil());
@@ -323,7 +323,7 @@ public class PixelBeat {
 	public CommandManager getCmdMan() {
 		return cmdMan;
 	}
-	//gibt den Pfad dieser Jar-Datei zurück
+	//gibt den Pfad dieser Jar-Datei zurÃ¼ck
     public String getCurrentJarPath() {
         String path = getJarPath();
         if(path.endsWith(".jar")) {
@@ -332,7 +332,7 @@ public class PixelBeat {
         return path;
     }
     
-    //gibt den absoluten Pfad inklusive Dateiname dieser Anwendung zurück
+    //gibt den absoluten Pfad inklusive Dateiname dieser Anwendung zurÃ¼ck
     public String getJarPath() {
         final CodeSource source = this.getClass().getProtectionDomain().getCodeSource();
         if (source != null) {
