@@ -7,7 +7,7 @@ import de.pixelbeat.LiteSQL;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.speechpackets.MessageFormatter;
-import de.pixelbeat.utils.Misc;
+import de.pixelbeat.utils.Utils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -25,7 +25,7 @@ public class ConfigCommand implements ServerCommand{
 			
 		}else if(args.length == 2) {
 			if(args[1].equalsIgnoreCase("prefix")) {
-				channel.sendMessage(mf.format(guildid, "feedback.info.prefix",Misc.getGuildPrefix(channel.getGuild().getIdLong()))).queue();
+				channel.sendMessage(mf.format(guildid, "feedback.info.prefix",Utils.getGuildPrefix(channel.getGuild().getIdLong()))).queue();
 			}
 		}else if(args.length == 3) {
 			if(args[1].equalsIgnoreCase("prefix")) {
@@ -37,7 +37,7 @@ public class ConfigCommand implements ServerCommand{
 				        }
 				        if(count <= 6) {					            
 							try {
-								String oldPrefix = Misc.getGuildPrefix(channel.getGuild().getIdLong());
+								String oldPrefix = Utils.getGuildPrefix(channel.getGuild().getIdLong());
 								PreparedStatement ps = LiteSQL.getConnection().prepareStatement("UPDATE `general` SET `prefix` = ? WHERE `guildid` = "+channel.getGuild().getIdLong());
 								ps.setString(1, args[2]);
 								ps.executeUpdate();
@@ -46,13 +46,13 @@ public class ConfigCommand implements ServerCommand{
 								e.printStackTrace();
 							}
 						}else {
-							Misc.sendErrorEmbled(channel, "The prefix must be less than 6 characters. The prefix is the character that starts a command e.g `!`", m);
+							Utils.sendErrorEmbled(channel, "The prefix must be less than 6 characters. The prefix is the character that starts a command e.g `!`", m);
 						}
 					}else {
-						Misc.sendErrorEmbled(channel,"An internal error occurred: `Could not connect to the database`", m);
+						Utils.sendErrorEmbled(channel,"An internal error occurred: `Could not connect to the database`", m);
 					}
 				}else {
-					Misc.sendErrorEmbled(channel, "You don't have enough permissions **Permisions: **`MANAGE_SERVER`", m);
+					Utils.sendErrorEmbled(channel, "You don't have enough permissions **Permisions: **`MANAGE_SERVER`", m);
 				}
 			}
 		}else if(args.length == 4) {

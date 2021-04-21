@@ -5,7 +5,7 @@ import java.util.List;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
-import de.pixelbeat.utils.Misc;
+import de.pixelbeat.utils.Utils;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -24,7 +24,7 @@ public class CommandListener extends ListenerAdapter{
 			List<User> MentionedUsers = event.getMessage().getMentionedUsers();
 			TextChannel channel = event.getTextChannel();
 			Guild guild = event.getGuild();
-			String prefix = Misc.getGuildPrefix(guild.getIdLong());
+			String prefix = Utils.getGuildPrefix(guild.getIdLong());
 			
 			if(!event.getAuthor().isBot()) {
 				if(message.startsWith(prefix)) {

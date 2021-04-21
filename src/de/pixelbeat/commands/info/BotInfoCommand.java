@@ -7,7 +7,7 @@ import java.util.Date;
 import de.pixelbeat.Json;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
-import de.pixelbeat.utils.Misc;
+import de.pixelbeat.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -34,11 +34,11 @@ public class BotInfoCommand implements ServerCommand{
 			PixelBeat.version,
 			serversRunning,
 			membersDeserving,
-			Misc.uptime(PixelBeat.uptime),
+			Utils.uptime(PixelBeat.uptime),
 			botstart(),
-			Misc.uptime(Json.getTotalOnlineTime()),
-			Misc.getUserInt(),
-			Misc.uptime(Json.getPlayedMusicTime()),
+			Utils.uptime(Json.getTotalOnlineTime()),
+			Utils.getUserInt(),
+			Utils.uptime(Json.getPlayedMusicTime()),
 			channel.getGuild().getSelfMember().getAsMention()));
 		builder.setFooter("Made by Tyten#1665 with <3");
 		channel.sendMessage(builder.build()).queue();

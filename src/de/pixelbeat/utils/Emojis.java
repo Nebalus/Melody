@@ -14,6 +14,8 @@ public class Emojis {
 	public final static String PREVIOUS_TITLE = "⏮";
 	public final static String PAUSE = "⏸";
 	public final static String RESUME = "▶️";
+	public final static String BACK = "◀️";
+	public final static String STOP = "⏹";
 	public final static String SINGLE_LOOP = "🔂";
 	public final static String QUEUE_LOOP = "🔁";
 	public final static String MUSIC_NOTE = "🎶";

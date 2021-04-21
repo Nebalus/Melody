@@ -8,7 +8,7 @@ import de.pixelbeat.music.AudioLoadResult;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.speechpackets.MessageFormatter;
-import de.pixelbeat.utils.Misc;
+import de.pixelbeat.utils.Utils;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -50,7 +50,7 @@ public class PlayCommand implements ServerCommand{
 				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.user-not-in-vc"));
 			}
 		}else {
-			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), "Please use "+Misc.getGuildPrefix(channel.getGuild().getIdLong())+"play <url/search query>");
+			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), "Please use "+Utils.getGuildPrefix(channel.getGuild().getIdLong())+"play <url/search query>");
 		}
 	}
 }

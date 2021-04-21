@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class Misc {
+public class Utils {
 
 	public static String getGuildPrefix(Long GuildId) {
 		try {
@@ -95,10 +95,32 @@ public class Misc {
 		return replace;
 	}
 	
-	public static void sendEmbled(TextChannel channel, EmbedBuilder builder) {				
-		
-		builder.setColor(PixelBeat.HEXEmbeld);
-		channel.sendMessage(builder.build()).queue();
+	public static String getTimeFormat(Long time) {		
+		if(time >= 1000) {
+			long sekunden = time/1000;
+			long minuten = sekunden/60;
+			long stunden = minuten/60;
+			sekunden %= 60;
+			minuten %= 60;
+			String timeformat = "";
+			
+			if(stunden > 0) {
+				if(stunden <= 9) {
+					timeformat = timeformat + "0"+stunden+":";
+				}else timeformat = timeformat + stunden+":";	
+			}
+			
+			if(minuten <= 9) {
+				timeformat = timeformat + "0"+minuten+":";
+			}else timeformat = timeformat + minuten+":";	
+			
+			if(sekunden <= 9) {
+				timeformat = timeformat + "0"+sekunden;
+			}else timeformat = timeformat + sekunden;
+			
+			return timeformat;
+		}
+		return null;
 	}
 	
 	public static void sendErrorEmbled(TextChannel channel, String discription, Member m) {				
@@ -109,10 +131,11 @@ public class Misc {
 	}
 	
 	public static void setUserlistenTime(Long UserID, Long listentime) {
-		//WÃ¼rde eine JSON Codierung Empfelen
+		//Würde eine JSON Codierung Empfelen
 	}
+	
 	public static Long getUserlistenTime(Long UserID) {
-		//WÃ¼rde eine JSON Codierung Empfelen
+		//Würde eine JSON Codierung Empfelen
 		return 0l;
 	}
 
