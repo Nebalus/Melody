@@ -8,6 +8,8 @@ import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.Queue;
 import de.pixelbeat.music.QueuedTrack;
 import de.pixelbeat.speechpackets.MessageFormatter;
+import de.pixelbeat.utils.Emojis;
+import de.pixelbeat.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -29,26 +31,31 @@ public class QueueCommand implements ServerCommand{
 		
 		if(controller.getPlayer().getPlayingTrack() != null) {
 			list = mf.format(channel.getGuild().getIdLong(), "music.track.currently-playing")+"\n"
-					+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(channel.getGuild().getIdLong(), "music.user.who-requested")+queue.currentplaying.getWhoQueued().getUser().getAsTag()+" \n"
-					+ " \n";
+				+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(channel.getGuild().getIdLong(), "music.user.who-requested")+queue.currentplaying.getWhoQueued().getUser().getAsTag()+" \n"
+				+ " \n";
 			int size = 1;
 			for(QueuedTrack qt : queue.getQueuelist()) {
 				AudioTrack at = qt.getTrack();
 				if(size <= 10 && size >= 1) {
 					if(size == 1) {
-						list = list + "In queue:\n";
+						list = list + mf.format(channel.getGuild().getIdLong(), "music.queue.in-queue")+"\n";
 					}
-						list = list + "``"+size+"`` - ["+ at.getInfo().title+"]("+at.getInfo().uri+") | ``"+mf.format(channel.getGuild().getIdLong(), "music.user.who-requested")+qt.getWhoQueued().getUser().getAsTag()+"``\n"
-								+ " \n";
+					list = list + "``"+size+".`` ``["+Utils.getTimeFormat(at.getInfo().length)+"]`` **["+ at.getInfo().title+"]("+at.getInfo().uri+")** - "+qt.getWhoQueued().getAsMention()+"\n";
 				}
 				size++;
 			}
-			list = list + "**"+(size-1)+" **\n";
+			builder.setFooter(mf.format(channel.getGuild().getIdLong(), "music.queue.page", 1+"/"+(((size-1) / 10) > 0 ? ((size-1) / 10) : 1)));
+			
 		}else {
 			list = mf.format(channel.getGuild().getIdLong(), "music.info.currently-playing-null");
 		}
 		builder.setDescription(list);
-		channel.sendMessage(builder.build()).queue();
+		channel.sendMessage(builder.build()).queue((queuemessage) ->{
+			queuemessage.addReaction(Emojis.BACK).queue();	
+			queuemessage.addReaction(Emojis.STOP).queue();	
+			queuemessage.addReaction(Emojis.RESUME).queue();	
+		});
+		
 	}
-
+	
 }

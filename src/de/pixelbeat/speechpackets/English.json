@@ -21,6 +21,9 @@
     
     "music.user.who-requested": "Requested by ",
     
+    "music.queue.in-queue": "In queue:",
+    "music.queue.page": "Page {0}",
+    
     "music.track.author": "Author: {0}",
     "music.track.author-null": "Nobody",
     "music.track.playing-nothing": "Nothing playing...",

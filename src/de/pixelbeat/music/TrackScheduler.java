@@ -15,7 +15,7 @@ import de.pixelbeat.LiteSQL;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
-import de.pixelbeat.utils.Misc;
+import de.pixelbeat.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -76,7 +76,7 @@ public class TrackScheduler extends AudioEventAdapter{
 			if((vc = controller.getGuild().getSelfMember().getVoiceState().getChannel()) != null) {
 				for(Member vcm : vc.getMembers()) {
 					if(!vcm.getUser().isBot()) {
-						if(!Misc.doesUserExist(vcm.getIdLong())) {
+						if(!Utils.doesUserExist(vcm.getIdLong())) {
 							try {
 								PreparedStatement ps = LiteSQL.getConnection().prepareStatement("INSERT INTO userdata(userid) VALUES(?)");
 								ps.setLong(1, vcm.getIdLong());

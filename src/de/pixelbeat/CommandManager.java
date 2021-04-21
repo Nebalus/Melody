@@ -57,6 +57,7 @@ public class CommandManager {
 		
 		this.commands.put("trackinfo",new TrackinfoCommand());
 		this.commands.put("ti",new TrackinfoCommand());
+		this.commands.put("nowplaying",new TrackinfoCommand());
 		
 		this.commands.put("queue",new QueueCommand());
 		this.commands.put("q",new QueueCommand());
@@ -77,9 +78,7 @@ public class CommandManager {
 		this.commands.put("loop",new LoopCommand());
 	}
 	
-	public boolean perform(String command, Member m, TextChannel channel, Message message) {
-		
-		
+	public boolean perform(String command, Member m, TextChannel channel, Message message) {	
 		ServerCommand cmd;
 		if((cmd = this.commands.get(command.toLowerCase())) != null) {
 			cmd.performCommand(m, channel, message);

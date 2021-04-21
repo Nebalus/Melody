@@ -80,7 +80,7 @@ public class Images {
 			//Playing text
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 20));	
 			
-			String currenttrackplaytime = getTimeFormat(trackplaytime);
+			String currenttrackplaytime = Utils.getTimeFormat(trackplaytime);
 			if(currenttrackplaytime == null) {
 				currenttrackplaytime = "N/ A";
 			}
@@ -88,7 +88,7 @@ public class Images {
 			graph.drawString(currenttrackplaytime, 119,250);
 			//Ending text
 			
-			String currenttracklength = getTimeFormat(tracklength);
+			String currenttracklength = Utils.getTimeFormat(tracklength);
 			if(currenttracklength == null) {
 				currenttracklength = "INFINITE "+Emojis.INFINITY;
 			}
@@ -130,35 +130,6 @@ public class Images {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
-	}
-	
-	private static String getTimeFormat(Long time) {		
-		if(time >= 1000) {
-			long sekunden = time/1000;
-			long minuten = sekunden/60;
-			long stunden = minuten/60;
-			sekunden %= 60;
-			minuten %= 60;
-			String timeformat = "";
-			
-			if(stunden > 0) {
-				if(stunden <= 9) {
-					timeformat = timeformat + "0"+stunden+":";
-				}else timeformat = timeformat + stunden+":";	
-			}
-			
-			if(minuten <= 9) {
-				timeformat = timeformat + "0"+minuten+":";
-			}else timeformat = timeformat + minuten+":";	
-			
-			if(sekunden <= 9) {
-				timeformat = timeformat + "0"+sekunden;
-			}else timeformat = timeformat + sekunden;
-			
-			return timeformat;
-		}
-		
 		return null;
 	}
 	
