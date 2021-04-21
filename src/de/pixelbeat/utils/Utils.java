@@ -109,10 +109,10 @@ public class Misc {
 	}
 	
 	public static void setUserlistenTime(Long UserID, Long listentime) {
-		//Würde eine JSON Codierung Empfelen
+		//WÃ¼rde eine JSON Codierung Empfelen
 	}
 	public static Long getUserlistenTime(Long UserID) {
-		//Würde eine JSON Codierung Empfelen
+		//WÃ¼rde eine JSON Codierung Empfelen
 		return 0l;
 	}
 
