@@ -25,7 +25,9 @@ public class QueueEmbed {
 	}
 	
 	public boolean addPage() {
-		if((((queue.getQueueSize()+1) / 10) > 0 ? ((queue.getQueueSize()+1) / 10) : 1) > page+1) {
+		int queuepage = queue.getQueueSize()/10;
+		queuepage = (float) queue.getQueueSize()/10 > queuepage ? queuepage+1 : queuepage;
+		if(queuepage > page) {
 			page++;
 			return true;
 		}
