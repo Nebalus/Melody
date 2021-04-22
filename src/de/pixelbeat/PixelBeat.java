@@ -17,12 +17,14 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
 import de.pixelbeat.listeners.CommandListener;
+import de.pixelbeat.listeners.ReactListener;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.music.PlayerManager;
 import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
-import de.pixelbeat.utils.Misc;
+import de.pixelbeat.utils.Utils;
+import de.pixelbeat.entities.EntityManager;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
@@ -44,16 +46,15 @@ public class PixelBeat {
 	private Thread loop;
 	public AudioPlayerManager audioPlayerManager;
 	public PlayerManager playerManager;
+	public EntityManager entityManager;
 	
-	public static int uptime; 
-	public static long startuptime; 
-	public static String version = "Alpha 0.4.4";
+	public int uptime; 
+	public long startuptime; 
+	public String version = "Alpha 0.5.0";
 	
 	public static final Color HEXEmbeld = Color.decode("#32a87f");
 	public static final Color HEXEmbeldError = Color.decode("#db3b9e");
 	public static final Color HEXEmbeldQueue = Color.decode("#212121"); 
-	
-	public static Boolean hasDisplay = false;
 	
 	public static void main(String[] args) {		
 		try {
@@ -83,11 +84,12 @@ public class PixelBeat {
 		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(null);
 		configureMemoryUsage(builder); 
 	
-		builder.addEventListeners(new CommandListener() , new MusicUtil());
+		builder.addEventListeners(new CommandListener() , new MusicUtil(), new ReactListener());
 		builder.setActivity(Activity.playing("booting myself..."));
 		
 		this.audioPlayerManager = new DefaultAudioPlayerManager();
 		this.playerManager = new PlayerManager();
+		this.entityManager = new EntityManager();
 		this.cmdMan = new CommandManager();
 		
 		this.shardMan = builder.build();
@@ -215,13 +217,13 @@ public class PixelBeat {
 					}
 					break;
 				case 1:
-					jda.getPresence().setActivity(Activity.listening(Misc.getGuildPrefix(0l)+"help | "+version));
+					jda.getPresence().setActivity(Activity.listening(Utils.getGuildPrefix(0l)+"help | "+version));
 					break;
 				case 2:
 					jda.getPresence().setActivity(Activity.listening("@"+jda.getSelfUser().getName()));
 					break;
 				case 3:
-					jda.getPresence().setActivity(Activity.playing("a total of "+Misc.uptime(Json.getPlayedMusicTime())+ " music for "+Misc.getUserInt()+" users!"));
+					jda.getPresence().setActivity(Activity.playing("a total of "+Utils.uptime(Json.getPlayedMusicTime())+ " music for "+Utils.getUserInt()+" users!"));
 					break;
 				default:
 					jda.getPresence().setActivity(Activity.watching("an error activity.json not found :("));
@@ -243,13 +245,13 @@ public class PixelBeat {
 		if(guildScannerCooldown <= 5) {
 			for(Guild g : shardMan.getGuilds()) {
 				if(!guildCache.contains(g.getIdLong())) {
-					if(!Misc.doesGuildExist(g.getIdLong())) {
+					if(!Utils.doesGuildExist(g.getIdLong())) {
 						g.getDefaultChannel().sendMessage("Hello everybody who I don't know, i'm "+g.getJDA().getSelfUser().getAsMention()+" "+g.getJDA().getEmoteById(Emojis.HEY_GUYS).getAsMention()+"\n"
 								+ " \n"
-								+ " `-` My prefix on "+g.getName()+" is `"+Misc.getGuildPrefix(g.getIdLong())+"`\n"
-								+ " `-` If you do not understand how I work then you can see all my commands by typing `"+Misc.getGuildPrefix(g.getIdLong())+"help`\n"
-								+ " `-` When you dont like something in my config then you can easyly change it by typing `"+Misc.getGuildPrefix(g.getIdLong())+"config help`\n"
-								+ " `-` To change my prefix just type `"+Misc.getGuildPrefix(g.getIdLong())+"config prefix [newprefix]`\n"
+								+ " `-` My prefix on "+g.getName()+" is `"+Utils.getGuildPrefix(g.getIdLong())+"`\n"
+								+ " `-` If you do not understand how I work then you can see all my commands by typing `"+Utils.getGuildPrefix(g.getIdLong())+"help`\n"
+								+ " `-` When you dont like something in my config then you can easyly change it by typing `"+Utils.getGuildPrefix(g.getIdLong())+"config help`\n"
+								+ " `-` To change my prefix just type `"+Utils.getGuildPrefix(g.getIdLong())+"config prefix [newprefix]`\n"
 								+ " \n"
 								+ "**Otherwise have fun listening to the music from my service** "+ Emojis.MUSIC_NOTE+" \n"
 								+ "PS: Thanks a lot for your support, that you added me to your discord server! "+g.getJDA().getEmoteById(Emojis.ANIMATED_HEARTS).getAsMention()).queue();
@@ -323,7 +325,7 @@ public class PixelBeat {
 	public CommandManager getCmdMan() {
 		return cmdMan;
 	}
-	//gibt den Pfad dieser Jar-Datei zurÃ¼ck
+	//gibt den Pfad dieser Jar-Datei zurück
     public String getCurrentJarPath() {
         String path = getJarPath();
         if(path.endsWith(".jar")) {
@@ -332,7 +334,7 @@ public class PixelBeat {
         return path;
     }
     
-    //gibt den absoluten Pfad inklusive Dateiname dieser Anwendung zurÃ¼ck
+    //gibt den absoluten Pfad inklusive Dateiname dieser Anwendung zurück
     public String getJarPath() {
         final CodeSource source = this.getClass().getProtectionDomain().getCodeSource();
         if (source != null) {
