@@ -31,16 +31,16 @@ public class BotInfoCommand implements ServerCommand{
 		builder.setThumbnail(guild.getSelfMember().getUser().getAvatarUrl());
 		builder.setDescription(PixelBeat.INSTANCE.getMessageFormatter().format(channel.getGuild().getIdLong(), "feedback.info.botinfo",
 			"JDA",
-			PixelBeat.version,
+			PixelBeat.INSTANCE.version,
 			serversRunning,
 			membersDeserving,
-			Utils.uptime(PixelBeat.uptime),
+			Utils.uptime(PixelBeat.INSTANCE.uptime),
 			botstart(),
 			Utils.uptime(Json.getTotalOnlineTime()),
 			Utils.getUserInt(),
 			Utils.uptime(Json.getPlayedMusicTime()),
 			channel.getGuild().getSelfMember().getAsMention()));
-		builder.setFooter("Made by Tyten#1665 with <3");
+		builder.setFooter("Made by Nebalus#1665 with <3");
 		channel.sendMessage(builder.build()).queue();
 		membersDeserving = 0;
 	}
@@ -50,7 +50,7 @@ public class BotInfoCommand implements ServerCommand{
 	}
 	
 	public String botstart() {
-		Date date = new Date(PixelBeat.startuptime);
+		Date date = new Date(PixelBeat.INSTANCE.startuptime);
 		String DateFormat = new SimpleDateFormat("EEE, d MMM HH:mm:ss yyyy").format(date);
 		return DateFormat;
 	}

@@ -39,10 +39,7 @@ public class Queue {
 		return true;
 	}
 	public int getQueueSize() {
-		if(this.queuelist.size() >= 1) {
-			return this.queuelist.size();
-		}
-		return 0;
+		return this.queuelist.size();
 	}
 	public boolean skiptracks(int count) {
 		if(this.queuelist.size() >= 1) {
