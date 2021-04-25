@@ -44,7 +44,7 @@ public class PlayCommand implements ServerCommand{
 					final String uri = url;
 					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false, false, false));
 				}else {
-					MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomaene(url)));
+					MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomain(url)));
 				}					
 			}else {
 				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.user-not-in-vc"));

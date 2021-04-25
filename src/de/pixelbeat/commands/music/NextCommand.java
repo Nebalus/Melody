@@ -36,11 +36,11 @@ public class NextCommand implements ServerCommand{
 					if(player.getPlayingTrack() != null) {
 						player.stopTrack();
 						if(queue.nextexist()) {
-							builder.setDescription(Emojis.NEXT_TITLE+" Track skipped");
+							builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(channel.getGuild().getIdLong(), "music.track.skip"));
 							MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
 							queue.next();
 						}else {
-							builder.setDescription(Emojis.NEXT_TITLE+" Track skipped, could not find the next track");
+							builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(channel.getGuild().getIdLong(), "music.track.skip-new-null"));
 							MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
 						}
 					}else {

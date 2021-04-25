@@ -226,7 +226,7 @@ public class MusicUtil extends ListenerAdapter{
 	}
 	
 	public static Boolean isUrlVerified(String url) {
-		String uri = getDomaene(url);
+		String uri = getDomain(url);
 		if(uri != null) {
 			if(verifiedurl.contains(uri)) {
 				return true;
@@ -235,7 +235,7 @@ public class MusicUtil extends ListenerAdapter{
 		return false;
 	}
 	
-	public static String getDomaene(String url) {
+	public static String getDomain(String url) {
 		if(url.startsWith("http://") || url.startsWith("https://")) {
 			String[] args = url.split("/");
 			return args[2].toLowerCase();

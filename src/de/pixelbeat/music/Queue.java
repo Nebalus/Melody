@@ -61,9 +61,7 @@ public class Queue {
 				return track;
 			}
 			return null;
-		}catch(IndexOutOfBoundsException e) {
-			
-		}
+		}catch(IndexOutOfBoundsException e) {}
 		return null;	
 	}
 	public Member getuserwhoqueued(int num) {
