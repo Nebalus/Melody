@@ -97,8 +97,7 @@ public class TrackScheduler extends AudioEventAdapter{
 		Guild guild = PixelBeat.INSTANCE.shardMan.getGuildById(guildid);
 		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
-		if(endReason.mayStartNext) {
-			
+		if(endReason.mayStartNext) {	
 			GuildVoiceState state;
 			if((state = guild.getSelfMember().getVoiceState()) != null) {
 				VoiceChannel vc;
@@ -143,7 +142,7 @@ public class TrackScheduler extends AudioEventAdapter{
 		 long guildid = PixelBeat.INSTANCE.playerManager.getGuildByPlayerHash(player.hashCode());
 		 EmbedBuilder builder = new EmbedBuilder();
 		 builder.setDescription("An error occured.");
-		 builder.addField("Errorcode",exception.getMessage()+"", false);
+		 builder.addField("Errorcode",exception.getMessage(), false);
 		 MusicUtil.sendEmbled(guildid, builder);
 	 }
 }

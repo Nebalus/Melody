@@ -135,12 +135,13 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 
 	@Override
 	public void noMatches() {
+		Long guildid = controller.getGuild().getIdLong();
 		if(uri.startsWith("ytsearch: ")) {
 		EmbedBuilder builder = new EmbedBuilder()
-				.setDescription("Sorry but I don't know that :(");	
-		MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
+				.setDescription(mf.format(guildid, "feedback.music.no-match"));	
+		MusicUtil.sendEmbled(guildid, builder);
 		}else {
-			MusicUtil.sendEmbledError(controller.getGuild().getIdLong(), "Hmm "+userWhoQueued.getAsMention()+" it seems that the link you sent does not contains a song/stream :(");
+			MusicUtil.sendEmbledError(guildid, mf.format(guildid, "feedback.music.nothing-in-link"));
 		}
 	}
 
