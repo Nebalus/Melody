@@ -19,8 +19,7 @@ public class BotInfoCommand implements ServerCommand{
 	private int membersDeserving = 0;
 
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message) {
-		Guild guild = channel.getGuild();
+	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		
 		int serversRunning = channel.getJDA().getGuilds().size(); 
 		for(Guild g1 : channel.getJDA().getGuilds()) {
@@ -29,7 +28,7 @@ public class BotInfoCommand implements ServerCommand{
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(0x23cba7);
 		builder.setThumbnail(guild.getSelfMember().getUser().getAvatarUrl());
-		builder.setDescription(PixelBeat.INSTANCE.getMessageFormatter().format(channel.getGuild().getIdLong(), "feedback.info.botinfo",
+		builder.setDescription(PixelBeat.INSTANCE.getMessageFormatter().format(guild.getIdLong(), "feedback.info.botinfo",
 			"JDA",
 			PixelBeat.INSTANCE.version,
 			serversRunning,
@@ -39,7 +38,7 @@ public class BotInfoCommand implements ServerCommand{
 			Utils.uptime(Json.getTotalOnlineTime()),
 			Utils.getUserInt(),
 			Utils.uptime(Json.getPlayedMusicTime()),
-			channel.getGuild().getSelfMember().getAsMention()));
+			guild.getSelfMember().getAsMention()));
 		builder.setFooter("Made by Nebalus#1665 with <3");
 		channel.sendMessage(builder.build()).queue();
 		membersDeserving = 0;

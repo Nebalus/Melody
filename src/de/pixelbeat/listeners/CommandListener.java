@@ -35,7 +35,7 @@ public class CommandListener extends ListenerAdapter{
 					String[] args = message.substring(count).split(" ");
 			
 					if(args.length > 0){
-						if(!PixelBeat.INSTANCE.getCmdMan().perform(args[0], event.getMember(), channel, event.getMessage())) {
+						if(!PixelBeat.INSTANCE.getCmdMan().perform(args[0], event.getMember(), channel, event.getMessage(), event.getGuild())) {
 							channel.sendMessage(event.getJDA().getEmoteById(Emojis.ANIMATED_THINKING_EMOJI).getAsMention()+" "+mf.format(guild.getIdLong(), "feedback.info.unknown-command",prefix)).queue();
 						}
 					}

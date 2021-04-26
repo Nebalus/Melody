@@ -7,6 +7,7 @@ import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.speechpackets.MessageFormatter;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -19,21 +20,21 @@ public class JoinCommand implements ServerCommand{
 	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message) {
+	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		MusicUtil.updateChannel(channel);
 		GuildVoiceState state;
 		VoiceChannel vc;
 		if((state = m.getVoiceState()) != null && (vc = state.getChannel()) != null) {
-			AudioManager manager = vc.getGuild().getAudioManager();
+			AudioManager manager = guild.getAudioManager();
 			manager.openAudioConnection(vc);
-			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(channel.getGuild().getIdLong());
+			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong());
 			AudioPlayer player = controller.getPlayer();
 			player.setPaused(false);
 			if(player.getPlayingTrack() == null) {
-				MusicUtil.getVoiceAfkTime.put(vc.getGuild().getIdLong(), 600l);
+				controller.setAfkTime(600);
 			}
 		}else {
-			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.user-not-in-vc"));		
+			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));		
 		}
 	}
 }

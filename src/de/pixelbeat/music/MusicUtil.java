@@ -3,12 +3,9 @@ package de.pixelbeat.music;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import de.pixelbeat.ConsoleLogger;
 import de.pixelbeat.LiteSQL;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.utils.Emojis;
@@ -27,9 +24,7 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 
 public class MusicUtil extends ListenerAdapter{
 
-	public static HashMap<Long, Long> getVoiceAfkTime = new HashMap<Long, Long>();
-	
-	public static ArrayList<String> verifiedurl = new ArrayList<String>();
+	private static ArrayList<String> verifiedurl = new ArrayList<String>();
 	
 	public static void updateChannel(TextChannel channel) {	
 		try {
@@ -112,33 +107,32 @@ public class MusicUtil extends ListenerAdapter{
 	@Override
 	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
 		VoiceChannel vc = event.getChannelLeft();
-		if(event.getMember() == event.getGuild().getSelfMember()) {	
-			MusicKiller(event.getGuild());
+		Guild guild = event.getGuild();
+		if(event.getMember() == guild.getSelfMember()) {	
+			MusicKiller(guild);
 		}else {
-			if(vc.getMembers().contains(event.getGuild().getSelfMember())) {
-				if(vc.getMembers().size() == 1) {
-					getVoiceAfkTime.put(event.getGuild().getIdLong(), 240l);
-				}
+			if(vc.getMembers().contains(guild.getSelfMember()) && vc.getMembers().size() == 1) {
+				PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong()).setAfkTime(240);
 			}
 		}
-		
 	}
 	
 	@Override
 	public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
-		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(event.getGuild().getIdLong());
-		if(event.getMember() == event.getGuild().getSelfMember()) {
-			AudioPlayer player = controller.getPlayer();
+		Guild guild = event.getGuild();
+		if(event.getMember() == guild.getSelfMember()) {
+			AudioPlayer player = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong()).getPlayer();
 			player.setPaused(false);
-			event.getGuild().getSelfMember().deafen(true).queue();
+			guild.getSelfMember().deafen(true).queue();
 		}
 	}
 	
 	@Override
 	public void onGuildVoiceDeafen(GuildVoiceDeafenEvent event) {
-		if(event.getMember() == event.getGuild().getSelfMember()) {
+		Guild guild = event.getGuild();
+		if(event.getMember() == guild.getSelfMember()) {
 			if(!event.isDeafened()) {
-				event.getGuild().getSelfMember().deafen(true).queue();
+				guild.getSelfMember().deafen(true).queue();
 			}
 		}
 	}
@@ -147,16 +141,11 @@ public class MusicUtil extends ListenerAdapter{
 		try {
 			for(Guild g :  shardMan.getGuilds()) {
 				GuildVoiceState state;
-				if((state = g.getSelfMember().getVoiceState()) != null) {
-					VoiceChannel vc;
-					if((vc = state.getChannel()) != null) {
-						MusicController controller = PixelBeat.INSTANCE.playerManager.getController(g.getIdLong());
-						AudioPlayer player = controller.getPlayer();
-						if(player.getPlayingTrack() != null) {
-							if(vc.getMembers().size() == 1) {
-								AFKManager(g);
-							}
-						}else {
+				VoiceChannel vc;
+				if((state = g.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
+					AudioPlayer player = PixelBeat.INSTANCE.playerManager.getController(g.getIdLong()).getPlayer();
+					if(player.getPlayingTrack() != null) {
+						if(vc.getMembers().size() == 1) {
 							AFKManager(g);
 						}
 					}else {
@@ -168,21 +157,18 @@ public class MusicUtil extends ListenerAdapter{
 	}
 	
 	public static void AFKManager(Guild g) {
-		if(getVoiceAfkTime.containsKey(g.getIdLong())) {
-			Long time = getVoiceAfkTime.get(g.getIdLong());
-			if(time != 0) {
-				time--;
-				ConsoleLogger.debug(g.getIdLong()+"", time+"");
-				getVoiceAfkTime.put(g.getIdLong(), time);
-			}else {
-				MusicKiller(g);
-			}
+		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(g.getIdLong());
+		int time = controller.getAfkTime();
+		if(time > 0) {
+			time--;
+			controller.setAfkTime(time);
+		}else {
+			MusicKiller(g);
 		}
 	}
 	
 	public static void MusicKiller(Guild g) {
-		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(g.getIdLong());
-		AudioPlayer player = controller.getPlayer();
+		AudioPlayer player = PixelBeat.INSTANCE.playerManager.getController(g.getIdLong()).getPlayer();
 		GuildVoiceState state;
 		VoiceChannel vc;
 		
@@ -192,7 +178,6 @@ public class MusicUtil extends ListenerAdapter{
 			manager.closeAudioConnection();
 		}
 		PixelBeat.INSTANCE.playerManager.clearController(g.getIdLong());
-		getVoiceAfkTime.remove(g.getIdLong());
 	}
 	
 	public static String getTime(AudioTrackInfo trackinfo, Long time) {
@@ -227,10 +212,8 @@ public class MusicUtil extends ListenerAdapter{
 	
 	public static Boolean isUrlVerified(String url) {
 		String uri = getDomain(url);
-		if(uri != null) {
-			if(verifiedurl.contains(uri)) {
-				return true;
-			}
+		if(uri != null && verifiedurl.contains(uri)) {
+			return true;
 		}
 		return false;
 	}
