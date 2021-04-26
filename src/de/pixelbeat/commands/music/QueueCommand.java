@@ -4,7 +4,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
-import de.pixelbeat.entities.QueueEmbed;
+import de.pixelbeat.entities.reacts.QueueReacton;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.Queue;
 import de.pixelbeat.music.QueuedTrack;
@@ -26,15 +26,16 @@ public class QueueCommand implements ServerCommand{
 		channel.sendMessage("Loading...").queue((queuemessage) ->{
 			queuemessage.addReaction(Emojis.BACK).queue();	
 			queuemessage.addReaction(Emojis.RESUME).queue();	
-			queuemessage.addReaction(Emojis.EXIT).queue();
-			QueueEmbed qe = new QueueEmbed(PixelBeat.INSTANCE.playerManager.getController(channel.getGuild().getIdLong()).getQueue());
-			PixelBeat.INSTANCE.entityManager.getController(channel.getGuild().getIdLong()).addQueueEmbed(queuemessage.getIdLong(), qe);
+			queuemessage.addReaction(Emojis.REFRESH).queue();
+			//queuemessage.addReaction(Emojis.EXIT).queue();
+			QueueReacton qe = new QueueReacton(PixelBeat.INSTANCE.playerManager.getController(channel.getGuild().getIdLong()).getQueue());
+			PixelBeat.INSTANCE.entityManager.getController(channel.getGuild().getIdLong()).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
 			queuemessage.editMessage(loadQueueEmbed(channel.getGuild(),qe).build()).queue();
 			queuemessage.editMessage(".").queue();
 		});		
 	}
 	
-	public static EmbedBuilder loadQueueEmbed(Guild guild, QueueEmbed qe) {
+	public static EmbedBuilder loadQueueEmbed(Guild guild, QueueReacton qe) {
 		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong());
 		EmbedBuilder builder = new EmbedBuilder();
 		Queue queue = controller.getQueue();

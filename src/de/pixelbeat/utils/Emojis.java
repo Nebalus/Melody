@@ -11,6 +11,7 @@ public class Emojis {
 	
 	public final static Long HEY_GUYS = 801638731136237568l;
 	
+	public final static String REFRESH = "🔄";
 	public final static String NEXT_TITLE = "⏭";
 	public final static String PREVIOUS_TITLE = "⏮";
 	public final static String PAUSE = "⏸";
