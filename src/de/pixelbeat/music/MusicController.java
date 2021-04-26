@@ -4,7 +4,7 @@ import java.util.HashMap;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import de.pixelbeat.PixelBeat;
-import de.pixelbeat.entities.QueueEmbed;
+import de.pixelbeat.entities.reacts.QueueReacton;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class MusicController {
@@ -12,7 +12,7 @@ public class MusicController {
 	private Guild guild;
 	private AudioPlayer player;
 	private Queue queue;
-	private HashMap<Long, QueueEmbed> queueembed;
+	private HashMap<Long, QueueReacton> queueembed;
 	
 	public MusicController(Guild guild) {
 		this.guild = guild;
@@ -36,16 +36,16 @@ public class MusicController {
 		return queue;
 	}
 	
-	public QueueEmbed getQueueEmbed(Long messageid) {
+	public QueueReacton getQueueEmbed(Long messageid) {
 		if(queueembed.containsKey(messageid)) {
 			return queueembed.get(messageid);
 		}
 		return null;
 	}
 	
-	public void addQueueEmbed(Long messageid, QueueEmbed queueEmbed) {
+	public void addQueueEmbed(Long messageid, QueueReacton queueReacton) {
 		if(!queueembed.containsKey(messageid)) {
-			queueembed.put(messageid, queueEmbed);
+			queueembed.put(messageid, queueReacton);
 		}
 	}
 	

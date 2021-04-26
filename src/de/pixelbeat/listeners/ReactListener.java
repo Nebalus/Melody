@@ -2,8 +2,8 @@ package de.pixelbeat.listeners;
 
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.music.QueueCommand;
-import de.pixelbeat.entities.EntityController;
-import de.pixelbeat.entities.QueueEmbed;
+import de.pixelbeat.entities.reacts.QueueReacton;
+import de.pixelbeat.entities.reacts.ReactionManager;
 import de.pixelbeat.utils.Emojis;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
@@ -23,27 +23,34 @@ public class ReactListener extends ListenerAdapter{
 			TextChannel channel = event.getTextChannel();
 			User user = event.getUser();
 			
-			EntityController entityController = PixelBeat.INSTANCE.entityManager.getController(guild.getIdLong());
-			QueueEmbed qe;
-			if((qe = entityController.getQueueEmbed(messageid)) != null && !user.isBot()) {
+			ReactionManager reactionManager = PixelBeat.INSTANCE.entityManager.getController(guild.getIdLong()).getReactionManager();
+			QueueReacton qr;
+			if((qr = reactionManager.getQueueReacton(messageid)) != null && !user.isBot()) {
 				switch (emoji) {
 				case Emojis.BACK:
 					channel.removeReactionById(messageid, emoji, event.getUser()).queue();
-					if(qe.removePage()) {
-						channel.editMessageById(messageid, QueueCommand.loadQueueEmbed(guild,qe).build()).queue();		
+					if(qr.removePage()) {
+						channel.editMessageById(messageid, QueueCommand.loadQueueEmbed(guild,qr).build()).queue();		
 					}
 					break;
+					
 				case Emojis.RESUME:
 					channel.removeReactionById(messageid, emoji, event.getUser()).queue();
-					if(qe.addPage()) {
-						channel.editMessageById(messageid, QueueCommand.loadQueueEmbed(guild,qe).build()).queue();	
+					if(qr.addPage()) {
+						channel.editMessageById(messageid, QueueCommand.loadQueueEmbed(guild,qr).build()).queue();	
 					}
 					break;
 				
+				case Emojis.REFRESH:
+					channel.removeReactionById(messageid, emoji, event.getUser()).queue();
+					channel.editMessageById(messageid, QueueCommand.loadQueueEmbed(guild,qr).build()).queue();
+					break;
+				/*	
 				case Emojis.EXIT:
-					entityController.removeQueueEmbed(messageid);
+					reactionManager.removeQueueReacton(messageid);
 					channel.clearReactionsById(messageid).queue();
 					break;
+					*/
 				}
 			}
 		}
