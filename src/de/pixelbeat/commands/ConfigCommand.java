@@ -9,6 +9,7 @@ import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Utils;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -18,14 +19,14 @@ public class ConfigCommand implements ServerCommand{
 	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message) {
+	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
-		Long guildid = channel.getGuild().getIdLong();
+		Long guildid = guild.getIdLong();
 		if(args.length == 1) {
 			
 		}else if(args.length == 2) {
 			if(args[1].equalsIgnoreCase("prefix")) {
-				channel.sendMessage(mf.format(guildid, "feedback.info.prefix",Utils.getGuildPrefix(channel.getGuild().getIdLong()))).queue();
+				channel.sendMessage(mf.format(guildid, "feedback.info.prefix",Utils.getGuildPrefix(guildid))).queue();
 			}
 		}else if(args.length == 3) {
 			if(args[1].equalsIgnoreCase("prefix")) {
@@ -37,8 +38,8 @@ public class ConfigCommand implements ServerCommand{
 				        }
 				        if(count <= 6) {					            
 							try {
-								String oldPrefix = Utils.getGuildPrefix(channel.getGuild().getIdLong());
-								PreparedStatement ps = LiteSQL.getConnection().prepareStatement("UPDATE `general` SET `prefix` = ? WHERE `guildid` = "+channel.getGuild().getIdLong());
+								String oldPrefix = Utils.getGuildPrefix(guildid);
+								PreparedStatement ps = LiteSQL.getConnection().prepareStatement("UPDATE `general` SET `prefix` = ? WHERE `guildid` = "+guildid);
 								ps.setString(1, args[2]);
 								ps.executeUpdate();
 								channel.sendMessage("**You have updated my prefix from** `"+oldPrefix+"` **to** `"+args[2]+"`").queue();

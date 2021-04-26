@@ -21,6 +21,7 @@ import de.pixelbeat.commands.music.StopCommand;
 import de.pixelbeat.commands.music.TrackinfoCommand;
 import de.pixelbeat.commands.music.VolumeCommand;
 import de.pixelbeat.commands.types.ServerCommand;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -78,10 +79,10 @@ public class CommandManager {
 		this.commands.put("loop",new LoopCommand());
 	}
 	
-	public boolean perform(String command, Member m, TextChannel channel, Message message) {	
+	public boolean perform(String command, Member m, TextChannel channel, Message message, Guild guild) {	
 		ServerCommand cmd;
 		if((cmd = this.commands.get(command.toLowerCase())) != null) {
-			cmd.performCommand(m, channel, message);
+			cmd.performCommand(m, channel, message, guild);
 			return true;
 		}
 		

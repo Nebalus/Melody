@@ -22,15 +22,15 @@ public class QueueCommand implements ServerCommand{
 	private static MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message) {	
+	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {	
 		channel.sendMessage("Loading...").queue((queuemessage) ->{
 			queuemessage.addReaction(Emojis.BACK).queue();	
 			queuemessage.addReaction(Emojis.RESUME).queue();	
 			queuemessage.addReaction(Emojis.REFRESH).queue();
 			//queuemessage.addReaction(Emojis.EXIT).queue();
-			QueueReacton qe = new QueueReacton(PixelBeat.INSTANCE.playerManager.getController(channel.getGuild().getIdLong()).getQueue());
-			PixelBeat.INSTANCE.entityManager.getController(channel.getGuild().getIdLong()).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
-			queuemessage.editMessage(loadQueueEmbed(channel.getGuild(),qe).build()).queue();
+			QueueReacton qe = new QueueReacton(PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong()).getQueue());
+			PixelBeat.INSTANCE.entityManager.getController(guild.getIdLong()).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
+			queuemessage.editMessage(loadQueueEmbed(guild,qe).build()).queue();
 			queuemessage.editMessage(".").queue();
 		});		
 	}

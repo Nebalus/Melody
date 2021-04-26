@@ -4,6 +4,7 @@ import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.speechpackets.MessageFormatter;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -14,17 +15,18 @@ public class LeaveCommand implements ServerCommand{
 
 	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
 	
+	@SuppressWarnings("unused")
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message) {
+	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		MusicUtil.updateChannel(channel);
 		GuildVoiceState state;
 		VoiceChannel vc;
-		if((state = m.getGuild().getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
+		if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
 		
-			MusicUtil.MusicKiller(vc.getGuild());
+			MusicUtil.MusicKiller(guild);
 			message.addReaction("U+1F44C").queue();
 		}else {
-			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
+			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"));
 		}
 	}
 }

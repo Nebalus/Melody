@@ -10,6 +10,7 @@ import de.pixelbeat.music.Queue;
 import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -20,14 +21,15 @@ public class NextCommand implements ServerCommand{
 
 	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
 	
+	@SuppressWarnings("unused")
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message) {
+	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		MusicUtil.updateChannel(channel);
 		GuildVoiceState state;
 		VoiceChannel vc;
 		EmbedBuilder builder = new EmbedBuilder();
-		if((state = m.getGuild().getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
-			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());
+		if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
+			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong());
 			String[] args = message.getContentDisplay().split(" ");
 			if(args.length == 1) {
 				try {
@@ -36,22 +38,22 @@ public class NextCommand implements ServerCommand{
 					if(player.getPlayingTrack() != null) {
 						player.stopTrack();
 						if(queue.nextexist()) {
-							builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(channel.getGuild().getIdLong(), "music.track.skip"));
-							MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
+							builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(guild.getIdLong(), "music.track.skip"));
+							MusicUtil.sendEmbled(guild.getIdLong(), builder);
 							queue.next();
 						}else {
-							builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(channel.getGuild().getIdLong(), "music.track.skip-new-null"));
-							MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
+							builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(guild.getIdLong(), "music.track.skip-new-null"));
+							MusicUtil.sendEmbled(guild.getIdLong(), builder);
 						}
 					}else {
-						MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "music.info.currently-playing-null"));
+						MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "music.info.currently-playing-null"));
 					}
 				}catch(NumberFormatException e) {
 					e.printStackTrace();
 				}
 			}
 		}else {
-			MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), mf.format(channel.getGuild().getIdLong(), "feedback.music.bot-not-in-vc"));
+			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"));
 		}
 	}
 }

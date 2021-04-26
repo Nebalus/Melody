@@ -7,6 +7,7 @@ import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -16,15 +17,15 @@ public class VolumeCommand implements ServerCommand{
 	//private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message) {
+	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
-		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(channel.getGuild().getIdLong());
+		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong());
 		AudioPlayer player = controller.getPlayer();
 		MusicUtil.updateChannel(channel);
 		if(args.length == 1) {
 			EmbedBuilder builder = new EmbedBuilder();
-			builder.setDescription("The volume from the bot: " + MusicUtil.getVolume(channel.getGuild().getIdLong()));
-			MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
+			builder.setDescription("The volume from the bot: " + MusicUtil.getVolume(guild.getIdLong()));
+			MusicUtil.sendEmbled(guild.getIdLong(), builder);
 		}else {
 			try {
 				int amount = Integer.parseInt(args[1]);			
@@ -32,17 +33,17 @@ public class VolumeCommand implements ServerCommand{
 					if(amount >= 1) {
 						player.setVolume(amount);
 						EmbedBuilder builder = new EmbedBuilder();
-						MusicUtil.setVolume(channel.getGuild().getIdLong(), amount);
+						MusicUtil.setVolume(guild.getIdLong(), amount);
 						builder.setDescription("The volume from the bot has been set to " + amount);
-						MusicUtil.sendEmbled(channel.getGuild().getIdLong(), builder);
+						MusicUtil.sendEmbled(guild.getIdLong(), builder);
 					}else {
-						MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), m.getAsMention() + " the min volume you can use is 1!");
+						MusicUtil.sendEmbledError(guild.getIdLong(), m.getAsMention() + " the min volume you can use is 1!");
 					}
 				}else {
-					MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), m.getAsMention() + " the max volume you can use is 200!");
+					MusicUtil.sendEmbledError(guild.getIdLong(), m.getAsMention() + " the max volume you can use is 200!");
 				}		
 			}catch(NumberFormatException e) {
-				MusicUtil.sendEmbledError(channel.getGuild().getIdLong(), m.getAsMention() + " Please choose a number between 1-200!");
+				MusicUtil.sendEmbledError(guild.getIdLong(), m.getAsMention() + " Please choose a number between 1-200!");
 			}
 		}
 	}

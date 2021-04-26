@@ -106,7 +106,7 @@ public class TrackScheduler extends AudioEventAdapter{
 						if(!queue.isLoopQueue()) {
 							if(!queue.next()) { 
 								if(vc.getMembers().size() > 1) {
-									MusicUtil.getVoiceAfkTime.put(guildid, 600l);
+									controller.setAfkTime(600);
 								}
 							}else {
 								return;
