@@ -4,11 +4,11 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
+import de.pixelbeat.entities.GuildEntity;
 import de.pixelbeat.music.AudioLoadResult;
 import de.pixelbeat.music.MusicController;
 import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.speechpackets.MessageFormatter;
-import de.pixelbeat.utils.Utils;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -19,18 +19,20 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 public class PlaylistCommand implements ServerCommand{
 	
-	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	private PixelBeat pixelbeat = PixelBeat.INSTANCE;
+	private MessageFormatter mf = pixelbeat.getMessageFormatter();
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
-		MusicUtil.updateChannel(channel);
+		GuildEntity guildentity = pixelbeat.entityManager.getGuildEntity(guild.getIdLong());
+		guildentity.setChannelId(channel.getIdLong());
 		if(args.length > 1) {
 			GuildVoiceState state;
 			VoiceChannel vc;
 			if((state = m.getVoiceState()) != null && (vc = state.getChannel()) != null) {
-				MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong());
-				AudioPlayerManager apm = PixelBeat.INSTANCE.audioPlayerManager;
+				MusicController controller = pixelbeat.playerManager.getController(guild.getIdLong());
+				AudioPlayerManager apm = pixelbeat.audioPlayerManager;
 				AudioManager manager = guild.getAudioManager();
 				StringBuilder strBuilder = new StringBuilder();
 				for(int i = 1; i < args.length; i++) strBuilder.append(args[i] + " ");
@@ -46,7 +48,7 @@ public class PlaylistCommand implements ServerCommand{
 				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));
 			}
 		}else {
-			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.info.command-usage",Utils.getGuildPrefix(guild.getIdLong())+"playlist <url>"));
+			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.info.command-usage",guildentity.getPrefix()+"playlist <url>"));
 		}
 	}
 }

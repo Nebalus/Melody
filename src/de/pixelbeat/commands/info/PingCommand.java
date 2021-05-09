@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class PingCommand implements ServerCommand{
 
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) 	{		
 		long gatewayping = channel.getJDA().getGatewayPing();
 	
 		channel.getJDA().getRestPing().queue( (time) ->

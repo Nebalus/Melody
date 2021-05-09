@@ -10,12 +10,12 @@ import java.util.HashMap;
 import org.json.JSONObject;
 
 import de.pixelbeat.Json;
-import de.pixelbeat.LiteSQL;
+import de.pixelbeat.PixelBeat;
 
 public class MessageFormatter {
 	
 	private HashMap<Languages, JSONObject> getJSONMessage = new HashMap<Languages, JSONObject>();
-	
+	private PixelBeat pixelbeat = PixelBeat.INSTANCE;
 	public MessageFormatter() {
 		for (Languages language : Languages.values()) {
 			try {
@@ -46,7 +46,7 @@ public class MessageFormatter {
 	}
 	private Languages getLanguageFromGuild(Long guildid) {
 		try {
-			ResultSet set = LiteSQL.onQuery("SELECT language FROM general WHERE guildid = "+guildid);
+			ResultSet set = pixelbeat.getDatabase().onQuery("SELECT language FROM general WHERE guildid = "+guildid);
 			if(set.next()) {
 				return Languages.getLanguage(set.getString("language"));
 			}

@@ -39,9 +39,7 @@ public class PlayerManager {
 			if(controller.getPlayer().hashCode() == hash) {
 				return controller.getGuild().getIdLong();
 			}
-		}
-		
+		}	
 		return -1;
 	}
-	
 }

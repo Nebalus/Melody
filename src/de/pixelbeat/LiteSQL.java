@@ -12,9 +12,10 @@ import java.sql.Statement;
 
 public class LiteSQL {
 	
-	private static Connection conn;
-	private static Statement stmt;
-	public static void connect() {
+	private Connection conn;
+	private Statement stmt;
+	
+	public LiteSQL(){
 		conn = null;
 		try {
 			File file = new File("Datenbank.db");
@@ -26,14 +27,14 @@ public class LiteSQL {
 			
 			ConsoleLogger.info("SQLDatabase", "Verbindung zur Datenbank hergestellt");
 			stmt = conn.createStatement();
-			onCreate();
+			onUpdate("CREATE TABLE IF NOT EXISTs general(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, channelid INTEGER, volume INTEGER, pitch INTEGER, speed INTEGER, djrole INTEGER, prefix VARCHAR, ispremium BOOLEAN, voteskip BOOLEAN, staymode BOOLEAN, language VARCHAR)");
+			onUpdate("CREATE TABLE IF NOT EXISTs userdata(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, userid INTEGER)");	
 		} catch (SQLException | IOException e1) {
 			e1.printStackTrace();
 		}
 	}
 	
-	
-	public static void disconnect() {
+	public void disconnect() {
 		try {
 			if(isConnected()) {
 				conn.close();
@@ -44,18 +45,15 @@ public class LiteSQL {
 		}
 	}
 	
-	
-	 public static boolean isConnected() {
+	 public boolean isConnected() {
 	    return (conn == null ? false : true);
-	 }
+	 } 
 	 
-	 
-	 public static Connection getConnection() {
+	 public Connection getConnection() {
 	    return conn;
 	 }
-	
 	 
-	public static void onUpdate(String sql) {
+	public void onUpdate(String sql) {
 		try {
 			stmt.execute(sql);
 		}catch (SQLException e) {
@@ -63,16 +61,12 @@ public class LiteSQL {
 		}
 	}
 		
-	public static ResultSet onQuery(String sql) {
+	public ResultSet onQuery(String sql) {
 		try {
 			return stmt.executeQuery(sql);
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 			return null;
-	}
-	public static void onCreate() {
-		LiteSQL.onUpdate("CREATE TABLE IF NOT EXISTs general(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, channelid INTEGER, volume INTEGER, pitch INTEGER, speed INTEGER , djrole INTEGER, prefix VARCHAR, ispremium BOOLEAN, voteskip BOOLEAN, language VARCHAR)");
-		LiteSQL.onUpdate("CREATE TABLE IF NOT EXISTs userdata(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, userid INTEGER)");	
 	}
 }

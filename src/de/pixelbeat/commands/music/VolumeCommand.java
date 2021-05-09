@@ -1,10 +1,8 @@
 package de.pixelbeat.commands.music;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
-import de.pixelbeat.music.MusicController;
+import de.pixelbeat.entities.GuildEntity;
 import de.pixelbeat.music.MusicUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -14,26 +12,26 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class VolumeCommand implements ServerCommand{
 
-	//private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	private PixelBeat pixelbeat = PixelBeat.INSTANCE;
+	//private MessageFormatter mf = pixelbeat.getMessageFormatter();
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
-		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong());
-		AudioPlayer player = controller.getPlayer();
-		MusicUtil.updateChannel(channel);
+		GuildEntity guildentity = pixelbeat.entityManager.getGuildEntity(guild.getIdLong());
+		guildentity.setChannelId(channel.getIdLong());
 		if(args.length == 1) {
 			EmbedBuilder builder = new EmbedBuilder();
-			builder.setDescription("The volume from the bot: " + MusicUtil.getVolume(guild.getIdLong()));
+			builder.setDescription("The volume from the bot: " + guildentity.getVolume());
 			MusicUtil.sendEmbled(guild.getIdLong(), builder);
 		}else {
 			try {
 				int amount = Integer.parseInt(args[1]);			
 				if(amount <= 200) {
 					if(amount >= 1) {
-						player.setVolume(amount);
+						pixelbeat.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
 						EmbedBuilder builder = new EmbedBuilder();
-						MusicUtil.setVolume(guild.getIdLong(), amount);
+						guildentity.setVolume(amount);
 						builder.setDescription("The volume from the bot has been set to " + amount);
 						MusicUtil.sendEmbled(guild.getIdLong(), builder);
 					}else {

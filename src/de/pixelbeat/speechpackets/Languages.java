@@ -21,6 +21,11 @@ public enum Languages {
 		return file;
 	}
 	
+	public String getCode() {
+		return code;
+	}
+	
+	
 	public static Languages getLanguage(String code) {
 		 for (Languages language : values()) {
 			 if(language.code.equalsIgnoreCase(code) || language.name.equalsIgnoreCase(code)) {

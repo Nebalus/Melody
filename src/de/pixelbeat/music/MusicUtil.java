@@ -1,12 +1,10 @@
 package de.pixelbeat.music;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import de.pixelbeat.LiteSQL;
+import de.pixelbeat.ConsoleLogger;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.utils.Emojis;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -25,35 +23,15 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 public class MusicUtil extends ListenerAdapter{
 
 	private static ArrayList<String> verifiedurl = new ArrayList<String>();
-	
-	public static void updateChannel(TextChannel channel) {	
-		try {
-			ResultSet set = LiteSQL.onQuery("SELECT channelid FROM general WHERE guildid = " + channel.getGuild().getIdLong());
-			if(set.next()) {
-				if(set.getLong("channelid") != channel.getIdLong()) {
-					LiteSQL.onUpdate("UPDATE general SET channelid = " + channel.getIdLong() + " WHERE guildid = "+ channel.getGuild().getIdLong());
-				}
-			}
-		}catch(SQLException ex) {
-			ex.printStackTrace();
-		}	
-	}
+	private PixelBeat pixelbeat = PixelBeat.INSTANCE;
 	
 	private static TextChannel getChannel(long guildid) {
-		ResultSet set = LiteSQL.onQuery("SELECT channelid FROM general WHERE guildid = "+guildid);
-		try {
-			if(set.next()) {
-				long channelid = set.getLong("channelid");
-				Guild guild;
-				if((guild = PixelBeat.INSTANCE.shardMan.getGuildById(guildid)) != null) {
-					TextChannel channel;
-					if((channel = guild.getTextChannelById(channelid)) != null) {
-						return channel;
-					}
-				}
+		Guild guild;
+		if((guild = PixelBeat.INSTANCE.shardMan.getGuildById(guildid)) != null) {
+			TextChannel channel;
+			if((channel = guild.getTextChannelById(PixelBeat.INSTANCE.entityManager.getGuildEntity(guildid).getChannelId())) != null) {
+				return channel;
 			}
-		}catch(SQLException ex) {
-			ex.printStackTrace();	
 		}
 		return null;
 	}
@@ -76,34 +54,6 @@ public class MusicUtil extends ListenerAdapter{
 		}				
 	}
 	
-	public static int getVolume(Long GuildID) {
-		try {
-			ResultSet rs = LiteSQL.onQuery("SELECT volume FROM general WHERE guildid = " + GuildID);	
-			if(rs.next()) {
-				if(rs.getInt("volume") != 0) {
-					return rs.getInt("volume");	
-				}
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return 50;
-	}
-	
-	public static Boolean setVolume(Long GuildID, int volume) {
-		ResultSet set = LiteSQL.onQuery("SELECT volume FROM general WHERE guildid = " + GuildID);
-		try {
-			if(set.next()) {
-			 LiteSQL.onUpdate("UPDATE general SET volume = " + volume + " WHERE guildid = "+ GuildID);
-			 return true;	
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-
 	@Override
 	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
 		VoiceChannel vc = event.getChannelLeft();
@@ -112,7 +62,7 @@ public class MusicUtil extends ListenerAdapter{
 			MusicKiller(guild);
 		}else {
 			if(vc.getMembers().contains(guild.getSelfMember()) && vc.getMembers().size() == 1) {
-				PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong()).setAfkTime(240);
+				pixelbeat.playerManager.getController(guild.getIdLong()).setAfkTime(240);
 			}
 		}
 	}
@@ -121,7 +71,7 @@ public class MusicUtil extends ListenerAdapter{
 	public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
 		Guild guild = event.getGuild();
 		if(event.getMember() == guild.getSelfMember()) {
-			AudioPlayer player = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong()).getPlayer();
+			AudioPlayer player = pixelbeat.playerManager.getController(guild.getIdLong()).getPlayer();
 			player.setPaused(false);
 			guild.getSelfMember().deafen(true).queue();
 		}
@@ -159,11 +109,14 @@ public class MusicUtil extends ListenerAdapter{
 	public static void AFKManager(Guild g) {
 		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(g.getIdLong());
 		int time = controller.getAfkTime();
-		if(time > 0) {
-			time--;
-			controller.setAfkTime(time);
-		}else {
-			MusicKiller(g);
+		if(time > -1) {
+			if(time != 0) {
+				time--;
+				controller.setAfkTime(time);
+				ConsoleLogger.info(g.getIdLong()+"", time+"");
+			}else {
+				MusicKiller(g);
+			}
 		}
 	}
 	

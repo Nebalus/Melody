@@ -13,12 +13,14 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public class LeaveCommand implements ServerCommand{
 
-	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	private PixelBeat pixelbeat = PixelBeat.INSTANCE;
+	private MessageFormatter mf = pixelbeat.getMessageFormatter();
 	
 	@SuppressWarnings("unused")
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		MusicUtil.updateChannel(channel);
+		pixelbeat.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
+		
 		GuildVoiceState state;
 		VoiceChannel vc;
 		if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {

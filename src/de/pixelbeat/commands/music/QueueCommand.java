@@ -19,7 +19,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class QueueCommand implements ServerCommand{
 
-	private static MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	private static PixelBeat pixelbeat = PixelBeat.INSTANCE;
+	private static MessageFormatter mf = pixelbeat.getMessageFormatter();
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {	
@@ -28,15 +29,15 @@ public class QueueCommand implements ServerCommand{
 			queuemessage.addReaction(Emojis.RESUME).queue();	
 			queuemessage.addReaction(Emojis.REFRESH).queue();
 			//queuemessage.addReaction(Emojis.EXIT).queue();
-			QueueReacton qe = new QueueReacton(PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong()).getQueue());
-			PixelBeat.INSTANCE.entityManager.getController(guild.getIdLong()).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
+			QueueReacton qe = new QueueReacton(pixelbeat.playerManager.getController(guild.getIdLong()).getQueue());
+			PixelBeat.INSTANCE.entityManager.getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
 			queuemessage.editMessage(loadQueueEmbed(guild,qe).build()).queue();
 			queuemessage.editMessage(".").queue();
 		});		
 	}
 	
 	public static EmbedBuilder loadQueueEmbed(Guild guild, QueueReacton qe) {
-		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong());
+		MusicController controller = pixelbeat.playerManager.getController(guild.getIdLong());
 		EmbedBuilder builder = new EmbedBuilder();
 		Queue queue = controller.getQueue();
 		builder.setTitle("**Queue for "+guild.getName()+"**");

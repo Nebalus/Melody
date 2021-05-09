@@ -13,17 +13,18 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public class ResumeCommand implements ServerCommand{
 
-	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	private PixelBeat pixelbeat = PixelBeat.INSTANCE;
+	private MessageFormatter mf = pixelbeat.getMessageFormatter();
 	
 	@SuppressWarnings("unused")
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		MusicUtil.updateChannel(channel);
+		pixelbeat.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
 
 		GuildVoiceState state;
 		VoiceChannel vc;
 		if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
-			PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong()).getPlayer().setPaused(false);
+			pixelbeat.playerManager.getController(guild.getIdLong()).getPlayer().setPaused(false);
 		}else {
 			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"));
 		}

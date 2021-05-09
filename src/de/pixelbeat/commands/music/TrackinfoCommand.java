@@ -5,7 +5,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.commands.types.ServerCommand;
 import de.pixelbeat.music.MusicController;
-import de.pixelbeat.music.MusicUtil;
 import de.pixelbeat.utils.Images;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -15,9 +14,11 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class TrackinfoCommand implements ServerCommand{
 	
+	private PixelBeat pixelbeat = PixelBeat.INSTANCE;
+	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		MusicUtil.updateChannel(channel);
+		pixelbeat.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setImage("attachment://trackinfo.png");
 		try {
