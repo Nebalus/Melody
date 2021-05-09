@@ -32,7 +32,7 @@ public class JoinCommand implements ServerCommand{
 			AudioPlayer player = controller.getPlayer();
 			player.setPaused(false);
 			if(player.getPlayingTrack() == null) {
-				controller.setAfkTime(10);
+				controller.setAfkTime(600);
 			}
 		}else {
 			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));		
