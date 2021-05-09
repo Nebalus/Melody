@@ -16,6 +16,7 @@ import de.pixelbeat.commands.music.PlaylistCommand;
 import de.pixelbeat.commands.music.QueueCommand;
 import de.pixelbeat.commands.music.ResumeCommand;
 import de.pixelbeat.commands.music.ShuffelCommand;
+import de.pixelbeat.commands.music.StayCommand;
 import de.pixelbeat.commands.music.NextCommand;
 import de.pixelbeat.commands.music.StopCommand;
 import de.pixelbeat.commands.music.TrackinfoCommand;
@@ -77,6 +78,9 @@ public class CommandManager {
 		this.commands.put("shuffel",new ShuffelCommand());
 		
 		this.commands.put("loop",new LoopCommand());
+		
+		this.commands.put("24/7", new StayCommand());
+		this.commands.put("247", new StayCommand());
 	}
 	
 	public boolean perform(String command, Member m, TextChannel channel, Message message, Guild guild) {	

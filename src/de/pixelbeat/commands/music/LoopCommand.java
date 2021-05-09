@@ -17,17 +17,18 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public class LoopCommand implements ServerCommand{
 
-	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	private PixelBeat pixelbeat = PixelBeat.INSTANCE;
+	private MessageFormatter mf = pixelbeat.getMessageFormatter();
 	
 	@SuppressWarnings("unused")
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		MusicUtil.updateChannel(channel);
+		pixelbeat.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
 
 		GuildVoiceState state;
 		VoiceChannel vc;
 		if((state = m.getVoiceState()) != null && (vc = state.getChannel()) != null) {
-			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong());
+			MusicController controller = pixelbeat.playerManager.getController(guild.getIdLong());
 			AudioPlayer player = controller.getPlayer();
 			if(player.getPlayingTrack() != null) {
 				if(controller.getQueue().isLoop()) {

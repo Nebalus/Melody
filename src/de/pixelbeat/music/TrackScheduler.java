@@ -11,7 +11,6 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import de.pixelbeat.LiteSQL;
 import de.pixelbeat.PixelBeat;
 import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
@@ -23,12 +22,13 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public class TrackScheduler extends AudioEventAdapter{
-
-	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	
+	private PixelBeat pixelbeat = PixelBeat.INSTANCE;
+	private MessageFormatter mf = pixelbeat.getMessageFormatter();
 	
 	@Override
 	public void onPlayerPause(AudioPlayer player) {
-		long guildid = PixelBeat.INSTANCE.playerManager.getGuildByPlayerHash(player.hashCode());
+		long guildid = pixelbeat.playerManager.getGuildByPlayerHash(player.hashCode());
 		
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(Emojis.PAUSE+" "+mf.format(guildid, "music.track.pause"));
@@ -37,7 +37,7 @@ public class TrackScheduler extends AudioEventAdapter{
 	
 	@Override
 	public void onPlayerResume(AudioPlayer player) {
-		long guildid = PixelBeat.INSTANCE.playerManager.getGuildByPlayerHash(player.hashCode());
+		long guildid = pixelbeat.playerManager.getGuildByPlayerHash(player.hashCode());
 		
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(Emojis.RESUME+" "+mf.format(guildid, "music.track.resume"));
@@ -48,9 +48,9 @@ public class TrackScheduler extends AudioEventAdapter{
 	
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
-		long guildid = PixelBeat.INSTANCE.playerManager.getGuildByPlayerHash(player.hashCode());
-		Guild guild = PixelBeat.INSTANCE.shardMan.getGuildById(guildid);
-		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guildid);
+		long guildid = pixelbeat.playerManager.getGuildByPlayerHash(player.hashCode());
+		Guild guild = pixelbeat.shardMan.getGuildById(guildid);
+		MusicController controller = pixelbeat.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
 		if(queue.isLoop() == false && queue.isLoopQueue() == false) {
 			EmbedBuilder builder = new EmbedBuilder();
@@ -78,7 +78,7 @@ public class TrackScheduler extends AudioEventAdapter{
 					if(!vcm.getUser().isBot()) {
 						if(!Utils.doesUserExist(vcm.getIdLong())) {
 							try {
-								PreparedStatement ps = LiteSQL.getConnection().prepareStatement("INSERT INTO userdata(userid) VALUES(?)");
+								PreparedStatement ps = pixelbeat.getDatabase().getConnection().prepareStatement("INSERT INTO userdata(userid) VALUES(?)");
 								ps.setLong(1, vcm.getIdLong());
 								ps.executeUpdate();
 							} catch (SQLException e) {
@@ -93,9 +93,9 @@ public class TrackScheduler extends AudioEventAdapter{
 	
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {	
-		long guildid = PixelBeat.INSTANCE.playerManager.getGuildByPlayerHash(player.hashCode());
-		Guild guild = PixelBeat.INSTANCE.shardMan.getGuildById(guildid);
-		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guildid);
+		long guildid = pixelbeat.playerManager.getGuildByPlayerHash(player.hashCode());
+		Guild guild = pixelbeat.shardMan.getGuildById(guildid);
+		MusicController controller = pixelbeat.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
 		if(endReason.mayStartNext) {	
 			GuildVoiceState state;
@@ -112,13 +112,13 @@ public class TrackScheduler extends AudioEventAdapter{
 								return;
 							}
 						}else {
-							AudioPlayerManager apm = PixelBeat.INSTANCE.audioPlayerManager;
+							AudioPlayerManager apm = pixelbeat.audioPlayerManager;
 							final String uri = track.getInfo().uri;
 							apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false, false, true));
 							return;
 						}
 					}else {
-						AudioPlayerManager apm = PixelBeat.INSTANCE.audioPlayerManager;
+						AudioPlayerManager apm = pixelbeat.audioPlayerManager;
 						final String uri = track.getInfo().uri;
 						apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false, true, false));
 						return;
@@ -139,7 +139,7 @@ public class TrackScheduler extends AudioEventAdapter{
 	  
 	  @Override
 	  public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-		 long guildid = PixelBeat.INSTANCE.playerManager.getGuildByPlayerHash(player.hashCode());
+		 long guildid = pixelbeat.playerManager.getGuildByPlayerHash(player.hashCode());
 		 EmbedBuilder builder = new EmbedBuilder();
 		 builder.setDescription("An error occured.");
 		 builder.addField("Errorcode",exception.getMessage(), false);

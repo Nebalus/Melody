@@ -9,6 +9,7 @@ import java.security.CodeSource;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 import javax.security.auth.login.LoginException;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -25,6 +26,7 @@ import de.pixelbeat.speechpackets.MessageFormatter;
 import de.pixelbeat.utils.Emojis;
 import de.pixelbeat.utils.Utils;
 import de.pixelbeat.entities.EntityManager;
+import de.pixelbeat.entities.GuildEntity;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
@@ -47,11 +49,12 @@ public class PixelBeat {
 	public AudioPlayerManager audioPlayerManager;
 	public PlayerManager playerManager;
 	public EntityManager entityManager;
+	public LiteSQL database;
 	
 	public int uptime; 
 	public long startuptime; 
-	public String version = "Alpha 0.5.0";
-	
+	public String version = "Alpha 0.5.1";
+	public static final Long expiretime = 1000l*60l*10l;
 	public static final Color HEXEmbeld = Color.decode("#32a87f");
 	public static final Color HEXEmbeldError = Color.decode("#db3b9e");
 	public static final Color HEXEmbeldQueue = Color.decode("#212121"); 
@@ -69,30 +72,23 @@ public class PixelBeat {
 		    String fonts[] = 
 		      GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
-		    for ( int i = 0; i < fonts.length; i++ )
-		    {
+		    for ( int i = 0; i < fonts.length; i++ ){
 		      System.out.println(fonts[i]);
 		    }
 		Long startupMillis;
 		startupMillis = System.currentTimeMillis();
 		INSTANCE = this;
-		LiteSQL.connect();
+		database = new LiteSQL();
 		messageformatter = new MessageFormatter();
 		Json.connect();
 		
-		MusicUtil.loadDomains();
-		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(null);
-		configureMemoryUsage(builder); 
-	
-		builder.addEventListeners(new CommandListener() , new MusicUtil(), new ReactListener());
-		builder.setActivity(Activity.playing("booting myself..."));
 		
 		this.audioPlayerManager = new DefaultAudioPlayerManager();
 		this.playerManager = new PlayerManager();
 		this.entityManager = new EntityManager();
 		this.cmdMan = new CommandManager();
 		
-		this.shardMan = builder.build();
+	
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
 		AudioSourceManagers.registerLocalSource(audioPlayerManager);
 		audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
@@ -111,12 +107,13 @@ public class PixelBeat {
 		this.loop = new Thread(() -> {
 			
 			Long time = System.currentTimeMillis();
+			Long entitysavetime = System.currentTimeMillis();
 			while(true) {
 				
 				if(System.currentTimeMillis() >= time + 1000) {
 					time = System.currentTimeMillis();
 					MusicUtil.onRefreshAutoDisabler(shardMan);
-					if(LiteSQL.isConnected()) {
+					if(database.isConnected()) {
 						scanGuilds();	
 					}
 					onStatusUpdate();
@@ -124,6 +121,14 @@ public class PixelBeat {
 					Json.setTotalOnlineTime(Json.getTotalOnlineTime()+1l);
 					onCaculatingPlayedMusik();
 					//onCaculatingHeardMusic();
+				}
+				if(System.currentTimeMillis() >= entitysavetime + 150000) {
+					for(Map.Entry<Long, GuildEntity> entry : entityManager.guildentity.entrySet()) {
+					    GuildEntity value = entry.getValue();
+					    if(value.getExpireTime() <= System.currentTimeMillis()) {
+					    	entityManager.removeGuildEntity(value);
+					    }
+					}
 				}
 			}
 			
@@ -140,7 +145,7 @@ public class PixelBeat {
 					if((state = g.getSelfMember().getVoiceState()) != null) {
 						VoiceChannel vc;
 						if((vc = state.getChannel()) != null) {
-							MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());	
+							MusicController controller = playerManager.getController(vc.getGuild().getIdLong());	
 							AudioPlayer player = controller.getPlayer();
 							if(player.getPlayingTrack() != null) {
 								if(!player.isPaused()) {
@@ -169,7 +174,7 @@ public class PixelBeat {
 				if((state = g.getSelfMember().getVoiceState()) != null) {
 					VoiceChannel vc;
 					if((vc = state.getChannel()) != null) {
-						MusicController controller = PixelBeat.INSTANCE.playerManager.getController(vc.getGuild().getIdLong());	
+						MusicController controller = playerManager.getController(vc.getGuild().getIdLong());	
 						AudioPlayer player = controller.getPlayer();
 						if(player.getPlayingTrack() != null) {
 							if(!player.isPaused()) {
@@ -217,7 +222,7 @@ public class PixelBeat {
 					}
 					break;
 				case 1:
-					jda.getPresence().setActivity(Activity.listening(Utils.getGuildPrefix(0l)+"help | "+version));
+					jda.getPresence().setActivity(Activity.listening("pb!help | "+version));
 					break;
 				case 2:
 					jda.getPresence().setActivity(Activity.listening("@"+jda.getSelfUser().getName()));
@@ -246,17 +251,8 @@ public class PixelBeat {
 			for(Guild g : shardMan.getGuilds()) {
 				if(!guildCache.contains(g.getIdLong())) {
 					if(!Utils.doesGuildExist(g.getIdLong())) {
-						g.getDefaultChannel().sendMessage("Hello everybody who I don't know, i'm "+g.getJDA().getSelfUser().getAsMention()+" "+g.getJDA().getEmoteById(Emojis.HEY_GUYS).getAsMention()+"\n"
-								+ " \n"
-								+ " `-` My prefix on "+g.getName()+" is `"+Utils.getGuildPrefix(g.getIdLong())+"`\n"
-								+ " `-` If you do not understand how I work then you can see all my commands by typing `"+Utils.getGuildPrefix(g.getIdLong())+"help`\n"
-								+ " `-` When you dont like something in my config then you can easyly change it by typing `"+Utils.getGuildPrefix(g.getIdLong())+"config help`\n"
-								+ " `-` To change my prefix just type `"+Utils.getGuildPrefix(g.getIdLong())+"config prefix [newprefix]`\n"
-								+ " \n"
-								+ "**Otherwise have fun listening to the music from my service** "+ Emojis.MUSIC_NOTE+" \n"
-								+ "PS: Thanks a lot for your support, that you added me to your discord server! "+g.getJDA().getEmoteById(Emojis.ANIMATED_HEARTS).getAsMention()).queue();
 						try {
-							PreparedStatement ps = LiteSQL.getConnection().prepareStatement("INSERT INTO general(guildid,channelid) VALUES(?,?)");
+							PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO general(guildid,channelid) VALUES(?,?)");
 							ps.setLong(1, g.getIdLong());
 							ps.setLong(2, g.getDefaultChannel().getIdLong());
 							ps.executeUpdate();
@@ -264,6 +260,17 @@ public class PixelBeat {
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}
+						String prefix = entityManager.getGuildEntity(g.getIdLong()).getPrefix();
+						g.getDefaultChannel().sendMessage("Hello everybody, i'm "+g.getJDA().getSelfUser().getAsMention()+" "+g.getJDA().getEmoteById(Emojis.HEY_GUYS).getAsMention()+"\n"
+								+ " \n"
+								+ " `-` My prefix on "+g.getName()+" is `"+prefix+"`\n"
+								+ " `-` If you do not understand how I work then you can see all my commands by typing `"+prefix+"help`\n"
+								+ " `-` When you dont like something in my config then you can easyly change it by typing `"+prefix+"config help`\n"
+								+ " `-` To change my prefix just type `"+prefix+"config prefix [newprefix]`\n"
+								+ " \n"
+								+ "**Otherwise have fun listening to the music from my service** "+ Emojis.MUSIC_NOTE+" \n"
+								+ "PS: Thanks a lot for your support, that you added me to your discord server! "+g.getJDA().getEmoteById(Emojis.ANIMATED_HEARTS).getAsMention()).queue();
+					
 					}else {
 						guildCache.add(g.getIdLong());
 					}
@@ -282,22 +289,21 @@ public class PixelBeat {
 				while((line = reader.readLine()) != null) {
 					if(line.equalsIgnoreCase("stop")) {
 						if(shardMan != null) {
-							LiteSQL.disconnect();					
+							database.disconnect();					
 							shardMan.setStatus(OnlineStatus.OFFLINE);
 							shardMan.shutdown();
 							ConsoleLogger.info("Bot", "Pixel offline!");
 						}
 						if(loop != null) {
 							loop.interrupt();
-						}
+						}	
 						reader.close();
 						break;
 					}else {
 						ConsoleLogger.info("Command", "Use \"Stop\" to shutdown!");
 					}
 				}
-			}catch(IOException e) {		
-			}			
+			}catch(IOException e) {}			
 		}).start();	
 	}
 	public void configureMemoryUsage(DefaultShardManagerBuilder builder) {
@@ -344,5 +350,8 @@ public class PixelBeat {
     }
     public MessageFormatter getMessageFormatter() {
 		return messageformatter;
+    }
+    public LiteSQL getDatabase() {
+    	return database;
     }
 }

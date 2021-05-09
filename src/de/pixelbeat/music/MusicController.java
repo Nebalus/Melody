@@ -17,10 +17,11 @@ public class MusicController {
 		this.guild = guild;
 		this.player = PixelBeat.INSTANCE.audioPlayerManager.createPlayer();
 		this.queue = new Queue(this);
+		this.afktime = -1;
 		
 		this.guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 		this.player.addListener(new TrackScheduler());
-		this.player.setVolume(MusicUtil.getVolume(guild.getIdLong()));
+		this.player.setVolume(PixelBeat.INSTANCE.entityManager.getGuildEntity(guild.getIdLong()).getVolume());
 	}
 	
 	public Guild getGuild() {

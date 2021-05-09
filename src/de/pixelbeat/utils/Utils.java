@@ -3,31 +3,16 @@ package de.pixelbeat.utils;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.pixelbeat.LiteSQL;
 import de.pixelbeat.PixelBeat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 public class Utils {
-
-	public static String getGuildPrefix(Long GuildId) {
-		try {
-			ResultSet rs = LiteSQL.onQuery("SELECT prefix FROM general WHERE guildid = " + GuildId);	
-			if(rs.next()) {
-				if(rs.getString("prefix") != null) {
-					return rs.getString("prefix");	
-				}
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return "pb!";
-	}
 	
 	public static boolean doesGuildExist(Long GuildId) {
 		try {
-			ResultSet rs = LiteSQL.onQuery("SELECT guildid FROM general WHERE guildid = " + GuildId);
+			ResultSet rs = PixelBeat.INSTANCE.getDatabase().onQuery("SELECT guildid FROM general WHERE guildid = " + GuildId);
 			if(rs.next()) {
 				return true;
 			}
@@ -38,7 +23,7 @@ public class Utils {
 	}
 	public static boolean doesUserExist(Long UserId) {
 		try {
-			ResultSet rs = LiteSQL.onQuery("SELECT userid FROM userdata WHERE userid = " + UserId);
+			ResultSet rs = PixelBeat.INSTANCE.getDatabase().onQuery("SELECT userid FROM userdata WHERE userid = " + UserId);
 			if(rs.next()) {
 				return true;
 			}
@@ -50,7 +35,7 @@ public class Utils {
 	
 	public static Long getUserInt() {
 		try {
-			ResultSet rs = LiteSQL.onQuery("SELECT seq FROM sqlite_sequence WHERE name = \"userdata\"");
+			ResultSet rs = PixelBeat.INSTANCE.getDatabase().onQuery("SELECT seq FROM sqlite_sequence WHERE name = \"userdata\"");
 			if(rs.next()) {
 				if(rs.getString("seq") != null) {
 					return rs.getLong("seq");	

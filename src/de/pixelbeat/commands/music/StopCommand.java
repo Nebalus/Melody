@@ -15,12 +15,13 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class StopCommand implements ServerCommand{
 
-	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	private PixelBeat pixelbeat = PixelBeat.INSTANCE;
+	private MessageFormatter mf = pixelbeat.getMessageFormatter();
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		MusicUtil.updateChannel(channel);
-		MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong());
+		pixelbeat.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
+		MusicController controller = pixelbeat.playerManager.getController(guild.getIdLong());
 		AudioPlayer player = controller.getPlayer();
 		if(player.getPlayingTrack() != null) {
 			Queue queue = controller.getQueue();

@@ -23,7 +23,7 @@ public class ReactListener extends ListenerAdapter{
 			TextChannel channel = event.getTextChannel();
 			User user = event.getUser();
 			
-			ReactionManager reactionManager = PixelBeat.INSTANCE.entityManager.getController(guild.getIdLong()).getReactionManager();
+			ReactionManager reactionManager = PixelBeat.INSTANCE.entityManager.getGuildController(guild.getIdLong()).getReactionManager();
 			QueueReacton qr;
 			if((qr = reactionManager.getQueueReacton(messageid)) != null && !user.isBot()) {
 				switch (emoji) {

@@ -17,21 +17,22 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 public class JoinCommand implements ServerCommand{
 	
-	private MessageFormatter mf = PixelBeat.INSTANCE.getMessageFormatter();
+	private PixelBeat pixelbeat = PixelBeat.INSTANCE;
+	private MessageFormatter mf = pixelbeat.getMessageFormatter();
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		MusicUtil.updateChannel(channel);
+		pixelbeat.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
 		GuildVoiceState state;
 		VoiceChannel vc;
 		if((state = m.getVoiceState()) != null && (vc = state.getChannel()) != null) {
 			AudioManager manager = guild.getAudioManager();
 			manager.openAudioConnection(vc);
-			MusicController controller = PixelBeat.INSTANCE.playerManager.getController(guild.getIdLong());
+			MusicController controller = pixelbeat.playerManager.getController(guild.getIdLong());
 			AudioPlayer player = controller.getPlayer();
 			player.setPaused(false);
 			if(player.getPlayingTrack() == null) {
-				controller.setAfkTime(600);
+				controller.setAfkTime(10);
 			}
 		}else {
 			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));		
