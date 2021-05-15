@@ -79,6 +79,9 @@ public class CommandManager {
 		
 		this.commands.put("loop",new LoopCommand());
 		
+		//Funktioniert nicht auf einen raspberry pi
+		//this.commands.put("speed",new SpeedCommand());
+		
 		this.commands.put("24/7", new StayCommand());
 		this.commands.put("247", new StayCommand());
 	}

@@ -22,6 +22,15 @@ public class MusicController {
 		this.guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 		this.player.addListener(new TrackScheduler());
 		this.player.setVolume(PixelBeat.INSTANCE.entityManager.getGuildEntity(guild.getIdLong()).getVolume());
+		/*
+		 * Funktioniert nicht auf einen raspberry pi
+		this.player.setFilterFactory((track, format, output)->{
+			GuildEntity ge = PixelBeat.INSTANCE.entityManager.getGuildEntity(guild.getIdLong());
+			TimescalePcmAudioFilter timescale = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
+		    timescale.setSpeed(ge.getSpeed());
+		    return Arrays.asList(timescale);
+		});
+		*/
 	}
 	
 	public Guild getGuild() {
