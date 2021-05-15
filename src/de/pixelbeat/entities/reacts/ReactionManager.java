@@ -4,10 +4,8 @@ import java.util.HashMap;
 
 
 public class ReactionManager {
-
 	
 	private HashMap<Long, QueueReacton> queuereaction = new HashMap<Long, QueueReacton>();
-	
 	
 	public boolean addReactionMessage(Long messageid, Object Class) {
 		ReactionTypes raw = ((ReactionRaw) Class).getType();

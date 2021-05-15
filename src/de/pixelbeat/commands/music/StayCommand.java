@@ -11,6 +11,6 @@ public class StayCommand implements ServerCommand{
 	//Prefix 24/7
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-	
+		
 	}
 }

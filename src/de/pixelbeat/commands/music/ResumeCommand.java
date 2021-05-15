@@ -20,7 +20,6 @@ public class ResumeCommand implements ServerCommand{
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		pixelbeat.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
-
 		GuildVoiceState state;
 		VoiceChannel vc;
 		if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
