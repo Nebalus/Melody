@@ -27,7 +27,7 @@ public class VolumeCommand implements ServerCommand{
 		}else {
 			try {
 				int amount = Integer.parseInt(args[1]);			
-				if(amount <= 200) {
+				if(amount <= 100) {
 					if(amount >= 1) {
 						melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
 						EmbedBuilder builder = new EmbedBuilder();
@@ -38,10 +38,10 @@ public class VolumeCommand implements ServerCommand{
 						MusicUtil.sendEmbledError(guild.getIdLong(), m.getAsMention() + " the min volume you can use is 1!");
 					}
 				}else {
-					MusicUtil.sendEmbledError(guild.getIdLong(), m.getAsMention() + " the max volume you can use is 200!");
+					MusicUtil.sendEmbledError(guild.getIdLong(), m.getAsMention() + " the max volume you can use is 100!");
 				}		
 			}catch(NumberFormatException e) {
-				MusicUtil.sendEmbledError(guild.getIdLong(), m.getAsMention() + " Please choose a number between 1-200!");
+				MusicUtil.sendEmbledError(guild.getIdLong(), m.getAsMention() + " Please choose a number between 1-100!");
 			}
 		}
 	}
