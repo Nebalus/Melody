@@ -1,6 +1,25 @@
 package de.melody.commands.server.music;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackState;
+import com.sedmelluq.discord.lavaplayer.track.TrackMarker;
+import com.wrapper.spotify.SpotifyApi;
+import com.wrapper.spotify.SpotifyHttpManager;
+import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
+import com.wrapper.spotify.model_objects.specification.Playlist;
+import com.wrapper.spotify.model_objects.specification.Track;
+import com.wrapper.spotify.requests.data.playlists.GetPlaylistRequest;
+import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
@@ -9,6 +28,7 @@ import de.melody.music.AudioLoadResult;
 import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.utils.SpotifyAPI;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -42,7 +62,75 @@ public class PlayCommand implements ServerCommand{
 					url = "ytsearch: " + url;
 					isytsearch = true;
 				}
-				if(MusicUtil.isUrlVerified(url) || isytsearch == true) {
+				if(url.startsWith("https://open.spotify.com/")) {
+					SpotifyApi spotify = new SpotifyApi.Builder()
+							.setAccessToken(Melody.INSTANCE.spotifyapi.getToken())
+							.build();
+					if(url.toLowerCase().startsWith("https://open.spotify.com/track/")){
+						String[] urlid = url.split("/");
+						String id = urlid[4].substring(0, 22);
+						
+						final GetTrackRequest TrackRequest = spotify.getTrack(id).build();
+						manager.openAudioConnection(vc);
+						try {
+							final CompletableFuture<Track> trackFuture = TrackRequest.executeAsync();
+							final Track track = trackFuture.join();
+							
+							final String uri = "ytsearch: " + track.getName() + " "+track.getArtists()[0].getName();
+							
+							apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false, false, false));
+							} catch (CompletionException e) {
+						      System.out.println("Error: " + e.getCause().getMessage());
+							} catch (CancellationException e) {
+						      System.out.println("Async operation cancelled.");
+							}
+					}else
+						if(url.toLowerCase().startsWith("https://open.spotify.com/playlist/")){
+							String[] urlid = url.split("/");
+							String id = urlid[4].substring(0, 22);
+							
+							
+							final GetPlaylistRequest playlistRequest = spotify.getPlaylist(id).build();
+							manager.openAudioConnection(vc);
+							try {
+								final CompletableFuture<Playlist> playlistFuture = playlistRequest.executeAsync();
+								final Playlist playlist = playlistFuture.join();
+				
+								AudioPlaylist aPlaylist = new AudioPlaylist() {
+									
+									@Override
+									public boolean isSearchResult() {
+										return false;
+									}
+									
+									@Override
+									public List<AudioTrack> getTracks() {
+										List<AudioTrack> list = new ArrayList<AudioTrack>();
+										
+										return null;
+									}
+									
+									@Override
+									public AudioTrack getSelectedTrack() {
+										return getTracks().get(0);
+									}
+									
+									@Override
+									public String getName() {
+										return playlist.getName();
+									}
+								};
+								
+								final String uri = "ytsearch: " + playlist.getName();
+								apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false, false, false));
+								} catch (CompletionException e) {
+							      System.out.println("Error: " + e.getCause().getMessage());
+								} catch (CancellationException e) {
+							      System.out.println("Async operation cancelled.");
+								}
+						}
+					System.out.println(spotify.getAccessToken());
+				}else if(MusicUtil.isUrlVerified(url) || isytsearch == true) {
 					manager.openAudioConnection(vc);
 					final String uri = url;
 					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false, false, false));
