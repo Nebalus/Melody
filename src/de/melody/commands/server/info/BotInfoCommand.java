@@ -3,6 +3,7 @@ package de.melody.commands.server.info;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 
 import de.melody.Json;
 import de.melody.Melody;
@@ -28,17 +29,30 @@ public class BotInfoCommand implements ServerCommand{
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(0x23cba7);
 		builder.setThumbnail(guild.getSelfMember().getUser().getAvatarUrl());
+		
+		Runtime r = Runtime.getRuntime();
+		Properties prop = System.getProperties();
+		String smallmemory = new String(r.totalMemory()+"");
+		String bigmemory = new String(r.totalMemory()/ 1048576+"");
+		
 		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(guild.getIdLong(), "feedback.info.botinfo",
 			"JDA",
 			Melody.INSTANCE.version,
 			serversRunning,
 			membersDeserving,
-			Utils.uptime(Melody.INSTANCE.uptime),
-			botstart(),
-			Utils.uptime(Json.getTotalOnlineTime()),
 			Utils.getUserInt(),
 			Utils.uptime(Json.getPlayedMusicTime()),
-			guild.getSelfMember().getAsMention()));
+			guild.getSelfMember().getAsMention())
+				
+			+" \n \n```OS: "+prop.getProperty("os.name")+"\n"
+			+ "System Name: Cluster Node 2\n"
+			+ "Cores: "+r.availableProcessors()+"\n"
+			+ "CPU Arch: "+prop.getProperty("os.arch")+"\n"
+			+ "Memory Usage: "+bigmemory+"."+smallmemory.substring(bigmemory.length())+"MB\n"
+			+ "Uptime: "+Utils.uptime(Melody.INSTANCE.uptime)+"```");
+		
+		
+			
 		builder.setFooter("Made by Nebalus#1665 with <3");
 		channel.sendMessage(builder.build()).queue();
 		membersDeserving = 0;
