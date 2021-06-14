@@ -1,20 +1,25 @@
 package de.melody.commands.server.info;
 
 import de.melody.Melody;
-import de.melody.commands.types.ServerCommand;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
+import de.melody.commands.types.SlashCommand;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
-public class PingCommand implements ServerCommand{
+public class PingCommand implements SlashCommand{
 
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) 	{		
-		long gatewayping = channel.getJDA().getGatewayPing();
-	
-		channel.getJDA().getRestPing().queue( (time) ->
-		channel.sendMessageFormat(Melody.INSTANCE.getMessageFormatter().format(channel.getGuild().getIdLong(), "feedback.info.ping"), time, gatewayping).queue()
-		);
+	public CommandData getCommandData() {
+		return new CommandData("ping", "Checks "+Melody.name+"'s response time to Discord");
 	}
+
+	@Override
+	public void performSlashCommand(SlashCommandEvent slash) {
+		long gatewayping = slash.getJDA().getGatewayPing();
+		
+		slash.getJDA().getRestPing().queue( (time) ->
+			slash.replyFormat(Melody.INSTANCE.getMessageFormatter().format(slash.getGuild().getIdLong(), "feedback.info.ping"), time, gatewayping).queue()
+		);
+		
+	}
+
 }

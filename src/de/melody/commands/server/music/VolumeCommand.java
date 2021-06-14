@@ -1,7 +1,7 @@
 package de.melody.commands.server.music;
 
 import de.melody.Melody;
-import de.melody.commands.types.ServerCommand;
+import de.melody.commands.types.SlashCommand;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class VolumeCommand implements ServerCommand{
+public class VolumeCommand implements SlashCommand{
 
 	private Melody melody = Melody.INSTANCE;
 	//private MessageFormatter mf = pixelbeat.getMessageFormatter();

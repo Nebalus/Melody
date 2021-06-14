@@ -53,4 +53,9 @@ public class MessageFormatter {
 		} catch (Exception e) {}
 		return Languages.ENGLISH;
 	}
+
+	public String format(String string, String domain) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

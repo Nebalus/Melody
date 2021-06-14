@@ -17,7 +17,6 @@ public class GuildEntity {
 	private double pitch = 1.0;
 	private double speed = 1.0;
 	private Long djroleid;
-	private String prefix = "m!";
 	private boolean voteskip = false;
 	private boolean staymode = false;
 	private Languages language = Languages.ENGLISH;
@@ -43,9 +42,6 @@ public class GuildEntity {
 						speed = rs.getDouble("speed");
 					}
 					djroleid = rs.getLong("djrole");
-					if(rs.getString("prefix") != null) {
-						prefix = rs.getString("prefix");
-					}
 					voteskip = rs.getBoolean("voteskip");
 					staymode = rs.getBoolean("staymode");
 					if(rs.getString("language") != null) {
@@ -100,15 +96,6 @@ public class GuildEntity {
 		return this.djroleid;
 	}
 	
-	public String getPrefix() {
-		renewExpireTime();
-		return this.prefix;
-	}
-	public void setPrefix(String newprefix) {
-		this.prefix = newprefix;
-		update();
-	}
-	
 	public Boolean isVoteSkip() {
 		renewExpireTime();
 		return this.voteskip;
@@ -155,7 +142,6 @@ public class GuildEntity {
 							+ "pitch = ?,"
 							+ "speed = ?,"
 							+ "djrole = ?,"
-							+ "prefix = ?,"
 							+ "voteskip = ?,"
 							+ "staymode = ?,"
 							+ "language = ? WHERE guildid = ?");
@@ -164,11 +150,10 @@ public class GuildEntity {
 					ps.setDouble(3, pitch);
 					ps.setDouble(4, speed);
 					ps.setLong(5, djroleid);
-					ps.setString(6, prefix);
-					ps.setBoolean(7, voteskip);
-					ps.setBoolean(8, staymode);
-					ps.setString(9, language.getCode());
-					ps.setLong(10, guildid);
+					ps.setBoolean(6, voteskip);
+					ps.setBoolean(7, staymode);
+					ps.setString(8, language.getCode());
+					ps.setLong(9, guildid);
 					ps.executeUpdate();
 					ConsoleLogger.info("export guild", guildid);
 				} catch (SQLException e) {

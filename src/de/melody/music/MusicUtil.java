@@ -8,6 +8,7 @@ import de.melody.ConsoleLogger;
 import de.melody.Melody;
 import de.melody.utils.Emojis;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -15,6 +16,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -53,6 +55,20 @@ public class MusicUtil extends ListenerAdapter{
 			channel.sendMessage(builder.build()).queue();
 		}				
 	}
+	
+	public static void sendEmbledSlash(SlashCommandEvent slash, EmbedBuilder builder, boolean ephemeral) {		
+		builder.setColor(Melody.HEXEmbeld);
+		slash.replyEmbeds(builder.build()).setEphemeral(ephemeral).queue();
+		System.out.println("TEst");
+	}
+	
+	public static void sendEmbledErrorSlash(SlashCommandEvent slash, String errormessage, boolean ephemeral) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setDescription(Emoji.fromEmote("tickred",757615100315304057l,true).getAsMention()+" "+errormessage);
+		builder.setColor(Melody.HEXEmbeldError);
+		slash.replyEmbeds(builder.build()).setEphemeral(ephemeral).queue();
+	}
+	
 	
 	@Override
 	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {

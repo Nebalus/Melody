@@ -1,7 +1,7 @@
 package de.melody.commands.server.music;
 
 import de.melody.Melody;
-import de.melody.commands.types.ServerCommand;
+import de.melody.commands.types.SlashCommand;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
 import net.dv8tion.jda.api.entities.Guild;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
-public class LeaveCommand implements ServerCommand{
+public class LeaveCommand implements SlashCommand{
 
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();

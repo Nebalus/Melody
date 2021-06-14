@@ -1,14 +1,14 @@
 package de.melody.commands.server.music;
 
 import de.melody.Melody;
-import de.melody.commands.types.ServerCommand;
+import de.melody.commands.types.SlashCommand;
 import de.melody.entities.GuildEntity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class StayCommand implements ServerCommand{
+public class StayCommand implements SlashCommand{
 
 	private Melody melody = Melody.INSTANCE;
 	

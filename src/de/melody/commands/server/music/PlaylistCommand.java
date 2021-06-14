@@ -3,7 +3,7 @@ package de.melody.commands.server.music;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
 import de.melody.Melody;
-import de.melody.commands.types.ServerCommand;
+import de.melody.commands.types.SlashCommand;
 import de.melody.entities.GuildEntity;
 import de.melody.music.AudioLoadResult;
 import de.melody.music.MusicController;
@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-public class PlaylistCommand implements ServerCommand{
+public class PlaylistCommand implements SlashCommand{
 	
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();

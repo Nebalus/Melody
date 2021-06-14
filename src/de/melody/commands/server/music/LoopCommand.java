@@ -3,7 +3,7 @@ package de.melody.commands.server.music;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import de.melody.Melody;
-import de.melody.commands.types.ServerCommand;
+import de.melody.commands.types.SlashCommand;
 import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
-public class LoopCommand implements ServerCommand{
+public class LoopCommand implements SlashCommand{
 
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();

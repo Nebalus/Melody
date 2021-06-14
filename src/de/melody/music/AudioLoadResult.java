@@ -9,6 +9,7 @@ import de.melody.Melody;
 import de.melody.speechpackets.MessageFormatter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 public class AudioLoadResult implements AudioLoadResultHandler{
 
@@ -18,16 +19,18 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	private final Boolean isPlaylist;
 	private final Boolean isLoop;
 	private final Boolean isLoopQueue;
+	private final SlashCommandEvent slash;
 	
 	private MessageFormatter mf = Melody.INSTANCE.getMessageFormatter();
 	
-    public AudioLoadResult(MusicController controller,String uri,Member userWhoQueued,Boolean isPlaylist, Boolean isloop, Boolean isloopqueue) {
+    public AudioLoadResult(MusicController controller,String uri,SlashCommandEvent slash,Boolean isPlaylist, Boolean isloop, Boolean isloopqueue) {
     	this.controller = controller;
 		this.uri = uri;
-		this.userWhoQueued = userWhoQueued;
+		this.userWhoQueued = slash.getMember();
 		this.isPlaylist = isPlaylist;
 		this.isLoop = isloop;
 		this.isLoopQueue = isloopqueue;
+		this.slash = slash;
 	}
 	
 	@Override
@@ -50,7 +53,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 						String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
 						builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
 					}					
-					MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
+					MusicUtil.sendEmbledSlash(slash, builder, false);
 				}
 			}
 			queue.addTrackToQueue(track,userWhoQueued);	
@@ -81,7 +84,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 						builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
 					}
 					
-					MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
+					MusicUtil.sendEmbledSlash(slash, builder, false);
 					}	
 				queue.addTrackToQueue(playlist.getTracks().get(0), userWhoQueued);	
 			return;
@@ -103,7 +106,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 					builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
 				}
 				
-				MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
+				MusicUtil.sendEmbledSlash(slash, builder, false);
 			}
 			queue.addTrackToQueue(playlist.getTracks().get(0), userWhoQueued);	
 			}	
@@ -125,9 +128,9 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 					.addField(mf.format(guildid, "music.playlist.time-until-playing"),  (MusicUtil.getTimeUntil(controller) - timeUntil == 0l ? "Now" : MusicUtil.getTime(null, MusicUtil.getTimeUntil(controller) - timeUntil))+"", true)
 					.addField(mf.format(guildid, "music.playlist.length"), MusicUtil.getTime(null,timeUntil), false);
 			
-			MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
+			MusicUtil.sendEmbledSlash(slash, builder, false);
 		}else {
-				MusicUtil.sendEmbledError(controller.getGuild().getIdLong(), userWhoQueued.getAsMention()+ " "+mf.format(guildid, "music.playlist.empty"));
+				MusicUtil.sendEmbledErrorSlash(slash, userWhoQueued.getAsMention()+ " "+mf.format(guildid, "music.playlist.empty"),true);
 			}
 		}
 	}
@@ -136,11 +139,9 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	public void noMatches() {
 		Long guildid = controller.getGuild().getIdLong();
 		if(uri.startsWith("ytsearch: ")) {
-		EmbedBuilder builder = new EmbedBuilder()
-				.setDescription(mf.format(guildid, "feedback.music.no-match"));	
-		MusicUtil.sendEmbled(guildid, builder);
+			MusicUtil.sendEmbledErrorSlash(slash, mf.format(guildid, "feedback.music.no-match"),true);
 		}else {
-			MusicUtil.sendEmbledError(guildid, mf.format(guildid, "feedback.music.nothing-in-link"));
+			MusicUtil.sendEmbledErrorSlash(slash, mf.format(guildid, "feedback.music.nothing-in-link"),true);
 		}
 	}
 

@@ -1,5 +1,8 @@
 package de.melody;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.melody.commands.server.ConfigCommand;
@@ -22,16 +25,18 @@ import de.melody.commands.server.music.StopCommand;
 import de.melody.commands.server.music.TrackinfoCommand;
 import de.melody.commands.server.music.VolumeCommand;
 import de.melody.commands.types.DirectmessageCommand;
-import de.melody.commands.types.ServerCommand;
+import de.melody.commands.types.SlashCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 public class CommandManager {
 
-	public ConcurrentHashMap<String, ServerCommand> servercommands;
+	public ConcurrentHashMap<String, SlashCommand> servercommands;
 	public ConcurrentHashMap<String, DirectmessageCommand> directmessagecommands;
 	
 	public CommandManager() {
@@ -39,10 +44,9 @@ public class CommandManager {
 		this.servercommands = new ConcurrentHashMap<>();
 		
 		this.servercommands.put("join",new JoinCommand());
-		this.servercommands.put("j",new JoinCommand());
-		
-		this.servercommands.put("p",new PlayCommand());
 		this.servercommands.put("play",new PlayCommand());
+		/*
+		this.servercommands.put("p",new PlayCommand());
 		
 		this.servercommands.put("playlist",new PlaylistCommand());
 		this.servercommands.put("pl",new PlaylistCommand());
@@ -73,10 +77,12 @@ public class CommandManager {
 		this.servercommands.put("next", new NextCommand());
 		this.servercommands.put("n", new NextCommand());
 		
+		*/
 		this.servercommands.put("botinfo",new BotInfoCommand());
 		this.servercommands.put("ping",new PingCommand());
-		this.servercommands.put("config",new ConfigCommand());
 		this.servercommands.put("invite",new InviteCommand());
+		/*
+		this.servercommands.put("config",new ConfigCommand());
 		this.servercommands.put("github",new GithubCommand());
 		
 		this.servercommands.put("shuffel",new ShuffelCommand());
@@ -88,19 +94,9 @@ public class CommandManager {
 		
 		this.servercommands.put("24/7", new StayCommand());
 		this.servercommands.put("247", new StayCommand());
+		*/
 		//*********************************************************
 		
-		
-	}
-	
-	public boolean performServer(String command, Member m, TextChannel channel, Message message, Guild guild) {	
-		ServerCommand cmd;
-		if((cmd = this.servercommands.get(command.toLowerCase())) != null) {
-			cmd.performCommand(m, channel, message, guild);
-			return true;
-		}
-		
-		return false;
 	}
 	
 	public boolean performDirectmessage(String command, User user, Message message) {	
@@ -110,5 +106,18 @@ public class CommandManager {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean performSlash(SlashCommandEvent slash) {	
+		SlashCommand cmd;
+		if((cmd = this.servercommands.get(slash.getName().toLowerCase())) != null) {
+			cmd.performSlashCommand(slash);
+			return true;
+		}
+		return false;
+	}
+	
+	public ConcurrentHashMap<String ,SlashCommand> getCommandData(){
+		return servercommands;
 	}
 }

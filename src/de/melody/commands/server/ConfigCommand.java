@@ -1,7 +1,7 @@
 package de.melody.commands.server;
 
 import de.melody.Melody;
-import de.melody.commands.types.ServerCommand;
+import de.melody.commands.types.SlashCommand;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class ConfigCommand implements ServerCommand{
+public class ConfigCommand implements SlashCommand{
 	
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
@@ -28,6 +28,7 @@ public class ConfigCommand implements ServerCommand{
 				channel.sendMessage(mf.format(guildid, "feedback.info.prefix",guildentity.getPrefix())).queue();
 			}
 		}else if(args.length == 3) {
+			/*
 			if(args[1].equalsIgnoreCase("prefix")) {
 				if(m.hasPermission(Permission.ADMINISTRATOR) | m.hasPermission(Permission.MANAGE_SERVER)) {
 					if(melody.getDatabase().isConnected()) {
@@ -50,6 +51,7 @@ public class ConfigCommand implements ServerCommand{
 					Utils.sendErrorEmbled(channel, "You don't have enough permissions **Permisions: **`MANAGE_SERVER`", m);
 				}
 			}
+			*/
 		}else if(args.length == 4) {
 			
 		}else if(args.length == 5) {

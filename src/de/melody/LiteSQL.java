@@ -28,7 +28,7 @@ public class LiteSQL {
 			ConsoleLogger.info("SQLDatabase", "Verbindung zur Datenbank hergestellt");
 			stmt = conn.createStatement();
 			onUpdate("CREATE TABLE IF NOT EXISTs general(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, channelid INTEGER, volume INTEGER, pitch INTEGER, speed INTEGER, djrole INTEGER, prefix VARCHAR, voteskip BOOLEAN, staymode BOOLEAN, language VARCHAR)");
-			onUpdate("CREATE TABLE IF NOT EXISTs userdata(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, userid INTEGER, favoritemusic INTEGER)");	
+			onUpdate("CREATE TABLE IF NOT EXISTs userdata(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, userid INTEGER, favoritemusic INTEGER, heardtime INTEGER)");	
 			/*
 			 * token = XXXX-XXXX-XXXX-XXXX
 			 * createdtime is wenn a user created a playlist

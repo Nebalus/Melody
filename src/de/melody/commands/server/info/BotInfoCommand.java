@@ -7,42 +7,40 @@ import java.util.Properties;
 
 import de.melody.Json;
 import de.melody.Melody;
-import de.melody.commands.types.ServerCommand;
+import de.melody.commands.types.SlashCommand;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
-public class BotInfoCommand implements ServerCommand{
-
-	private int membersDeserving = 0;
+public class BotInfoCommand implements SlashCommand{
 
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		
-		int serversRunning = channel.getJDA().getGuilds().size(); 
-		for(Guild g1 : channel.getJDA().getGuilds()) {
+	public void performSlashCommand(SlashCommandEvent slash) {
+		int membersDeserving = 0;
+		int serversRunning = slash.getJDA().getGuilds().size(); 
+		for(Guild g1 : slash.getJDA().getGuilds()) {
 			membersDeserving = membersDeserving + g1.getMemberCount();
 		}
+		
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(0x23cba7);
-		builder.setThumbnail(guild.getSelfMember().getUser().getAvatarUrl());
+		builder.setThumbnail(slash.getGuild().getSelfMember().getUser().getAvatarUrl());
 		
 		Runtime r = Runtime.getRuntime();
 		Properties prop = System.getProperties();
 		String smallmemory = new String(r.totalMemory()+"");
 		String bigmemory = new String(r.totalMemory()/ 1048576+"");
 		
-		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(guild.getIdLong(), "feedback.info.botinfo",
+		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(slash.getGuild().getIdLong(), "feedback.info.botinfo",
 			"JDA",
 			Melody.INSTANCE.version,
 			serversRunning,
 			membersDeserving,
 			Utils.getUserInt(),
 			Utils.uptime(Json.getPlayedMusicTime()),
-			guild.getSelfMember().getAsMention())
+			slash.getGuild().getSelfMember().getAsMention())
 				
 			+" \n \n```OS: "+prop.getProperty("os.name")+"\n"
 			+ "System Name: Cluster Node 2\n"
@@ -50,12 +48,9 @@ public class BotInfoCommand implements ServerCommand{
 			+ "CPU Arch: "+prop.getProperty("os.arch")+"\n"
 			+ "Memory Usage: "+bigmemory+"."+smallmemory.substring(bigmemory.length())+"MB\n"
 			+ "Uptime: "+Utils.uptime(Melody.INSTANCE.uptime)+"```");
-		
-		
-			
+	
 		builder.setFooter("Made by Nebalus#1665 with <3");
-		channel.sendMessage(builder.build()).queue();
-		membersDeserving = 0;
+		slash.replyEmbeds(builder.build()).queue();
 	}
 	
 	public int getCooldown() {
@@ -66,5 +61,10 @@ public class BotInfoCommand implements ServerCommand{
 		Date date = new Date(Melody.INSTANCE.startuptime);
 		String DateFormat = new SimpleDateFormat("EEE, d MMM HH:mm:ss yyyy").format(date);
 		return DateFormat;
+	}
+
+	@Override
+	public CommandData getCommandData() {
+		return new CommandData("botinfo", "Shows the infos from "+Melody.name);
 	}
 }
