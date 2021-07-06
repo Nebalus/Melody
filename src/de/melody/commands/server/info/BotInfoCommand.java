@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
-import de.melody.Json;
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.utils.Utils;
@@ -19,6 +18,7 @@ public class BotInfoCommand implements ServerCommand{
 
 	private int membersDeserving = 0;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		
@@ -37,15 +37,15 @@ public class BotInfoCommand implements ServerCommand{
 		
 		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(guild.getIdLong(), "feedback.info.botinfo",
 			"JDA",
-			Melody.INSTANCE.version,
+			Melody.version,
 			serversRunning,
 			membersDeserving,
 			Utils.getUserInt(),
-			Utils.uptime(Json.getPlayedMusicTime()),
+			Utils.uptime(Melody.INSTANCE.playedmusictime),
 			guild.getSelfMember().getAsMention())
 				
 			+" \n \n```OS: "+prop.getProperty("os.name")+"\n"
-			+ "System Name: Cluster Node 2\n"
+			+ "System Name: Node 3\n"
 			+ "Cores: "+r.availableProcessors()+"\n"
 			+ "CPU Arch: "+prop.getProperty("os.arch")+"\n"
 			+ "Memory Usage: "+bigmemory+"."+smallmemory.substring(bigmemory.length())+"MB\n"

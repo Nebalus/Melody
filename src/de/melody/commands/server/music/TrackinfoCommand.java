@@ -16,6 +16,7 @@ public class TrackinfoCommand implements ServerCommand{
 	
 	private Melody melody = Melody.INSTANCE;
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		melody.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());

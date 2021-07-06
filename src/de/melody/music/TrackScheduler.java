@@ -47,6 +47,7 @@ public class TrackScheduler extends AudioEventAdapter{
 	
 	
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
 		long guildid = melody.playerManager.getGuildByPlayerHash(player.hashCode());

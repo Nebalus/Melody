@@ -22,6 +22,7 @@ public class QueueCommand implements ServerCommand{
 	private static Melody melody = Melody.INSTANCE;
 	private static MessageFormatter mf = melody.getMessageFormatter();
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {	
 		channel.sendMessage("Loading...").queue((queuemessage) ->{

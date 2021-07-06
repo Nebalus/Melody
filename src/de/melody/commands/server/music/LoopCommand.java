@@ -38,11 +38,9 @@ public class LoopCommand implements ServerCommand{
 					controller.getQueue().setLoop(true);
 					channel.sendMessage(Emojis.SINGLE_LOOP+mf.format(guild.getIdLong(), "music.info.loop-enabled")).queue();
 				}	
-			}else {
-				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "music.info.currently-playing-null"));
-			}				
-		}else {
+			}else 
+				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "music.info.currently-playing-null"));				
+		}else 
 			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"));
-		}
 	}
 }

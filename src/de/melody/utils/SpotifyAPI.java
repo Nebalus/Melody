@@ -29,7 +29,7 @@ public class SpotifyAPI {
 	}
 	
 	public void update() {
-		if(expiretime < System.currentTimeMillis() + (60*1000)) {
+		if(expiretime < System.currentTimeMillis()) {
 			final String encodedid = Base64.getEncoder().encodeToString((clientId+":"+clientSecret).getBytes());
 			try {
 				URL url = new URL("https://accounts.spotify.com/api/token");

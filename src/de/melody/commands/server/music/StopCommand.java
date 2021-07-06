@@ -8,6 +8,7 @@ import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.utils.Emojis;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -24,11 +25,9 @@ public class StopCommand implements ServerCommand{
 		MusicController controller = melody.playerManager.getController(guild.getIdLong());
 		AudioPlayer player = controller.getPlayer();
 		if(player.getPlayingTrack() != null) {
-			Queue queue = controller.getQueue();
-			player.stopTrack();
-			queue.clearall();
-			controller.setAfkTime(600);
-			message.addReaction("U+1F44C").queue();
+			MusicUtil.MusicKiller(guild);
+			melody.playerManager.getController(guild.getIdLong()).setAfkTime(600);
+			message.addReaction(Emojis.OK_HAND).queue();
 		}else {
 			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "music.info.currently-playing-null"));
 		}	
