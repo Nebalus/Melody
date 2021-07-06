@@ -11,6 +11,6 @@ public class InviteCommand implements ServerCommand{
 
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		channel.sendMessage(Melody.INSTANCE.getMessageFormatter().format(channel.getGuild().getIdLong(), "feedback.info.invite", m.getAsMention(), "https://nebalus.ga/invite")).queue();
+		channel.sendMessage(Melody.INSTANCE.getMessageFormatter().format(channel.getGuild().getIdLong(), "feedback.info.invite", m.getAsMention(), "https://nebalus.ga/melody/invite")).queue();
 	}
 }

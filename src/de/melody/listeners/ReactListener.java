@@ -19,6 +19,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ReactListener extends ListenerAdapter{
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onMessageReactionAdd(MessageReactionAddEvent event) {
 		if(event.isFromType(ChannelType.TEXT)) {

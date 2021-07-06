@@ -24,4 +24,5 @@ public class Emojis {
 	public final static String INFINITY = "∞";
 	public final static String EXIT = "❌";
 	public final static String SPARKLING_HEART = "💖";
+	public final static String OK_HAND = "👌";
 }

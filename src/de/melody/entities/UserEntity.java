@@ -13,6 +13,7 @@ public class UserEntity {
 	
 	private int favoritemusicid = 0;
 	private Long userid;
+	private Long heardtime = 0l;
 	
 	private Long expiretime = System.currentTimeMillis() + Melody.expiretime;
 	private Boolean needtoexport = false;
@@ -27,11 +28,21 @@ public class UserEntity {
 				ResultSet rs = database.onQuery("SELECT * FROM userdata WHERE userid = " + userid);	
 				if(rs.next()) {
 					favoritemusicid = rs.getInt("favoritemusic");
+					heardtime = rs.getLong("heardtime");
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public Long getHeardTime() {
+		renewExpireTime();
+		return this.heardtime;
+	}
+	public void setHeardTime(Long newheardtime) {
+		heardtime = newheardtime;
+		update();
 	}
 	
 	public Long getUserId() {
@@ -70,9 +81,10 @@ public class UserEntity {
 			if(needtoexport) {
 				try {
 					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE userdata SET "
-							+ "favoritemusic = ? WHERE userid = ?");
+							+ "favoritemusic = ?, heardtime = ? WHERE userid = ?");
 					ps.setInt(1, favoritemusicid);
-					ps.setLong(2, userid);
+					ps.setLong(2, heardtime);
+					ps.setLong(3, userid);
 					ps.executeUpdate();
 					ConsoleLogger.info("export user", userid);
 				} catch (SQLException e) {

@@ -1,10 +1,10 @@
 package de.melody.music;
 
 import java.util.ArrayList;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import de.melody.ConsoleLogger;
 import de.melody.Melody;
 import de.melody.utils.Emojis;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -36,6 +36,7 @@ public class MusicUtil extends ListenerAdapter{
 		return null;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void sendEmbled(long guildid, EmbedBuilder builder) {		
 		TextChannel channel;
 		if((channel = getChannel(guildid)) != null) {
@@ -44,6 +45,7 @@ public class MusicUtil extends ListenerAdapter{
 		}			
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void sendEmbledError(long guildid, String errormessage) {
 		TextChannel channel;
 		if((channel = getChannel(guildid)) != null) {
@@ -113,7 +115,7 @@ public class MusicUtil extends ListenerAdapter{
 			if(time > 0) {
 				time--;
 				controller.setAfkTime(time);
-				ConsoleLogger.info(g.getIdLong()+"", time+"");
+				//ConsoleLogger.info(g.getIdLong()+"", time+"");
 			}else {
 				MusicKiller(g);
 			}

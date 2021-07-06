@@ -1,8 +1,10 @@
 package de.melody.utils;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import de.melody.LiteSQL;
 import de.melody.Melody;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -108,20 +110,41 @@ public class Utils {
 		return null;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void sendErrorEmbled(TextChannel channel, String discription, Member m) {				
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+m.getUser().getAsMention()+" "+discription);
 		builder.setColor(Melody.HEXEmbeldError);
 		channel.sendMessage(builder.build()).queue();
 	}
-	
-	public static void setUserlistenTime(Long UserID, Long listentime) {
-		//Würde eine JSON Codierung Empfelen
+	public static void loadSystemData(Melody melody) {
+		if(melody.getDatabase().isConnected()) {
+			try {
+				ResultSet rs = melody.getDatabase().onQuery("SELECT playedmusictime FROM system");
+				if(rs.next()) {
+					melody.playedmusictime = rs.getInt("playedmusictime");
+				}
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
-	
-	public static Long getUserlistenTime(Long UserID) {
-		//Würde eine JSON Codierung Empfelen
-		return 0l;
+	public static void saveSystemData(Melody melody) {
+		if(melody.getDatabase().isConnected()) {
+			try {
+				ResultSet rs = melody.getDatabase().onQuery("SELECT playedmusictime FROM system");
+				if(rs.next()) {	
+					PreparedStatement ps = melody.getDatabase().getConnection().prepareStatement("UPDATE `system` SET `playedmusictime` = ?");
+					ps.setLong(1, melody.playedmusictime);
+					ps.executeUpdate();	
+				}else {
+					PreparedStatement ps = melody.getDatabase().getConnection().prepareStatement("INSERT INTO system (playedmusictime) VALUES (?)");
+					ps.setLong(1, melody.playedmusictime);
+					ps.executeUpdate();
+				}
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
-
 }
