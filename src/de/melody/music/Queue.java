@@ -53,6 +53,7 @@ public class Queue {
 		}
 		return false;
 	}
+	
 	public AudioTrack gettrack(int num) {
 		try {
 			AudioTrack track = queuelist.get(num).getTrack();
@@ -64,6 +65,7 @@ public class Queue {
 		}catch(IndexOutOfBoundsException e) {}
 		return null;	
 	}
+	
 	public Member getuserwhoqueued(int num) {
 		try {
 			Member user = queuelist.get(num).getWhoQueued();

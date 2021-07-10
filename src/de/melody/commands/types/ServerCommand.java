@@ -9,4 +9,6 @@ public interface ServerCommand {
 
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild);
 	
+	//public long getCooldown();
 }
+

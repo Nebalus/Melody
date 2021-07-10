@@ -65,8 +65,8 @@ public class TrackScheduler extends AudioEventAdapter{
 			builder.setColor(Melody.HEXEmbeld);
 			if(url.startsWith("https://www.youtube.com/watch?v=")) {
 				String videoID = url.replace("https://www.youtube.com/watch?v=", "");
-				//builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
-				builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
+				builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
+				//builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
 			}
 			MusicUtil.getChannel(guildid).sendMessage(builder.build()).queue((trackmessage) ->{
 				TrackReaction te = new TrackReaction(info);
