@@ -12,8 +12,8 @@ public class PlaylistEntity {
 	private String token = ID_Manager.generateID();
 	private Long createdtime = System.currentTimeMillis();
 	private Long ownerid = 0l;
-	private String name = "Unknown";
-	private String urls = "{}";
+	private String name = "Unknown - "+token;
+	private String tracks = "{}";
 	
 	private Long expiretime;
 	
@@ -28,9 +28,9 @@ public class PlaylistEntity {
 				if(rs.next()) {
 					token = rs.getString("token");	
 					createdtime = rs.getLong("createdtime");
-					ownerid = rs.getLong("createdtime");
+					ownerid = rs.getLong("ownerid");
 					name = rs.getString("name");
-					urls = rs.getString("urls");
+					tracks = rs.getString("tracks");
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();

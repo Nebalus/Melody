@@ -4,7 +4,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.melody.commands.server.ConfigCommand;
 import de.melody.commands.server.info.BotInfoCommand;
-import de.melody.commands.server.info.GithubCommand;
 import de.melody.commands.server.info.InviteCommand;
 import de.melody.commands.server.info.PingCommand;
 import de.melody.commands.server.music.JoinCommand;
@@ -56,8 +55,7 @@ public class CommandManager {
 		this.servercommands.put("resume",new ResumeCommand());
 		this.servercommands.put("unpause",new ResumeCommand());
 		
-		this.servercommands.put("stop",new StopCommand());
-		
+		this.servercommands.put("stop",new StopCommand()); 
 		this.servercommands.put("l",new LeaveCommand());
 		this.servercommands.put("leave",new LeaveCommand());
 		
@@ -77,14 +75,13 @@ public class CommandManager {
 		this.servercommands.put("ping",new PingCommand());
 		this.servercommands.put("config",new ConfigCommand());
 		this.servercommands.put("invite",new InviteCommand());
-		this.servercommands.put("github",new GithubCommand());
 		
 		this.servercommands.put("shuffel",new ShuffelCommand());
 		
 		this.servercommands.put("loop",new LoopCommand());
 		
 		//Funktioniert nicht auf einen raspberry pi
-		//this.commands.put("speed",new SpeedCommand());
+		//this.servercommands.put("speed",new SpeedCommand());
 		
 		this.servercommands.put("24/7", new StayCommand());
 		this.servercommands.put("247", new StayCommand());

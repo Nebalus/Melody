@@ -27,7 +27,7 @@ public class ConfigCommand implements ServerCommand{
 			if(args[1].equalsIgnoreCase("prefix")) {
 				channel.sendMessage(mf.format(guildid, "feedback.info.prefix",guildentity.getPrefix())).queue();
 			}
-		}else if(args.length == 3) {
+		}else if(args.length >= 3) {
 			if(args[1].equalsIgnoreCase("prefix")) {
 				if(m.hasPermission(Permission.ADMINISTRATOR) | m.hasPermission(Permission.MANAGE_SERVER)) {
 					if(melody.getDatabase().isConnected()) {
@@ -50,12 +50,6 @@ public class ConfigCommand implements ServerCommand{
 					Utils.sendErrorEmbled(channel, "You don't have enough permissions **Permisions: **`MANAGE_SERVER`", m);
 				}
 			}
-		}else if(args.length == 4) {
-			
-		}else if(args.length == 5) {
-			
-		}else if(args.length == 6) {
-			
 		}
 	}
 	public void sendHelpMenu(TextChannel channel) {

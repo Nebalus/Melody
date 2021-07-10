@@ -41,14 +41,11 @@ public class PlaylistCommand implements ServerCommand{
 					manager.openAudioConnection(vc);
 					final String uri = url;
 					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, true, false, false));
-				}else {
-					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomain(url)));
-				}					
-			}else {
+				}else 
+					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomain(url)));				
+			}else
 				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));
-			}
-		}else {
+		}else 
 			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.info.command-usage",guildentity.getPrefix()+"playlist <url>"));
-		}
 	}
 }

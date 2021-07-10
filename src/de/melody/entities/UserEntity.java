@@ -29,6 +29,8 @@ public class UserEntity {
 				if(rs.next()) {
 					favoritemusicid = rs.getInt("favoritemusic");
 					heardtime = rs.getLong("heardtime");
+				}else {
+					
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();

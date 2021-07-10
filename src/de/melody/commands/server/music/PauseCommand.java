@@ -25,8 +25,7 @@ public class PauseCommand implements ServerCommand{
 		VoiceChannel vc;
 		if((state = m.getGuild().getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
 			melody.playerManager.getController(guild.getIdLong()).getPlayer().setPaused(true);
-		}else {
+		}else
 			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"));
-		}
 	}
 }

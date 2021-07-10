@@ -24,8 +24,7 @@ public class ResumeCommand implements ServerCommand{
 		VoiceChannel vc;
 		if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
 			melody.playerManager.getController(guild.getIdLong()).getPlayer().setPaused(false);
-		}else {
+		}else
 			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"));
-		}
 	}
 }

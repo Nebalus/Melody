@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.melody.LiteSQL;
 import de.melody.Melody;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -14,7 +13,7 @@ public class Utils {
 	
 	public static boolean doesGuildExist(Long GuildId) {
 		try {
-			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT guildid FROM general WHERE guildid = " + GuildId);
+			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT guildid FROM guilds WHERE guildid = " + GuildId);
 			if(rs.next()) {
 				return true;
 			}
