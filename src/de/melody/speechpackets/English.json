@@ -6,6 +6,11 @@
     
     "config.staymode.enabled": "24/7 mode has been aktivated!",
     "config.staymode.disabled": "24/7 mode has been deaktivated!",
+    "config.volume.show": "The volume from the bot: {0}",
+    "config.volume.set": "The volume from the bot has been set to {0}",
+    "config.volume.max-int": "the max volume you can use is {0}!",
+    "config.volume.min-int": "the min volume you can use is 1!",
+    "config.volume.out-of-bounds": "Please choose a number between 1-{0}!",
     
     "feedback.info.invite": "{0} here is my invite link which you can add me to your Discord server:\n\n Invitelink: {1}",
     "feedback.info.ping": "The latency of the bot is %dms",
@@ -13,7 +18,7 @@
     "feedback.info.prefix": "**My prefix on this server is `{0}`**",
     "feedback.info.unknown-command": "`hmm, it looks like I don't know this command. Please use {0}help to see the command list.`",
     "feedback.info.error.bot-no-permmisions": "I don't have enough permissions, please give me the following **Permisions**: `{0}`",
-    "feedback.info.error.user-no-permmisions": "You don't have enough permissions **Permisions**: `{0}`",
+    "feedback.error.user-no-permmisions": "You don't have enough permissions **Permisions**: `{0}`",
     "feedback.info.command-usage": "Please use {0}",
     
     "feedback.music.no-match": "Sorry but I don't know that :(",

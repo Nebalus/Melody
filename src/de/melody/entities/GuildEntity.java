@@ -40,18 +40,22 @@ public class GuildEntity {
 					if(rs.getInt("volume") > 0) {
 						volume = rs.getInt("volume");
 					}
-					pitch = rs.getInt("pitch");
-					if(rs.getDouble("speed") > 0) {
-						speed = rs.getDouble("speed");
-					}
 					djroleid = rs.getLong("djrole");
 					if(rs.getString("prefix") != null) {
 						prefix = rs.getString("prefix");
 					}
-					voteskip = rs.getBoolean("voteskip");
-					staymode = rs.getBoolean("staymode");
-					announcesongs = rs.getBoolean("announcesongs");
-					preventduplicates = rs.getBoolean("preventduplicates");
+					if(rs.getString("voteskip") != null) {
+						voteskip = rs.getBoolean("voteskip");	
+					}
+					if(rs.getString("staymode") != null) {
+						staymode = rs.getBoolean("staymode");	
+					}
+					if(rs.getString("announcesongs") != null) {
+						announcesongs = rs.getBoolean("announcesongs");	
+					}
+					if(rs.getString("preventduplicates") != null) {
+						preventduplicates = rs.getBoolean("preventduplicates");	
+					}
 					if(rs.getString("language") != null) {
 						language = Languages.getLanguage(rs.getString("language"));
 					}
@@ -84,21 +88,6 @@ public class GuildEntity {
 		this.volume = newvolume;
 		update();
 	}
-	
-	public double getPitch() {
-		renewExpireTime();
-		return this.pitch;
-	}
-	
-	public double getSpeed() {
-		renewExpireTime();
-		return this.speed;
-	}
-	public void setSpeed(Double newspeed) {
-		this.speed = newspeed;
-		update();
-	}
-	
 	public Long getDjRoleId() {
 		renewExpireTime();
 		return this.djroleid;

@@ -58,10 +58,6 @@ public class BotInfoCommand implements ServerCommand{
 		membersDeserving = 0;
 	}
 	
-	public int getCooldown() {
-		return 5;
-	}
-	
 	public String botstart() {
 		Date date = new Date(Melody.INSTANCE.startuptime);
 		String DateFormat = new SimpleDateFormat("EEE, d MMM HH:mm:ss yyyy").format(date);

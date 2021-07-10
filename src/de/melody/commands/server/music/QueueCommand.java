@@ -43,10 +43,10 @@ public class QueueCommand implements ServerCommand{
 		Queue queue = controller.getQueue();
 		builder.setTitle(mf.format(guild.getIdLong(), "music.queue.from-guild",guild.getName()));
 		builder.setThumbnail(guild.getIconUrl());
-
+		builder.setColor(Melody.HEXEmbeldQueue);
 		String list = null;
 		if(controller.getPlayer().getPlayingTrack() != null) {
-			list = mf.format(guild.getIdLong(), "feedback.music.currently-playing-null")+"\n"
+			list = mf.format(guild.getIdLong(), "music.track.currently-playing")+"\n"
 				+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(guild.getIdLong(), "music.user.who-requested")+queue.currentplaying.getWhoQueued().getUser().getAsTag()+" \n"
 				+ " \n";
 			int size = 1;
@@ -66,7 +66,7 @@ public class QueueCommand implements ServerCommand{
 			builder.setFooter(mf.format(guild.getIdLong(), "music.queue.page", qe.getPage()+"/"+maxpage));
 			
 		}else {
-			list = mf.format(guild.getIdLong(), "music.info.currently-playing-null");
+			list = mf.format(guild.getIdLong(), "feedback.music.currently-playing-null");
 		}
 		builder.setDescription(list);
 		return builder;

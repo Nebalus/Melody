@@ -116,6 +116,7 @@ public class Utils {
 		builder.setColor(Melody.HEXEmbeldError);
 		channel.sendMessage(builder.build()).queue();
 	}
+	
 	public static void loadSystemData(Melody melody) {
 		if(melody.getDatabase().isConnected()) {
 			try {
