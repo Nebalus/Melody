@@ -43,15 +43,13 @@ public class NextCommand implements ServerCommand{
 						MusicUtil.sendEmbled(guild.getIdLong(), builder);
 						queue.next();
 					}else {
-						builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(guild.getIdLong(), "music.track.skip-new-null"));
+						builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(guild.getIdLong(), "music.track.skip-null"));
 						MusicUtil.sendEmbled(guild.getIdLong(), builder);
 					}
-				}else {
-					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "music.info.currently-playing-null"));
-				}
+				}else 
+					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"));
 			}
-		}else {
+		}else
 			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"));
-		}
 	}
 }

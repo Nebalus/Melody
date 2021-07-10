@@ -41,12 +41,12 @@ public class QueueCommand implements ServerCommand{
 		MusicController controller = melody.playerManager.getController(guild.getIdLong());
 		EmbedBuilder builder = new EmbedBuilder();
 		Queue queue = controller.getQueue();
-		builder.setTitle("**Queue for "+guild.getName()+"**");
+		builder.setTitle(mf.format(guild.getIdLong(), "music.queue.from-guild",guild.getName()));
 		builder.setThumbnail(guild.getIconUrl());
-		
+
 		String list = null;
 		if(controller.getPlayer().getPlayingTrack() != null) {
-			list = mf.format(guild.getIdLong(), "music.track.currently-playing")+"\n"
+			list = mf.format(guild.getIdLong(), "feedback.music.currently-playing-null")+"\n"
 				+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(guild.getIdLong(), "music.user.who-requested")+queue.currentplaying.getWhoQueued().getUser().getAsTag()+" \n"
 				+ " \n";
 			int size = 1;

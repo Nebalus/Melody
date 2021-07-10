@@ -186,9 +186,9 @@ public class MusicUtil extends ListenerAdapter{
 		verifiedurl.add("music.youtube.com");	
 		verifiedurl.add("youtu.be");	
 		verifiedurl.add("youtube.com");			
-		verifiedurl.add("www.twitch.tv");	
-		verifiedurl.add("vimeo.com");		
-		verifiedurl.add("bandcamp.com");		
-		verifiedurl.add("soundcloud.com");
+		//verifiedurl.add("www.twitch.tv");	
+		//verifiedurl.add("vimeo.com");		
+		//verifiedurl.add("bandcamp.com");		
+		//verifiedurl.add("soundcloud.com");
 	}
 }

@@ -30,40 +30,52 @@ public class ID_Manager{
 		if(zufall1 < 999) {
 			if(zufall1 < 99) {
 				if(zufall1 < 9) {
-				zufallstr1 = "000"+zufall1;
+					zufallstr1 = "000"+zufall1;
 				}else
-				zufallstr1 = "00"+zufall1;
+					zufallstr1 = "00"+zufall1;
 			    }else
-			    zufallstr1 = "0"+zufall1;
+			    	zufallstr1 = "0"+zufall1;
 		}
 		if(zufall2 < 999) {
 			if(zufall2 < 99) {
 				if(zufall2 < 9) {
-				zufallstr2 = "000"+zufall2;
+					zufallstr2 = "000"+zufall2;
 				}else
-				zufallstr2 = "00"+zufall2;
+					zufallstr2 = "00"+zufall2;
 				}else
-				zufallstr2 = "0"+zufall2;
+					zufallstr2 = "0"+zufall2;
 		}
 		if(zufall3 < 999) {
 			if(zufall3 < 99) {
 				if(zufall3 < 9) {
-				zufallstr3 = "000"+zufall3;
+					zufallstr3 = "000"+zufall3;
 				}else
-				zufallstr3 = "00"+zufall3;
+					zufallstr3 = "00"+zufall3;
 				}else
-				zufallstr3 = "0"+zufall3;
+					zufallstr3 = "0"+zufall3;
 		}
 		if(zufall4 < 999) {
 			if(zufall4 < 99) {
 				if(zufall4 < 9) {
-				zufallstr4 = "000"+zufall4;
+					zufallstr4 = "000"+zufall4;
 				}else
-				zufallstr4 = "00"+zufall4;
+					zufallstr4 = "00"+zufall4;
 				}else
-				zufallstr4 = "0"+zufall4;
+					zufallstr4 = "0"+zufall4;
 		}
 		String genID = zufallstr1+"-"+zufallstr2+"-"+zufallstr3+"-"+zufallstr4;
 		return genID;
 	}	
+
+	public static String generateShortID() {
+		char[] charakterlist = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+								'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+								'1','2','3','4','5','6','7','8','9','_','-'};
+		String generatedid = "";
+		Random random = new Random();
+		for(int length = 0;length < 10;length++) {
+			generatedid = generatedid + charakterlist[random.nextInt(charakterlist.length)];
+		}
+		return generatedid;
+	}
 }

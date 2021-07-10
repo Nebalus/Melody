@@ -5,8 +5,9 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.music.MusicController;
-import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.utils.Emojis;
+import de.melody.utils.Utils;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -22,7 +23,6 @@ public class JoinCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		melody.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
 		GuildVoiceState state;
 		VoiceChannel vc;
 		if((state = m.getVoiceState()) != null && (vc = state.getChannel()) != null) {
@@ -31,11 +31,11 @@ public class JoinCommand implements ServerCommand{
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
 			AudioPlayer player = controller.getPlayer();
 			player.setPaused(false);
+			message.addReaction(Emojis.OK_HAND).queue();
 			if(player.getPlayingTrack() == null) {
 				controller.setAfkTime(600);
 			}
-		}else {
-			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));		
-		}
+		}else 
+			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"), m);
 	}
 }

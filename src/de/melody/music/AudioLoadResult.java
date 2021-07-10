@@ -120,9 +120,9 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 			
 			EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.playlist.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
 					.setDescription("["+playlist.getName()+"]("+uri+")")
-					.addField(mf.format(guildid, "music.playlist.position-in-queue"), (QueueSize == 0 ? "Now" : QueueSize+""), true)
+					.addField(mf.format(guildid, "music.track.position-in-queue"), (QueueSize == 0 ? "Now" : QueueSize+""), true)
 					.addField(mf.format(guildid, "music.playlist.enqueued"), playlist.getTracks().size()+"", true)
-					.addField(mf.format(guildid, "music.playlist.time-until-playing"),  (MusicUtil.getTimeUntil(controller) - timeUntil == 0l ? "Now" : MusicUtil.getTime(null, MusicUtil.getTimeUntil(controller) - timeUntil))+"", true)
+					.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) - timeUntil == 0l ? "Now" : MusicUtil.getTime(null, MusicUtil.getTimeUntil(controller) - timeUntil))+"", true)
 					.addField(mf.format(guildid, "music.playlist.length"), MusicUtil.getTime(null,timeUntil), false);
 			
 			MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);

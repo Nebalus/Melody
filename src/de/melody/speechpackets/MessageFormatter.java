@@ -46,7 +46,7 @@ public class MessageFormatter {
 	}
 	private Languages getLanguageFromGuild(Long guildid) {
 		try {
-			ResultSet set = melody.getDatabase().onQuery("SELECT language FROM general WHERE guildid = "+guildid);
+			ResultSet set = melody.getDatabase().onQuery("SELECT language FROM guilds WHERE guildid = "+guildid);
 			if(set.next()) {
 				return Languages.getLanguage(set.getString("language"));
 			}

@@ -27,20 +27,28 @@ public class LiteSQL {
 			
 			ConsoleLogger.info("SQLDatabase", "Verbindung zur Datenbank hergestellt");
 			stmt = conn.createStatement();
-			onUpdate("CREATE TABLE IF NOT EXISTs general(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, channelid INTEGER, volume INTEGER, pitch INTEGER, speed INTEGER, djrole INTEGER, prefix VARCHAR, voteskip BOOLEAN, staymode BOOLEAN, language VARCHAR)");
-			onUpdate("CREATE TABLE IF NOT EXISTs userdata(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, userid INTEGER, favoritemusic INTEGER)");	
+			onUpdate("CREATE TABLE IF NOT EXISTs guilds(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, channelid INTEGER, volume INTEGER, pitch INTEGER, speed INTEGER, djrole INTEGER, prefix VARCHAR, voteskip BOOLEAN, staymode BOOLEAN, language VARCHAR, announcesongs BOOLEAN, preventduplicates BOOLEAN, maxusersongs INTEGER, maxqueuelength INTEGER)");
+			onUpdate("CREATE TABLE IF NOT EXISTs userdata(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, userid INTEGER, favoritemusic INTEGER, heardtime INTEGER)");	
 			/*
-			 * token = XXXX-XXXX-XXXX-XXXX
+			 * token = XXXXXXXXXX / = Example -> dnQW1cgh2s
 			 * createdtime is when a user creates a playlist
 			 * ownerid is the discord id from the owner who creaded the playlist
+			 * 	   tipp: use the id from the userdata category
+			 * name | is the name from the playlist
+			 * 	   placeholders: 
+			 *   	   {username} = 
 			 *
-			 * type 
+			 * privacytype 
 			 * 0 = private playlist
+			 *     info: only the owner has access to the playlist
 			 * 1 = guild playlist 
+			 * 	   info: only the users that are in the same guild as the owner has access to the playlist
+			 * 2 = public playlist
+			 * 	   info: everyone has access to the playlist
 			 * 
 			 * saved create test esdf 
 			 */
-			onUpdate("CREATE TABLE IF NOT EXISTs playlist(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, token VARCHAR, createdtime INTEGER, ownerid INTEGER, type INTEGER, name VARCHAR, urls VARCHAR)");
+			onUpdate("CREATE TABLE IF NOT EXISTs playlist(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, token VARCHAR, createdtime INTEGER, ownerid INTEGER, privacytype INTEGER, name VARCHAR, tracks VARCHAR)");
 			onUpdate("CREATE TABLE IF NOT EXISTs track(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, url VARCHAR, name VARCHAR)");
 			onUpdate("CREATE TABLE IF NOT EXISTs system(playedmusictime INTEGER)");
 		} catch (SQLException | IOException e1) {

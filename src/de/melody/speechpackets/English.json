@@ -2,9 +2,12 @@
     "language.name": "English",
     "language.region": "Amerika",
     "language.code": "en_us",
+    "language.credits": "Nebalus#1665",
+    
+    "config.staymode.enabled": "24/7 mode has been aktivated!",
+    "config.staymode.disabled": "24/7 mode has been deaktivated!",
     
     "feedback.info.invite": "{0} here is my invite link which you can add me to your Discord server:\n\n Invitelink: {1}",
-    "feedback.info.github": "{0} here is my Github page which you can see my Source Code:\n\n Github: {1}",
     "feedback.info.ping": "The latency of the bot is %dms",
     "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nRunning on servers: {2}\nDeserving members: {3}\n\nAt the time you look at this, {4} people listened for {5} to music thru {6}!",
     "feedback.info.prefix": "**My prefix on this server is `{0}`**",
@@ -18,18 +21,22 @@
     "feedback.music.bot-not-in-vc": "I am not in a voice channel",
     "feedback.music.user-not-in-vc": "You are not in a voice channel",
     "feedback.music.error.non-whitelisted-domain": "The domain **{0}** is not whitelisted in my system",
+    "feedback.music.currently-playing-null": "Currently i am not playing a track",
     
     "music.info.loop-enabled": " **enabled!**",
     "music.info.loop-disabled": " **disabled!**",
-    "music.info.currently-playing-null": "Currently i am not playing a track",
    
     "music.user.who-requested": "Requested by ",
     
     "music.queue.in-queue": "In queue:",
+    "music.queue.from-guild": "**Queue from {0}**",
     "music.queue.page": "Page {0}",
     
+    "music.shuffel.successful": "{0} tracks has been shuffeled!",
+    "music.shuffel.emptyqueue": "There is nothing to be shuffeled because the queue is empty!",
+   
     "music.track.skip": "Track skipped",
-    "music.track.skip-new-null": "Track skipped, could not find the next track",
+    "music.track.skip-null": "Track skipped, could not find the next track",
     "music.track.author": "Author: {0}",
     "music.track.author-null": "Nobody",
     "music.track.playing-nothing": "Nothing playing...",
@@ -45,9 +52,7 @@
     "music.playlist.empty": "The playlist you sent does not contain any songs or is set to private :(",
     "music.playlist.added-to-queue": "Playlist added to queue",
     "music.playlist.length": "**Playlist duration**",
-    "music.playlist.position-in-queue": "**Position in queue**",
-    "music.playlist.enqueued": "**Estimated time until playing**",
-    "music.playlist.time-until-playing": "**Estimated time until playing**"
+    "music.playlist.enqueued": "**Enqueued tracks**"
  
     
 }

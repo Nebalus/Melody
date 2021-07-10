@@ -20,6 +20,8 @@ public class GuildEntity {
 	private String prefix = "m!";
 	private boolean voteskip = false;
 	private boolean staymode = false;
+	private boolean announcesongs = true;
+	private boolean preventduplicates = false;
 	private Languages language = Languages.ENGLISH;
 	
 	private Long expiretime = System.currentTimeMillis() + Melody.expiretime;
@@ -32,7 +34,7 @@ public class GuildEntity {
 		this.guildid = guildid;
 		if(database.isConnected()) {
 			try {
-				ResultSet rs = database.onQuery("SELECT * FROM general WHERE guildid = " + guildid);	
+				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE guildid = " + guildid);	
 				if(rs.next()) {
 					channelid = rs.getLong("channelid");	
 					if(rs.getInt("volume") > 0) {
@@ -48,6 +50,8 @@ public class GuildEntity {
 					}
 					voteskip = rs.getBoolean("voteskip");
 					staymode = rs.getBoolean("staymode");
+					announcesongs = rs.getBoolean("announcesongs");
+					preventduplicates = rs.getBoolean("preventduplicates");
 					if(rs.getString("language") != null) {
 						language = Languages.getLanguage(rs.getString("language"));
 					}
@@ -128,6 +132,16 @@ public class GuildEntity {
 		return this.language;
 	}
 	
+	public Boolean isAnnounceSongs() {
+		renewExpireTime();
+		return this.announcesongs;
+	}
+	
+	public Boolean isPreventDuplicates() {
+		renewExpireTime();
+		return this.preventduplicates;
+	}
+	
 	public Long getExpireTime() {
 		return this.expiretime;
 	}
@@ -149,7 +163,7 @@ public class GuildEntity {
 		if(database.isConnected()) {
 			if(needtoexport) {
 				try {
-					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE general SET "
+					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE guilds SET "
 							+ "channelid = ?,"
 							+ "volume = ?,"
 							+ "pitch = ?,"
@@ -158,7 +172,9 @@ public class GuildEntity {
 							+ "prefix = ?,"
 							+ "voteskip = ?,"
 							+ "staymode = ?,"
-							+ "language = ? WHERE guildid = ?");
+							+ "language = ?,"
+							+ "announcesongs = ?,"
+							+ "preventduplicates = ? WHERE guildid = ?");
 					ps.setLong(1, channelid);
 					ps.setInt(2, volume);
 					ps.setDouble(3, pitch);
@@ -168,7 +184,9 @@ public class GuildEntity {
 					ps.setBoolean(7, voteskip);
 					ps.setBoolean(8, staymode);
 					ps.setString(9, language.getCode());
-					ps.setLong(10, guildid);
+					ps.setBoolean(10, announcesongs);
+					ps.setBoolean(11, preventduplicates);
+					ps.setLong(12, guildid);
 					ps.executeUpdate();
 					ConsoleLogger.info("export guild", guildid);
 				} catch (SQLException e) {

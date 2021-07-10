@@ -122,7 +122,6 @@ public class PlayCommand implements ServerCommand{
 							      System.out.println("Async operation cancelled.");
 								}
 						}
-					System.out.println(spotify.getAccessToken());
 				}else if(MusicUtil.isUrlVerified(url) || isytsearch == true) {
 					manager.openAudioConnection(vc);
 					final String uri = url;

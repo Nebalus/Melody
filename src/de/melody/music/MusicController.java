@@ -17,7 +17,7 @@ public class MusicController {
 		this.guild = guild;
 		this.player = Melody.INSTANCE.audioPlayerManager.createPlayer();
 		this.queue = new Queue(this);
-		this.afktime = 10;
+		this.afktime = 20;
 		
 		this.guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 		this.player.addListener(new TrackScheduler());
