@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import de.melody.Json;
 import de.melody.Melody;
+import de.melody.entities.GuildEntity;
 
 public class MessageFormatter {
 	
@@ -34,23 +35,28 @@ public class MessageFormatter {
 	public String format(Long guildid, String key, Object... args) {
 		String message = "JSON-Error {"+key+"}";
 	    try {
-			JSONObject json = getJSONMessage.get(getLanguageFromGuild(guildid));
+	    	Languages language = melody.entityManager.getGuildEntity(guildid).getLanguage();
+			JSONObject json = getJSONMessage.get(language);
 			message = json.getString(key);
 			for(int i = 0; i < args.length; ++i) {
 				message = message.replace("{" + i + "}", String.valueOf(args[i]));
 		    }
+			if(language.equals(Languages.GERMAN)) {
+				message = message.replace("ae", "ä");
+				message = message.replace("oe", "ö");
+				message = message.replace("ue", "ü");
+				message = message.replace("AE", "Ä");
+				message = message.replace("OE", "Ö");
+				message = message.replace("UE", "Ü");
+				
+				message = message.replace("[ä]", "ae");
+				message = message.replace("[ö]", "oe");
+				message = message.replace("[ü]", "ue");
+				System.out.println("test");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	    return message;
-	}
-	private Languages getLanguageFromGuild(Long guildid) {
-		try {
-			ResultSet set = melody.getDatabase().onQuery("SELECT language FROM guilds WHERE guildid = "+guildid);
-			if(set.next()) {
-				return Languages.getLanguage(set.getString("language"));
-			}
-		} catch (Exception e) {}
-		return Languages.ENGLISH;
 	}
 }

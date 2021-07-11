@@ -2,5 +2,70 @@
     "language.name": "German",
     "language.region": "Germany",
     "language.code": "de_ge",
-    "language.credits": "Nebalus#1665"
+    "language.credits": "Nebalus#1665",
+    
+    "config.info.submenu.current-value": "Akt[ue]ller Wert:",
+    "config.info.submenu.usage": "Verwendung:",
+    "config.info.submenu.valid-settings": "Gueltige Einstellungen:",
+    "config.info.submenu.title": "**{0} Config - {1}**",
+    
+    "config.sub.prefix.info": "AEndert denn Praefix, um die Befehle von Melody zu verwenden.",
+    "config.sub.prefix.valid-settings": "Beliebiger Text, maximal 6 Zeichen.",
+    "config.sub.language.info": "AEndert die Ausgabesprache von Melody.",
+    
+    "config.command.staymode.enabled": "Der 24/7-Modus wurde aktiviert!",
+    "config.command.staymode.disabled": "Der 24/7-Modus wurde deaktiviert!",
+    "config.command.volume.show": "Die Lautstaerke von Melody: {0}",
+    "config.command.volume.set": "Die Lautstaerke von Melody wurde auf {0} gesetzt!",
+    "config.command.volume.max-int": "Die maximale Lautstaerke die du verwenden kannst ist {0}!",
+    "config.command.volume.min-int": "Die minimale Lautstaerke die du verwenden kannst ist  1!",
+    "config.command.volume.out-of-bounds": "Bitte suche eine zahl zwischen 1-{0}!",
+    
+    "feedback.info.invite": "{0} hier ist mein Einladungslink wo du mich zu deinem Server hinzufuegen kannst:\n\n Einladungslink: {1}",
+    "feedback.info.ping": "Die Latenz von Melody ist %dms",
+    "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nLaeuft auf Servern: {2}\nDeserving members: {3}\n\nZu dem Zeitpunkt, wo du das ansehst, hoerten {4} Leute {5} lang Musik üeber {6}!",
+    "feedback.info.prefix": "**Mein Praefix auf diesem Server ist `{0}`**",
+    "feedback.info.unknown-command": "`hmm, es sieht so aus als wenn ich diesen Befehl nicht kennen wuerde. Bitte nutze um die Befehls liste zu sehen {0}help.`",
+    "feedback.info.error.bot-no-permmisions": "Ich habe nicht genug Rechte, ich benoetige die **Rechte**: `{0}`",
+    "feedback.error.user-no-permmisions": "Du hast nicht genug **Rechte**: `{0}`",
+    "feedback.info.command-usage": "Bitte nutze {0}",
+    
+    "feedback.music.no-match": "Es tut mir leid aber ich weiß das nicht :(",
+    "feedback.music.nothing-in-link": "Hmm es sieht so aus als wenn der link die du gesendet hast kein lied/stream beinhaltet :(",
+    "feedback.music.bot-not-in-vc": "Ich bin nicht in einen Sprachkanal.",
+    "feedback.music.user-not-in-vc": "Du befindest dich nicht in einen Sprachkanal.",
+    "feedback.music.error.non-whitelisted-domain": "Die domain **{0}** wuerde nicht in meinen System gewhitelisted.",
+    "feedback.music.currently-playing-null": "Grade spiele ich keinen lied",
+    
+    "music.info.loop-enabled": " **aktiviert!**",
+    "music.info.loop-disabled": " **deaktiviert!**",
+   
+    "music.user.who-requested": "Angefordert von ",
+    
+    "music.queue.in-queue": "In der Warteschlange:",
+    "music.queue.from-guild": "**Warteschlange von {0}**",
+    "music.queue.page": "Seite {0}",
+    
+    "music.shuffel.successful": "{0} Spuren wurden gemischt!",
+    "music.shuffel.emptyqueue": "Es gibt nichts zu mischen!",
+   
+    "music.track.skip": "Spur uebersprungen",
+    "music.track.author": "Autor: {0}",
+    "music.track.author-null": "Niemand",
+    "music.track.playing-nothing": "Spielt grade nichts...",
+    "music.track.currently-playing": "Spielt gerade: ",
+    "music.track.resume": "Melody fortgesetzt",
+    "music.track.pause": "Melody angehalten",
+    "music.track.length": "**Liedda[ue]r**",
+    "music.track.channel": "**Kanal**",
+    "music.track.added-to-queue": "Lied zur Warteschlange hinzugefuegt",
+    "music.track.position-in-queue": "**Position in der Warteschlange**",
+    "music.track.time-until-playing": "**Geschaetzte Zeit bis zum Spielen**",
+    
+    "music.playlist.empty": "Die Playlist die du gesendet hast enthaelt keine Lieder oder ist auf privat gestellt :(",
+    "music.playlist.added-to-queue": "Playlist zur Warteschlange hinzugefuegt",
+    "music.playlist.length": "**Playlist-Da[ue]r**",
+    "music.playlist.enqueued": "**In die Warteschlange gestellte Titel**"
+ 
+    
 }

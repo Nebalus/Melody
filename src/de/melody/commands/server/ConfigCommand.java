@@ -25,19 +25,31 @@ public class ConfigCommand implements ServerCommand{
 		GuildEntity guildentity = melody.entityManager.getGuildEntity(guildid);
 		if(m.hasPermission(Permission.ADMINISTRATOR) || m.hasPermission(Permission.MANAGE_SERVER)) {
 			if(args.length == 1) {
-				
+				sendMainMenu(channel);
 			}else if(args.length == 2) {
-				if(args[1].equalsIgnoreCase(ConfigSubCommands.prefix.name())) {
-					sendSubCommandMenu(guildentity.getPrefix(), channel, ConfigSubCommands.prefix, guildentity.getPrefix());
+				try {
+					ConfigSubCommands subcommand = ConfigSubCommands.valueOf(args[1]);
+					switch(subcommand) {
+						case prefix:
+							sendSubCommandMenu(guildentity.getPrefix(), channel, ConfigSubCommands.prefix, guildentity.getPrefix(),null);
+							break;
+						case language:
+							sendSubCommandMenu(guildentity.getLanguage().getIcon()+" "+guildentity.getLanguage().getLanguage(), channel, ConfigSubCommands.language, guildentity.getPrefix(),null);
+							break;
+						default:
+							sendMainMenu(channel);
+							break;
+					}
+				}catch(IllegalArgumentException e){
+					sendMainMenu(channel);
 				}
 			}else if(args.length >= 3) {
 				if(args[1].equalsIgnoreCase(ConfigSubCommands.prefix.name())) {
 					if(args[2].length() <= 6) {					            
-						String oldPrefix = guildentity.getPrefix();
+						channel.sendMessage("**You have updated my prefix from** `"+guildentity.getPrefix()+"` **to** `"+args[2]+"`").queue();	
 						guildentity.setPrefix(args[2]);
-						channel.sendMessage("**You have updated my prefix from** `"+oldPrefix+"` **to** `"+args[2]+"`").queue();			
 					}else {
-						sendSubCommandMenu(guildentity.getPrefix(), channel, ConfigSubCommands.prefix, guildentity.getPrefix());
+						sendSubCommandMenu(guildentity.getPrefix(), channel, ConfigSubCommands.prefix, guildentity.getPrefix(),null);
 					}
 				}
 			}
@@ -46,10 +58,12 @@ public class ConfigCommand implements ServerCommand{
 		}
 	}
 	public void sendMainMenu(TextChannel channel) {
-		
+		channel.sendMessage("Test").queue();	
 	}
+	
+	
 	@SuppressWarnings("deprecation")
-	public void sendSubCommandMenu(Object currentvalue, TextChannel channel,ConfigSubCommands subcommand,String prefix) {
+	public void sendSubCommandMenu(Object currentvalue, TextChannel channel,ConfigSubCommands subcommand,String prefix,String customvalidsettigs) {
 		Long guildid = channel.getGuild().getIdLong();
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Melody.HEXEmbeld);
@@ -57,12 +71,16 @@ public class ConfigCommand implements ServerCommand{
 		builder.setDescription(mf.format(guildid, "config.sub."+subcommand.name()+".info"));
 		builder.addField(Emojis.CLIPBOARD+" "+mf.format(guildid, "config.info.submenu.current-value"), "`"+currentvalue.toString()+"`", false);
 		builder.addField(Emojis.PENCIL+" "+mf.format(guildid, "config.info.submenu.usage"), "`"+prefix+"config " +subcommand.name()+" "+subcommand.usage+"`", false);
-		builder.addField(Emojis.CHECK_MARK+" "+mf.format(guildid, "config.info.submenu.valid-settings"), "`"+mf.format(guildid, "config.sub."+subcommand.name()+".valid-settings")+"`", false);
-	
+		if(customvalidsettigs == null) {
+			builder.addField(Emojis.CHECK_MARK+" "+mf.format(guildid, "config.info.submenu.valid-settings"), "`"+mf.format(guildid, "config.sub."+subcommand.name()+".valid-settings")+"`", false);
+		}else {
+			builder.addField(Emojis.CHECK_MARK+" "+mf.format(guildid, "config.info.submenu.valid-settings"), "`"+customvalidsettigs+"`", false);
+		}
 		channel.sendMessage(builder.build()).queue();
 	}
 	private enum ConfigSubCommands{
-		prefix("[new prefix]",Emojis.EXCLAMATION_MARK+" Prefix");
+		prefix("[new prefix]",Emojis.EXCLAMATION_MARK+" Prefix"),
+		language("[new language]",Emojis.WHITE_FLAG+" Language");
 		
 		String usage;
 		String title;
