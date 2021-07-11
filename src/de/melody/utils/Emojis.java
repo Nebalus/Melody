@@ -25,4 +25,8 @@ public class Emojis {
 	public final static String EXIT = "❌";
 	public final static String SPARKLING_HEART = "💖";
 	public final static String OK_HAND = "👌";
+	public final static String EXCLAMATION_MARK = "❗️";
+	public final static String CLIPBOARD = "📋";
+	public final static String PENCIL = "✏️";
+	public final static String CHECK_MARK = "✅";
 }
