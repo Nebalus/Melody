@@ -19,10 +19,10 @@ public class StayCommand implements ServerCommand{
 		GuildEntity guildentity = melody.entityManager.getGuildEntity(guild.getIdLong());
 		if(guildentity.is24_7()) {
 			guildentity.set24_7(false);
-			channel.sendMessage(mf.format(guild.getIdLong(), "config.staymode.disabled")).queue();
+			channel.sendMessage(mf.format(guild.getIdLong(), "config.command.staymode.disabled")).queue();
 		}else {
 			guildentity.set24_7(true);
-			channel.sendMessage(mf.format(guild.getIdLong(), "config.staymode.enabled")).queue();
+			channel.sendMessage(mf.format(guild.getIdLong(), "config.command.staymode.enabled")).queue();
 		}
 	}
 }

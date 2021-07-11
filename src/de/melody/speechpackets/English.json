@@ -4,13 +4,21 @@
     "language.code": "en_us",
     "language.credits": "Nebalus#1665",
     
-    "config.staymode.enabled": "24/7 mode has been aktivated!",
-    "config.staymode.disabled": "24/7 mode has been deaktivated!",
-    "config.volume.show": "The volume from the bot: {0}",
-    "config.volume.set": "The volume from the bot has been set to {0}",
-    "config.volume.max-int": "the max volume you can use is {0}!",
-    "config.volume.min-int": "the min volume you can use is 1!",
-    "config.volume.out-of-bounds": "Please choose a number between 1-{0}!",
+    "config.info.submenu.current-value": "Current Value:",
+    "config.info.submenu.usage": "Usage:",
+    "config.info.submenu.valid-settings": "Valid Settings:",
+    "config.info.submenu.title": "**{0} Config - {1}**",
+    
+    "config.sub.prefix.info": "Changes the prefix for triggering Melody.",
+    "config.sub.prefix.valid-settings": "Any text, at most 6 characters. The prefix is the character that starts a command e.g !",
+    
+    "config.command.staymode.enabled": "24/7 mode has been aktivated!",
+    "config.command.staymode.disabled": "24/7 mode has been deaktivated!",
+    "config.command.volume.show": "The volume from the bot: {0}",
+    "config.command.volume.set": "The volume from the bot has been set to {0}",
+    "config.command.volume.max-int": "the max volume you can use is {0}!",
+    "config.command.volume.min-int": "the min volume you can use is 1!",
+    "config.command.volume.out-of-bounds": "Please choose a number between 1-{0}!",
     
     "feedback.info.invite": "{0} here is my invite link which you can add me to your Discord server:\n\n Invitelink: {1}",
     "feedback.info.ping": "The latency of the bot is %dms",
