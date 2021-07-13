@@ -57,7 +57,7 @@ public class PlayCommand implements ServerCommand{
 				}
 				if(url.startsWith("https://open.spotify.com/")) {
 					SpotifyApi spotify = new SpotifyApi.Builder()
-							.setAccessToken(Melody.INSTANCE.spotifyapi.getToken())
+							.setAccessToken(Melody.INSTANCE.spotifyutils.getToken())
 							.build();
 					if(url.toLowerCase().startsWith("https://open.spotify.com/track/")){
 						String[] urlid = url.split("/");

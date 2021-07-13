@@ -3,6 +3,7 @@ package de.melody.commands.server;
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.entities.GuildEntity;
+import de.melody.speechpackets.Languages;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emojis;
 import de.melody.utils.Utils;
@@ -34,7 +35,7 @@ public class ConfigCommand implements ServerCommand{
 							sendSubCommandMenu(guildentity.getPrefix(), channel, ConfigSubCommands.prefix, guildentity.getPrefix(),null);
 							break;
 						case language:
-							sendSubCommandMenu(guildentity.getLanguage().getIcon()+" "+guildentity.getLanguage().getLanguage(), channel, ConfigSubCommands.language, guildentity.getPrefix(),null);
+							sendSubCommandMenu(" `"+guildentity.getLanguage().getIcon()+"` "+guildentity.getLanguage().getName()+" ", channel, ConfigSubCommands.language, guildentity.getPrefix(),Languages.getLanguageList());
 							break;
 						default:
 							sendMainMenu(channel);
@@ -44,13 +45,39 @@ public class ConfigCommand implements ServerCommand{
 					sendMainMenu(channel);
 				}
 			}else if(args.length >= 3) {
-				if(args[1].equalsIgnoreCase(ConfigSubCommands.prefix.name())) {
-					if(args[2].length() <= 6) {					            
-						channel.sendMessage("**You have updated my prefix from** `"+guildentity.getPrefix()+"` **to** `"+args[2]+"`").queue();	
-						guildentity.setPrefix(args[2]);
-					}else {
-						sendSubCommandMenu(guildentity.getPrefix(), channel, ConfigSubCommands.prefix, guildentity.getPrefix(),null);
+				try {
+					ConfigSubCommands subcommand = ConfigSubCommands.valueOf(args[1]);
+					switch(subcommand) {
+						case prefix:
+							if(args[2].length() <= 6) {					            
+								channel.sendMessage("**You have updated my prefix from** `"+guildentity.getPrefix()+"` **to** `"+args[2]+"`").queue();	
+								guildentity.setPrefix(args[2]);
+							}else 
+								sendSubCommandMenu(guildentity.getPrefix(), channel, ConfigSubCommands.prefix, guildentity.getPrefix(),null);
+							break;
+						
+						case language:
+							boolean isLanguage = false;
+							Languages newLang = guildentity.getLanguage();
+							for(Languages lang : Languages.values()) {
+								if(lang.getName().equalsIgnoreCase(args[2]) || lang.getCode().equalsIgnoreCase(args[2]) && newLang != lang) {
+									isLanguage = true;
+									newLang = lang;
+								}
+							}
+							if(isLanguage) {
+								channel.sendMessage("**You have updated my language from ** `"+guildentity.getLanguage().getName()+"` **to** `"+newLang.getName()+"`**!**").queue();	
+								guildentity.setLanguage(newLang);
+							}else   
+								sendSubCommandMenu(" `"+guildentity.getLanguage().getIcon()+"` "+guildentity.getLanguage().getName()+" ", channel, ConfigSubCommands.language, guildentity.getPrefix(),Languages.getLanguageList());
+							break;
+						
+						default:
+							sendMainMenu(channel);
+							break;
 					}
+				}catch(IllegalArgumentException e){
+					sendMainMenu(channel);
 				}
 			}
 		}else {
@@ -80,7 +107,8 @@ public class ConfigCommand implements ServerCommand{
 	}
 	private enum ConfigSubCommands{
 		prefix("[new prefix]",Emojis.EXCLAMATION_MARK+" Prefix"),
-		language("[new language]",Emojis.WHITE_FLAG+" Language");
+		language("[new language]",Emojis.WHITE_FLAG+" Language"),
+		announcesongs("[yes|no]",Emojis.BELL+" Announce Songs");
 		
 		String usage;
 		String title;

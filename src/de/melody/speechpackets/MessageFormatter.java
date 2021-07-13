@@ -4,14 +4,12 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.sql.ResultSet;
 import java.util.HashMap;
 
 import org.json.JSONObject;
 
 import de.melody.Json;
 import de.melody.Melody;
-import de.melody.entities.GuildEntity;
 
 public class MessageFormatter {
 	
@@ -52,7 +50,6 @@ public class MessageFormatter {
 				message = message.replace("[ä]", "ae");
 				message = message.replace("[ö]", "oe");
 				message = message.replace("[ü]", "ue");
-				System.out.println("test");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

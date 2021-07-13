@@ -34,7 +34,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	public void trackLoaded(AudioTrack track) {
 		Queue queue = controller.getQueue();
 		if(isLoop == false) {
-			if(queue.trackexist()) {
+			if(queue.isPlayingTrack()) {
 				if(isPlaylist == false && isLoopQueue == false) {
 					int QueueSize = queue.getQueueSize();
 					QueueSize++;
@@ -65,7 +65,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 		Long guildid = controller.getGuild().getIdLong();
 		if(isPlaylist == false) {
 			if(uri.startsWith("ytsearch: ")) {
-				if(queue.trackexist()) {
+				if(queue.isPlayingTrack()) {
 					int QueueSize = queue.getQueueSize();
 					QueueSize++;
 					AudioTrack track = playlist.getTracks().get(0);
@@ -87,7 +87,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 			return;
 		}
 		if(playlist.getTracks().size() >= 1) {
-			if(queue.trackexist()) {
+			if(queue.isPlayingTrack()) {
 				int QueueSize = queue.getQueueSize();
 				QueueSize++;
 				AudioTrack track = playlist.getTracks().get(0);

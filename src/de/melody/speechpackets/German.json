@@ -23,7 +23,7 @@
     
     "feedback.info.invite": "{0} hier ist mein Einladungslink wo du mich zu deinem Server hinzufuegen kannst:\n\n Einladungslink: {1}",
     "feedback.info.ping": "Die Latenz von Melody ist %dms",
-    "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nLaeuft auf Servern: {2}\nDeserving members: {3}\n\nZu dem Zeitpunkt, wo du das ansehst, hoerten {4} Leute {5} lang Musik üeber {6}!",
+    "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nLaeuft auf Servern: {2}\nDeserving members: {3}\n\nZu dem Zeitpunkt, wo du das ansehst, hoerten {4} Leute {5} lang Musik ueber {6}!",
     "feedback.info.prefix": "**Mein Praefix auf diesem Server ist `{0}`**",
     "feedback.info.unknown-command": "`hmm, es sieht so aus als wenn ich diesen Befehl nicht kennen wuerde. Bitte nutze um die Befehls liste zu sehen {0}help.`",
     "feedback.info.error.bot-no-permmisions": "Ich habe nicht genug Rechte, ich benoetige die **Rechte**: `{0}`",
