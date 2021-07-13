@@ -116,12 +116,17 @@ public class GuildEntity {
 		update();
 	}
 	
+	public void setLanguage(Languages newlanguage) {
+		this.language = newlanguage;
+		update();
+	}
+	
 	public Languages getLanguage() {
 		renewExpireTime();
 		return this.language;
 	}
 	
-	public Boolean isAnnounceSongs() {
+	public Boolean canAnnounceSongs() {
 		renewExpireTime();
 		return this.announcesongs;
 	}

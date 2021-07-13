@@ -54,7 +54,7 @@ public class TrackScheduler extends AudioEventAdapter{
 		Guild guild = melody.shardMan.getGuildById(guildid);
 		MusicController controller = melody.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
-		if(queue.isLoop() == false && queue.isLoopQueue() == false) {
+		if(controller.isLoop() == false && controller.isLoopQueue() == false) {
 			EmbedBuilder builder = new EmbedBuilder();
 			AudioTrackInfo info = track.getInfo();
 			builder.setDescription(guild.getJDA().getEmoteById(Emojis.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guildid, "music.track.currently-playing")+ info.title);
@@ -104,8 +104,8 @@ public class TrackScheduler extends AudioEventAdapter{
 			if((state = guild.getSelfMember().getVoiceState()) != null) {
 				VoiceChannel vc;
 				if((vc = state.getChannel()) != null) {
-					if(!queue.isLoop()) {
-						if(!queue.isLoopQueue()) {
+					if(!controller.isLoop()) {
+						if(!controller.isLoopQueue()) {
 							if(!queue.next()) { 
 								if(vc.getMembers().size() > 1) {
 									controller.setAfkTime(600);
@@ -128,8 +128,8 @@ public class TrackScheduler extends AudioEventAdapter{
 				}
 			}
 		}
-		if(queue.isLoop()) {
-			queue.setLoop(false);	
+		if(controller.isLoop()) {
+			controller.setLoop(false);	
 		}
 		player.stopTrack();
 	}

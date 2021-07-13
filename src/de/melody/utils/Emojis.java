@@ -30,6 +30,7 @@ public class Emojis {
 	public final static String PENCIL = "✏️";
 	public final static String CHECK_MARK = "✅";
 	public final static String WHITE_FLAG = "🏳️";
+	public final static String BELL = "🔔";
 	public final static String GERMANY_FLAG = "🇩🇪";
 	public final static String UNITED_STATES_FLAG = "🇺🇸";
 }
