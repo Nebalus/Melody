@@ -50,7 +50,7 @@ public class Images {
 			graph.setColor(Color.WHITE);
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 30));
 			
-			final int maxcharacter = 38;
+			final int maxcharacter = 42;
 			String currenttrackname = "";
 			if(trackname != null) {
 				int currentcharacters = 0;

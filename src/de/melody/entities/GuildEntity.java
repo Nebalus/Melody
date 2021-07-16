@@ -160,8 +160,6 @@ public class GuildEntity {
 					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE guilds SET "
 							+ "channelid = ?,"
 							+ "volume = ?,"
-							+ "pitch = ?,"
-							+ "speed = ?,"
 							+ "djrole = ?,"
 							+ "prefix = ?,"
 							+ "voteskip = ?,"
@@ -171,16 +169,14 @@ public class GuildEntity {
 							+ "preventduplicates = ? WHERE guildid = ?");
 					ps.setLong(1, channelid);
 					ps.setInt(2, volume);
-					ps.setDouble(3, pitch);
-					ps.setDouble(4, speed);
-					ps.setLong(5, djroleid);
-					ps.setString(6, prefix);
-					ps.setBoolean(7, voteskip);
-					ps.setBoolean(8, staymode);
-					ps.setString(9, language.getCode());
-					ps.setBoolean(10, announcesongs);
-					ps.setBoolean(11, preventduplicates);
-					ps.setLong(12, guildid);
+					ps.setLong(3, djroleid);
+					ps.setString(4, prefix);
+					ps.setBoolean(5, voteskip);
+					ps.setBoolean(6, staymode);
+					ps.setString(7, language.getCode());
+					ps.setBoolean(8, announcesongs);
+					ps.setBoolean(9, preventduplicates);
+					ps.setLong(10, guildid);
 					ps.executeUpdate();
 					ConsoleLogger.info("export guild", guildid);
 				} catch (SQLException e) {

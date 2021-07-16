@@ -11,6 +11,7 @@
     
     "config.sub.prefix.info": "Changes the prefix to use Melody's commands.",
     "config.sub.prefix.valid-settings": "Any text, at most 6 characters.",
+    
     "config.sub.language.info": "Changes the output language from Melody.",
     
     "config.command.staymode.enabled": "24/7 mode has been aktivated!",

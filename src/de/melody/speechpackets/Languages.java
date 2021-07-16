@@ -40,12 +40,4 @@ public enum Languages {
          }
 		return ENGLISH;
 	}
-	
-	public static String getLanguageList() {
-		String message = "";
-		for (Languages language : values()) {
-			message = message+ " `"+language.getIcon()+"` - "+language.getName()+" \n";
-        }
-		return message;
-	}
 }

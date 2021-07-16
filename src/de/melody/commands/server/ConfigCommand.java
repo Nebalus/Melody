@@ -23,7 +23,7 @@ public class ConfigCommand implements ServerCommand{
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
 		Long guildid = guild.getIdLong();
-		GuildEntity guildentity = melody.entityManager.getGuildEntity(guildid);
+		GuildEntity ge = melody.entityManager.getGuildEntity(guildid);
 		if(m.hasPermission(Permission.ADMINISTRATOR) || m.hasPermission(Permission.MANAGE_SERVER)) {
 			if(args.length == 1) {
 				sendMainMenu(channel);
@@ -32,10 +32,17 @@ public class ConfigCommand implements ServerCommand{
 					ConfigSubCommands subcommand = ConfigSubCommands.valueOf(args[1]);
 					switch(subcommand) {
 						case prefix:
-							sendSubCommandMenu(guildentity.getPrefix(), channel, ConfigSubCommands.prefix, guildentity.getPrefix(),null);
+							sendSubCommandMenu(ge.getPrefix(), channel, ConfigSubCommands.prefix, ge.getPrefix(),null);
 							break;
 						case language:
-							sendSubCommandMenu(" `"+guildentity.getLanguage().getIcon()+"` "+guildentity.getLanguage().getName()+" ", channel, ConfigSubCommands.language, guildentity.getPrefix(),Languages.getLanguageList());
+							String languagelist = "";
+							for (Languages language : Languages.values()) {
+								languagelist = languagelist+ " `"+language.getIcon()+"` - "+language.getName()+" \n";
+					        }
+							sendSubCommandMenu(" `"+ge.getLanguage().getIcon()+"` "+ge.getLanguage().getName()+" ", channel, ConfigSubCommands.language, ge.getPrefix(),languagelist);
+							break;
+						case announcesongs:
+							sendSubCommandMenu(ge.getPrefix(), channel, ConfigSubCommands.announcesongs, ge.getPrefix(),null);
 							break;
 						default:
 							sendMainMenu(channel);
@@ -50,15 +57,15 @@ public class ConfigCommand implements ServerCommand{
 					switch(subcommand) {
 						case prefix:
 							if(args[2].length() <= 6) {					            
-								channel.sendMessage("**You have updated my prefix from** `"+guildentity.getPrefix()+"` **to** `"+args[2]+"`").queue();	
-								guildentity.setPrefix(args[2]);
+								channel.sendMessage("**You have updated my prefix from** `"+ge.getPrefix()+"` **to** `"+args[2]+"`").queue();	
+								ge.setPrefix(args[2]);
 							}else 
-								sendSubCommandMenu(guildentity.getPrefix(), channel, ConfigSubCommands.prefix, guildentity.getPrefix(),null);
+								sendSubCommandMenu(ge.getPrefix(), channel, ConfigSubCommands.prefix, ge.getPrefix(),null);
 							break;
 						
 						case language:
 							boolean isLanguage = false;
-							Languages newLang = guildentity.getLanguage();
+							Languages newLang = ge.getLanguage();
 							for(Languages lang : Languages.values()) {
 								if(lang.getName().equalsIgnoreCase(args[2]) || lang.getCode().equalsIgnoreCase(args[2]) && newLang != lang) {
 									isLanguage = true;
@@ -66,12 +73,18 @@ public class ConfigCommand implements ServerCommand{
 								}
 							}
 							if(isLanguage) {
-								channel.sendMessage("**You have updated my language from ** `"+guildentity.getLanguage().getName()+"` **to** `"+newLang.getName()+"`**!**").queue();	
-								guildentity.setLanguage(newLang);
-							}else   
-								sendSubCommandMenu(" `"+guildentity.getLanguage().getIcon()+"` "+guildentity.getLanguage().getName()+" ", channel, ConfigSubCommands.language, guildentity.getPrefix(),Languages.getLanguageList());
+								channel.sendMessage("**You have updated my language from ** `"+ge.getLanguage().getName()+"` **to** `"+newLang.getName()+"`**!**").queue();	
+								ge.setLanguage(newLang);
+							}else {
+								String languagelist = "";
+								for (Languages language : Languages.values()) {
+									languagelist = languagelist+ " `"+language.getIcon()+"` - "+language.getName()+" \n";
+						        }
+								sendSubCommandMenu(" `"+ge.getLanguage().getIcon()+"` "+ge.getLanguage().getName()+" ", channel, ConfigSubCommands.language, ge.getPrefix(),languagelist);
+							}
 							break;
-						
+						case announcesongs:
+							break;
 						default:
 							sendMainMenu(channel);
 							break;
