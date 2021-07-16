@@ -22,11 +22,11 @@ public class VolumeCommand implements ServerCommand{
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
-		GuildEntity guildentity = melody.entityManager.getGuildEntity(guild.getIdLong());
-		guildentity.setChannelId(channel.getIdLong());
+		GuildEntity ge = melody.entityManager.getGuildEntity(guild.getIdLong());
+		ge.setChannelId(channel.getIdLong());
 		if(args.length == 1) {
 			EmbedBuilder builder = new EmbedBuilder();
-			builder.setDescription(mf.format(guild.getIdLong(), "config.command.volume.show",guildentity.getVolume()));
+			builder.setDescription(mf.format(guild.getIdLong(), "config.command.volume.show",ge.getVolume()));
 			MusicUtil.sendEmbled(guild.getIdLong(), builder);
 		}else {
 			try {
@@ -35,7 +35,7 @@ public class VolumeCommand implements ServerCommand{
 					if(amount >= 1) {
 						melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
 						EmbedBuilder builder = new EmbedBuilder();
-						guildentity.setVolume(amount);
+						ge.setVolume(amount);
 						builder.setDescription(mf.format(guild.getIdLong(), "config.command.volume.set",amount));
 						MusicUtil.sendEmbled(guild.getIdLong(), builder);
 					}else

@@ -6,6 +6,7 @@ import de.melody.commands.server.ConfigCommand;
 import de.melody.commands.server.info.BotInfoCommand;
 import de.melody.commands.server.info.InviteCommand;
 import de.melody.commands.server.info.PingCommand;
+import de.melody.commands.server.music.FastforwardCommand;
 import de.melody.commands.server.music.JoinCommand;
 import de.melody.commands.server.music.LeaveCommand;
 import de.melody.commands.server.music.LoopCommand;
@@ -39,6 +40,9 @@ public class CommandManager {
 		
 		this.servercommands.put("join",new JoinCommand());
 		this.servercommands.put("j",new JoinCommand());
+		
+		this.servercommands.put("fastforward",new FastforwardCommand());
+		this.servercommands.put("fw",new FastforwardCommand());
 		
 		this.servercommands.put("p",new PlayCommand());
 		this.servercommands.put("play",new PlayCommand());

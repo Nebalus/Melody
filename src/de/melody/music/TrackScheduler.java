@@ -12,6 +12,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import de.melody.Melody;
+import de.melody.entities.GuildEntity;
 import de.melody.entities.reacts.TrackReaction;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emojis;
@@ -54,7 +55,8 @@ public class TrackScheduler extends AudioEventAdapter{
 		Guild guild = melody.shardMan.getGuildById(guildid);
 		MusicController controller = melody.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
-		if(controller.isLoop() == false && controller.isLoopQueue() == false) {
+		GuildEntity ge = melody.entityManager.getGuildEntity(guild.getIdLong());
+		if(controller.isLoop() == false && controller.isLoopQueue() == false && ge.canAnnounceSongs()) {
 			EmbedBuilder builder = new EmbedBuilder();
 			AudioTrackInfo info = track.getInfo();
 			builder.setDescription(guild.getJDA().getEmoteById(Emojis.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guildid, "music.track.currently-playing")+ info.title);
