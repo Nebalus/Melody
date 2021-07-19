@@ -51,6 +51,7 @@ public class MessageFormatter {
 				message = message.replace("[ö]", "oe");
 				message = message.replace("[ü]", "ue");
 			}
+			message = message.replace("[botname]", Melody.name);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

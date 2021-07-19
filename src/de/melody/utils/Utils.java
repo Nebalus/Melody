@@ -48,8 +48,13 @@ public class Utils {
 		return 0l;
 	}
 	
-	public static String uptime(long time) {
-		long uptime = time;
+	public static String decodeStringFromTimeMillis(long time,Boolean inseconds) {
+		long uptime;
+		if(inseconds) {
+			uptime = time;
+		}else {
+			uptime = time/1000;
+		}
 		
 		long sekunden = uptime;
 		long minuten = sekunden/60;
@@ -79,6 +84,42 @@ public class Utils {
 		
 		String replace = uptimeSuffix.replace(" ", ", ");
 		return replace;
+	}
+	public static Boolean isStringValidBoolean(String value) {
+		Boolean bool = false;
+		value = value.toLowerCase();
+		switch(value) {
+			case "true":
+			case "on":
+			case "false":
+			case "off":
+				bool =true;
+				break;
+		}
+		return bool;
+	}
+	public static Boolean getBooleanFromString(String value) {
+		Boolean bool = false;
+		value = value.toLowerCase();
+		switch(value) {
+			case "true":
+			case "on":
+				bool =true;
+				break;
+			case "false":
+			case "off":
+				bool =false;
+				break;
+		}
+		return bool;
+	}
+	
+	public static String getStringFromBoolean(Boolean value) {
+		if(value) {
+			return "on";
+		}else {
+			return "off";
+		}
 	}
 	
 	public static String getTimeFormat(Long time) {		

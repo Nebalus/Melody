@@ -16,6 +16,8 @@ import de.melody.commands.server.music.PlayCommand;
 import de.melody.commands.server.music.PlaylistCommand;
 import de.melody.commands.server.music.QueueCommand;
 import de.melody.commands.server.music.ResumeCommand;
+import de.melody.commands.server.music.RewindCommand;
+import de.melody.commands.server.music.SeekCommand;
 import de.melody.commands.server.music.ShuffelCommand;
 import de.melody.commands.server.music.StayCommand;
 import de.melody.commands.server.music.StopCommand;
@@ -43,6 +45,11 @@ public class CommandManager {
 		
 		this.servercommands.put("fastforward",new FastforwardCommand());
 		this.servercommands.put("fw",new FastforwardCommand());
+		
+		this.servercommands.put("rewind",new RewindCommand());
+		this.servercommands.put("rw",new RewindCommand());
+		
+		this.servercommands.put("seek",new SeekCommand());
 		
 		this.servercommands.put("p",new PlayCommand());
 		this.servercommands.put("play",new PlayCommand());

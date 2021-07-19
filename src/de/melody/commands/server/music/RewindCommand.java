@@ -3,7 +3,6 @@ package de.melody.commands.server.music;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import de.melody.ConsoleLogger;
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.entities.GuildEntity;
@@ -20,7 +19,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
-public class FastforwardCommand implements ServerCommand{
+public class RewindCommand  implements ServerCommand{
 	
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
@@ -37,23 +36,23 @@ public class FastforwardCommand implements ServerCommand{
 			AudioPlayer player = controller.getPlayer();
 			Queue queue = controller.getQueue();
 			if(queue.isPlayingTrack()) {
-				Long fastforwardmillis;
+				Long rewindmillis;
 				if(args.length <= 1) {
-					fastforwardmillis = 10000l;
+					rewindmillis = 10000l;
 					AudioTrack track = player.getPlayingTrack();
-					track.setPosition(player.getPlayingTrack().getPosition()+fastforwardmillis);
+					track.setPosition(player.getPlayingTrack().getPosition()-rewindmillis);
 				}else {
 					String subTime = "";
 					for(int i = 1; i < args.length; i++) {
 						subTime = subTime +" "+args[i];
 					}
 					AudioTrack track = player.getPlayingTrack();
-					fastforwardmillis = Utils.decodeTimeMillisFromString(subTime);
-					track.setPosition(player.getPlayingTrack().getPosition()+fastforwardmillis);
+					rewindmillis = Utils.decodeTimeMillisFromString(subTime);
+					track.setPosition(player.getPlayingTrack().getPosition()-rewindmillis);
 				}
 				EmbedBuilder builder = new EmbedBuilder();
 				builder.setColor(Melody.HEXEmbeld);
-				builder.setDescription(Emojis.FAST_FORWARD+" "+mf.format(guild.getIdLong(), "command.fastforward.set",Utils.decodeStringFromTimeMillis(fastforwardmillis,false)));
+				builder.setDescription(Emojis.REWIND+" "+mf.format(guild.getIdLong(), "command.rewind.set",Utils.decodeStringFromTimeMillis(rewindmillis,false)));
 				channel.sendMessage(builder.build()).queue();
 			}else 
 				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"),m);
