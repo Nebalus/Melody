@@ -75,19 +75,18 @@ public class TrackScheduler extends AudioEventAdapter{
 				melody.entityManager.getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(trackmessage.getIdLong(), te);
 				trackmessage.addReaction(Emojis.SPARKLING_HEART).queue();
 			});
-	
-			VoiceChannel vc;
-			if((vc = controller.getGuild().getSelfMember().getVoiceState().getChannel()) != null) {
-				for(Member vcm : vc.getMembers()) {
-					if(!vcm.getUser().isBot()) {
-						if(!Utils.doesUserExist(vcm.getIdLong())) {
-							try {
-								PreparedStatement ps = melody.getDatabase().getConnection().prepareStatement("INSERT INTO userdata(userid) VALUES(?)");
-								ps.setLong(1, vcm.getIdLong());
-								ps.executeUpdate();
-							} catch (SQLException e) {
-								e.printStackTrace();
-							}
+		}
+		VoiceChannel vc;
+		if((vc = controller.getGuild().getSelfMember().getVoiceState().getChannel()) != null) {
+			for(Member vcm : vc.getMembers()) {
+				if(!vcm.getUser().isBot()) {
+					if(!Utils.doesUserExist(vcm.getIdLong())) {
+						try {
+							PreparedStatement ps = melody.getDatabase().getConnection().prepareStatement("INSERT INTO userdata(userid) VALUES(?)");
+							ps.setLong(1, vcm.getIdLong());
+							ps.executeUpdate();
+						} catch (SQLException e) {
+							e.printStackTrace();
 						}
 					}
 				}
@@ -118,13 +117,13 @@ public class TrackScheduler extends AudioEventAdapter{
 						}else {
 							AudioPlayerManager apm = melody.audioPlayerManager;
 							final String uri = track.getInfo().uri;
-							apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false, false, true));
+							apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
 							return;
 						}
 					}else {
 						AudioPlayerManager apm = melody.audioPlayerManager;
 						final String uri = track.getInfo().uri;
-						apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false, true, false));
+						apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
 						return;
 					}
 				}

@@ -26,7 +26,7 @@ public class ConfigCommand implements ServerCommand{
 		GuildEntity ge = melody.entityManager.getGuildEntity(guildid);
 		if(m.hasPermission(Permission.ADMINISTRATOR) || m.hasPermission(Permission.MANAGE_SERVER)) {
 			if(args.length == 1) {
-				sendMainMenu(channel);
+				sendMainMenu(channel,ge.getPrefix());
 			}else if(args.length == 2) {
 				try {
 					ConfigSubCommands subcommand = ConfigSubCommands.valueOf(args[1]);
@@ -42,14 +42,17 @@ public class ConfigCommand implements ServerCommand{
 							sendSubCommandMenu(" `"+ge.getLanguage().getIcon()+"` "+ge.getLanguage().getName()+" ", channel, ConfigSubCommands.language, ge.getPrefix(),languagelist);
 							break;
 						case announcesongs:
-							sendSubCommandMenu(ge.getPrefix(), channel, ConfigSubCommands.announcesongs, ge.getPrefix(),null);
+							sendSubCommandMenu(Utils.getStringFromBoolean(ge.canAnnounceSongs()), channel, ConfigSubCommands.announcesongs, ge.getPrefix(),Utils.getStringFromBoolean(true)+", "+Utils.getStringFromBoolean(false));
+							break;
+						case revocablecommands: 
+							sendSubCommandMenu(Utils.getStringFromBoolean(ge.canRevokeCommand()), channel, ConfigSubCommands.revocablecommands, ge.getPrefix(), null);
 							break;
 						default:
-							sendMainMenu(channel);
+							sendMainMenu(channel,ge.getPrefix());
 							break;
 					}
 				}catch(IllegalArgumentException e){
-					sendMainMenu(channel);
+					sendMainMenu(channel,ge.getPrefix());
 				}
 			}else if(args.length >= 3) {
 				try {
@@ -84,21 +87,55 @@ public class ConfigCommand implements ServerCommand{
 							}
 							break;
 						case announcesongs:
+							boolean value = Utils.getBooleanFromString(args[2]);
+							if(Utils.isStringValidBoolean(args[2]) && value != ge.canAnnounceSongs()) {
+								if(value) {
+									channel.sendMessage("**I will now announce new songs**").queue();	
+									ge.setAnnounceSongs(true);
+								}else {
+									channel.sendMessage("**I will no longer announce new songs**").queue();	
+									ge.setAnnounceSongs(false);
+								}
+							}else {
+								sendSubCommandMenu(Utils.getStringFromBoolean(ge.canAnnounceSongs()), channel, ConfigSubCommands.announcesongs, ge.getPrefix(),Utils.getStringFromBoolean(true)+", "+Utils.getStringFromBoolean(false));
+							}
+							break;
+						case revocablecommands: 
+							boolean value1 = Utils.getBooleanFromString(args[2]);
+							if(Utils.isStringValidBoolean(args[2]) && value1 != ge.canRevokeCommand()) {
+								if(value1) {
+									channel.sendMessage("**I will now delete every new commands**").queue();	
+									ge.setRevokeCommand(true);
+								}else {
+									channel.sendMessage("**I will no longer delete every new commands**").queue();	
+									ge.setRevokeCommand(false);
+								}
+							}else {
+								sendSubCommandMenu(Utils.getStringFromBoolean(ge.canRevokeCommand()), channel, ConfigSubCommands.revocablecommands, ge.getPrefix(),Utils.getStringFromBoolean(true)+", "+Utils.getStringFromBoolean(false));
+							}
 							break;
 						default:
-							sendMainMenu(channel);
+							sendMainMenu(channel,ge.getPrefix());
 							break;
 					}
 				}catch(IllegalArgumentException e){
-					sendMainMenu(channel);
+					sendMainMenu(channel,ge.getPrefix());
 				}
 			}
 		}else {
 			Utils.sendErrorEmbled(channel,mf.format(guildid, "feedback.error.user-no-permmisions", "MANAGE_SERVER"), m);
 		}
 	}
-	public void sendMainMenu(TextChannel channel) {
-		channel.sendMessage("Test").queue();	
+	@SuppressWarnings("deprecation")
+	public void sendMainMenu(TextChannel channel, String prefix) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.setColor(Melody.HEXEmbeld);
+		builder.setTitle("**"+Melody.name+" Config**");	
+		for(ConfigSubCommands command : ConfigSubCommands.values()) {
+			builder.addField(command.title, "`"+prefix+"config "+command.name()+"`", true);
+
+		}
+		channel.sendMessage(builder.build()).queue();
 	}
 	
 	
@@ -121,7 +158,8 @@ public class ConfigCommand implements ServerCommand{
 	private enum ConfigSubCommands{
 		prefix("[new prefix]",Emojis.EXCLAMATION_MARK+" Prefix"),
 		language("[new language]",Emojis.WHITE_FLAG+" Language"),
-		announcesongs("[yes|no]",Emojis.BELL+" Announce Songs");
+		announcesongs("[on|off]",Emojis.BELL+" Announce Songs"),
+		revocablecommands("[on|off]",Emojis.FIRECRACKER+" Revocable Commands");
 		
 		String usage;
 		String title;

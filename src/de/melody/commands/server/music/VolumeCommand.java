@@ -26,7 +26,7 @@ public class VolumeCommand implements ServerCommand{
 		ge.setChannelId(channel.getIdLong());
 		if(args.length == 1) {
 			EmbedBuilder builder = new EmbedBuilder();
-			builder.setDescription(mf.format(guild.getIdLong(), "config.command.volume.show",ge.getVolume()));
+			builder.setDescription(mf.format(guild.getIdLong(), "command.volume.show",ge.getVolume()));
 			MusicUtil.sendEmbled(guild.getIdLong(), builder);
 		}else {
 			try {
@@ -36,14 +36,14 @@ public class VolumeCommand implements ServerCommand{
 						melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
 						EmbedBuilder builder = new EmbedBuilder();
 						ge.setVolume(amount);
-						builder.setDescription(mf.format(guild.getIdLong(), "config.command.volume.set",amount));
+						builder.setDescription(mf.format(guild.getIdLong(), "command.volume.set",amount));
 						MusicUtil.sendEmbled(guild.getIdLong(), builder);
 					}else
-						Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "config.command.volume.min-int"), m);
+						Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "command.volume.min-int"), m);
 				}else
-					Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "config.command.volume.max-int",maxvolume), m);
+					Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "command.volume.max-int",maxvolume), m);
 			}catch(NumberFormatException e) {
-				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "config.command.volume.out-of-bounds",maxvolume), m);
+				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "command.volume.out-of-bounds",maxvolume), m);
 			}
 		}
 	}

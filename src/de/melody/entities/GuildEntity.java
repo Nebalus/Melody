@@ -14,12 +14,11 @@ public class GuildEntity {
 	private Long guildid;
 	private Long channelid;
 	private int volume = 50;
-	private double pitch = 1.0;
-	private double speed = 1.0;
 	private Long djroleid;
 	private String prefix = "m!";
 	private boolean voteskip = false;
 	private boolean staymode = false;
+	private boolean revocablecommands = false;
 	private boolean announcesongs = true;
 	private boolean preventduplicates = false;
 	private Languages language = Languages.ENGLISH;
@@ -55,6 +54,9 @@ public class GuildEntity {
 					}
 					if(rs.getString("preventduplicates") != null) {
 						preventduplicates = rs.getBoolean("preventduplicates");	
+					}
+					if(rs.getString("revocablecommands") != null) {
+						revocablecommands = rs.getBoolean("revocablecommands");	
 					}
 					if(rs.getString("language") != null) {
 						language = Languages.getLanguage(rs.getString("language"));
@@ -131,6 +133,19 @@ public class GuildEntity {
 		return this.announcesongs;
 	}
 	
+	public void setAnnounceSongs(Boolean newannouncesongs) {
+		this.announcesongs = newannouncesongs;
+		update();
+	}
+	
+	public Boolean canRevokeCommand() {
+		return revocablecommands;
+	}
+	public void setRevokeCommand(Boolean newrevocablecommands) {
+		this.revocablecommands = newrevocablecommands;
+		update();
+	}
+	
 	public Boolean isPreventDuplicates() {
 		renewExpireTime();
 		return this.preventduplicates;
@@ -166,7 +181,8 @@ public class GuildEntity {
 							+ "staymode = ?,"
 							+ "language = ?,"
 							+ "announcesongs = ?,"
-							+ "preventduplicates = ? WHERE guildid = ?");
+							+ "preventduplicates = ?,"
+							+ "revocablecommands = ? WHERE guildid = ?");
 					ps.setLong(1, channelid);
 					ps.setInt(2, volume);
 					ps.setLong(3, djroleid);
@@ -176,7 +192,8 @@ public class GuildEntity {
 					ps.setString(7, language.getCode());
 					ps.setBoolean(8, announcesongs);
 					ps.setBoolean(9, preventduplicates);
-					ps.setLong(10, guildid);
+					ps.setBoolean(10, revocablecommands);
+					ps.setLong(11, guildid);
 					ps.executeUpdate();
 					ConsoleLogger.info("export guild", guildid);
 				} catch (SQLException e) {
