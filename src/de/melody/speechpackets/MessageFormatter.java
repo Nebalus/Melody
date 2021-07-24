@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import org.json.JSONObject;
 
+import de.melody.Config;
 import de.melody.Json;
 import de.melody.Melody;
 
@@ -31,9 +32,9 @@ public class MessageFormatter {
 	}
 	
 	public String format(Long guildid, String key, Object... args) {
-		String message = "JSON-Error {"+key+"}";
+		Languages language = melody.entityManager.getGuildEntity(guildid).getLanguage();
+		String message = "JSON-Error {"+key+"}: "+language.code;
 	    try {
-	    	Languages language = melody.entityManager.getGuildEntity(guildid).getLanguage();
 			JSONObject json = getJSONMessage.get(language);
 			message = json.getString(key);
 			for(int i = 0; i < args.length; ++i) {
@@ -51,7 +52,7 @@ public class MessageFormatter {
 				message = message.replace("[ö]", "oe");
 				message = message.replace("[ü]", "ue");
 			}
-			message = message.replace("[botname]", Melody.name);
+			message = message.replace("[botname]", Config.buildname);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

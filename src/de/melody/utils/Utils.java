@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import de.melody.Config;
 import de.melody.Melody;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -64,7 +65,7 @@ public class Utils {
 		minuten %= 60;
 		sekunden %= 60;
 		
-		String uptimeSuffix = null;
+		String uptimeSuffix = "";
 		//uptimeSuffix = "just started";
 		if(uptime == 0) {
 			uptimeSuffix = "0s";
@@ -81,9 +82,7 @@ public class Utils {
 		if(uptime >= 86400) {
 			uptimeSuffix = tage +"d "+(uptimeSuffix != null ? uptimeSuffix : "");
 		}
-		
-		String replace = uptimeSuffix.replace(" ", ", ");
-		return replace;
+		return uptimeSuffix;
 	}
 	public static Boolean isStringValidBoolean(String value) {
 		Boolean bool = false;
@@ -189,7 +188,7 @@ public class Utils {
 	public static void sendErrorEmbled(TextChannel channel, String discription, Member m) {				
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+m.getUser().getAsMention()+" "+discription);
-		builder.setColor(Melody.HEXEmbeldError);
+		builder.setColor(Config.HEXEmbeldError);
 		channel.sendMessage(builder.build()).queue();
 	}
 	

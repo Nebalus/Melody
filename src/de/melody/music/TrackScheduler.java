@@ -11,6 +11,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
+import de.melody.Config;
 import de.melody.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.entities.reacts.TrackReaction;
@@ -64,7 +65,7 @@ public class TrackScheduler extends AudioEventAdapter{
 			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", false);
 			builder.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(info,0l),true);
 			builder.setFooter(mf.format(guildid, "music.user.who-requested")+ queue.currentplaying.getWhoQueued().getUser().getAsTag());
-			builder.setColor(Melody.HEXEmbeld);
+			builder.setColor(Config.HEXEmbeld);
 			if(url.startsWith("https://www.youtube.com/watch?v=")) {
 				String videoID = url.replace("https://www.youtube.com/watch?v=", "");
 				builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");

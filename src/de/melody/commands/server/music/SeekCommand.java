@@ -7,7 +7,6 @@ import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
-import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.entities.Guild;
@@ -31,9 +30,8 @@ public class SeekCommand implements ServerCommand{
 			String[] args = message.getContentDisplay().split(" ");
 			GuildEntity ge = melody.entityManager.getGuildEntity(guild.getIdLong());
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
-			AudioPlayer player = controller.getPlayer();
-			Queue queue = controller.getQueue();
-			if(queue.isPlayingTrack()) {
+			if(controller.isPlayingTrack()) {
+				AudioPlayer player = controller.getPlayer();
 				if(args.length <= 1) {
 				
 				}else {

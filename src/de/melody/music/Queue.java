@@ -17,7 +17,7 @@ public class Queue {
 	public QueuedTrack currentplaying;
 	
 	public Queue(MusicController controller) {
-		this.setController(controller);
+		this.controller = controller;
 		this.queuelist = new ArrayList<QueuedTrack>();
 		this.playedlist = new ArrayList<QueuedTrack>();
 	}
@@ -26,15 +26,21 @@ public class Queue {
 		if(this.queuelist.size() >= 1) {
 			currentplaying = queuelist.remove(0);
 			if(currentplaying != null) {
-				play(currentplaying.getTrack());
+				controller.play(currentplaying.getTrack());
 				return true;
 			}
 		}
 		return false;
 	}
-	public boolean play(AudioTrack at) {
-		this.controller.getPlayer().playTrack(at);
-		return true;
+	public boolean back() {
+		if(this.playedlist.size() >= 1) {
+			currentplaying = playedlist.remove(playedlist.size()-1);
+			if(currentplaying != null) {
+				controller.play(currentplaying.getTrack());
+				return true;
+			}
+		}
+		return false;
 	}
 	public int getQueueSize() {
 		return this.queuelist.size();
@@ -63,35 +69,11 @@ public class Queue {
 		}catch(IndexOutOfBoundsException e) {}
 		return null;	
 	}
-	
-	public Member getWhoQueued(int num) {
-		try {
-			Member user = queuelist.get(num).getWhoQueued();
-			
-			if(user != null) {
-				return user;
-			}
-		}catch(IndexOutOfBoundsException e) {}
-		return null;	
-	}
-	
-	public Boolean isPlayingTrack() {
-		if(this.controller.getPlayer().getPlayingTrack() == null) {
-			return false;
-		}
-		return true;	
-	}
-	
-	public boolean clearAll() {
+
+	public boolean clear() {
 		if(this.queuelist.size() >= 1) {
 			queuelist.clear();	
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean nextExist() {
-		if(this.queuelist.size() >= 1) {
+			playedlist.clear();
 			return true;
 		}
 		return false;
@@ -99,7 +81,7 @@ public class Queue {
 	
 	public void addTrackToQueue(AudioTrack track, Member m) {
 		this.queuelist.add(new QueuedTrack(track, m));
-		if(!isPlayingTrack()) {
+		if(!controller.isPlayingTrack()) {
 			next();
 		}
 	}
@@ -110,10 +92,6 @@ public class Queue {
 	
 	public MusicController getController() {
 		return controller;
-	}
-
-	public void setController(MusicController controller) {
-		this.controller = controller;
 	}
 	
 	public List<QueuedTrack> getQueuelist(){

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import de.melody.Config;
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.utils.Utils;
@@ -32,8 +33,8 @@ public class BotInfoCommand implements ServerCommand{
 		
 		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(guild.getIdLong(), "feedback.info.botinfo",
 			"JDA",
-			Melody.version,
-			Melody.builddate,
+			Config.buildversion,
+			Config.builddate,
 			serversRunning,
 			Utils.getUserInt(),
 			Utils.decodeStringFromTimeMillis(Melody.INSTANCE.playedmusictime,true),
