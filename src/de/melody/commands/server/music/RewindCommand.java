@@ -3,11 +3,11 @@ package de.melody.commands.server.music;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import de.melody.Config;
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
-import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emojis;
 import de.melody.utils.Utils;
@@ -33,9 +33,8 @@ public class RewindCommand  implements ServerCommand{
 			String[] args = message.getContentDisplay().split(" ");
 			GuildEntity ge = melody.entityManager.getGuildEntity(guild.getIdLong());
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
-			AudioPlayer player = controller.getPlayer();
-			Queue queue = controller.getQueue();
-			if(queue.isPlayingTrack()) {
+			if(controller.isPlayingTrack()) {
+				AudioPlayer player = controller.getPlayer();
 				Long rewindmillis;
 				if(args.length <= 1) {
 					rewindmillis = 10000l;
@@ -51,7 +50,7 @@ public class RewindCommand  implements ServerCommand{
 					track.setPosition(player.getPlayingTrack().getPosition()-rewindmillis);
 				}
 				EmbedBuilder builder = new EmbedBuilder();
-				builder.setColor(Melody.HEXEmbeld);
+				builder.setColor(Config.HEXEmbeld);
 				builder.setDescription(Emojis.REWIND+" "+mf.format(guild.getIdLong(), "command.rewind.set",Utils.decodeStringFromTimeMillis(rewindmillis,false)));
 				channel.sendMessage(builder.build()).queue();
 			}else 

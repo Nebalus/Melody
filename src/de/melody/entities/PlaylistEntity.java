@@ -3,6 +3,7 @@ package de.melody.entities;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import de.melody.Config;
 import de.melody.LiteSQL;
 import de.melody.Melody;
 import de.melody.utils.ID_Manager;
@@ -21,7 +22,7 @@ public class PlaylistEntity {
 	private LiteSQL database = pixelbeat.getDatabase();
 	
 	public PlaylistEntity(int playlistlistid) {
-		this.expiretime = System.currentTimeMillis() + Melody.expiretime;
+		this.expiretime = System.currentTimeMillis() + Config.entityexpiretime;
 		if(database.isConnected()) {
 			try {
 				ResultSet rs = database.onQuery("SELECT * FROM playlist WHERE id = " + playlistlistid);	

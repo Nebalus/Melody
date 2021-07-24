@@ -1,5 +1,6 @@
 package de.melody.commands.server;
 
+import de.melody.Config;
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.entities.GuildEntity;
@@ -59,8 +60,8 @@ public class ConfigCommand implements ServerCommand{
 					ConfigSubCommands subcommand = ConfigSubCommands.valueOf(args[1]);
 					switch(subcommand) {
 						case prefix:
-							if(args[2].length() <= 6) {					            
-								channel.sendMessage("**You have updated my prefix from** `"+ge.getPrefix()+"` **to** `"+args[2]+"`").queue();	
+							if(args[2].length() <= 6) {					 
+								channel.sendMessage(mf.format(guildid, "config.sub.prefix.succes", ge.getPrefix(),args[2])).queue();	
 								ge.setPrefix(args[2]);
 							}else 
 								sendSubCommandMenu(ge.getPrefix(), channel, ConfigSubCommands.prefix, ge.getPrefix(),null);
@@ -76,8 +77,9 @@ public class ConfigCommand implements ServerCommand{
 								}
 							}
 							if(isLanguage) {
-								channel.sendMessage("**You have updated my language from ** `"+ge.getLanguage().getName()+"` **to** `"+newLang.getName()+"`**!**").queue();	
+								Languages oldLang = ge.getLanguage();
 								ge.setLanguage(newLang);
+								channel.sendMessage(mf.format(guildid, "config.sub.language.succes", oldLang.getName(),newLang.getName())).queue();	
 							}else {
 								String languagelist = "";
 								for (Languages language : Languages.values()) {
@@ -90,10 +92,10 @@ public class ConfigCommand implements ServerCommand{
 							boolean value = Utils.getBooleanFromString(args[2]);
 							if(Utils.isStringValidBoolean(args[2]) && value != ge.canAnnounceSongs()) {
 								if(value) {
-									channel.sendMessage("**I will now announce new songs**").queue();	
+									channel.sendMessage(mf.format(guildid, "config.sub.announcesongs.succes.on")).queue();	
 									ge.setAnnounceSongs(true);
 								}else {
-									channel.sendMessage("**I will no longer announce new songs**").queue();	
+									channel.sendMessage(mf.format(guildid, "config.sub.announcesongs.succes.off")).queue();	
 									ge.setAnnounceSongs(false);
 								}
 							}else {
@@ -104,10 +106,10 @@ public class ConfigCommand implements ServerCommand{
 							boolean value1 = Utils.getBooleanFromString(args[2]);
 							if(Utils.isStringValidBoolean(args[2]) && value1 != ge.canRevokeCommand()) {
 								if(value1) {
-									channel.sendMessage("**I will now delete every new commands**").queue();	
+									channel.sendMessage("**I will now delete every new command**").queue();	
 									ge.setRevokeCommand(true);
 								}else {
-									channel.sendMessage("**I will no longer delete every new commands**").queue();	
+									channel.sendMessage("**I will no longer delete every new command**").queue();	
 									ge.setRevokeCommand(false);
 								}
 							}else {
@@ -129,11 +131,10 @@ public class ConfigCommand implements ServerCommand{
 	@SuppressWarnings("deprecation")
 	public void sendMainMenu(TextChannel channel, String prefix) {
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Melody.HEXEmbeld);
-		builder.setTitle("**"+Melody.name+" Config**");	
+		builder.setColor(Config.HEXEmbeld);
+		builder.setTitle("**"+Config.buildname+" Config**");	
 		for(ConfigSubCommands command : ConfigSubCommands.values()) {
 			builder.addField(command.title, "`"+prefix+"config "+command.name()+"`", true);
-
 		}
 		channel.sendMessage(builder.build()).queue();
 	}
@@ -143,8 +144,8 @@ public class ConfigCommand implements ServerCommand{
 	public void sendSubCommandMenu(Object currentvalue, TextChannel channel,ConfigSubCommands subcommand,String prefix,String customvalidsettigs) {
 		Long guildid = channel.getGuild().getIdLong();
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Melody.HEXEmbeld);
-		builder.setTitle(mf.format(guildid, "config.info.submenu.title",Melody.name,subcommand.title));	
+		builder.setColor(Config.HEXEmbeld);
+		builder.setTitle(mf.format(guildid, "config.info.submenu.title",Config.buildname,subcommand.title));	
 		builder.setDescription(mf.format(guildid, "config.sub."+subcommand.name()+".info"));
 		builder.addField(Emojis.CLIPBOARD+" "+mf.format(guildid, "config.info.submenu.current-value"), "`"+currentvalue.toString()+"`", false);
 		builder.addField(Emojis.PENCIL+" "+mf.format(guildid, "config.info.submenu.usage"), "`"+prefix+"config " +subcommand.name()+" "+subcommand.usage+"`", false);

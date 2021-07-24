@@ -1,6 +1,7 @@
 package de.melody.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.melody.Melody;
 import net.dv8tion.jda.api.entities.Guild;
@@ -37,6 +38,18 @@ public class MusicController {
 		*/
 	}
 	
+	public Boolean isPlayingTrack() {
+		if(player.getPlayingTrack() == null) {
+			return false;
+		}
+		return true;	
+	}
+	
+	public boolean play(AudioTrack at) {
+		this.player.playTrack(at);
+		return true;
+	}
+	
 	public Guild getGuild() {
 		return guild;
 	}
@@ -71,5 +84,5 @@ public class MusicController {
 	
 	public void setLoop(Boolean loop) {
 		this.isloop = loop;
-	}
+	}	
 }

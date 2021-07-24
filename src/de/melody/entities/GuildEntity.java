@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import de.melody.Config;
 import de.melody.ConsoleLogger;
 import de.melody.LiteSQL;
 import de.melody.Melody;
@@ -23,7 +24,7 @@ public class GuildEntity {
 	private boolean preventduplicates = false;
 	private Languages language = Languages.ENGLISH;
 	
-	private Long expiretime = System.currentTimeMillis() + Melody.expiretime;
+	private Long expiretime = System.currentTimeMillis() + Config.entityexpiretime;
 	private Boolean needtoexport = false;
 	
 	private Melody pixelbeat = Melody.INSTANCE;
@@ -165,7 +166,7 @@ public class GuildEntity {
 	}
 	
 	private void renewExpireTime() {
-		this.expiretime = System.currentTimeMillis() + Melody.expiretime;
+		this.expiretime = System.currentTimeMillis() + Config.entityexpiretime;
 	}
 	
 	public boolean exportData() {

@@ -33,7 +33,7 @@ public class StopCommand implements ServerCommand{
 			if(player.getPlayingTrack() != null) {
 				Queue queue = controller.getQueue();
 				player.stopTrack();
-				queue.clearAll();
+				queue.clear();
 				melody.playerManager.getController(guild.getIdLong()).setAfkTime(600);
 				message.addReaction(Emojis.OK_HAND).queue();
 			}else 
