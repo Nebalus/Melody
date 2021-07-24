@@ -6,6 +6,7 @@ import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
+import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emojis;
 import net.dv8tion.jda.api.entities.Guild;
@@ -30,7 +31,9 @@ public class StopCommand implements ServerCommand{
 		VoiceChannel vc;
 		if((state = m.getVoiceState()) != null && (vc = state.getChannel()) != null) {
 			if(player.getPlayingTrack() != null) {
-				MusicUtil.MusicKiller(guild);
+				Queue queue = controller.getQueue();
+				player.stopTrack();
+				queue.clear();
 				melody.playerManager.getController(guild.getIdLong()).setAfkTime(600);
 				message.addReaction(Emojis.OK_HAND).queue();
 			}else 

@@ -11,7 +11,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
+import de.melody.Config;
 import de.melody.Melody;
+import de.melody.entities.GuildEntity;
 import de.melody.entities.reacts.TrackReaction;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emojis;
@@ -54,7 +56,8 @@ public class TrackScheduler extends AudioEventAdapter{
 		Guild guild = melody.shardMan.getGuildById(guildid);
 		MusicController controller = melody.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
-		if(queue.isLoop() == false && queue.isLoopQueue() == false) {
+		GuildEntity ge = melody.entityManager.getGuildEntity(guild.getIdLong());
+		if(controller.isLoop() == false && controller.isLoopQueue() == false && ge.canAnnounceSongs()) {
 			EmbedBuilder builder = new EmbedBuilder();
 			AudioTrackInfo info = track.getInfo();
 			builder.setDescription(guild.getJDA().getEmoteById(Emojis.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guildid, "music.track.currently-playing")+ info.title);
@@ -62,30 +65,29 @@ public class TrackScheduler extends AudioEventAdapter{
 			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", false);
 			builder.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(info,0l),true);
 			builder.setFooter(mf.format(guildid, "music.user.who-requested")+ queue.currentplaying.getWhoQueued().getUser().getAsTag());
-			builder.setColor(Melody.HEXEmbeld);
+			builder.setColor(Config.HEXEmbeld);
 			if(url.startsWith("https://www.youtube.com/watch?v=")) {
 				String videoID = url.replace("https://www.youtube.com/watch?v=", "");
-				//builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
-				builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
+				builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
+				//builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
 			}
 			MusicUtil.getChannel(guildid).sendMessage(builder.build()).queue((trackmessage) ->{
 				TrackReaction te = new TrackReaction(info);
 				melody.entityManager.getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(trackmessage.getIdLong(), te);
 				trackmessage.addReaction(Emojis.SPARKLING_HEART).queue();
 			});
-	
-			VoiceChannel vc;
-			if((vc = controller.getGuild().getSelfMember().getVoiceState().getChannel()) != null) {
-				for(Member vcm : vc.getMembers()) {
-					if(!vcm.getUser().isBot()) {
-						if(!Utils.doesUserExist(vcm.getIdLong())) {
-							try {
-								PreparedStatement ps = melody.getDatabase().getConnection().prepareStatement("INSERT INTO userdata(userid) VALUES(?)");
-								ps.setLong(1, vcm.getIdLong());
-								ps.executeUpdate();
-							} catch (SQLException e) {
-								e.printStackTrace();
-							}
+		}
+		VoiceChannel vc;
+		if((vc = controller.getGuild().getSelfMember().getVoiceState().getChannel()) != null) {
+			for(Member vcm : vc.getMembers()) {
+				if(!vcm.getUser().isBot()) {
+					if(!Utils.doesUserExist(vcm.getIdLong())) {
+						try {
+							PreparedStatement ps = melody.getDatabase().getConnection().prepareStatement("INSERT INTO userdata(userid) VALUES(?)");
+							ps.setLong(1, vcm.getIdLong());
+							ps.executeUpdate();
+						} catch (SQLException e) {
+							e.printStackTrace();
 						}
 					}
 				}
@@ -104,8 +106,8 @@ public class TrackScheduler extends AudioEventAdapter{
 			if((state = guild.getSelfMember().getVoiceState()) != null) {
 				VoiceChannel vc;
 				if((vc = state.getChannel()) != null) {
-					if(!queue.isLoop()) {
-						if(!queue.isLoopQueue()) {
+					if(!controller.isLoop()) {
+						if(!controller.isLoopQueue()) {
 							if(!queue.next()) { 
 								if(vc.getMembers().size() > 1) {
 									controller.setAfkTime(600);
@@ -116,20 +118,20 @@ public class TrackScheduler extends AudioEventAdapter{
 						}else {
 							AudioPlayerManager apm = melody.audioPlayerManager;
 							final String uri = track.getInfo().uri;
-							apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false, false, true));
+							apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
 							return;
 						}
 					}else {
 						AudioPlayerManager apm = melody.audioPlayerManager;
 						final String uri = track.getInfo().uri;
-						apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false, true, false));
+						apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
 						return;
 					}
 				}
 			}
 		}
-		if(queue.isLoop()) {
-			queue.setLoop(false);	
+		if(controller.isLoop()) {
+			controller.setLoop(false);	
 		}
 		player.stopTrack();
 	}

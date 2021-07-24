@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import de.melody.Config;
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.utils.Utils;
@@ -16,16 +17,11 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class BotInfoCommand implements ServerCommand{
 
-	private int membersDeserving = 0;
-
 	@SuppressWarnings("deprecation")
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		
 		int serversRunning = channel.getJDA().getGuilds().size(); 
-		for(Guild g1 : channel.getJDA().getGuilds()) {
-			membersDeserving = membersDeserving + g1.getMemberCount();
-		}
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(0x23cba7);
 		builder.setThumbnail(guild.getSelfMember().getUser().getAvatarUrl());
@@ -37,11 +33,11 @@ public class BotInfoCommand implements ServerCommand{
 		
 		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(guild.getIdLong(), "feedback.info.botinfo",
 			"JDA",
-			Melody.version,
+			Config.buildversion,
+			Config.builddate,
 			serversRunning,
-			membersDeserving,
 			Utils.getUserInt(),
-			Utils.uptime(Melody.INSTANCE.playedmusictime),
+			Utils.decodeStringFromTimeMillis(Melody.INSTANCE.playedmusictime,true),
 			guild.getSelfMember().getAsMention())
 				
 			+" \n \n```OS: "+prop.getProperty("os.name")+"\n"
@@ -49,17 +45,12 @@ public class BotInfoCommand implements ServerCommand{
 			+ "Cores: "+r.availableProcessors()+"\n"
 			+ "CPU Arch: "+prop.getProperty("os.arch")+"\n"
 			+ "Memory Usage: "+bigmemory+"."+smallmemory.substring(bigmemory.length())+"MB\n"
-			+ "Uptime: "+Utils.uptime(Melody.INSTANCE.uptime)+"```");
+			+ "Uptime: "+Utils.decodeStringFromTimeMillis(Melody.INSTANCE.uptime,true)+"```");
 		
 		
 			
 		builder.setFooter("Made by Nebalus#1665 with <3");
 		channel.sendMessage(builder.build()).queue();
-		membersDeserving = 0;
-	}
-	
-	public int getCooldown() {
-		return 5;
 	}
 	
 	public String botstart() {

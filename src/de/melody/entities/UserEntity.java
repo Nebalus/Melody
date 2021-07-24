@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import de.melody.Config;
 import de.melody.ConsoleLogger;
 import de.melody.LiteSQL;
 import de.melody.Melody;
@@ -15,7 +16,7 @@ public class UserEntity {
 	private Long userid;
 	private Long heardtime = 0l;
 	
-	private Long expiretime = System.currentTimeMillis() + Melody.expiretime;
+	private Long expiretime = System.currentTimeMillis() + Config.entityexpiretime;
 	private Boolean needtoexport = false;
 	
 	private Melody pixelbeat = Melody.INSTANCE;
@@ -63,7 +64,7 @@ public class UserEntity {
 	
 	private void update() {
 		needtoexport = true;
-		this.expiretime = System.currentTimeMillis() + Melody.expiretime;
+		this.expiretime = System.currentTimeMillis() + Config.entityexpiretime;
 	}
 	
 	public Long getExpireTime() {
@@ -75,7 +76,7 @@ public class UserEntity {
 	}
 	
 	private void renewExpireTime() {
-		this.expiretime = System.currentTimeMillis() + Melody.expiretime;
+		this.expiretime = System.currentTimeMillis() + Config.entityexpiretime;
 	}
 	
 	public boolean exportData() {
