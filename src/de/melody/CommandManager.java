@@ -6,6 +6,7 @@ import de.melody.commands.server.ConfigCommand;
 import de.melody.commands.server.info.BotInfoCommand;
 import de.melody.commands.server.info.InviteCommand;
 import de.melody.commands.server.info.PingCommand;
+import de.melody.commands.server.music.FastforwardCommand;
 import de.melody.commands.server.music.JoinCommand;
 import de.melody.commands.server.music.LeaveCommand;
 import de.melody.commands.server.music.LoopCommand;
@@ -15,6 +16,8 @@ import de.melody.commands.server.music.PlayCommand;
 import de.melody.commands.server.music.PlaylistCommand;
 import de.melody.commands.server.music.QueueCommand;
 import de.melody.commands.server.music.ResumeCommand;
+import de.melody.commands.server.music.RewindCommand;
+import de.melody.commands.server.music.SeekCommand;
 import de.melody.commands.server.music.ShuffelCommand;
 import de.melody.commands.server.music.StayCommand;
 import de.melody.commands.server.music.StopCommand;
@@ -39,6 +42,14 @@ public class CommandManager {
 		
 		this.servercommands.put("join",new JoinCommand());
 		this.servercommands.put("j",new JoinCommand());
+		
+		this.servercommands.put("fastforward",new FastforwardCommand());
+		this.servercommands.put("fw",new FastforwardCommand());
+		
+		this.servercommands.put("rewind",new RewindCommand());
+		this.servercommands.put("rw",new RewindCommand());
+		
+		this.servercommands.put("seek",new SeekCommand());
 		
 		this.servercommands.put("p",new PlayCommand());
 		this.servercommands.put("play",new PlayCommand());
@@ -79,9 +90,6 @@ public class CommandManager {
 		this.servercommands.put("shuffel",new ShuffelCommand());
 		
 		this.servercommands.put("loop",new LoopCommand());
-		
-		//Funktioniert nicht auf einen raspberry pi
-		//this.servercommands.put("speed",new SpeedCommand());
 		
 		this.servercommands.put("24/7", new StayCommand());
 		this.servercommands.put("247", new StayCommand());

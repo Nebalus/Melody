@@ -57,7 +57,7 @@ public class PlayCommand implements ServerCommand{
 				}
 				if(url.startsWith("https://open.spotify.com/")) {
 					SpotifyApi spotify = new SpotifyApi.Builder()
-							.setAccessToken(Melody.INSTANCE.spotifyapi.getToken())
+							.setAccessToken(Melody.INSTANCE.spotifyutils.getToken())
 							.build();
 					if(url.toLowerCase().startsWith("https://open.spotify.com/track/")){
 						String[] urlid = url.split("/");
@@ -71,7 +71,7 @@ public class PlayCommand implements ServerCommand{
 							
 							final String uri = "ytsearch: " + track.getName() + " "+track.getArtists()[0].getName();
 							
-							apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false, false, false));
+							apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false));
 							} catch (CompletionException e) {
 						      System.out.println("Error: " + e.getCause().getMessage());
 							} catch (CancellationException e) {
@@ -115,7 +115,7 @@ public class PlayCommand implements ServerCommand{
 								};
 								
 								final String uri = "ytsearch: " + playlist.getName();
-								apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false, false, false));
+								apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false));
 								} catch (CompletionException e) {
 							      System.out.println("Error: " + e.getCause().getMessage());
 								} catch (CancellationException e) {
@@ -125,7 +125,7 @@ public class PlayCommand implements ServerCommand{
 				}else if(MusicUtil.isUrlVerified(url) || isytsearch == true) {
 					manager.openAudioConnection(vc);
 					final String uri = url;
-					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false, false, false));
+					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false));
 				}else {
 					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomain(url)));
 				}					

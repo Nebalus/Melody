@@ -21,30 +21,29 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	
 	private MessageFormatter mf = Melody.INSTANCE.getMessageFormatter();
 	
-    public AudioLoadResult(MusicController controller,String uri,Member userWhoQueued,Boolean isPlaylist, Boolean isloop, Boolean isloopqueue) {
+    public AudioLoadResult(MusicController controller,String uri,Member userWhoQueued,Boolean isPlaylist) {
     	this.controller = controller;
 		this.uri = uri;
 		this.userWhoQueued = userWhoQueued;
 		this.isPlaylist = isPlaylist;
-		this.isLoop = isloop;
-		this.isLoopQueue = isloopqueue;
+		this.isLoop = controller.isLoop();
+		this.isLoopQueue = controller.isLoopQueue();
 	}
 	
 	@Override
 	public void trackLoaded(AudioTrack track) {
-		Queue queue = controller.getQueue();
 		if(isLoop == false) {
-			if(queue.trackexist()) {
+			Queue queue = controller.getQueue();
+			if(controller.isPlayingTrack()) {
 				if(isPlaylist == false && isLoopQueue == false) {
 					int QueueSize = queue.getQueueSize();
 					QueueSize++;
 					Long guildid = controller.getGuild().getIdLong();
 					EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
 							.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
-							.addField(mf.format(guildid, "music.track.channel"), track.getInfo().author , true)
 							.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
 							.addField(mf.format(guildid, "music.track.position-in-queue"), QueueSize+"", true)
-							.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller)))+"", false);;
+							.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
 							
 					if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
 						String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
@@ -55,7 +54,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 			}
 			queue.addTrackToQueue(track,userWhoQueued);	
 		}else {
-			queue.play(track);
+			controller.play(track);
 		}
 	}
 
@@ -65,16 +64,15 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 		Long guildid = controller.getGuild().getIdLong();
 		if(isPlaylist == false) {
 			if(uri.startsWith("ytsearch: ")) {
-				if(queue.trackexist()) {
+				if(controller.isPlayingTrack()) {
 					int QueueSize = queue.getQueueSize();
 					QueueSize++;
 					AudioTrack track = playlist.getTracks().get(0);
 					EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
 							.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
-							.addField(mf.format(guildid, "music.track.channel"), track.getInfo().author , true)
 							.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
 							.addField(mf.format(guildid, "music.track.position-in-queue"), QueueSize+"", true)
-							.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller)))+"", false);
+							.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
 					
 					if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
 						String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
@@ -87,16 +85,15 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 			return;
 		}
 		if(playlist.getTracks().size() >= 1) {
-			if(queue.trackexist()) {
+			if(controller.isPlayingTrack()) {
 				int QueueSize = queue.getQueueSize();
 				QueueSize++;
 				AudioTrack track = playlist.getTracks().get(0);
 				EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
 						.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
-						.addField(mf.format(guildid, "music.track.channel"), track.getInfo().author , true)
 						.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
 						.addField(mf.format(guildid, "music.track.position-in-queue"), QueueSize+"", true)
-						.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller)))+"", false);
+						.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
 				
 				if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
 					String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
@@ -122,7 +119,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 					.setDescription("["+playlist.getName()+"]("+uri+")")
 					.addField(mf.format(guildid, "music.track.position-in-queue"), (QueueSize == 0 ? "Now" : QueueSize+""), true)
 					.addField(mf.format(guildid, "music.playlist.enqueued"), playlist.getTracks().size()+"", true)
-					.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) - timeUntil == 0l ? "Now" : MusicUtil.getTime(null, MusicUtil.getTimeUntil(controller) - timeUntil))+"", true)
+					.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) - timeUntil == 0l ? "Now" : "In "+MusicUtil.getTime(null, MusicUtil.getTimeUntil(controller) - timeUntil)), true)
 					.addField(mf.format(guildid, "music.playlist.length"), MusicUtil.getTime(null,timeUntil), false);
 			
 			MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
