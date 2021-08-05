@@ -1,7 +1,6 @@
 package de.melody.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.melody.Melody;
 import net.dv8tion.jda.api.entities.Guild;
@@ -12,21 +11,17 @@ public class MusicController {
 	private AudioPlayer player;
 	private Queue queue;
 	private int afktime;
-	private boolean isloop;	
-	private boolean isloopqueue;
+	
 	
 	public MusicController(Guild guild) {
 		this.guild = guild;
 		this.player = Melody.INSTANCE.audioPlayerManager.createPlayer();
 		this.queue = new Queue(this);
-		this.afktime = 15;
+		this.afktime = 20;
 		
 		this.guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 		this.player.addListener(new TrackScheduler());
 		this.player.setVolume(Melody.INSTANCE.entityManager.getGuildEntity(guild.getIdLong()).getVolume());
-		this.isloop = false;
-		this.isloopqueue = false;
-		
 		/*
 		 * Funktioniert nicht auf einen raspberry pi
 		this.player.setFilterFactory((track, format, output)->{
@@ -36,18 +31,6 @@ public class MusicController {
 		    return Arrays.asList(timescale);
 		});
 		*/
-	}
-	
-	public Boolean isPlayingTrack() {
-		if(player.getPlayingTrack() == null) {
-			return false;
-		}
-		return true;	
-	}
-	
-	public boolean play(AudioTrack at) {
-		this.player.playTrack(at);
-		return true;
 	}
 	
 	public Guild getGuild() {
@@ -70,19 +53,4 @@ public class MusicController {
 		afktime = time;
 	}
 	
-	public boolean isLoop() {
-		return isloop;
-	}
-	
-	public boolean isLoopQueue() {
-		return isloopqueue;
-	}
-	
-	public void setLoopQueue(Boolean loopqueue) {
-		this.isloopqueue = loopqueue;
-	}
-	
-	public void setLoop(Boolean loop) {
-		this.isloop = loop;
-	}	
 }

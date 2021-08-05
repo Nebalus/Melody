@@ -40,7 +40,7 @@ public class PlaylistCommand implements ServerCommand{
 				if(MusicUtil.isUrlVerified(url)) {
 					manager.openAudioConnection(vc);
 					final String uri = url;
-					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, true));
+					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, true, false, false));
 				}else 
 					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomain(url)));				
 			}else

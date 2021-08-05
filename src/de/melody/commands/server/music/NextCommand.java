@@ -38,9 +38,14 @@ public class NextCommand implements ServerCommand{
 				Queue queue = controller.getQueue();
 				if(player.getPlayingTrack() != null) {
 					player.stopTrack();
-					builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(guild.getIdLong(), "music.track.skip"));
-					MusicUtil.sendEmbled(guild.getIdLong(), builder);
-					queue.next();
+					if(queue.nextexist()) {
+						builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(guild.getIdLong(), "music.track.skip"));
+						MusicUtil.sendEmbled(guild.getIdLong(), builder);
+						queue.next();
+					}else {
+						builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(guild.getIdLong(), "music.track.skip-null"));
+						MusicUtil.sendEmbled(guild.getIdLong(), builder);
+					}
 				}else 
 					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"));
 			}

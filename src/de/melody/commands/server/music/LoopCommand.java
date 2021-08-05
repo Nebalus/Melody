@@ -31,11 +31,11 @@ public class LoopCommand implements ServerCommand{
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
 			AudioPlayer player = controller.getPlayer();
 			if(player.getPlayingTrack() != null) {
-				if(controller.isLoop()) {
-					controller.setLoop(false);
+				if(controller.getQueue().isLoop()) {
+					controller.getQueue().setLoop(false);
 					channel.sendMessage(Emojis.SINGLE_LOOP+mf.format(guild.getIdLong(), "music.info.loop-disabled")).queue();
 				}else {
-					controller.setLoop(true);
+					controller.getQueue().setLoop(true);
 					channel.sendMessage(Emojis.SINGLE_LOOP+mf.format(guild.getIdLong(), "music.info.loop-enabled")).queue();
 				}	
 			}else 
