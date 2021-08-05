@@ -61,6 +61,6 @@ public class FastforwardCommand implements ServerCommand{
 
 	@Override
 	public List<String> getCommandPrefix() {
-		return List.of("fastforward","fw");
+		return List.of("fastforward","fw","f");
 	}
 }
