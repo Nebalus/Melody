@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.melody.Config;
 import de.melody.Melody;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -49,13 +48,8 @@ public class Utils {
 		return 0l;
 	}
 	
-	public static String decodeStringFromTimeMillis(long time,Boolean inseconds) {
-		long uptime;
-		if(inseconds) {
-			uptime = time;
-		}else {
-			uptime = time/1000;
-		}
+	public static String uptime(long time) {
+		long uptime = time;
 		
 		long sekunden = uptime;
 		long minuten = sekunden/60;
@@ -65,7 +59,7 @@ public class Utils {
 		minuten %= 60;
 		sekunden %= 60;
 		
-		String uptimeSuffix = "";
+		String uptimeSuffix = null;
 		//uptimeSuffix = "just started";
 		if(uptime == 0) {
 			uptimeSuffix = "0s";
@@ -82,43 +76,9 @@ public class Utils {
 		if(uptime >= 86400) {
 			uptimeSuffix = tage +"d "+(uptimeSuffix != null ? uptimeSuffix : "");
 		}
-		return uptimeSuffix;
-	}
-	public static Boolean isStringValidBoolean(String value) {
-		Boolean bool = false;
-		value = value.toLowerCase();
-		switch(value) {
-			case "true":
-			case "on":
-			case "false":
-			case "off":
-				bool =true;
-				break;
-		}
-		return bool;
-	}
-	public static Boolean getBooleanFromString(String value) {
-		Boolean bool = false;
-		value = value.toLowerCase();
-		switch(value) {
-			case "true":
-			case "on":
-				bool =true;
-				break;
-			case "false":
-			case "off":
-				bool =false;
-				break;
-		}
-		return bool;
-	}
-	
-	public static String getStringFromBoolean(Boolean value) {
-		if(value) {
-			return "on";
-		}else {
-			return "off";
-		}
+		
+		String replace = uptimeSuffix.replace(" ", ", ");
+		return replace;
 	}
 	
 	public static String getTimeFormat(Long time) {		
@@ -149,49 +109,13 @@ public class Utils {
 		return null;
 	}
 	
-	public static Long decodeTimeMillisFromString(String time) {
-		Long endTime = 0l;
-		for(String args : time.split(" ")) {
-			args = args.toLowerCase();
-			if(args.endsWith("sec")) {
-				args = args.replace("sec", "");
-				int seconds = Integer.valueOf(args);
-				if (seconds < 0) {
-					seconds *= -1;
-				}
-				endTime = endTime + (seconds*1000);
-			}
-			if(args.endsWith("min")) {
-				args = args.replace("min", "");
-				int minutes = Integer.valueOf(args);
-				if (minutes < 0) {
-					minutes *= -1;
-				}
-				endTime = endTime + (minutes*60000);
-			}
-			if(args.endsWith("h")) {
-				args = args.replace("h", "");
-				int hours = Integer.valueOf(args);
-				if (hours < 0) {
-					hours *= -1;
-				}
-				endTime = endTime + (hours*3600000);
-			}
-		}
-		if(endTime < 1000l) {
-			endTime = 1000l;
-		}
-		return endTime;
-	}
-	
 	@SuppressWarnings("deprecation")
 	public static void sendErrorEmbled(TextChannel channel, String discription, Member m) {				
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+m.getUser().getAsMention()+" "+discription);
-		builder.setColor(Config.HEXEmbeldError);
+		builder.setColor(Melody.HEXEmbeldError);
 		channel.sendMessage(builder.build()).queue();
 	}
-	
 	public static void loadSystemData(Melody melody) {
 		if(melody.getDatabase().isConnected()) {
 			try {

@@ -2,7 +2,6 @@ package de.melody.commands.server.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import de.melody.Config;
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.entities.reacts.QueueReaction;
@@ -34,7 +33,7 @@ public class QueueCommand implements ServerCommand{
 			QueueReaction qe = new QueueReaction(melody.playerManager.getController(guild.getIdLong()).getQueue());
 			Melody.INSTANCE.entityManager.getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
 			queuemessage.editMessage(loadQueueEmbed(guild,qe).build()).queue();
-			queuemessage.editMessage("‏‏‎ ‎").queue();
+			queuemessage.editMessage(".").queue();
 		});		
 	}
 	
@@ -44,10 +43,10 @@ public class QueueCommand implements ServerCommand{
 		Queue queue = controller.getQueue();
 		builder.setTitle(mf.format(guild.getIdLong(), "music.queue.from-guild",guild.getName()));
 		builder.setThumbnail(guild.getIconUrl());
-		builder.setColor(Config.HEXEmbeld);
+
 		String list = null;
 		if(controller.getPlayer().getPlayingTrack() != null) {
-			list = mf.format(guild.getIdLong(), "music.track.currently-playing")+"\n"
+			list = mf.format(guild.getIdLong(), "feedback.music.currently-playing-null")+"\n"
 				+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(guild.getIdLong(), "music.user.who-requested")+queue.currentplaying.getWhoQueued().getUser().getAsTag()+" \n"
 				+ " \n";
 			int size = 1;
@@ -67,7 +66,7 @@ public class QueueCommand implements ServerCommand{
 			builder.setFooter(mf.format(guild.getIdLong(), "music.queue.page", qe.getPage()+"/"+maxpage));
 			
 		}else {
-			list = mf.format(guild.getIdLong(), "feedback.music.currently-playing-null");
+			list = mf.format(guild.getIdLong(), "music.info.currently-playing-null");
 		}
 		builder.setDescription(list);
 		return builder;

@@ -1,11 +1,9 @@
 package de.melody.listeners;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import de.melody.ConsoleLogger;
 import de.melody.Melody;
-import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emojis;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -27,25 +25,23 @@ public class CommandListener extends ListenerAdapter{
 			List<User> MentionedUsers = event.getMessage().getMentionedUsers();
 			TextChannel channel = event.getTextChannel();
 			Guild guild = event.getGuild();
-			GuildEntity ge = melody.entityManager.getGuildEntity(guild.getIdLong());
+			String prefix = melody.entityManager.getGuildEntity(guild.getIdLong()).getPrefix();
 			
 			if(!event.getAuthor().isBot()) {
-				if(message.startsWith(ge.getPrefix())) {
+				if(message.startsWith(prefix)) {
 					int count = 0;
-					for (int i = 0; i < ge.getPrefix().length(); i++) {
+					for (int i = 0; i < prefix.length(); i++) {
 						count++;
 					}
 					String[] args = message.substring(count).split(" ");
-					if(ge.canRevokeCommand()) {
-						event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
-					}
+			
 					if(args.length > 0){
 						if(!melody.getCmdMan().performServer(args[0], event.getMember(), channel, event.getMessage(), event.getGuild())) {
-							channel.sendMessage(event.getJDA().getEmoteById(Emojis.ANIMATED_THINKING_EMOJI).getAsMention()+" "+mf.format(guild.getIdLong(), "feedback.info.unknown-command",ge.getPrefix())).queue();
+							channel.sendMessage(event.getJDA().getEmoteById(Emojis.ANIMATED_THINKING_EMOJI).getAsMention()+" "+mf.format(guild.getIdLong(), "feedback.info.unknown-command",prefix)).queue();
 						}
 					}
 				}else if(MentionedUsers.contains(channel.getJDA().getSelfUser())) {
-					event.getChannel().sendMessage(mf.format(guild.getIdLong(), "feedback.info.prefix",ge.getPrefix())).queue();
+					event.getChannel().sendMessage(mf.format(guild.getIdLong(), "feedback.info.prefix",prefix)).queue();
 				}
 			}
 		}else if(event.isFromType(ChannelType.PRIVATE)) {
