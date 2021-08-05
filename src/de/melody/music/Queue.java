@@ -5,9 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.wrapper.spotify.model_objects.miscellaneous.CurrentlyPlaying;
-
-import de.melody.ConsoleLogger;
 import net.dv8tion.jda.api.entities.Member;
 
 public class Queue {
@@ -16,7 +13,7 @@ public class Queue {
 	private List<QueuedTrack> playedlist;
 	private MusicController controller;
 	
-	private QueuedTrack currentplaying;
+	public QueuedTrack currentplaying;
 	
 	public Queue(MusicController controller) {
 		this.controller = controller;
@@ -42,14 +39,9 @@ public class Queue {
 		}
 		return 0;
 	}
-
-	public QueuedTrack getCurrentPlaying() {
-		return currentplaying;
-	}
 	
 	public boolean back(int amount) {
 		return false;
-	
 	}
 	public int getQueueSize() {
 		return this.queuelist.size();

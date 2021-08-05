@@ -12,4 +12,7 @@ public class Config {
 	public static final Color HEXEmbeldError = Color.RED;
 	
 	public static final int maxqueuelength = 500;
+	
+	public static final String invitelink = "https://nebalus.ga/melody/invite";
+	public static final String homepagelink = "https://nebalus.ga/melody/";
 }

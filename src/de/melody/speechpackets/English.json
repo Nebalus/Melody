@@ -68,6 +68,7 @@
     "music.track.added-to-queue": "Song added to queue",
     "music.track.position-in-queue": "**Position in queue**",
     "music.track.time-until-playing": "**Plays**",
+    "music.track.now-playing": "**Now Playing**",
     
     "music.playlist.empty": "The playlist you sent does not contain any songs or is set to private :(",
     "music.playlist.added-to-queue": "Playlist added to queue",

@@ -1,8 +1,13 @@
 package de.melody.utils;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import org.json.JSONObject;
 
 import de.melody.Config;
 import de.melody.Melody;
@@ -179,7 +184,7 @@ public class Utils {
 			}
 		}
 		if(endTime < 1000l) {
-			endTime = 1000l;
+			endTime = 10000l;
 		}
 		return endTime;
 	}
@@ -221,5 +226,10 @@ public class Utils {
 				e.printStackTrace();
 			}
 		}
+	}
+	public static JSONObject getJsonObject(File jsonfile) throws Exception {
+		String content = new String(Files.readAllBytes(Paths.get(jsonfile.toURI())), "UTF-8");
+		JSONObject json = new JSONObject(content);
+		return json;
 	}
 }

@@ -9,8 +9,8 @@ import java.util.HashMap;
 import org.json.JSONObject;
 
 import de.melody.Config;
-import de.melody.Json;
 import de.melody.Melody;
+import de.melody.utils.Utils;
 
 public class MessageFormatter {
 	
@@ -23,7 +23,7 @@ public class MessageFormatter {
 				File file = new File(language.getFileName());
 				Files.copy(link, file.getAbsoluteFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
 				
-				getJSONMessage.put(language, Json.getJsonObject(file));
+				getJSONMessage.put(language, Utils.getJsonObject(file));
 					
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -59,6 +59,6 @@ public class RewindCommand implements ServerCommand{
 
 	@Override
 	public List<String> getCommandPrefix() {
-		return List.of("rewind","rw");
+		return List.of("rewind","rw","r");
 	}
 }

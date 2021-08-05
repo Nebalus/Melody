@@ -11,6 +11,7 @@ import de.melody.music.MusicUtil;
 import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emojis;
+import de.melody.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -45,9 +46,9 @@ public class NextCommand implements ServerCommand{
 					queue.next(1);
 				}
 			}else 
-				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"));
+				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"),m);
 		}else
-			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"));
+			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"), m);
 	}
 
 	@Override

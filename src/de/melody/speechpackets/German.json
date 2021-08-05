@@ -68,6 +68,7 @@
     "music.track.added-to-queue": "Lied zur Warteschlange hinzugefuegt",
     "music.track.position-in-queue": "**Position in der Warteschlange**",
     "music.track.time-until-playing": "**Spielt**",
+    "music.track.now-playing": "**Laeuft gerade**",
     
     "music.playlist.empty": "Die Playlist die du gesendet hast enthaelt keine Lieder oder ist auf privat gestellt :(",
     "music.playlist.added-to-queue": "Playlist zur Warteschlange hinzugefuegt.",

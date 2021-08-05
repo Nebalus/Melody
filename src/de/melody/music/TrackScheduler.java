@@ -12,7 +12,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import de.melody.Config;
-import de.melody.ConsoleLogger;
 import de.melody.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.entities.reacts.TrackReaction;
@@ -61,16 +60,17 @@ public class TrackScheduler extends AudioEventAdapter{
 		if(controller.isLoop() == false && controller.isLoopQueue() == false && ge.canAnnounceSongs()) {
 			EmbedBuilder builder = new EmbedBuilder();
 			AudioTrackInfo info = track.getInfo();
-			builder.setDescription(guild.getJDA().getEmoteById(Emojis.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guildid, "music.track.currently-playing")+ info.title);
 			String url = info.uri;
-			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", false);
+			builder.setDescription("["+guild.getJDA().getEmoteById(Emojis.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guildid, "music.track.now-playing")+"]("+Config.homepagelink+")");
+			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", true);
 			builder.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(info,0l),true);
-			builder.setFooter(mf.format(guildid, "music.user.who-requested")+ queue.getCurrentPlaying().getWhoQueued().getUser().getAsTag());
+			builder.addBlankField(true);
+			builder.setFooter(mf.format(guildid, "music.user.who-requested")+ queue.currentplaying.getWhoQueued().getUser().getAsTag());
 			builder.setColor(Config.HEXEmbeld);
 			if(url.startsWith("https://www.youtube.com/watch?v=")) {
 				String videoID = url.replace("https://www.youtube.com/watch?v=", "");
-				builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
-				//builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
+				//builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
+				builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
 			}
 			MusicUtil.getChannel(guildid).sendMessage(builder.build()).queue((trackmessage) ->{
 				TrackReaction te = new TrackReaction(info);
@@ -104,22 +104,15 @@ public class TrackScheduler extends AudioEventAdapter{
 		Queue queue = controller.getQueue();
 		if(endReason.mayStartNext) {	
 			GuildVoiceState state;
-			if((state = guild.getSelfMember().getVoiceState()) != null) {
-				VoiceChannel vc;
-				if((vc = state.getChannel()) != null) {
-					if(!controller.isLoop()) {
-						if(!controller.isLoopQueue()) {
-							if(queue.next(1) != 1) { 
-								if(vc.getMembers().size() > 1) {
-									controller.setAfkTime(600);
-								}
-							}else {
-								return;
+			VoiceChannel vc;
+			if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
+				if(!controller.isLoop()) {
+					if(!controller.isLoopQueue()) {
+						if(queue.next(1) != 1) { 
+							if(vc.getMembers().size() > 1) {
+								controller.setAfkTime(600);
 							}
 						}else {
-							AudioPlayerManager apm = melody.audioPlayerManager;
-							final String uri = track.getInfo().uri;
-							apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
 							return;
 						}
 					}else {
@@ -128,6 +121,11 @@ public class TrackScheduler extends AudioEventAdapter{
 						apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
 						return;
 					}
+				}else {
+					AudioPlayerManager apm = melody.audioPlayerManager;
+					final String uri = track.getInfo().uri;
+					apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
+					return;
 				}
 			}
 		}
@@ -138,9 +136,7 @@ public class TrackScheduler extends AudioEventAdapter{
 	}
 	
 	  @Override
-	  public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
-
-	  }
+	  public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {}
 	  
 	  @Override
 	  public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
