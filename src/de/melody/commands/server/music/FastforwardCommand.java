@@ -1,5 +1,7 @@
 package de.melody.commands.server.music;
 
+import java.util.List;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
@@ -17,7 +19,6 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public class FastforwardCommand implements ServerCommand{
 	
@@ -28,8 +29,7 @@ public class FastforwardCommand implements ServerCommand{
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		GuildVoiceState state;
-		VoiceChannel vc;
-		if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
+		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			String[] args = message.getContentDisplay().split(" ");
 			GuildEntity ge = melody.entityManager.getGuildEntity(guild.getIdLong());
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
@@ -57,5 +57,10 @@ public class FastforwardCommand implements ServerCommand{
 				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"),m);
 		}else 
 			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"), m);
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("fastforward","fw");
 	}
 }

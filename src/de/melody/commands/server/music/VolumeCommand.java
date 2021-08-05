@@ -1,5 +1,7 @@
 package de.melody.commands.server.music;
 
+import java.util.List;
+
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.entities.GuildEntity;
@@ -46,5 +48,10 @@ public class VolumeCommand implements ServerCommand{
 				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "command.volume.out-of-bounds",maxvolume), m);
 			}
 		}
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("volume","vol","v");
 	}
 }

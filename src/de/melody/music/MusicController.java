@@ -19,7 +19,7 @@ public class MusicController {
 		this.guild = guild;
 		this.player = Melody.INSTANCE.audioPlayerManager.createPlayer();
 		this.queue = new Queue(this);
-		this.afktime = 15;
+		this.afktime = 10;
 		
 		this.guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 		this.player.addListener(new TrackScheduler());
@@ -45,9 +45,12 @@ public class MusicController {
 		return true;	
 	}
 	
-	public boolean play(AudioTrack at) {
-		this.player.playTrack(at);
-		return true;
+	public void play(AudioTrack at) {
+		if(isPlayingTrack()) {
+			this.player.startTrack(at, false);
+		}else {
+			this.player.playTrack(at);
+		}
 	}
 	
 	public Guild getGuild() {

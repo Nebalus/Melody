@@ -1,5 +1,7 @@
 package de.melody.commands.server.music;
 
+import java.util.List;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
 import de.melody.Melody;
@@ -42,10 +44,15 @@ public class PlaylistCommand implements ServerCommand{
 					final String uri = url;
 					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, true));
 				}else 
-					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomain(url)));				
+					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.non-whitelisted-domain",MusicUtil.getDomain(url)));				
 			}else
 				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));
 		}else 
 			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.info.command-usage",guildentity.getPrefix()+"playlist <url>"));
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("playlist","pl");
 	}
 }

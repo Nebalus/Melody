@@ -1,5 +1,7 @@
 package de.melody.commands.server.music;
 
+import java.util.List;
+
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.melody.Melody;
@@ -21,9 +23,14 @@ public class TrackinfoCommand implements ServerCommand{
 		try {
 			MusicController controller = Melody.INSTANCE.playerManager.getController(guild.getIdLong());
 			AudioTrack audiotrack = controller.getPlayer().getPlayingTrack();
-			channel.sendFile(Images.tracktopng(audiotrack.getInfo().title,audiotrack.getPosition(),audiotrack.getDuration(),audiotrack.getInfo().author,guild.getIdLong(),controller.getQueue().currentplaying.getWhoQueued()), "trackinfo.png").queue();	
+			channel.sendFile(Images.tracktopng(audiotrack.getInfo().title,audiotrack.getPosition(),audiotrack.getDuration(),audiotrack.getInfo().author,guild.getIdLong(),controller.getQueue().getCurrentPlaying().getWhoQueued()), "trackinfo.png").queue();	
 		}catch (NullPointerException e) {
 			channel.sendFile(Images.tracktopng(null,0,0,null,guild.getIdLong(),null), "trackinfo.png").queue();	
 		}
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("trackinfo","ti");
 	}
 }

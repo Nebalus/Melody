@@ -1,5 +1,7 @@
 package de.melody.commands.server.music;
 
+import java.util.List;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import de.melody.Melody;
@@ -37,5 +39,10 @@ public class JoinCommand implements ServerCommand{
 			}
 		}else 
 			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"), m);
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("join","j");
 	}
 }

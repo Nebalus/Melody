@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.wrapper.spotify.model_objects.miscellaneous.CurrentlyPlaying;
 
+import de.melody.ConsoleLogger;
 import net.dv8tion.jda.api.entities.Member;
 
 public class Queue {
@@ -14,7 +16,7 @@ public class Queue {
 	private List<QueuedTrack> playedlist;
 	private MusicController controller;
 	
-	public QueuedTrack currentplaying;
+	private QueuedTrack currentplaying;
 	
 	public Queue(MusicController controller) {
 		this.controller = controller;
@@ -22,54 +24,37 @@ public class Queue {
 		this.playedlist = new ArrayList<QueuedTrack>();
 	}
 	
-	public boolean next() {
-		if(this.queuelist.size() >= 1) {
-			currentplaying = queuelist.remove(0);
-			if(currentplaying != null) {
-				controller.play(currentplaying.getTrack());
-				return true;
+	public int next(int amount) {
+		if(amount == 0) amount++;
+		if(amount < 0) amount *= -1;
+		if(amount > queuelist.size()) amount = queuelist.size();
+		if(!queuelist.isEmpty()) {
+			for (int i = 1; i < amount;) {
+				++i;
+				playedlist.add(queuelist.remove(0));
+			}
+			if (!queuelist.isEmpty() && queuelist.get(0) != null) {
+				final QueuedTrack qt = queuelist.remove(0);
+				currentplaying = qt;
+				controller.play(qt.getTrack());
+				return amount;
 			}
 		}
-		return false;
+		return 0;
 	}
-	public boolean back() {
-		if(this.playedlist.size() >= 1) {
-			currentplaying = playedlist.remove(playedlist.size()-1);
-			if(currentplaying != null) {
-				controller.play(currentplaying.getTrack());
-				return true;
-			}
-		}
+
+	public QueuedTrack getCurrentPlaying() {
+		return currentplaying;
+	}
+	
+	public boolean back(int amount) {
 		return false;
+	
 	}
 	public int getQueueSize() {
 		return this.queuelist.size();
 	}
-	public boolean skipTracks(int count) {
-		if(this.queuelist.size() >= 1) {
-			
-			AudioTrack track = queuelist.remove(count).getTrack();
-			
-			if(track != null) {
-				this.controller.getPlayer().playTrack(track);
-				return true;
-			}
-		}
-		return false;
-	}
 	
-	public AudioTrack getTrack(int num) {
-		try {
-			AudioTrack track = queuelist.get(num).getTrack();
-			
-			if(track != null) {
-				return track;
-			}
-			return null;
-		}catch(IndexOutOfBoundsException e) {}
-		return null;	
-	}
-
 	public boolean clear() {
 		if(this.queuelist.size() >= 1) {
 			queuelist.clear();	
@@ -82,7 +67,9 @@ public class Queue {
 	public void addTrackToQueue(AudioTrack track, Member m) {
 		this.queuelist.add(new QueuedTrack(track, m));
 		if(!controller.isPlayingTrack()) {
-			next();
+			QueuedTrack qt = this.queuelist.remove(0);
+			currentplaying = qt; 
+			controller.play(qt.getTrack());
 		}
 	}
 	

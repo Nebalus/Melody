@@ -1,5 +1,7 @@
 package de.melody.commands.server.music;
 
+import java.util.List;
+
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.melody.Config;
@@ -48,7 +50,7 @@ public class QueueCommand implements ServerCommand{
 		String list = null;
 		if(controller.getPlayer().getPlayingTrack() != null) {
 			list = mf.format(guild.getIdLong(), "music.track.currently-playing")+"\n"
-				+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(guild.getIdLong(), "music.user.who-requested")+queue.currentplaying.getWhoQueued().getUser().getAsTag()+" \n"
+				+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(guild.getIdLong(), "music.user.who-requested")+queue.getCurrentPlaying().getWhoQueued().getUser().getAsTag()+" \n"
 				+ " \n";
 			int size = 1;
 			int page = qe.getPage()*10;
@@ -71,5 +73,10 @@ public class QueueCommand implements ServerCommand{
 		}
 		builder.setDescription(list);
 		return builder;
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("queue","q");
 	}
 }
