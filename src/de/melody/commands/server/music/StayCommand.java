@@ -1,5 +1,7 @@
 package de.melody.commands.server.music;
 
+import java.util.List;
+
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.entities.GuildEntity;
@@ -24,5 +26,10 @@ public class StayCommand implements ServerCommand{
 			guildentity.set24_7(true);
 			channel.sendMessage(mf.format(guild.getIdLong(), "command.staymode.enabled")).queue();
 		}
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("24/7","247");
 	}
 }

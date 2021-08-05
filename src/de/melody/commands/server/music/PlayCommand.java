@@ -127,7 +127,7 @@ public class PlayCommand implements ServerCommand{
 					final String uri = url;
 					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false));
 				}else {
-					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomain(url)));
+					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.non-whitelisted-domain",MusicUtil.getDomain(url)));
 				}					
 			}else {
 				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));
@@ -135,5 +135,10 @@ public class PlayCommand implements ServerCommand{
 		}else {
 			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.info.command-usage",guildentity.getPrefix()+"play <url/search query>"));
 		}
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("play","p");
 	}
 }

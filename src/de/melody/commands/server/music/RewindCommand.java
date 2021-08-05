@@ -1,12 +1,13 @@
 package de.melody.commands.server.music;
 
+import java.util.List;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.melody.Config;
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
-import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emojis;
@@ -17,21 +18,18 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 
-public class RewindCommand  implements ServerCommand{
+public class RewindCommand implements ServerCommand{
 	
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
-	@SuppressWarnings({ "unused", "deprecation" })
+	@SuppressWarnings("deprecation")
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		GuildVoiceState state;
-		VoiceChannel vc;
-		if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
+		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			String[] args = message.getContentDisplay().split(" ");
-			GuildEntity ge = melody.entityManager.getGuildEntity(guild.getIdLong());
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
 			if(controller.isPlayingTrack()) {
 				AudioPlayer player = controller.getPlayer();
@@ -57,5 +55,10 @@ public class RewindCommand  implements ServerCommand{
 				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"),m);
 		}else 
 			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"), m);
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("rewind","rw");
 	}
 }

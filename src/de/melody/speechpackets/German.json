@@ -25,7 +25,7 @@
     "command.volume.max-int": "Die maximale Lautstaerke die du verwenden kannst ist {0}.",
     "command.volume.min-int": "Die minimale Lautstaerke die du verwenden kannst ist 1.",
     "command.volume.out-of-bounds": "Bitte suche eine zahl zwischen 1-{0}.",
-    "command.fastforward.set": "Spuele {0} vor.",
+    "command.fastforward.set": "Spule {0} vor.",
     "command.rewind.set": "Spule {0} zurueck.",
     
     "feedback.info.invite": "{0} hier ist mein Einladungslink wo du mich zu deinem Server hinzufuegen kannst:\n\n Einladungslink: {1}",
@@ -56,7 +56,7 @@
     "music.shuffel.successful": "{0} Spuren wurden gemischt.",
     "music.shuffel.emptyqueue": "Es gibt nichts zu mischen.",
    
-    "music.track.skip": "Spur uebersprungen",
+    "music.track.skip": "Lied uebersprungen.",
     "music.track.author": "Autor: {0}",
     "music.track.author-null": "Niemand",
     "music.track.playing-nothing": "Spielt grade nichts...",

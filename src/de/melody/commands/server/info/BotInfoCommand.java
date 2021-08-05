@@ -3,6 +3,7 @@ package de.melody.commands.server.info;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import de.melody.Config;
@@ -57,5 +58,10 @@ public class BotInfoCommand implements ServerCommand{
 		Date date = new Date(Melody.INSTANCE.startuptime);
 		String DateFormat = new SimpleDateFormat("EEE, d MMM HH:mm:ss yyyy").format(date);
 		return DateFormat;
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("botinfo");
 	}
 }

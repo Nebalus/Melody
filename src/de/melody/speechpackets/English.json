@@ -41,7 +41,7 @@
     "feedback.music.nothing-in-link": "Hmm it seems that the link you sent does not contains a song/stream :(",
     "feedback.music.bot-not-in-vc": "I am not in a voice channel.",
     "feedback.music.user-not-in-vc": "You are not in a voice channel.",
-    "feedback.music.error.non-whitelisted-domain": "The domain **{0}** is not whitelisted in my system.",
+    "feedback.music.non-whitelisted-domain": "The domain **{0}** is not whitelisted in my system.",
     "feedback.music.currently-playing-null": "Currently i am not playing a track.",
     
     "music.info.loop-enabled": " **enabled!**",
@@ -56,7 +56,7 @@
     "music.shuffel.successful": "{0} tracks has been shuffeled.",
     "music.shuffel.emptyqueue": "There is nothing to be shuffeled.",
    
-    "music.track.skip": "Track skipped",
+    "music.track.skip": "Track skipped.",
     "music.track.author": "Author: {0}",
     "music.track.author-null": "Nobody",
     "music.track.playing-nothing": "Nothing playing...",

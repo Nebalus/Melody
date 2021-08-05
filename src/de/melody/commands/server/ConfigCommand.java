@@ -1,5 +1,7 @@
 package de.melody.commands.server;
 
+import java.util.List;
+
 import de.melody.Config;
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
@@ -129,7 +131,7 @@ public class ConfigCommand implements ServerCommand{
 		}
 	}
 	@SuppressWarnings("deprecation")
-	public void sendMainMenu(TextChannel channel, String prefix) {
+	private void sendMainMenu(TextChannel channel, String prefix) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Config.HEXEmbeld);
 		builder.setTitle("**"+Config.buildname+" Config**");	
@@ -138,10 +140,8 @@ public class ConfigCommand implements ServerCommand{
 		}
 		channel.sendMessage(builder.build()).queue();
 	}
-	
-	
 	@SuppressWarnings("deprecation")
-	public void sendSubCommandMenu(Object currentvalue, TextChannel channel,ConfigSubCommands subcommand,String prefix,String customvalidsettigs) {
+	private void sendSubCommandMenu(Object currentvalue, TextChannel channel,ConfigSubCommands subcommand,String prefix,String customvalidsettigs) {
 		Long guildid = channel.getGuild().getIdLong();
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Config.HEXEmbeld);
@@ -168,5 +168,9 @@ public class ConfigCommand implements ServerCommand{
 			this.usage = usage;
 			this.title = title;
 		}
+	}
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("config");
 	}
 }

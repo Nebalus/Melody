@@ -33,13 +33,10 @@ public class MessageFormatter {
 	
 	public String format(Long guildid, String key, Object... args) {
 		Languages language = melody.entityManager.getGuildEntity(guildid).getLanguage();
-		String message = "JSON-Error {"+key+"}: "+language.code;
+		String message = "JSON-Error {"+key+"} - "+language.code;
 	    try {
 			JSONObject json = getJSONMessage.get(language);
 			message = json.getString(key);
-			for(int i = 0; i < args.length; ++i) {
-				message = message.replace("{" + i + "}", String.valueOf(args[i]));
-		    }
 			if(language.equals(Languages.GERMAN)) {
 				message = message.replace("ae", "ä");
 				message = message.replace("oe", "ö");
@@ -53,6 +50,10 @@ public class MessageFormatter {
 				message = message.replace("[ü]", "ue");
 			}
 			message = message.replace("[botname]", Config.buildname);
+			
+			for(int i = 0; i < args.length; ++i) {
+				message = message.replace("{" + i + "}", String.valueOf(args[i]));
+		    }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
