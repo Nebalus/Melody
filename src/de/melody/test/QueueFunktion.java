@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import de.melody.ConsoleLogger;
 public class QueueFunktion {
@@ -71,12 +72,8 @@ public class QueueFunktion {
 	}
 	private static boolean back(int amount) {
 		ConsoleLogger.debug("Queue Back Funktion", 1);
-		if (amount < 0) {
-			amount *= -1;
-		} 
-		if(amount == 0) {
-			amount++;
-		}
+		if (amount < 0) amount *= -1; 
+		if(amount == 0) amount++;
 		ConsoleLogger.debug("Back Amount", amount);
 		ConsoleLogger.debug("Queuelist Back amount", othertestlist.size());
 		if(amount > othertestlist.size()) {
@@ -86,13 +83,17 @@ public class QueueFunktion {
 		}
 		if (!othertestlist.isEmpty()) {
 			ConsoleLogger.debug("Queue Back Funktion", 3);
+			ArrayList<String> cache = new ArrayList<String>();
 			for (int i = 0; i < amount;) {
 				++i;
 				ConsoleLogger.debug("Back For each", i);
 				ConsoleLogger.debug("Queue Back Funktion", 4);
 				String qt = othertestlist.remove(othertestlist.size()-1);
-				testlist.add(qt);
+				cache.add(qt);
 			}
+			Collections.reverse(cache);
+			cache.addAll(testlist);
+			testlist = cache;
 			ConsoleLogger.debug("Queue Back Funktion", 5);
 			if (!othertestlist.isEmpty() && othertestlist.get(othertestlist.size()-1) != null) {
 				ConsoleLogger.debug("Queue Back Funktion Succes", 6);

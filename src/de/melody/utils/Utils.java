@@ -158,30 +158,32 @@ public class Utils {
 		Long endTime = 0l;
 		for(String args : time.split(" ")) {
 			args = args.toLowerCase();
-			if(args.endsWith("sec")) {
-				args = args.replace("sec", "");
-				int seconds = Integer.valueOf(args);
-				if (seconds < 0) {
-					seconds *= -1;
+			try {
+				if(args.endsWith("sec")) {
+					args = args.replace("sec", "");
+					int seconds = Integer.valueOf(args);
+					if (seconds < 0) {
+						seconds *= -1;
+					}
+					endTime = endTime + (seconds*1000);
 				}
-				endTime = endTime + (seconds*1000);
-			}
-			if(args.endsWith("min")) {
-				args = args.replace("min", "");
-				int minutes = Integer.valueOf(args);
-				if (minutes < 0) {
-					minutes *= -1;
+				if(args.endsWith("min")) {
+					args = args.replace("min", "");
+					int minutes = Integer.valueOf(args);
+					if (minutes < 0) {
+						minutes *= -1;
+					}
+					endTime = endTime + (minutes*60000);
 				}
-				endTime = endTime + (minutes*60000);
-			}
-			if(args.endsWith("h")) {
-				args = args.replace("h", "");
-				int hours = Integer.valueOf(args);
-				if (hours < 0) {
-					hours *= -1;
+				if(args.endsWith("h")) {
+					args = args.replace("h", "");
+					int hours = Integer.valueOf(args);
+					if (hours < 0) {
+						hours *= -1;
+					}
+					endTime = endTime + (hours*3600000);
 				}
-				endTime = endTime + (hours*3600000);
-			}
+			}catch(NumberFormatException e) {}
 		}
 		if(endTime < 1000l) {
 			endTime = 10000l;

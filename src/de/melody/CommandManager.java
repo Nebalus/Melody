@@ -7,6 +7,7 @@ import de.melody.commands.server.ConfigCommand;
 import de.melody.commands.server.info.BotInfoCommand;
 import de.melody.commands.server.info.InviteCommand;
 import de.melody.commands.server.info.PingCommand;
+import de.melody.commands.server.music.BackCommand;
 import de.melody.commands.server.music.FastforwardCommand;
 import de.melody.commands.server.music.JoinCommand;
 import de.melody.commands.server.music.LeaveCommand;
@@ -58,7 +59,8 @@ public class CommandManager {
 				new InviteCommand(),
 				new ShuffelCommand(),
 				new LoopCommand(),
-				new StayCommand());
+				new StayCommand(),
+				new BackCommand());
 	
 		for(ServerCommand sc : commandlist) {
 			for(String subcommand : sc.getCommandPrefix()) {
