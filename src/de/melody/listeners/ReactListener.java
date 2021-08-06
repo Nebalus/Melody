@@ -24,7 +24,7 @@ public class ReactListener extends ListenerAdapter{
 	public void onMessageReactionAdd(MessageReactionAddEvent event) {
 		if(event.isFromType(ChannelType.TEXT)) {
 			User user = event.getUser();
-			if(!user.isBot()) {
+			if(!user.isBot() && event.getReactionEmote().isEmoji()) {
 				Guild guild = event.getGuild();
 				Long messageid = event.getMessageIdLong();
 				String emoji = event.getReactionEmote().getEmoji();

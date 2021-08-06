@@ -11,8 +11,11 @@ public class Config {
 	public static final Color HEXEmbeld = Color.decode("#2eb8bf");
 	public static final Color HEXEmbeldError = Color.RED;
 	
-	public static final int maxqueuelength = 500;
+	public static final int maxqueuelength = 200;
+	public static final int maxplayedqueuelength = 100;
 	
 	public static final String invitelink = "https://nebalus.ga/melody/invite";
 	public static final String homepagelink = "https://nebalus.ga/melody/";
+	
+	public static final int music_afk_default = 60;
 }

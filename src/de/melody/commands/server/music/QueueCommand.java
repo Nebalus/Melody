@@ -49,9 +49,11 @@ public class QueueCommand implements ServerCommand{
 		builder.setColor(Config.HEXEmbeld);
 		String list = null;
 		if(controller.getPlayer().getPlayingTrack() != null) {
-			list = mf.format(guild.getIdLong(), "music.track.currently-playing")+"\n"
-				+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(guild.getIdLong(), "music.user.who-requested")+queue.currentplaying.getWhoQueued().getUser().getAsTag()+" \n"
-				+ " \n";
+			if(queue.currentlyPlaying() != null) {
+				list = mf.format(guild.getIdLong(), "music.track.currently-playing")+"\n"
+					+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(guild.getIdLong(), "music.user.who-requested")+queue.currentlyPlaying().getWhoQueued().getUser().getAsTag()+" \n"
+					+ " \n";
+			}
 			int size = 1;
 			int page = qe.getPage()*10;
 			for(QueuedTrack qt : queue.getQueuelist()) {

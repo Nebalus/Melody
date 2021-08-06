@@ -1,6 +1,6 @@
 package de.melody.music;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
@@ -23,7 +23,11 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 
 public class MusicUtil extends ListenerAdapter{
 
-	private static ArrayList<String> verifiedurl = new ArrayList<String>();
+	private static final List<String> verifiedurl = List.of("www.youtube.com","music.youtube.com","youtu.be","youtube.com");		
+	//verifiedurl.add("www.twitch.tv");	
+	//verifiedurl.add("vimeo.com");		
+	//verifiedurl.add("bandcamp.com");		
+	//verifiedurl.add("soundcloud.com");
 	private Melody melody = Melody.INSTANCE;
 	
 	public static TextChannel getChannel(long guildid) {
@@ -179,16 +183,5 @@ public class MusicUtil extends ListenerAdapter{
 			return args[2].toLowerCase();
 		}
 		return null;
-	}
-	
-	public static void loadDomains() {
-		verifiedurl.add("www.youtube.com");	
-		verifiedurl.add("music.youtube.com");	
-		verifiedurl.add("youtu.be");	
-		verifiedurl.add("youtube.com");			
-		//verifiedurl.add("www.twitch.tv");	
-		//verifiedurl.add("vimeo.com");		
-		//verifiedurl.add("bandcamp.com");		
-		//verifiedurl.add("soundcloud.com");
 	}
 }

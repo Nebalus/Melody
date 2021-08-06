@@ -73,7 +73,7 @@
     "music.playlist.empty": "Die Playlist die du gesendet hast enthaelt keine Lieder oder ist auf privat gestellt :(",
     "music.playlist.added-to-queue": "Playlist zur Warteschlange hinzugefuegt.",
     "music.playlist.length": "**Playlist-Da[ue]r**",
-    "music.playlist.enqueued": "**In die Warteschlange gestellte Titel**"
+    "music.playlist.enqueued": "**Eingereihte Lieder**"
  
     
 }
