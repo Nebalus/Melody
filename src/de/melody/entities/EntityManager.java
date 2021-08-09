@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.User;
 
 public class EntityManager {
 
-	public ConcurrentHashMap<Long, GuildEntityController> guildcontroller;
+	private ConcurrentHashMap<Long, GuildEntityController> guildcontroller;
 	public HashMap<Long, UserEntity> userentity;
 	public HashMap<Long, GuildEntity> guildentity;
 	public HashMap<Integer, PlaylistEntity> playlistentity;

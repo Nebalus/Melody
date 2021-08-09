@@ -17,7 +17,7 @@ public class SlashCommandListener extends ListenerAdapter{
 			Guild guild = event.getGuild();
 	    	switch (event.getName()){
 	    	case "prefix":
-	        		event.reply(mf.format(guild.getIdLong(), "feedback.info.prefix",melody.entityManager.guildentity.get(guild.getIdLong()).getPrefix())).queue();
+	        		event.reply(mf.format(guild.getIdLong(), "feedback.info.prefix",melody.entityManager.getGuildEntity(guild.getIdLong()).getPrefix())).queue();
 	        	break;        	
 	        default:
 	            event.reply("I can't handle that command right now :(").setEphemeral(true).queue();

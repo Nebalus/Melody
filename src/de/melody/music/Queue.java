@@ -25,12 +25,14 @@ public class Queue {
 		if(amount < 0) amount *= -1;
 		if(amount > queuelist.size()) amount = queuelist.size();
 		if(!queuelist.isEmpty()) {
-			for (int i = 0; i < amount;) {
+			for (int i = 1; i < amount;) {
 				++i;
 				playedlist.add(queuelist.remove(0));
 			}
 			if (!queuelist.isEmpty() && queuelist.get(0) != null) {
-				controller.play(queuelist.get(0).getTrack().makeClone());
+				QueuedTrack qt = queuelist.remove(0);
+				controller.play(qt.getTrack().makeClone());
+				playedlist.add(qt);
 				return amount;
 			}
 		}

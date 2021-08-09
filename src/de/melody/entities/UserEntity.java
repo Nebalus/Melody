@@ -19,8 +19,8 @@ public class UserEntity {
 	private Long expiretime = System.currentTimeMillis() + Config.entityexpiretime;
 	private Boolean needtoexport = false;
 	
-	private Melody pixelbeat = Melody.INSTANCE;
-	private LiteSQL database = pixelbeat.getDatabase();
+	private Melody melody = Melody.INSTANCE;
+	private LiteSQL database = melody.getDatabase();
 	
 	public UserEntity(User user) {
 		this.userid = user.getIdLong();
@@ -31,7 +31,9 @@ public class UserEntity {
 					favoritemusicid = rs.getInt("favoritemusic");
 					heardtime = rs.getLong("heardtime");
 				}else {
-					
+					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO userdata(userid) VALUES(?)");
+					ps.setLong(1, userid);
+					ps.executeUpdate();
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
