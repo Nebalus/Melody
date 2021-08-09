@@ -18,8 +18,8 @@ public class PlaylistEntity {
 	
 	private Long expiretime;
 	
-	private Melody pixelbeat = Melody.INSTANCE;
-	private LiteSQL database = pixelbeat.getDatabase();
+	private Melody melody = Melody.INSTANCE;
+	private LiteSQL database = melody.getDatabase();
 	
 	public PlaylistEntity(int playlistlistid) {
 		this.expiretime = System.currentTimeMillis() + Config.entityexpiretime;

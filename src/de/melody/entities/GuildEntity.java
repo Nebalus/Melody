@@ -15,7 +15,7 @@ public class GuildEntity {
 	private Long guildid;
 	private Long channelid;
 	private int volume = 50;
-	private Long djroleid;
+	private Long djroleid = 0l;
 	private String prefix = "m!";
 	private boolean voteskip = false;
 	private boolean staymode = false;
@@ -27,8 +27,8 @@ public class GuildEntity {
 	private Long expiretime = System.currentTimeMillis() + Config.entityexpiretime;
 	private Boolean needtoexport = false;
 	
-	private Melody pixelbeat = Melody.INSTANCE;
-	private LiteSQL database = pixelbeat.getDatabase();
+	private Melody melody = Melody.INSTANCE;
+	private LiteSQL database = melody.getDatabase();
 	
 	public GuildEntity(Long guildid) {
 		this.guildid = guildid;
@@ -62,6 +62,10 @@ public class GuildEntity {
 					if(rs.getString("language") != null) {
 						language = Languages.getLanguage(rs.getString("language"));
 					}
+				}else {
+					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(guildid) VALUES(?)");
+					ps.setLong(1, guildid);
+					ps.executeUpdate();
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
