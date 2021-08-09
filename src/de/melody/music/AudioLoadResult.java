@@ -18,6 +18,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	private final Boolean isPlaylist;
 	private final Boolean isLoop;
 	private final Boolean isLoopQueue;
+	private final Long guildid;
 	
 	private MessageFormatter mf = Melody.INSTANCE.getMessageFormatter();
 	
@@ -28,50 +29,59 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 		this.isPlaylist = isPlaylist;
 		this.isLoop = controller.isLoop();
 		this.isLoopQueue = controller.isLoopQueue();
+		this.guildid = controller.getGuild().getIdLong();
 	}
 	
 	@Override
 	public void trackLoaded(AudioTrack track) {
-		if(isLoop == false) {
-			Queue queue = controller.getQueue();
-			if(controller.isPlayingTrack()) {
-				if(isPlaylist == false && isLoopQueue == false) {
-					int QueueSize = queue.getQueueSize();
-					QueueSize++;
-					Long guildid = controller.getGuild().getIdLong();
-					EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
-							.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
-							.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
-							.addField(mf.format(guildid, "music.track.position-in-queue"), QueueSize+"", true)
-							.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
+		Queue queue = controller.getQueue();
+		if(controller.isPlayingTrack() && isLoop == false && isPlaylist == false && isLoopQueue == false) {
+			EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
+					.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
+					.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
+					.addField(mf.format(guildid, "music.track.position-in-queue"), queue.getQueueSize()+1+"", true)
+					.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
 							
-					if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
-						String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
-						builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
-					}					
-					MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
-				}
-			}
-			queue.addTrackToQueue(track,userWhoQueued);	
-		}else {
-			controller.play(track);
+			if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
+				String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
+				builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
+			}					
+			MusicUtil.sendEmbled(guildid, builder);
 		}
+		queue.addTrackToQueue(track,userWhoQueued);	
 	}
 
 	@Override
 	public void playlistLoaded(AudioPlaylist playlist) {
 		Queue queue = controller.getQueue();
-		Long guildid = controller.getGuild().getIdLong();
-		if(isPlaylist == false) {
+		if(isPlaylist) {
+			Long timeUntil = 0l;
+			for(AudioTrack track : playlist.getTracks()) {
+				queue.addTrackToQueue(track,userWhoQueued);
+				timeUntil = timeUntil + track.getDuration();
+			}
+			if(playlist.getTracks().size() >= 1) {
+				int QueueSize = queue.getQueueSize() - playlist.getTracks().size() + 1;
+				
+				EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.playlist.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
+						.setDescription("["+playlist.getName()+"]("+uri+")")
+						.addField(mf.format(guildid, "music.track.position-in-queue"), (QueueSize == 0 ? "Now" : QueueSize+""), true)
+						.addField(mf.format(guildid, "music.playlist.enqueued"), playlist.getTracks().size()+"", true)
+						.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) - timeUntil == 0l ? "Now" : "In "+MusicUtil.getTime(null, MusicUtil.getTimeUntil(controller) - timeUntil)), true)
+						.addField(mf.format(guildid, "music.playlist.length"), MusicUtil.getTime(null,timeUntil), false);
+				
+				MusicUtil.sendEmbled(guildid, builder);
+			}else {
+				MusicUtil.sendEmbledError(guildid, userWhoQueued.getAsMention()+ " "+mf.format(guildid, "music.playlist.empty"));
+			}
+		}else {
 			if(uri.startsWith("ytsearch: ")) {
 				if(controller.isPlayingTrack()) {
-					int QueueSize = queue.getQueueSize();
-					QueueSize++;
 					AudioTrack track = playlist.getTracks().get(0);
 					EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
 							.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
 							.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
-							.addField(mf.format(guildid, "music.track.position-in-queue"), QueueSize+"", true)
+							.addField(mf.format(guildid, "music.track.position-in-queue"), queue.getQueueSize()+1+"", true)
 							.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
 					
 					if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
@@ -79,59 +89,34 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 						builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
 					}
 					
-					MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
+					MusicUtil.sendEmbled(guildid, builder);
 					}	
 				queue.addTrackToQueue(playlist.getTracks().get(0), userWhoQueued);	
 			return;
-		}
-		if(playlist.getTracks().size() >= 1) {
-			if(controller.isPlayingTrack()) {
-				int QueueSize = queue.getQueueSize();
-				QueueSize++;
-				AudioTrack track = playlist.getTracks().get(0);
-				EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
-						.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
-						.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
-						.addField(mf.format(guildid, "music.track.position-in-queue"), QueueSize+"", true)
-						.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
-				
-				if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
-					String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
-					builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
-				}
-				
-				MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
 			}
+			if(playlist.getTracks().size() >= 1) {
+				if(controller.isPlayingTrack()) {
+					AudioTrack track = playlist.getTracks().get(0);
+					EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
+							.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
+							.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
+							.addField(mf.format(guildid, "music.track.position-in-queue"), queue.getQueueSize()+1+"", true)
+							.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
+					
+					if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
+						String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
+						builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
+					}
+					
+					MusicUtil.sendEmbled(guildid, builder);
+				}
 			queue.addTrackToQueue(playlist.getTracks().get(0), userWhoQueued);	
 			}	
-		
-	}else if(isPlaylist == true) {
-		Long timeUntil = 0l;
-		for(AudioTrack track : playlist.getTracks()) {
-			queue.addTrackToQueue(track,userWhoQueued);
-			timeUntil = timeUntil + track.getDuration();
-		}
-		if(playlist.getTracks().size() >= 1) {
-			int QueueSize = queue.getQueueSize();
-			QueueSize = QueueSize - playlist.getTracks().size() + 1;
-			
-			EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.playlist.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
-					.setDescription("["+playlist.getName()+"]("+uri+")")
-					.addField(mf.format(guildid, "music.track.position-in-queue"), (QueueSize == 0 ? "Now" : QueueSize+""), true)
-					.addField(mf.format(guildid, "music.playlist.enqueued"), playlist.getTracks().size()+"", true)
-					.addField(mf.format(guildid, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) - timeUntil == 0l ? "Now" : "In "+MusicUtil.getTime(null, MusicUtil.getTimeUntil(controller) - timeUntil)), true)
-					.addField(mf.format(guildid, "music.playlist.length"), MusicUtil.getTime(null,timeUntil), false);
-			
-			MusicUtil.sendEmbled(controller.getGuild().getIdLong(), builder);
-		}else {
-				MusicUtil.sendEmbledError(controller.getGuild().getIdLong(), userWhoQueued.getAsMention()+ " "+mf.format(guildid, "music.playlist.empty"));
-			}
 		}
 	}
 
 	@Override
 	public void noMatches() {
-		Long guildid = controller.getGuild().getIdLong();
 		if(uri.startsWith("ytsearch: ")) {
 		EmbedBuilder builder = new EmbedBuilder()
 				.setDescription(mf.format(guildid, "feedback.music.no-match"));	
