@@ -61,7 +61,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 				timeUntil = timeUntil + track.getDuration();
 			}
 			if(playlist.getTracks().size() >= 1) {
-				int QueueSize = queue.getQueueSize() - playlist.getTracks().size() + 1;
+				final int QueueSize = queue.getQueueSize() - playlist.getTracks().size() + 1;
 				
 				EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guildid, "music.playlist.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
 						.setDescription("["+playlist.getName()+"]("+uri+")")

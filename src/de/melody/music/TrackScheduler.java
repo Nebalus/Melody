@@ -1,10 +1,6 @@
 package de.melody.music;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -17,21 +13,20 @@ import de.melody.entities.GuildEntity;
 import de.melody.entities.reacts.TrackReaction;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emojis;
-import de.melody.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public class TrackScheduler extends AudioEventAdapter{
 	
 	private Melody melody = Melody.INSTANCE;
+	private PlayerManager playerManager = melody.playerManager;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
 	public void onPlayerPause(AudioPlayer player) {
-		long guildid = melody.playerManager.getGuildByPlayerHash(player.hashCode());
+		long guildid = playerManager.getGuildByPlayerHash(player.hashCode());
 		
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(Emojis.PAUSE+" "+mf.format(guildid, "music.track.pause"));
@@ -40,7 +35,7 @@ public class TrackScheduler extends AudioEventAdapter{
 	
 	@Override
 	public void onPlayerResume(AudioPlayer player) {
-		long guildid = melody.playerManager.getGuildByPlayerHash(player.hashCode());
+		long guildid = playerManager.getGuildByPlayerHash(player.hashCode());
 		
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(Emojis.RESUME+" "+mf.format(guildid, "music.track.resume"));
@@ -52,9 +47,9 @@ public class TrackScheduler extends AudioEventAdapter{
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
-		long guildid = melody.playerManager.getGuildByPlayerHash(player.hashCode());
+		long guildid = playerManager.getGuildByPlayerHash(player.hashCode());
 		Guild guild = melody.shardMan.getGuildById(guildid);
-		MusicController controller = melody.playerManager.getController(guildid);
+		MusicController controller = playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
 		GuildEntity ge = melody.entityManager.getGuildEntity(guild.getIdLong());
 		if(controller.isLoop() == false && controller.isLoopQueue() == false && ge.canAnnounceSongs()) {
@@ -82,7 +77,7 @@ public class TrackScheduler extends AudioEventAdapter{
 	
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {	
-		long guildid = melody.playerManager.getGuildByPlayerHash(player.hashCode());
+		long guildid = playerManager.getGuildByPlayerHash(player.hashCode());
 		Guild guild = melody.shardMan.getGuildById(guildid);
 		MusicController controller = melody.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
@@ -100,15 +95,13 @@ public class TrackScheduler extends AudioEventAdapter{
 							return;
 						}
 					}else {
-						AudioPlayerManager apm = melody.audioPlayerManager;
 						final String uri = track.getInfo().uri;
-						apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
+						melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
 						return;
 					}
 				}else {
-					AudioPlayerManager apm = melody.audioPlayerManager;
 					final String uri = track.getInfo().uri;
-					apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
+					melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
 					return;
 				}
 			}
@@ -124,7 +117,7 @@ public class TrackScheduler extends AudioEventAdapter{
 	  
 	  @Override
 	  public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-		 long guildid = melody.playerManager.getGuildByPlayerHash(player.hashCode());
+		 long guildid = playerManager.getGuildByPlayerHash(player.hashCode());
 		 EmbedBuilder builder = new EmbedBuilder();
 		 builder.setDescription("An error occured.");
 		 builder.addField("Errormessage",exception.getMessage(), false);
