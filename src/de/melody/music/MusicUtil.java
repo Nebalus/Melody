@@ -9,6 +9,7 @@ import de.melody.Config;
 import de.melody.Melody;
 import de.melody.utils.Emojis;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -17,13 +18,12 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 
 public class MusicUtil extends ListenerAdapter{
 
-	private static final List<String> verifiedurl = List.of("www.youtube.com","music.youtube.com","youtu.be","youtube.com");		
+	private static final List<String> verifiedurl = List.of("youtube.com","youtu.be");		
 	//verifiedurl.add("www.twitch.tv");	
 	//verifiedurl.add("vimeo.com");		
 	//verifiedurl.add("bandcamp.com");		
@@ -80,17 +80,17 @@ public class MusicUtil extends ListenerAdapter{
 		if(event.getMember() == guild.getSelfMember()) {
 			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
 			player.setPaused(false);
-			guild.getSelfMember().deafen(true).queue();
+			if(event.getMember().hasPermission(Permission.VOICE_DEAF_OTHERS)) {
+				guild.getSelfMember().deafen(true).queue();
+			}
 		}
 	}
 	
 	@Override
 	public void onGuildVoiceDeafen(GuildVoiceDeafenEvent event) {
 		Guild guild = event.getGuild();
-		if(event.getMember() == guild.getSelfMember()) {
-			if(!event.isDeafened()) {
-				guild.getSelfMember().deafen(true).queue();
-			}
+		if(event.getMember() == guild.getSelfMember() && event.getMember().hasPermission(Permission.VOICE_DEAF_OTHERS) && !event.isDeafened()) {
+			guild.getSelfMember().deafen(true).queue();
 		}
 	}
 	
@@ -133,8 +133,7 @@ public class MusicUtil extends ListenerAdapter{
 		
 		player.stopTrack();
 		if((state = g.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
-			AudioManager manager = vc.getGuild().getAudioManager();
-			manager.closeAudioConnection();
+			vc.getGuild().getAudioManager().closeAudioConnection();
 		}
 		Melody.INSTANCE.playerManager.clearController(g.getIdLong());
 	}
@@ -171,8 +170,12 @@ public class MusicUtil extends ListenerAdapter{
 	
 	public static Boolean isUrlVerified(String url) {
 		String uri = getDomain(url);
-		if(uri != null && verifiedurl.contains(uri)) {
-			return true;
+		if(uri != null) {
+			for(String vurl : verifiedurl) {
+				if(vurl.endsWith(uri)) {
+					return true;	
+				}
+			}
 		}
 		return false;
 	}

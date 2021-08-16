@@ -1,10 +1,11 @@
 package de.melody;
 
 import java.awt.Color;
+import java.util.List;
 
 public class Config {
-	public static final String buildversion = "Beta 0.5.7";	
-	public static final String builddate = "5/8/2021";	
+	public static final String buildversion = "Beta 0.5.7a";	
+	public static final String builddate = "9/8/2021";	
 	public static final String buildname = "Melody";
 	
 	public static final Long entityexpiretime = 1000l*60l*60l;
@@ -18,4 +19,6 @@ public class Config {
 	public static final String homepagelink = "https://nebalus.ga/melody/";
 	
 	public static final int music_afk_default = 60;
+	
+	public static final List<Long> developerids = List.of(502213965485703168l);
 }
