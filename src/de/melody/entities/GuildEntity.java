@@ -5,10 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import de.melody.Config;
-import de.melody.ConsoleLogger;
 import de.melody.LiteSQL;
 import de.melody.Melody;
 import de.melody.speechpackets.Languages;
+import de.melody.utils.ConsoleLogger;
 
 public class GuildEntity {
 	
