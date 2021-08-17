@@ -196,7 +196,7 @@ public class Utils {
 	@SuppressWarnings("deprecation")
 	public static void sendErrorEmbled(TextChannel channel, String discription, Member m) {				
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+m.getUser().getAsMention()+" "+discription);
+		builder.setDescription(channel.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+m.getUser().getAsMention()+" "+discription);
 		builder.setColor(Config.HEXEmbeldError);
 		channel.sendMessage(builder.build()).queue();
 	}

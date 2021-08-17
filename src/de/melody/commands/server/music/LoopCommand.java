@@ -9,7 +9,7 @@ import de.melody.commands.types.ServerCommand;
 import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -32,10 +32,10 @@ public class LoopCommand implements ServerCommand{
 			if(player.getPlayingTrack() != null) {
 				if(controller.isLoop()) {
 					controller.setLoop(false);
-					channel.sendMessage(Emojis.SINGLE_LOOP+mf.format(guild.getIdLong(), "music.info.loop-disabled")).queue();
+					channel.sendMessage(Emoji.SINGLE_LOOP+mf.format(guild.getIdLong(), "music.info.loop-disabled")).queue();
 				}else {
 					controller.setLoop(true);
-					channel.sendMessage(Emojis.SINGLE_LOOP+mf.format(guild.getIdLong(), "music.info.loop-enabled")).queue();
+					channel.sendMessage(Emoji.SINGLE_LOOP+mf.format(guild.getIdLong(), "music.info.loop-enabled")).queue();
 				}	
 			}else 
 				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"));				

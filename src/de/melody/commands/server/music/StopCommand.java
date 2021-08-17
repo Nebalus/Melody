@@ -10,7 +10,7 @@ import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -34,7 +34,7 @@ public class StopCommand implements ServerCommand{
 				player.stopTrack();
 				queue.clear();
 				melody.playerManager.getController(guild.getIdLong()).setAfkTime(600);
-				message.addReaction(Emojis.OK_HAND).queue();
+				message.addReaction(Emoji.OK_HAND).queue();
 			}else 
 				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"));
 		}else 

@@ -7,7 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import de.melody.Config;
 import de.melody.Melody;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -55,7 +55,7 @@ public class MusicUtil extends ListenerAdapter{
 		TextChannel channel;
 		if((channel = getChannel(guildid)) != null) {
 			EmbedBuilder builder = new EmbedBuilder();
-			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+errormessage);
+			builder.setDescription(channel.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+errormessage);
 			builder.setColor(Config.HEXEmbeldError);
 			channel.sendMessage(builder.build()).queue();
 		}				

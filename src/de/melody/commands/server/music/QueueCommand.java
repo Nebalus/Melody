@@ -12,7 +12,7 @@ import de.melody.music.MusicController;
 import de.melody.music.Queue;
 import de.melody.music.QueuedTrack;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -29,9 +29,9 @@ public class QueueCommand implements ServerCommand{
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {	
 		channel.sendMessage("Loading...").queue((queuemessage) ->{
-			queuemessage.addReaction(Emojis.BACK).queue();	
-			queuemessage.addReaction(Emojis.RESUME).queue();	
-			queuemessage.addReaction(Emojis.REFRESH).queue();
+			queuemessage.addReaction(Emoji.BACK).queue();	
+			queuemessage.addReaction(Emoji.RESUME).queue();	
+			queuemessage.addReaction(Emoji.REFRESH).queue();
 
 			QueueReaction qe = new QueueReaction(melody.playerManager.getController(guild.getIdLong()).getQueue());
 			Melody.INSTANCE.entityManager.getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);

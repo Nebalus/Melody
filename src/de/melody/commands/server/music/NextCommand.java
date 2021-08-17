@@ -10,7 +10,7 @@ import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -37,7 +37,7 @@ public class NextCommand implements ServerCommand{
 			Queue queue = controller.getQueue();
 			if(player.getPlayingTrack() != null) {
 				player.stopTrack();
-				builder.setDescription(Emojis.NEXT_TITLE+" "+mf.format(guild.getIdLong(), "music.track.skip"));
+				builder.setDescription(Emoji.NEXT_TITLE+" "+mf.format(guild.getIdLong(), "music.track.skip"));
 				MusicUtil.sendEmbled(guild.getIdLong(), builder);
 				try {
 					int i = Integer.valueOf(args[1]);
