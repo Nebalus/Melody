@@ -5,9 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import de.melody.Config;
-import de.melody.ConsoleLogger;
 import de.melody.LiteSQL;
 import de.melody.Melody;
+import de.melody.utils.ConsoleLogger;
 import net.dv8tion.jda.api.entities.User;
 
 public class UserEntity {
