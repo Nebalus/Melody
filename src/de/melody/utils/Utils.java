@@ -3,6 +3,7 @@ package de.melody.utils;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.CodeSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -71,7 +72,6 @@ public class Utils {
 		sekunden %= 60;
 		
 		String uptimeSuffix = "";
-		//uptimeSuffix = "just started";
 		if(uptime == 0) {
 			uptimeSuffix = "0s";
 		}
@@ -89,6 +89,7 @@ public class Utils {
 		}
 		return uptimeSuffix;
 	}
+	
 	public static Boolean isStringValidBoolean(String value) {
 		Boolean bool = false;
 		value = value.toLowerCase();
@@ -102,6 +103,7 @@ public class Utils {
 		}
 		return bool;
 	}
+	
 	public static Boolean getBooleanFromString(String value) {
 		Boolean bool = false;
 		value = value.toLowerCase();
@@ -234,4 +236,20 @@ public class Utils {
 		JSONObject json = new JSONObject(content);
 		return json;
 	}
+
+    public static String getCurrentJarPath() {
+        String path = getJarPath();
+        if(path.endsWith(".jar")) {
+            return path.substring(0, path.lastIndexOf("/"));
+        }
+        return path;
+    }
+    
+    public static String getJarPath() {
+        final CodeSource source = Melody.INSTANCE.getClass().getProtectionDomain().getCodeSource();
+        if (source != null) {
+            return source.getLocation().getPath().replaceAll("%20", " ");
+        }
+        return null;
+    }
 }

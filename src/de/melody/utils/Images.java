@@ -117,12 +117,12 @@ public class Images {
 			}		
 			graph.dispose();	
 			
-			File images = new File(Melody.INSTANCE.getCurrentJarPath()+"/images/");
+			File images = new File(Utils.getCurrentJarPath()+"/images/");
 			if(!images.exists()) {
 				images.mkdirs();
 			}
 			
-			File newfile = new File(Melody.INSTANCE.getCurrentJarPath()+"/images/"+ID_Manager.generateID()+".png");
+			File newfile = new File(Utils.getCurrentJarPath()+"/images/"+ID_Manager.generateID()+".png");
 			newfile.createNewFile();
 			ImageIO.write(buffimg, "png", newfile);
 			return newfile;

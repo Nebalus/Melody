@@ -4,7 +4,6 @@ import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Map.Entry;
@@ -68,18 +67,14 @@ public class Melody {
 	public long playedmusictime;
 	
 	public static void main(String[] args) {		
-		//QueueFunktion.startTestThread();
-		
 		try {
 			new Melody();
 		} catch (LoginException | IllegalArgumentException | InterruptedException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	private Melody() throws LoginException, IllegalArgumentException, InterruptedException {
-		
 		String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		for (int i = 0; i < fonts.length; i++){
 			System.out.println(fonts[i]);
@@ -126,8 +121,7 @@ public class Melody {
 	
 	
 	public void runLoop() {
-		this.loop = new Thread(() -> {
-			
+		this.loop = new Thread(() -> {	
 			Long time = System.currentTimeMillis() + 1000;
 			while(true) {		
 				if(System.currentTimeMillis() > time) {
@@ -185,7 +179,7 @@ public class Melody {
 						}else {
 							ConsoleLogger.info("Auto-Saver", "There is nothing to export to the database");
 						}
-					}catch(ConcurrentModificationException e){
+					}catch(Exception e){
 						ConsoleLogger.warning("Thread", "The current action from the Auto-Saver has been aborted");
 						e.printStackTrace();
 					}
@@ -232,17 +226,14 @@ public class Melody {
 	public void onStatusUpdate() {
 		if(nextStatusUpdate <= 0) {
 			Random rand = new Random();
-			int i = rand.nextInt(4);
+			int i = rand.nextInt(3);
 			shardMan.getShards().forEach(jda ->{
 				switch(i) {
 				case 0:
 					int musicguilds = 0;
 					for(Guild g : shardMan.getGuilds()) {
-						GuildVoiceState state;
-						if((state = g.getSelfMember().getVoiceState()) != null) {
-							if(state.getChannel() != null) {
-								musicguilds++;
-							}
+						if(g.getSelfMember().getVoiceState().getChannel() != null) {
+							musicguilds++;
 						}
 					}
 					jda.getPresence().setActivity(Activity.streaming("music on " +musicguilds+" server"+(musicguilds < 1 ? "s": "") +"!","https://twitch.tv/nebalus"));
@@ -253,9 +244,6 @@ public class Melody {
 				case 2:
 					jda.getPresence().setActivity(Activity.listening("@"+jda.getSelfUser().getName()));
 					break;
-				case 3:
-					jda.getPresence().setActivity(Activity.playing("a total of "+Utils.decodeStringFromTimeMillis(playedmusictime,true)+ " music for "+Utils.getUserInt()+" users!"));
-					break;
 				}
 			});
 			nextStatusUpdate = 15;
@@ -263,8 +251,6 @@ public class Melody {
 			nextStatusUpdate--;
 		}
 	}
-	
-	
 	
 	Integer guildScannerCooldown = 0;
 	ArrayList<Long> guildCache = new ArrayList<>();
@@ -328,6 +314,7 @@ public class Melody {
 			}catch(IOException e) {}			
 		}).start();	
 	}
+	
 	public void configureMemoryUsage(DefaultShardManagerBuilder builder) {
 	    // Disable cache for member activities (streaming/games/spotify)
 	    builder.disableCache(CacheFlag.ACTIVITY);
@@ -337,9 +324,6 @@ public class Melody {
 
 	    // Disable member chunking on startup
 	    builder.setChunkingFilter(ChunkingFilter.NONE);
-
-	    // Disable presence updates and typing events
-	    builder.disableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGE_TYPING);
 	    
 	    // Enable presence updates 
 	    builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
@@ -349,26 +333,11 @@ public class Melody {
 	public CommandManager getCmdMan() {
 		return cmdMan;
 	}
-	//gibt den Pfad dieser Jar-Datei zurück
-    public String getCurrentJarPath() {
-        String path = getJarPath();
-        if(path.endsWith(".jar")) {
-            return path.substring(0, path.lastIndexOf("/"));
-        }
-        return path;
-    }
-    
-    //gibt den absoluten Pfad inklusive Dateiname dieser Anwendung zurück
-    public String getJarPath() {
-        final CodeSource source = this.getClass().getProtectionDomain().getCodeSource();
-        if (source != null) {
-            return source.getLocation().getPath().replaceAll("%20", " ");
-        }
-        return null;
-    }
+
     public MessageFormatter getMessageFormatter() {
 		return messageformatter;
     }
+    
     public LiteSQL getDatabase() {
     	return database;
     }
