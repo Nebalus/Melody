@@ -8,7 +8,7 @@ import de.melody.commands.types.ServerCommand;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.Languages;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -147,20 +147,20 @@ public class ConfigCommand implements ServerCommand{
 		builder.setColor(Config.HEXEmbeld);
 		builder.setTitle(mf.format(guildid, "config.info.submenu.title",Config.buildname,subcommand.title));	
 		builder.setDescription(mf.format(guildid, "config.sub."+subcommand.name()+".info"));
-		builder.addField(Emojis.CLIPBOARD+" "+mf.format(guildid, "config.info.submenu.current-value"), "`"+currentvalue.toString()+"`", false);
-		builder.addField(Emojis.PENCIL+" "+mf.format(guildid, "config.info.submenu.usage"), "`"+prefix+"config " +subcommand.name()+" "+subcommand.usage+"`", false);
+		builder.addField(Emoji.CLIPBOARD+" "+mf.format(guildid, "config.info.submenu.current-value"), "`"+currentvalue.toString()+"`", false);
+		builder.addField(Emoji.PENCIL+" "+mf.format(guildid, "config.info.submenu.usage"), "`"+prefix+"config " +subcommand.name()+" "+subcommand.usage+"`", false);
 		if(customvalidsettigs == null) {
-			builder.addField(Emojis.CHECK_MARK+" "+mf.format(guildid, "config.info.submenu.valid-settings"), "`"+mf.format(guildid, "config.sub."+subcommand.name()+".valid-settings")+"`", false);
+			builder.addField(Emoji.CHECK_MARK+" "+mf.format(guildid, "config.info.submenu.valid-settings"), "`"+mf.format(guildid, "config.sub."+subcommand.name()+".valid-settings")+"`", false);
 		}else {
-			builder.addField(Emojis.CHECK_MARK+" "+mf.format(guildid, "config.info.submenu.valid-settings"), "`"+customvalidsettigs+"`", false);
+			builder.addField(Emoji.CHECK_MARK+" "+mf.format(guildid, "config.info.submenu.valid-settings"), "`"+customvalidsettigs+"`", false);
 		}
 		channel.sendMessage(builder.build()).queue();
 	}
 	private enum ConfigSubCommands{
-		prefix("[new prefix]",Emojis.EXCLAMATION_MARK+" Prefix"),
-		language("[new language]",Emojis.WHITE_FLAG+" Language"),
-		announcesongs("[on|off]",Emojis.BELL+" Announce Songs"),
-		revocablecommands("[on|off]",Emojis.FIRECRACKER+" Revocable Commands");
+		prefix("[new prefix]",Emoji.EXCLAMATION_MARK+" Prefix"),
+		language("[new language]",Emoji.WHITE_FLAG+" Language"),
+		announcesongs("[on|off]",Emoji.BELL+" Announce Songs"),
+		revocablecommands("[on|off]",Emoji.FIRECRACKER+" Revocable Commands");
 		
 		String usage;
 		String title;

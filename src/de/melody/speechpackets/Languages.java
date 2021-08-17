@@ -1,11 +1,11 @@
 package de.melody.speechpackets;
 
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 
 public enum Languages {
 
-	ENGLISH("English","English.json","US",Emojis.UNITED_STATES_FLAG),
-	GERMAN("Deutsch","German.json","DE",Emojis.GERMANY_FLAG);
+	ENGLISH("English","English.json","US",Emoji.UNITED_STATES_FLAG),
+	GERMAN("Deutsch","German.json","DE",Emoji.GERMANY_FLAG);
 	
 	String name;
 	String file;

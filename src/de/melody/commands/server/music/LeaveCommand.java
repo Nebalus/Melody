@@ -6,7 +6,7 @@ import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -24,7 +24,7 @@ public class LeaveCommand implements ServerCommand{
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			MusicUtil.MusicKiller(guild);
-			message.addReaction(Emojis.OK_HAND).queue();
+			message.addReaction(Emoji.OK_HAND).queue();
 		}else 
 			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"), m);
 	}

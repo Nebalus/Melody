@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -21,13 +20,12 @@ import de.melody.entities.GuildEntity;
 import de.melody.entities.UserEntity;
 import de.melody.listeners.CommandListener;
 import de.melody.listeners.ReactListener;
-import de.melody.listeners.SlashCommandListener;
 import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.music.PlayerManager;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.ConsoleLogger;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import de.melody.utils.SpotifyUtils;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.JDA;
@@ -89,7 +87,7 @@ public class Melody {
 		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(Secure.TOKEN);
 		configureMemoryUsage(builder); 
 	
-		builder.addEventListeners(new CommandListener() , new MusicUtil(), new ReactListener(), new SlashCommandListener());
+		builder.addEventListeners(new CommandListener() , new MusicUtil(), new ReactListener());
 		builder.setActivity(Activity.playing("booting myself..."));
 		
 		this.audioPlayerManager = new DefaultAudioPlayerManager();
@@ -222,7 +220,7 @@ public class Melody {
 		}
 	}
 	
-	int nextStatusUpdate = 6;
+	int nextStatusUpdate = 10;
 	public void onStatusUpdate() {
 		if(nextStatusUpdate <= 0) {
 			Random rand = new Random();
@@ -262,14 +260,14 @@ public class Melody {
 					for(TextChannel tc : g.getTextChannels()) {
 						if(!mentioned) {
 							try {
-								tc.sendMessage("Hello everybody, i'm "+g.getJDA().getSelfUser().getAsMention()+" "+g.getJDA().getEmoteById(Emojis.HEY_GUYS).getAsMention()+"\n"
+								tc.sendMessage("Hello everybody, i'm "+g.getJDA().getSelfUser().getAsMention()+" "+g.getJDA().getEmoteById(Emoji.HEY_GUYS).getAsMention()+"\n"
 										+ " \n"
 										+ " `-` My prefix on "+g.getName()+" is `m!`\n"
 										+ " `-` If you do not understand how I work then you can see all my commands by typing `m!help`\n"
 										+ " `-` When you dont like something in my config then you can easyly change it by typing `m!config help`\n"
 										+ " \n"
-										+ "**Otherwise have fun listening to the music from my service** "+ Emojis.MUSIC_NOTE+" \n"
-										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+g.getJDA().getEmoteById(Emojis.ANIMATED_HEARTS).getAsMention()).queue();
+										+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
+										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+g.getJDA().getEmoteById(Emoji.ANIMATED_HEARTS).getAsMention()).queue();
 								mentioned = true;
 								//loads the guild in the database
 								entityManager.getGuildEntity(g.getIdLong());

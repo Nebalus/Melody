@@ -1,6 +1,6 @@
 package de.melody.utils;
 
-public class Emojis {
+public class Emoji {
 
 	public final static Long ANIMATED_TICK_RED = 757615100315304057l;
 	public final static Long ANIMATED_TICK_GREEN = 757617377038041249l;

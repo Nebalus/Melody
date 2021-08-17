@@ -90,7 +90,7 @@ public class Images {
 			
 			String currenttracklength = Utils.getTimeFormat(tracklength);
 			if(currenttracklength == null) {
-				currenttracklength = "INFINITE "+Emojis.INFINITY;
+				currenttracklength = "INFINITE "+Emoji.INFINITY;
 			}
 			graph.drawString(currenttracklength, 960,250);
 			

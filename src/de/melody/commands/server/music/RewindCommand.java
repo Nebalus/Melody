@@ -10,7 +10,7 @@ import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -49,7 +49,7 @@ public class RewindCommand implements ServerCommand{
 				}
 				EmbedBuilder builder = new EmbedBuilder();
 				builder.setColor(Config.HEXEmbeld);
-				builder.setDescription(Emojis.REWIND+" "+mf.format(guild.getIdLong(), "command.rewind.set",Utils.decodeStringFromTimeMillis(rewindmillis,false)));
+				builder.setDescription(Emoji.REWIND+" "+mf.format(guild.getIdLong(), "command.rewind.set",Utils.decodeStringFromTimeMillis(rewindmillis,false)));
 				channel.sendMessage(builder.build()).queue();
 			}else 
 				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"),m);

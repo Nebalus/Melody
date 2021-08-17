@@ -8,7 +8,7 @@ import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -33,7 +33,7 @@ public class JoinCommand implements ServerCommand{
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
 			AudioPlayer player = controller.getPlayer();
 			player.setPaused(false);
-			message.addReaction(Emojis.OK_HAND).queue();
+			message.addReaction(Emoji.OK_HAND).queue();
 			if(player.getPlayingTrack() == null) {
 				controller.setAfkTime(600);
 			}

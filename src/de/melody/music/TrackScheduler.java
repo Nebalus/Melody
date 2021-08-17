@@ -12,7 +12,7 @@ import de.melody.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.entities.reacts.TrackReaction;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -29,7 +29,7 @@ public class TrackScheduler extends AudioEventAdapter{
 		long guildid = playerManager.getGuildByPlayerHash(player.hashCode());
 		
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setDescription(Emojis.PAUSE+" "+mf.format(guildid, "music.track.pause"));
+		builder.setDescription(Emoji.PAUSE+" "+mf.format(guildid, "music.track.pause"));
 		MusicUtil.sendEmbled(guildid, builder);		
 	}
 	
@@ -38,7 +38,7 @@ public class TrackScheduler extends AudioEventAdapter{
 		long guildid = playerManager.getGuildByPlayerHash(player.hashCode());
 		
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setDescription(Emojis.RESUME+" "+mf.format(guildid, "music.track.resume"));
+		builder.setDescription(Emoji.RESUME+" "+mf.format(guildid, "music.track.resume"));
 		MusicUtil.sendEmbled(guildid, builder);		
 	}
 	
@@ -56,7 +56,7 @@ public class TrackScheduler extends AudioEventAdapter{
 			EmbedBuilder builder = new EmbedBuilder();
 			AudioTrackInfo info = track.getInfo();
 			String url = info.uri;
-			builder.setDescription("["+guild.getJDA().getEmoteById(Emojis.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guildid, "music.track.now-playing")+"]("+Config.homepagelink+")");
+			builder.setDescription("["+guild.getJDA().getEmoteById(Emoji.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guildid, "music.track.now-playing")+"]("+Config.homepagelink+")");
 			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", true);
 			builder.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(info,0l),true);
 			builder.addBlankField(true);
@@ -70,7 +70,7 @@ public class TrackScheduler extends AudioEventAdapter{
 			MusicUtil.getChannel(guildid).sendMessage(builder.build()).queue((trackmessage) ->{
 				TrackReaction te = new TrackReaction(info);
 				melody.entityManager.getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(trackmessage.getIdLong(), te);
-				trackmessage.addReaction(Emojis.SPARKLING_HEART).queue();
+				trackmessage.addReaction(Emoji.SPARKLING_HEART).queue();
 			});
 		}
 	}
