@@ -1,5 +1,7 @@
 package de.melody.commands.server.music;
 
+import java.util.List;
+
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.music.MusicController;
@@ -21,9 +23,14 @@ public class ShuffelCommand implements ServerCommand{
 		Queue queue = controller.getQueue();
 		if(queue.getQueuelist().size() > 1) {
 			queue.shuffel(); 
-			channel.sendMessage(mf.format(guild.getIdLong(), "music.shuffel.successful",queue.getQueueSize())).queue();
+			channel.sendMessage(mf.format(guild, "music.shuffel.successful",queue.getQueueSize())).queue();
 		}else {
-			channel.sendMessage(mf.format(guild.getIdLong(), "music.shuffel.emptyqueue")).queue();
+			channel.sendMessage(mf.format(guild, "music.shuffel.emptyqueue")).queue();
 		}
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("shuffel");
 	}
 }

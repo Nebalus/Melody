@@ -1,13 +1,15 @@
 package de.melody.music;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
+import de.melody.Config;
 import de.melody.Melody;
-import de.melody.utils.Emojis;
+import de.melody.utils.Emoji;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -16,42 +18,42 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 
 public class MusicUtil extends ListenerAdapter{
 
-	private static ArrayList<String> verifiedurl = new ArrayList<String>();
+	private static final List<String> verifiedurl = List.of("youtube.com","youtu.be");		
+	//verifiedurl.add("www.twitch.tv");	
+	//verifiedurl.add("vimeo.com");		
+	//verifiedurl.add("bandcamp.com");		
+	//verifiedurl.add("soundcloud.com");
 	private Melody melody = Melody.INSTANCE;
 	
-	public static TextChannel getChannel(long guildid) {
-		Guild guild;
-		if((guild = Melody.INSTANCE.shardMan.getGuildById(guildid)) != null) {
-			TextChannel channel;
-			if((channel = guild.getTextChannelById(Melody.INSTANCE.entityManager.getGuildEntity(guildid).getChannelId())) != null) {
-				return channel;
-			}
+	public static TextChannel getChannel(Guild guild) {
+		TextChannel channel;
+		if((channel = guild.getTextChannelById(Melody.INSTANCE.entityManager.getGuildEntity(guild).getChannelId())) != null) {
+			return channel;
 		}
 		return null;
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static void sendEmbled(long guildid, EmbedBuilder builder) {		
+	public static void sendEmbled(Guild guild, EmbedBuilder builder) {		
 		TextChannel channel;
-		if((channel = getChannel(guildid)) != null) {
-			builder.setColor(Melody.HEXEmbeld);
+		if((channel = getChannel(guild)) != null) {
+			builder.setColor(Config.HEXEmbeld);
 			channel.sendMessage(builder.build()).queue();
 		}			
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static void sendEmbledError(long guildid, String errormessage) {
+	public static void sendEmbledError(Guild guild, String errormessage) {
 		TextChannel channel;
-		if((channel = getChannel(guildid)) != null) {
+		if((channel = getChannel(guild)) != null) {
 			EmbedBuilder builder = new EmbedBuilder();
-			builder.setDescription(channel.getJDA().getEmoteById(Emojis.ANIMATED_TICK_RED).getAsMention()+" "+errormessage);
-			builder.setColor(Melody.HEXEmbeldError);
+			builder.setDescription(channel.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+errormessage);
+			builder.setColor(Config.HEXEmbeldError);
 			channel.sendMessage(builder.build()).queue();
 		}				
 	}
@@ -75,17 +77,17 @@ public class MusicUtil extends ListenerAdapter{
 		if(event.getMember() == guild.getSelfMember()) {
 			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
 			player.setPaused(false);
-			guild.getSelfMember().deafen(true).queue();
+			if(event.getMember().hasPermission(Permission.VOICE_DEAF_OTHERS)) {
+				guild.getSelfMember().deafen(true).queue();
+			}
 		}
 	}
 	
 	@Override
 	public void onGuildVoiceDeafen(GuildVoiceDeafenEvent event) {
 		Guild guild = event.getGuild();
-		if(event.getMember() == guild.getSelfMember()) {
-			if(!event.isDeafened()) {
-				guild.getSelfMember().deafen(true).queue();
-			}
+		if(event.getMember() == guild.getSelfMember() && event.getMember().hasPermission(Permission.VOICE_DEAF_OTHERS) && !event.isDeafened()) {
+			guild.getSelfMember().deafen(true).queue();
 		}
 	}
 	
@@ -109,13 +111,12 @@ public class MusicUtil extends ListenerAdapter{
 	}
 	
 	public static void AFKManager(Guild g) {
-		if(Melody.INSTANCE.entityManager.getGuildEntity(g.getIdLong()).is24_7() == false) {
+		if(Melody.INSTANCE.entityManager.getGuildEntity(g).is24_7() == false) {
 			MusicController controller = Melody.INSTANCE.playerManager.getController(g.getIdLong());
 			int time = controller.getAfkTime();
 			if(time > 0) {
 				time--;
 				controller.setAfkTime(time);
-				//ConsoleLogger.info(g.getIdLong()+"", time+"");
 			}else {
 				MusicKiller(g);
 			}
@@ -129,8 +130,7 @@ public class MusicUtil extends ListenerAdapter{
 		
 		player.stopTrack();
 		if((state = g.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
-			AudioManager manager = vc.getGuild().getAudioManager();
-			manager.closeAudioConnection();
+			vc.getGuild().getAudioManager().closeAudioConnection();
 		}
 		Melody.INSTANCE.playerManager.clearController(g.getIdLong());
 	}
@@ -167,8 +167,12 @@ public class MusicUtil extends ListenerAdapter{
 	
 	public static Boolean isUrlVerified(String url) {
 		String uri = getDomain(url);
-		if(uri != null && verifiedurl.contains(uri)) {
-			return true;
+		if(uri != null) {
+			for(String vurl : verifiedurl) {
+				if(vurl.endsWith(uri)) {
+					return true;	
+				}
+			}
 		}
 		return false;
 	}
@@ -179,16 +183,5 @@ public class MusicUtil extends ListenerAdapter{
 			return args[2].toLowerCase();
 		}
 		return null;
-	}
-	
-	public static void loadDomains() {
-		verifiedurl.add("www.youtube.com");	
-		verifiedurl.add("music.youtube.com");	
-		verifiedurl.add("youtu.be");	
-		verifiedurl.add("youtube.com");			
-		//verifiedurl.add("www.twitch.tv");	
-		//verifiedurl.add("vimeo.com");		
-		//verifiedurl.add("bandcamp.com");		
-		//verifiedurl.add("soundcloud.com");
 	}
 }

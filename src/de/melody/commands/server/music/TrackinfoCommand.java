@@ -1,12 +1,13 @@
 package de.melody.commands.server.music;
 
+import java.util.List;
+
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.music.MusicController;
 import de.melody.utils.Images;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -16,18 +17,20 @@ public class TrackinfoCommand implements ServerCommand{
 	
 	private Melody melody = Melody.INSTANCE;
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		melody.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
-		EmbedBuilder builder = new EmbedBuilder();
-		builder.setImage("attachment://trackinfo.png");
+		melody.entityManager.getGuildEntity(guild).setChannelId(channel.getIdLong());
 		try {
 			MusicController controller = Melody.INSTANCE.playerManager.getController(guild.getIdLong());
 			AudioTrack audiotrack = controller.getPlayer().getPlayingTrack();
-			channel.sendFile(Images.tracktopng(audiotrack.getInfo().title,audiotrack.getPosition(),audiotrack.getDuration(),audiotrack.getInfo().author,guild.getIdLong(),controller.getQueue().currentplaying.getWhoQueued()), "trackinfo.png").embed(builder.build()).queue();	
+			channel.sendFile(Images.tracktopng(audiotrack.getInfo().title,audiotrack.getPosition(),audiotrack.getDuration(),audiotrack.getInfo().author,guild,controller.getQueue().currentlyPlaying().getWhoQueued()), "trackinfo.png").queue();	
 		}catch (NullPointerException e) {
-			channel.sendFile(Images.tracktopng(null,0,0,null,guild.getIdLong(),null), "trackinfo.png").embed(builder.build()).queue();	
+			channel.sendFile(Images.tracktopng(null,0,0,null,guild,null), "trackinfo.png").queue();	
 		}
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("trackinfo","ti");
 	}
 }

@@ -1,10 +1,13 @@
 package de.melody.commands.server.music;
 
+import java.util.List;
+
 import de.melody.Melody;
 import de.melody.commands.types.ServerCommand;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -16,32 +19,39 @@ public class VolumeCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
+	private final int maxvolume = 100;
+	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
-		GuildEntity guildentity = melody.entityManager.getGuildEntity(guild.getIdLong());
-		guildentity.setChannelId(channel.getIdLong());
+		GuildEntity ge = melody.entityManager.getGuildEntity(guild);
+		ge.setChannelId(channel.getIdLong());
 		if(args.length == 1) {
 			EmbedBuilder builder = new EmbedBuilder();
-			builder.setDescription("The volume from the bot: " + guildentity.getVolume());
-			MusicUtil.sendEmbled(guild.getIdLong(), builder);
+			builder.setDescription(mf.format(guild, "command.volume.show",ge.getVolume()));
+			MusicUtil.sendEmbled(guild, builder);
 		}else {
 			try {
 				int amount = Integer.parseInt(args[1]);			
-				if(amount <= 100) {
+				if(amount <= maxvolume) {
 					if(amount >= 1) {
 						melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
 						EmbedBuilder builder = new EmbedBuilder();
-						guildentity.setVolume(amount);
-						builder.setDescription("The volume from the bot has been set to " + amount);
-						MusicUtil.sendEmbled(guild.getIdLong(), builder);
+						ge.setVolume(amount);
+						builder.setDescription(mf.format(guild, "command.volume.set",amount));
+						MusicUtil.sendEmbled(guild, builder);
 					}else
-						MusicUtil.sendEmbledError(guild.getIdLong(), m.getAsMention() + " the min volume you can use is 1!");
+						Utils.sendErrorEmbled(channel, mf.format(guild, "command.volume.min-int"), m);
 				}else
-					MusicUtil.sendEmbledError(guild.getIdLong(), m.getAsMention() + " the max volume you can use is 100!");	
+					Utils.sendErrorEmbled(channel, mf.format(guild, "command.volume.max-int",maxvolume), m);
 			}catch(NumberFormatException e) {
-				MusicUtil.sendEmbledError(guild.getIdLong(), m.getAsMention() + " Please choose a number between 1-100!");
+				Utils.sendErrorEmbled(channel, mf.format(guild, "command.volume.out-of-bounds",maxvolume), m);
 			}
 		}
+	}
+
+	@Override
+	public List<String> getCommandPrefix() {
+		return List.of("volume","vol","v");
 	}
 }

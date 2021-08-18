@@ -11,13 +11,15 @@ import de.melody.music.MusicUtil;
 import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emoji;
+import de.melody.utils.Utils;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class StopCommand implements ServerCommand{
+public class BackCommand implements ServerCommand{
 
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
@@ -25,24 +27,33 @@ public class StopCommand implements ServerCommand{
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		melody.entityManager.getGuildEntity(guild).setChannelId(channel.getIdLong());
-		MusicController controller = melody.playerManager.getController(guild.getIdLong());
-		AudioPlayer player = controller.getPlayer();
+		
 		GuildVoiceState state;
-		if((state = m.getVoiceState()) != null && state.getChannel() != null) {
+		EmbedBuilder builder = new EmbedBuilder();
+		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
+			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			String[] args = message.getContentDisplay().split(" ");
+			AudioPlayer player = controller.getPlayer();
+			Queue queue = controller.getQueue();
 			if(player.getPlayingTrack() != null) {
-				Queue queue = controller.getQueue();
 				player.stopTrack();
-				queue.clear();
-				melody.playerManager.getController(guild.getIdLong()).setAfkTime(600);
-				message.addReaction(Emoji.OK_HAND).queue();
+				builder.setDescription(Emoji.PREVIOUS_TITLE+" test");
+				MusicUtil.sendEmbled(guild, builder);
+				try {
+					int i = Integer.valueOf(args[1]);
+					queue.back(i);
+				}catch(NumberFormatException | IndexOutOfBoundsException e) {
+					queue.back(1);
+				}
 			}else 
-				MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.currently-playing-null"));
-		}else 
-			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.user-not-in-vc"));
+				Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.currently-playing-null"),m);
+		}else
+			Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
 	}
 
 	@Override
 	public List<String> getCommandPrefix() {
-		return List.of("stop");
+		return List.of("back","b");
 	}
+
 }
