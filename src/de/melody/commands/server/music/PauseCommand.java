@@ -19,13 +19,13 @@ public class PauseCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		melody.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
+		melody.entityManager.getGuildEntity(guild).setChannelId(channel.getIdLong());
 
 		GuildVoiceState state;
 		if((state = m.getGuild().getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			melody.playerManager.getController(guild.getIdLong()).getPlayer().setPaused(true);
 		}else
-			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"));
+			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.bot-not-in-vc"));
 	}
 
 	@Override

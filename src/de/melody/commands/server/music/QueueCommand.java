@@ -44,14 +44,14 @@ public class QueueCommand implements ServerCommand{
 		MusicController controller = melody.playerManager.getController(guild.getIdLong());
 		EmbedBuilder builder = new EmbedBuilder();
 		Queue queue = controller.getQueue();
-		builder.setTitle(mf.format(guild.getIdLong(), "music.queue.from-guild",guild.getName()));
+		builder.setTitle(mf.format(guild, "music.queue.from-guild",guild.getName()));
 		builder.setThumbnail(guild.getIconUrl());
 		builder.setColor(Config.HEXEmbeld);
 		String list = null;
 		if(controller.getPlayer().getPlayingTrack() != null) {
 			if(queue.currentlyPlaying() != null) {
-				list = mf.format(guild.getIdLong(), "music.track.currently-playing")+"\n"
-					+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(guild.getIdLong(), "music.user.who-requested")+queue.currentlyPlaying().getWhoQueued().getUser().getAsTag()+" \n"
+				list = mf.format(guild, "music.track.currently-playing")+"\n"
+					+ " ["+ controller.getPlayer().getPlayingTrack().getInfo().title+"]("+controller.getPlayer().getPlayingTrack().getInfo().uri+") | "+mf.format(guild, "music.user.who-requested")+queue.currentlyPlaying().getWhoQueued().getUser().getAsTag()+" \n"
 					+ " \n";
 			}
 			int size = 1;
@@ -60,7 +60,7 @@ public class QueueCommand implements ServerCommand{
 				if(size <= page && size >= page-9) {
 					AudioTrack at = qt.getTrack();
 					if(size == page-9) {
-						list = list + mf.format(guild.getIdLong(), "music.queue.in-queue")+"\n";
+						list = list + mf.format(guild, "music.queue.in-queue")+"\n";
 					}
 					list = list + "``"+size+".`` ``["+Utils.getTimeFormat(at.getInfo().length)+"]`` **"+ at.getInfo().title+"** - "+qt.getWhoQueued().getAsMention()+"\n";
 				}
@@ -68,10 +68,10 @@ public class QueueCommand implements ServerCommand{
 			}
 			int queuepage = queue.getQueueSize()/10;
 			int maxpage = (float) queue.getQueueSize()/10 > queuepage ? queuepage+1 : queuepage;
-			builder.setFooter(mf.format(guild.getIdLong(), "music.queue.page", qe.getPage()+"/"+maxpage));
+			builder.setFooter(mf.format(guild, "music.queue.page", qe.getPage()+"/"+maxpage));
 			
 		}else {
-			list = mf.format(guild.getIdLong(), "feedback.music.currently-playing-null");
+			list = mf.format(guild, "feedback.music.currently-playing-null");
 		}
 		builder.setDescription(list);
 		return builder;

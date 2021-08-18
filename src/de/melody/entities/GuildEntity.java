@@ -9,6 +9,7 @@ import de.melody.LiteSQL;
 import de.melody.Melody;
 import de.melody.speechpackets.Languages;
 import de.melody.utils.ConsoleLogger;
+import net.dv8tion.jda.api.entities.Guild;
 
 public class GuildEntity {
 	
@@ -30,8 +31,8 @@ public class GuildEntity {
 	private Melody melody = Melody.INSTANCE;
 	private LiteSQL database = melody.getDatabase();
 	
-	public GuildEntity(Long guildid) {
-		this.guildid = guildid;
+	public GuildEntity(Guild guild) {
+		this.guildid = guild.getIdLong();
 		if(database.isConnected()) {
 			try {
 				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE guildid = " + guildid);	

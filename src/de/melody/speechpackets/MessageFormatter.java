@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import de.melody.Config;
 import de.melody.Melody;
 import de.melody.utils.Utils;
+import net.dv8tion.jda.api.entities.Guild;
 
 public class MessageFormatter {
 	
@@ -31,8 +32,8 @@ public class MessageFormatter {
         }
 	}
 	
-	public String format(Long guildid, String key, Object... args) {
-		Languages language = melody.entityManager.getGuildEntity(guildid).getLanguage();
+	public String format(Guild guild, String key, Object... args) {
+		Languages language = melody.entityManager.getGuildEntity(guild).getLanguage();
 		String message = "JSON-Error {"+key+"} - "+language.code;
 	    try {
 			JSONObject json = getJSONMessage.get(language);

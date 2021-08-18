@@ -25,8 +25,7 @@ public class ConfigCommand implements ServerCommand{
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
-		Long guildid = guild.getIdLong();
-		GuildEntity ge = melody.entityManager.getGuildEntity(guildid);
+		GuildEntity ge = melody.entityManager.getGuildEntity(guild);
 		if(m.hasPermission(Permission.ADMINISTRATOR) || m.hasPermission(Permission.MANAGE_SERVER)) {
 			if(args.length == 1) {
 				sendMainMenu(channel,ge.getPrefix());
@@ -63,7 +62,7 @@ public class ConfigCommand implements ServerCommand{
 					switch(subcommand) {
 						case prefix:
 							if(args[2].length() <= 6) {					 
-								channel.sendMessage(mf.format(guildid, "config.sub.prefix.succes", ge.getPrefix(),args[2])).queue();	
+								channel.sendMessage(mf.format(guild, "config.sub.prefix.succes", ge.getPrefix(),args[2])).queue();	
 								ge.setPrefix(args[2]);
 							}else 
 								sendSubCommandMenu(ge.getPrefix(), channel, ConfigSubCommands.prefix, ge.getPrefix(),null);
@@ -81,7 +80,7 @@ public class ConfigCommand implements ServerCommand{
 							if(isLanguage) {
 								Languages oldLang = ge.getLanguage();
 								ge.setLanguage(newLang);
-								channel.sendMessage(mf.format(guildid, "config.sub.language.succes", oldLang.getName(),newLang.getName())).queue();	
+								channel.sendMessage(mf.format(guild, "config.sub.language.succes", oldLang.getName(),newLang.getName())).queue();	
 							}else {
 								String languagelist = "";
 								for (Languages language : Languages.values()) {
@@ -94,10 +93,10 @@ public class ConfigCommand implements ServerCommand{
 							boolean value = Utils.getBooleanFromString(args[2]);
 							if(Utils.isStringValidBoolean(args[2]) && value != ge.canAnnounceSongs()) {
 								if(value) {
-									channel.sendMessage(mf.format(guildid, "config.sub.announcesongs.succes.on")).queue();	
+									channel.sendMessage(mf.format(guild, "config.sub.announcesongs.succes.on")).queue();	
 									ge.setAnnounceSongs(true);
 								}else {
-									channel.sendMessage(mf.format(guildid, "config.sub.announcesongs.succes.off")).queue();	
+									channel.sendMessage(mf.format(guild, "config.sub.announcesongs.succes.off")).queue();	
 									ge.setAnnounceSongs(false);
 								}
 							}else {
@@ -127,7 +126,7 @@ public class ConfigCommand implements ServerCommand{
 				}
 			}
 		}else {
-			Utils.sendErrorEmbled(channel,mf.format(guildid, "feedback.error.user-no-permmisions", "MANAGE_SERVER"), m);
+			Utils.sendErrorEmbled(channel,mf.format(guild, "feedback.error.user-no-permmisions", "MANAGE_SERVER"), m);
 		}
 	}
 	@SuppressWarnings("deprecation")
@@ -142,17 +141,17 @@ public class ConfigCommand implements ServerCommand{
 	}
 	@SuppressWarnings("deprecation")
 	private void sendSubCommandMenu(Object currentvalue, TextChannel channel,ConfigSubCommands subcommand,String prefix,String customvalidsettigs) {
-		Long guildid = channel.getGuild().getIdLong();
+		Guild guild = channel.getGuild();
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Config.HEXEmbeld);
-		builder.setTitle(mf.format(guildid, "config.info.submenu.title",Config.buildname,subcommand.title));	
-		builder.setDescription(mf.format(guildid, "config.sub."+subcommand.name()+".info"));
-		builder.addField(Emoji.CLIPBOARD+" "+mf.format(guildid, "config.info.submenu.current-value"), "`"+currentvalue.toString()+"`", false);
-		builder.addField(Emoji.PENCIL+" "+mf.format(guildid, "config.info.submenu.usage"), "`"+prefix+"config " +subcommand.name()+" "+subcommand.usage+"`", false);
+		builder.setTitle(mf.format(guild, "config.info.submenu.title",Config.buildname,subcommand.title));	
+		builder.setDescription(mf.format(guild, "config.sub."+subcommand.name()+".info"));
+		builder.addField(Emoji.CLIPBOARD+" "+mf.format(guild, "config.info.submenu.current-value"), "`"+currentvalue.toString()+"`", false);
+		builder.addField(Emoji.PENCIL+" "+mf.format(guild, "config.info.submenu.usage"), "`"+prefix+"config " +subcommand.name()+" "+subcommand.usage+"`", false);
 		if(customvalidsettigs == null) {
-			builder.addField(Emoji.CHECK_MARK+" "+mf.format(guildid, "config.info.submenu.valid-settings"), "`"+mf.format(guildid, "config.sub."+subcommand.name()+".valid-settings")+"`", false);
+			builder.addField(Emoji.CHECK_MARK+" "+mf.format(guild, "config.info.submenu.valid-settings"), "`"+mf.format(guild, "config.sub."+subcommand.name()+".valid-settings")+"`", false);
 		}else {
-			builder.addField(Emoji.CHECK_MARK+" "+mf.format(guildid, "config.info.submenu.valid-settings"), "`"+customvalidsettigs+"`", false);
+			builder.addField(Emoji.CHECK_MARK+" "+mf.format(guild, "config.info.submenu.valid-settings"), "`"+customvalidsettigs+"`", false);
 		}
 		channel.sendMessage(builder.build()).queue();
 	}

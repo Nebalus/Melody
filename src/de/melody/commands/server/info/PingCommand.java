@@ -15,7 +15,7 @@ public class PingCommand implements ServerCommand{
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) 	{		
 		long gatewayping = channel.getJDA().getGatewayPing();
 		channel.getJDA().getRestPing().queue( (time) ->
-			channel.sendMessageFormat(Melody.INSTANCE.getMessageFormatter().format(channel.getGuild().getIdLong(), "feedback.info.ping"), time, gatewayping).queue()
+			channel.sendMessageFormat(Melody.INSTANCE.getMessageFormatter().format(channel.getGuild(), "feedback.info.ping"), time, gatewayping).queue()
 		);
 	}
 

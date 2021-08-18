@@ -270,7 +270,7 @@ public class Melody {
 										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+g.getJDA().getEmoteById(Emoji.ANIMATED_HEARTS).getAsMention()).queue();
 								mentioned = true;
 								//loads the guild in the database
-								entityManager.getGuildEntity(g.getIdLong());
+								entityManager.getGuildEntity(g);
 								guildCache.add(tc.getIdLong());
 							}catch(InsufficientPermissionException e) {}
 						}

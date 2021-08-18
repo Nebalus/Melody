@@ -30,30 +30,27 @@ public class MusicUtil extends ListenerAdapter{
 	//verifiedurl.add("soundcloud.com");
 	private Melody melody = Melody.INSTANCE;
 	
-	public static TextChannel getChannel(long guildid) {
-		Guild guild;
-		if((guild = Melody.INSTANCE.shardMan.getGuildById(guildid)) != null) {
-			TextChannel channel;
-			if((channel = guild.getTextChannelById(Melody.INSTANCE.entityManager.getGuildEntity(guildid).getChannelId())) != null) {
-				return channel;
-			}
+	public static TextChannel getChannel(Guild guild) {
+		TextChannel channel;
+		if((channel = guild.getTextChannelById(Melody.INSTANCE.entityManager.getGuildEntity(guild).getChannelId())) != null) {
+			return channel;
 		}
 		return null;
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static void sendEmbled(long guildid, EmbedBuilder builder) {		
+	public static void sendEmbled(Guild guild, EmbedBuilder builder) {		
 		TextChannel channel;
-		if((channel = getChannel(guildid)) != null) {
+		if((channel = getChannel(guild)) != null) {
 			builder.setColor(Config.HEXEmbeld);
 			channel.sendMessage(builder.build()).queue();
 		}			
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static void sendEmbledError(long guildid, String errormessage) {
+	public static void sendEmbledError(Guild guild, String errormessage) {
 		TextChannel channel;
-		if((channel = getChannel(guildid)) != null) {
+		if((channel = getChannel(guild)) != null) {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setDescription(channel.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+errormessage);
 			builder.setColor(Config.HEXEmbeldError);
@@ -114,7 +111,7 @@ public class MusicUtil extends ListenerAdapter{
 	}
 	
 	public static void AFKManager(Guild g) {
-		if(Melody.INSTANCE.entityManager.getGuildEntity(g.getIdLong()).is24_7() == false) {
+		if(Melody.INSTANCE.entityManager.getGuildEntity(g).is24_7() == false) {
 			MusicController controller = Melody.INSTANCE.playerManager.getController(g.getIdLong());
 			int time = controller.getAfkTime();
 			if(time > 0) {

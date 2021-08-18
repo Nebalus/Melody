@@ -38,7 +38,7 @@ public class JoinCommand implements ServerCommand{
 				controller.setAfkTime(600);
 			}
 		}else 
-			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"), m);
+			Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.user-not-in-vc"), m);
 	}
 
 	@Override
