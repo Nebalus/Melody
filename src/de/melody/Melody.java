@@ -1,18 +1,15 @@
 package de.melody;
 
-import java.awt.Color;
 import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.security.CodeSource;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.Map.Entry;
 import java.util.Random;
+
 import javax.security.auth.login.LoginException;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -27,10 +24,11 @@ import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.music.PlayerManager;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emojis;
-import de.melody.utils.ID_Manager;
-import de.melody.utils.SpotifyAPI;
+import de.melody.utils.ConsoleLogger;
+import de.melody.utils.Emoji;
+import de.melody.utils.SpotifyUtils;
 import de.melody.utils.Utils;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
@@ -39,7 +37,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -58,52 +58,37 @@ public class Melody {
 	public EntityManager entityManager;
 	public LiteSQL database;
 	
-	public SpotifyAPI spotifyapi;
+	public SpotifyUtils spotifyutils;
 	
 	public int uptime; 
 	public long startuptime; 
 	public long playedmusictime;
 	
-	public static final String version = "Beta 0.5.4c";	
-	public static final String name = "Melody";
-	public static final Long expiretime = 1000l*60l*60l;
-	public static final Color HEXEmbeld = Color.decode("#32a87f");
-	public static final Color HEXEmbeldError = Color.RED;
-	public static final Color HEXEmbeldQueue = Color.decode("#212121"); 
-	
-	//ODAxODU2Njc4MDYzODk4NjQ0.YAmxOQ.98iS_fE3XICIgRx489YC14f6iAc
-	public final String Token = "ODAxODU2Njc4MDYzODk4NjQ0.YAmxOQ.98iS_fE3XICIgRx489YC14f6iAc";
-	//NzEyNzI4MDY0MDAxMzEwODM2.XsVxvA.BaMpWrE4aWoTG2467QfG7WesxH0
-	
 	public static void main(String[] args) {		
 		try {
 			new Melody();
-		} catch (LoginException | IllegalArgumentException e) {
+		} catch (LoginException | IllegalArgumentException | InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public Melody() throws LoginException, IllegalArgumentException {
-		
+	private Melody() throws LoginException, IllegalArgumentException, InterruptedException {
 		String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		for ( int i = 0; i < fonts.length; i++ ){
+		for (int i = 0; i < fonts.length; i++){
 			System.out.println(fonts[i]);
 		}
 		
-		Long startupMillis;
-		startupMillis = System.currentTimeMillis();
+		final Long startupMillis = System.currentTimeMillis();
 		INSTANCE = this;
 		database = new LiteSQL();
-		spotifyapi = new SpotifyAPI("3b931823a91148bfb33844f902fc18d3", "502262203e3f46a89585eee1a9a68c4d");
+		spotifyutils = new SpotifyUtils(Secure.SPOTIFY_CLIENTID, Secure.SPOTIFY_CLIENTSECRET);
 		messageformatter = new MessageFormatter();
-		
-		MusicUtil.loadDomains();
-		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(Token);
+	
+		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(Secure.TOKEN);
 		configureMemoryUsage(builder); 
 	
 		builder.addEventListeners(new CommandListener() , new MusicUtil(), new ReactListener());
 		builder.setActivity(Activity.playing("booting myself..."));
-		
 		
 		this.audioPlayerManager = new DefaultAudioPlayerManager();
 		this.playerManager = new PlayerManager();
@@ -111,24 +96,30 @@ public class Melody {
 		this.cmdMan = new CommandManager();
 		
 		this.shardMan = builder.build();
+		
+		for(JDA jda : this.shardMan.getShards()) {
+			jda.awaitReady();
+			
+			CommandListUpdateAction commands = jda.updateCommands();
+			commands.addCommands(new CommandData("prefix", "Gets the current prefix from "+Config.buildname));
+			commands.queue();
+		}
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
 		AudioSourceManagers.registerLocalSource(audioPlayerManager);
 		audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
 		
-		startupMillis = System.currentTimeMillis() - startupMillis;
 		uptime = 0;
 		startuptime = System.currentTimeMillis();
 		Utils.loadSystemData(this);
 		
 		runLoop();
 		//shutdown();
-		ConsoleLogger.info("Bot", "Melody online! ("+startupMillis+"ms)");
+		ConsoleLogger.info("Bot", "Melody online! ("+(System.currentTimeMillis() - startupMillis)+"ms)");
 	}
 	
 	
 	public void runLoop() {
-		this.loop = new Thread(() -> {
-			
+		this.loop = new Thread(() -> {	
 			Long time = System.currentTimeMillis() + 1000;
 			while(true) {		
 				if(System.currentTimeMillis() > time) {
@@ -138,7 +129,7 @@ public class Melody {
 						if(database.isConnected()) {
 							scanGuilds();	
 						}
-						spotifyapi.update();
+						spotifyutils.update();
 						onStatusUpdate();
 						uptime++;
 						onCaculatingPlayedMusik();
@@ -186,7 +177,7 @@ public class Melody {
 						}else {
 							ConsoleLogger.info("Auto-Saver", "There is nothing to export to the database");
 						}
-					}catch(ConcurrentModificationException e){
+					}catch(Exception e){
 						ConsoleLogger.warning("Thread", "The current action from the Auto-Saver has been aborted");
 						e.printStackTrace();
 					}
@@ -229,33 +220,27 @@ public class Melody {
 		}
 	}
 	
-	int nextStatusUpdate = 6;
+	int nextStatusUpdate = 10;
 	public void onStatusUpdate() {
 		if(nextStatusUpdate <= 0) {
 			Random rand = new Random();
-			int i = rand.nextInt(4);
+			int i = rand.nextInt(3);
 			shardMan.getShards().forEach(jda ->{
 				switch(i) {
 				case 0:
 					int musicguilds = 0;
 					for(Guild g : shardMan.getGuilds()) {
-						GuildVoiceState state;
-						if((state = g.getSelfMember().getVoiceState()) != null) {
-							if(state.getChannel() != null) {
-								musicguilds++;
-							}
+						if(g.getSelfMember().getVoiceState().getChannel() != null) {
+							musicguilds++;
 						}
 					}
 					jda.getPresence().setActivity(Activity.streaming("music on " +musicguilds+" server"+(musicguilds < 1 ? "s": "") +"!","https://twitch.tv/nebalus"));
 					break;
 				case 1:
-					jda.getPresence().setActivity(Activity.listening("m!help | "+version));
+					jda.getPresence().setActivity(Activity.listening("m!help | "+Config.buildversion));
 					break;
 				case 2:
 					jda.getPresence().setActivity(Activity.listening("@"+jda.getSelfUser().getName()));
-					break;
-				case 3:
-					jda.getPresence().setActivity(Activity.playing("a total of "+Utils.uptime(playedmusictime)+ " music for "+Utils.getUserInt()+" users!"));
 					break;
 				}
 			});
@@ -265,45 +250,34 @@ public class Melody {
 		}
 	}
 	
-	
-	
 	Integer guildScannerCooldown = 0;
 	ArrayList<Long> guildCache = new ArrayList<>();
 	public void scanGuilds() {
-		if(guildScannerCooldown <= 5) {
+		if(guildScannerCooldown <= 10) {
 			for(Guild g : shardMan.getGuilds()) {
-				if(!guildCache.contains(g.getIdLong())) {
-					if(!Utils.doesGuildExist(g.getIdLong())) {
-						boolean mentioned = false;
-						for(TextChannel tc : g.getTextChannels()) {
-							if(!mentioned) {
-								try {
-									tc.sendMessage("Hello everybody, i'm "+g.getJDA().getSelfUser().getAsMention()+" "+g.getJDA().getEmoteById(Emojis.HEY_GUYS).getAsMention()+"\n"
-											+ " \n"
-											+ " `-` My prefix on "+g.getName()+" is `m!`\n"
-											+ " `-` If you do not understand how I work then you can see all my commands by typing `m!help`\n"
-											+ " `-` When you dont like something in my config then you can easyly change it by typing `m!config help`\n"
-											+ " \n"
-											+ "**Otherwise have fun listening to the music from my service** "+ Emojis.MUSIC_NOTE+" \n"
-											+ "PS: Thanks a lot for your support, that you added me to your discord server! "+g.getJDA().getEmoteById(Emojis.ANIMATED_HEARTS).getAsMention()).queue();
-									mentioned = true;
-									try {
-										PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(guildid,channelid) VALUES(?,?)");
-										ps.setLong(1, g.getIdLong());
-										ps.setLong(2, tc.getIdLong());
-										ps.executeUpdate();
-										guildCache.add(g.getIdLong());
-									} catch (SQLException e) {
-										e.printStackTrace();
-									}
-								}catch(InsufficientPermissionException e) {}
-							}
+				if(!guildCache.contains(g.getIdLong()) && !Utils.doesGuildExist(g.getIdLong())) {		
+					boolean mentioned = false;
+					for(TextChannel tc : g.getTextChannels()) {
+						if(!mentioned) {
+							try {
+								tc.sendMessage("Hello everybody, i'm "+g.getJDA().getSelfUser().getAsMention()+" "+g.getJDA().getEmoteById(Emoji.HEY_GUYS).getAsMention()+"\n"
+										+ " \n"
+										+ " `-` My prefix on "+g.getName()+" is `m!`\n"
+										+ " `-` If you do not understand how I work then you can see all my commands by typing `m!help`\n"
+										+ " `-` When you dont like something in my config then you can easyly change it by typing `m!config help`\n"
+										+ " \n"
+										+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
+										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+g.getJDA().getEmoteById(Emoji.ANIMATED_HEARTS).getAsMention()).queue();
+								mentioned = true;
+								//loads the guild in the database
+								entityManager.getGuildEntity(g);
+								guildCache.add(tc.getIdLong());
+							}catch(InsufficientPermissionException e) {}
 						}
-	
-					}else {
-						guildCache.add(g.getIdLong());
 					}
-				}
+				}else {
+					guildCache.add(g.getIdLong());
+				}	
 			}
 			guildScannerCooldown = 0;
 		}
@@ -338,6 +312,7 @@ public class Melody {
 			}catch(IOException e) {}			
 		}).start();	
 	}
+	
 	public void configureMemoryUsage(DefaultShardManagerBuilder builder) {
 	    // Disable cache for member activities (streaming/games/spotify)
 	    builder.disableCache(CacheFlag.ACTIVITY);
@@ -347,39 +322,20 @@ public class Melody {
 
 	    // Disable member chunking on startup
 	    builder.setChunkingFilter(ChunkingFilter.NONE);
-
-	    // Disable presence updates and typing events
-	    builder.disableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGE_TYPING);
 	    
 	    // Enable presence updates 
 	    builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
 	    builder.setLargeThreshold(50);
 	}
 	
-	
 	public CommandManager getCmdMan() {
 		return cmdMan;
 	}
-	//gibt den Pfad dieser Jar-Datei zurück
-    public String getCurrentJarPath() {
-        String path = getJarPath();
-        if(path.endsWith(".jar")) {
-            return path.substring(0, path.lastIndexOf("/"));
-        }
-        return path;
-    }
-    
-    //gibt den absoluten Pfad inklusive Dateiname dieser Anwendung zurück
-    public String getJarPath() {
-        final CodeSource source = this.getClass().getProtectionDomain().getCodeSource();
-        if (source != null) {
-            return source.getLocation().getPath().replaceAll("%20", " ");
-        }
-        return null;
-    }
+
     public MessageFormatter getMessageFormatter() {
 		return messageformatter;
     }
+    
     public LiteSQL getDatabase() {
     	return database;
     }

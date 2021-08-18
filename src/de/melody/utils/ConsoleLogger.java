@@ -1,4 +1,4 @@
-package de.melody;
+package de.melody.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
