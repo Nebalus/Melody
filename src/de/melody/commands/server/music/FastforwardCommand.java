@@ -31,7 +31,7 @@ public class FastforwardCommand implements ServerCommand{
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			String[] args = message.getContentDisplay().split(" ");
-			GuildEntity ge = melody.entityManager.getGuildEntity(guild.getIdLong());
+			GuildEntity ge = melody.entityManager.getGuildEntity(guild);
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
 			if(controller.isPlayingTrack()) {
 				AudioPlayer player = controller.getPlayer();
@@ -51,12 +51,12 @@ public class FastforwardCommand implements ServerCommand{
 				}
 				EmbedBuilder builder = new EmbedBuilder();
 				builder.setColor(Config.HEXEmbeld);
-				builder.setDescription(Emoji.FAST_FORWARD+" "+mf.format(guild.getIdLong(), "command.fastforward.set",Utils.decodeStringFromTimeMillis(fastforwardmillis,false)));
+				builder.setDescription(Emoji.FAST_FORWARD+" "+mf.format(guild, "command.fastforward.set",Utils.decodeStringFromTimeMillis(fastforwardmillis,false)));
 				channel.sendMessage(builder.build()).queue();
 			}else 
-				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"),m);
+				Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.currently-playing-null"),m);
 		}else 
-			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"), m);
+			Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
 	}
 
 	@Override

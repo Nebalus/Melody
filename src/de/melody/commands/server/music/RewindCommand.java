@@ -49,12 +49,12 @@ public class RewindCommand implements ServerCommand{
 				}
 				EmbedBuilder builder = new EmbedBuilder();
 				builder.setColor(Config.HEXEmbeld);
-				builder.setDescription(Emoji.REWIND+" "+mf.format(guild.getIdLong(), "command.rewind.set",Utils.decodeStringFromTimeMillis(rewindmillis,false)));
+				builder.setDescription(Emoji.REWIND+" "+mf.format(guild, "command.rewind.set",Utils.decodeStringFromTimeMillis(rewindmillis,false)));
 				channel.sendMessage(builder.build()).queue();
 			}else 
-				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"),m);
+				Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.currently-playing-null"),m);
 		}else 
-			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"), m);
+			Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
 	}
 
 	@Override

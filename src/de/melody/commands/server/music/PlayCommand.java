@@ -38,7 +38,7 @@ public class PlayCommand implements ServerCommand{
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
-		GuildEntity guildentity = melody.entityManager.getGuildEntity(guild.getIdLong());
+		GuildEntity guildentity = melody.entityManager.getGuildEntity(guild);
 		guildentity.setChannelId(channel.getIdLong());
 		if(args.length > 1) {
 			GuildVoiceState state;
@@ -127,13 +127,13 @@ public class PlayCommand implements ServerCommand{
 					final String uri = url;
 					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false));
 				}else {
-					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.non-whitelisted-domain",MusicUtil.getDomain(url)));
+					MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.non-whitelisted-domain",MusicUtil.getDomain(url)));
 				}					
 			}else {
-				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));
+				MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.user-not-in-vc"));
 			}
 		}else {
-			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.info.command-usage",guildentity.getPrefix()+"play <url/search query>"));
+			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.info.command-usage",guildentity.getPrefix()+"play <url/search query>"));
 		}
 	}
 

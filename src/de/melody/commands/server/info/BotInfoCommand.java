@@ -32,7 +32,7 @@ public class BotInfoCommand implements ServerCommand{
 		String smallmemory = new String(r.totalMemory()+"");
 		String bigmemory = new String(r.totalMemory()/ 1048576+"");
 		
-		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(guild.getIdLong(), "feedback.info.botinfo",
+		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(guild, "feedback.info.botinfo",
 			"JDA",
 			Config.buildversion,
 			Config.builddate,

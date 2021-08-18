@@ -28,7 +28,7 @@ public class CommandListener extends ListenerAdapter{
 			List<User> MentionedUsers = event.getMessage().getMentionedUsers();
 			TextChannel channel = event.getTextChannel();
 			Guild guild = event.getGuild();
-			GuildEntity ge = melody.entityManager.getGuildEntity(guild.getIdLong());
+			GuildEntity ge = melody.entityManager.getGuildEntity(guild);
 			
 			if(!event.getAuthor().isBot()) {
 				if(message.startsWith(ge.getPrefix())) {
@@ -42,11 +42,11 @@ public class CommandListener extends ListenerAdapter{
 					}
 					if(args.length > 0){
 						if(!melody.getCmdMan().performServer(args[0], event.getMember(), channel, event.getMessage(), event.getGuild())) {
-							channel.sendMessage(event.getJDA().getEmoteById(Emoji.ANIMATED_THINKING_EMOJI).getAsMention()+" "+mf.format(guild.getIdLong(), "feedback.info.unknown-command",ge.getPrefix())).queue();
+							channel.sendMessage(event.getJDA().getEmoteById(Emoji.ANIMATED_THINKING_EMOJI).getAsMention()+" "+mf.format(guild, "feedback.info.unknown-command",ge.getPrefix())).queue();
 						}
 					}
 				}else if(MentionedUsers.contains(channel.getJDA().getSelfUser())) {
-					event.getChannel().sendMessage(mf.format(guild.getIdLong(), "feedback.info.prefix",ge.getPrefix())).queue();
+					event.getChannel().sendMessage(mf.format(guild, "feedback.info.prefix",ge.getPrefix())).queue();
 				}
 			}
 		}else if(event.isFromType(ChannelType.PRIVATE)) {
@@ -60,7 +60,7 @@ public class CommandListener extends ListenerAdapter{
 			Guild guild = event.getGuild();
 	    	switch (event.getName()){
 	    	case "prefix":
-	        		event.reply(mf.format(guild.getIdLong(), "feedback.info.prefix",melody.entityManager.getGuildEntity(guild.getIdLong()).getPrefix())).queue();
+	        		event.reply(mf.format(guild, "feedback.info.prefix",melody.entityManager.getGuildEntity(guild).getPrefix())).queue();
 	        	break;        	
 	        default:
 	            event.reply("I can't handle that command right now :(").setEphemeral(true).queue();

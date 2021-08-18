@@ -23,7 +23,7 @@ public class LoopCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		melody.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
+		melody.entityManager.getGuildEntity(guild).setChannelId(channel.getIdLong());
 
 		GuildVoiceState state;
 		if((state = m.getVoiceState()) != null && state.getChannel() != null) {
@@ -32,15 +32,15 @@ public class LoopCommand implements ServerCommand{
 			if(player.getPlayingTrack() != null) {
 				if(controller.isLoop()) {
 					controller.setLoop(false);
-					channel.sendMessage(Emoji.SINGLE_LOOP+mf.format(guild.getIdLong(), "music.info.loop-disabled")).queue();
+					channel.sendMessage(Emoji.SINGLE_LOOP+mf.format(guild, "music.info.loop-disabled")).queue();
 				}else {
 					controller.setLoop(true);
-					channel.sendMessage(Emoji.SINGLE_LOOP+mf.format(guild.getIdLong(), "music.info.loop-enabled")).queue();
+					channel.sendMessage(Emoji.SINGLE_LOOP+mf.format(guild, "music.info.loop-enabled")).queue();
 				}	
 			}else 
-				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"));				
+				MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.currently-playing-null"));				
 		}else 
-			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"));
+			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.bot-not-in-vc"));
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class StopCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		melody.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
+		melody.entityManager.getGuildEntity(guild).setChannelId(channel.getIdLong());
 		MusicController controller = melody.playerManager.getController(guild.getIdLong());
 		AudioPlayer player = controller.getPlayer();
 		GuildVoiceState state;
@@ -36,9 +36,9 @@ public class StopCommand implements ServerCommand{
 				melody.playerManager.getController(guild.getIdLong()).setAfkTime(600);
 				message.addReaction(Emoji.OK_HAND).queue();
 			}else 
-				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"));
+				MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.currently-playing-null"));
 		}else 
-			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));
+			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.user-not-in-vc"));
 	}
 
 	@Override

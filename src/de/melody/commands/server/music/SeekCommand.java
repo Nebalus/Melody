@@ -40,9 +40,9 @@ public class SeekCommand implements ServerCommand{
 					track.setPosition(Utils.decodeTimeMillisFromString(subTime));
 				}
 			}else 
-				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"),m);
+				Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.currently-playing-null"),m);
 		}else 
-			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"), m);
+			Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
 	}
 
 	@Override

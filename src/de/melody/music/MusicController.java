@@ -23,7 +23,7 @@ public class MusicController {
 		
 		this.guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 		this.player.addListener(new TrackScheduler());
-		this.player.setVolume(Melody.INSTANCE.entityManager.getGuildEntity(guild.getIdLong()).getVolume());
+		this.player.setVolume(Melody.INSTANCE.entityManager.getGuildEntity(guild).getVolume());
 		this.isloop = false;
 		this.isloopqueue = false;
 		

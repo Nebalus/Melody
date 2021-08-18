@@ -67,6 +67,7 @@ public class Queue {
 		}
 		return null;
 	}
+	
 	public int getQueueSize() {
 		return this.queuelist.size();
 	}

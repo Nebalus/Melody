@@ -26,7 +26,7 @@ public class BackCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		melody.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
+		melody.entityManager.getGuildEntity(guild).setChannelId(channel.getIdLong());
 		
 		GuildVoiceState state;
 		EmbedBuilder builder = new EmbedBuilder();
@@ -38,7 +38,7 @@ public class BackCommand implements ServerCommand{
 			if(player.getPlayingTrack() != null) {
 				player.stopTrack();
 				builder.setDescription(Emoji.PREVIOUS_TITLE+" test");
-				MusicUtil.sendEmbled(guild.getIdLong(), builder);
+				MusicUtil.sendEmbled(guild, builder);
 				try {
 					int i = Integer.valueOf(args[1]);
 					queue.back(i);
@@ -46,9 +46,9 @@ public class BackCommand implements ServerCommand{
 					queue.back(1);
 				}
 			}else 
-				Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.currently-playing-null"),m);
+				Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.currently-playing-null"),m);
 		}else
-			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"), m);
+			Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
 	}
 
 	@Override

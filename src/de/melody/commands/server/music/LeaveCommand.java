@@ -26,7 +26,7 @@ public class LeaveCommand implements ServerCommand{
 			MusicUtil.MusicKiller(guild);
 			message.addReaction(Emoji.OK_HAND).queue();
 		}else 
-			Utils.sendErrorEmbled(channel, mf.format(guild.getIdLong(), "feedback.music.bot-not-in-vc"), m);
+			Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
 	}
 
 	@Override

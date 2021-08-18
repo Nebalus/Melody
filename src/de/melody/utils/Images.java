@@ -13,13 +13,14 @@ import javax.imageio.ImageIO;
 
 import de.melody.Melody;
 import de.melody.speechpackets.MessageFormatter;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 
 public class Images {
 
 	private static MessageFormatter mf = Melody.INSTANCE.getMessageFormatter();
 	
-	public static File tracktopng(String trackname,long trackplaytime, long tracklength, String trackauthor, Long guildid, Member userqueued) {
+	public static File tracktopng(String trackname,long trackplaytime, long tracklength, String trackauthor, Guild guild, Member userqueued) {
 		try {
 			BufferedImage background = ImageIO.read((Images.class.getResource("/trackinfo.png")));
 			
@@ -63,9 +64,9 @@ public class Images {
 					}
 			    }    
 			}else {	
-				currenttrackname = mf.format(guildid,"music.track.playing-nothing");
+				currenttrackname = mf.format(guild,"music.track.playing-nothing");
 				}
-			graph.drawString(mf.format(guildid, "music.track.currently-playing")+currenttrackname, 69, 90);
+			graph.drawString(mf.format(guild, "music.track.currently-playing")+currenttrackname, 69, 90);
 			
 			//Author text
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 23));
@@ -73,9 +74,9 @@ public class Images {
 			if(trackauthor != null) {
 				currenttrackauthor = trackauthor;
 			}else {
-				currenttrackauthor = mf.format(guildid, "music.track.author-null");
+				currenttrackauthor = mf.format(guild, "music.track.author-null");
 			}
-			graph.drawString(mf.format(guildid, "music.track.author",currenttrackauthor), 119, 160);
+			graph.drawString(mf.format(guild, "music.track.author",currenttrackauthor), 119, 160);
 		
 			//Playing text
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 20));	
@@ -96,7 +97,7 @@ public class Images {
 			
 			//Requested by text
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 23));
-			graph.drawString(mf.format(guildid, "music.user.who-requested"), 25,height-95);
+			graph.drawString(mf.format(guild, "music.user.who-requested"), 25,height-95);
 			
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 36));
 			

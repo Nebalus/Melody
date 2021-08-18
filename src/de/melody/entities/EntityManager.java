@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.melody.Melody;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
 public class EntityManager {
@@ -50,12 +51,13 @@ public class EntityManager {
 		}
 	}
 	
-	public GuildEntity getGuildEntity(Long guildid) {
+	public GuildEntity getGuildEntity(Guild guild) {
 		GuildEntity ge = null;
+		Long guildid = guild.getIdLong();
 		if(this.guildentity.containsKey(guildid)) {
 			ge = this.guildentity.get(guildid);
 		}else {
-			ge = new GuildEntity(guildid);
+			ge = new GuildEntity(guild);
 			this.guildentity.put(guildid, ge);
 		}
 		return ge;

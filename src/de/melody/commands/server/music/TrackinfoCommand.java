@@ -19,13 +19,13 @@ public class TrackinfoCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		melody.entityManager.getGuildEntity(guild.getIdLong()).setChannelId(channel.getIdLong());
+		melody.entityManager.getGuildEntity(guild).setChannelId(channel.getIdLong());
 		try {
 			MusicController controller = Melody.INSTANCE.playerManager.getController(guild.getIdLong());
 			AudioTrack audiotrack = controller.getPlayer().getPlayingTrack();
-			channel.sendFile(Images.tracktopng(audiotrack.getInfo().title,audiotrack.getPosition(),audiotrack.getDuration(),audiotrack.getInfo().author,guild.getIdLong(),controller.getQueue().currentlyPlaying().getWhoQueued()), "trackinfo.png").queue();	
+			channel.sendFile(Images.tracktopng(audiotrack.getInfo().title,audiotrack.getPosition(),audiotrack.getDuration(),audiotrack.getInfo().author,guild,controller.getQueue().currentlyPlaying().getWhoQueued()), "trackinfo.png").queue();	
 		}catch (NullPointerException e) {
-			channel.sendFile(Images.tracktopng(null,0,0,null,guild.getIdLong(),null), "trackinfo.png").queue();	
+			channel.sendFile(Images.tracktopng(null,0,0,null,guild,null), "trackinfo.png").queue();	
 		}
 	}
 
