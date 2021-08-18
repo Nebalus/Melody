@@ -1,7 +1,5 @@
 package de.melody.commands.server.music;
 
-import java.util.List;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
 import de.melody.Melody;
@@ -27,7 +25,7 @@ public class PlaylistCommand implements ServerCommand{
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
-		GuildEntity guildentity = melody.entityManager.getGuildEntity(guild);
+		GuildEntity guildentity = melody.entityManager.getGuildEntity(guild.getIdLong());
 		guildentity.setChannelId(channel.getIdLong());
 		if(args.length > 1) {
 			GuildVoiceState state;
@@ -42,17 +40,12 @@ public class PlaylistCommand implements ServerCommand{
 				if(MusicUtil.isUrlVerified(url)) {
 					manager.openAudioConnection(vc);
 					final String uri = url;
-					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, true));
+					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, true, false, false));
 				}else 
-					MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.non-whitelisted-domain",MusicUtil.getDomain(url)));				
+					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomain(url)));				
 			}else
-				MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.user-not-in-vc"));
+				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));
 		}else 
-			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.info.command-usage",guildentity.getPrefix()+"playlist <url>"));
-	}
-
-	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("playlist","pl");
+			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.info.command-usage",guildentity.getPrefix()+"playlist <url>"));
 	}
 }

@@ -4,10 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.melody.Config;
+import de.melody.ConsoleLogger;
 import de.melody.LiteSQL;
 import de.melody.Melody;
-import de.melody.utils.ConsoleLogger;
 import net.dv8tion.jda.api.entities.User;
 
 public class UserEntity {
@@ -16,11 +15,11 @@ public class UserEntity {
 	private Long userid;
 	private Long heardtime = 0l;
 	
-	private Long expiretime = System.currentTimeMillis() + Config.entityexpiretime;
+	private Long expiretime = System.currentTimeMillis() + Melody.expiretime;
 	private Boolean needtoexport = false;
 	
-	private Melody melody = Melody.INSTANCE;
-	private LiteSQL database = melody.getDatabase();
+	private Melody pixelbeat = Melody.INSTANCE;
+	private LiteSQL database = pixelbeat.getDatabase();
 	
 	public UserEntity(User user) {
 		this.userid = user.getIdLong();
@@ -31,9 +30,7 @@ public class UserEntity {
 					favoritemusicid = rs.getInt("favoritemusic");
 					heardtime = rs.getLong("heardtime");
 				}else {
-					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO userdata(userid) VALUES(?)");
-					ps.setLong(1, userid);
-					ps.executeUpdate();
+					
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
@@ -66,7 +63,7 @@ public class UserEntity {
 	
 	private void update() {
 		needtoexport = true;
-		this.expiretime = System.currentTimeMillis() + Config.entityexpiretime;
+		this.expiretime = System.currentTimeMillis() + Melody.expiretime;
 	}
 	
 	public Long getExpireTime() {
@@ -78,7 +75,7 @@ public class UserEntity {
 	}
 	
 	private void renewExpireTime() {
-		this.expiretime = System.currentTimeMillis() + Config.entityexpiretime;
+		this.expiretime = System.currentTimeMillis() + Melody.expiretime;
 	}
 	
 	public boolean exportData() {

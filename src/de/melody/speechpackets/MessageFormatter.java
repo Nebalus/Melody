@@ -4,14 +4,13 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.sql.ResultSet;
 import java.util.HashMap;
 
 import org.json.JSONObject;
 
-import de.melody.Config;
+import de.melody.Json;
 import de.melody.Melody;
-import de.melody.utils.Utils;
-import net.dv8tion.jda.api.entities.Guild;
 
 public class MessageFormatter {
 	
@@ -24,7 +23,7 @@ public class MessageFormatter {
 				File file = new File(language.getFileName());
 				Files.copy(link, file.getAbsoluteFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
 				
-				getJSONMessage.put(language, Utils.getJsonObject(file));
+				getJSONMessage.put(language, Json.getJsonObject(file));
 					
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -32,26 +31,11 @@ public class MessageFormatter {
         }
 	}
 	
-	public String format(Guild guild, String key, Object... args) {
-		Languages language = melody.entityManager.getGuildEntity(guild).getLanguage();
-		String message = "JSON-Error {"+key+"} - "+language.code;
+	public String format(Long guildid, String key, Object... args) {
+		String message = "JSON-Error {"+key+"}";
 	    try {
-			JSONObject json = getJSONMessage.get(language);
+			JSONObject json = getJSONMessage.get(getLanguageFromGuild(guildid));
 			message = json.getString(key);
-			if(language.equals(Languages.GERMAN)) {
-				message = message.replace("ae", "ä");
-				message = message.replace("oe", "ö");
-				message = message.replace("ue", "ü");
-				message = message.replace("AE", "Ä");
-				message = message.replace("OE", "Ö");
-				message = message.replace("UE", "Ü");
-				
-				message = message.replace("[ä]", "ae");
-				message = message.replace("[ö]", "oe");
-				message = message.replace("[ü]", "ue");
-			}
-			message = message.replace("[botname]", Config.buildname);
-			
 			for(int i = 0; i < args.length; ++i) {
 				message = message.replace("{" + i + "}", String.valueOf(args[i]));
 		    }
@@ -59,5 +43,14 @@ public class MessageFormatter {
 			e.printStackTrace();
 		}
 	    return message;
+	}
+	private Languages getLanguageFromGuild(Long guildid) {
+		try {
+			ResultSet set = melody.getDatabase().onQuery("SELECT language FROM guilds WHERE guildid = "+guildid);
+			if(set.next()) {
+				return Languages.getLanguage(set.getString("language"));
+			}
+		} catch (Exception e) {}
+		return Languages.ENGLISH;
 	}
 }

@@ -1,45 +1,48 @@
 package de.melody.music;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import de.melody.Config;
 import de.melody.Melody;
-import de.melody.entities.GuildEntity;
 import de.melody.entities.reacts.TrackReaction;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emoji;
+import de.melody.utils.Emojis;
+import de.melody.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public class TrackScheduler extends AudioEventAdapter{
 	
 	private Melody melody = Melody.INSTANCE;
-	private PlayerManager playerManager = melody.playerManager;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
 	public void onPlayerPause(AudioPlayer player) {
-		Guild guild = melody.shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
+		long guildid = melody.playerManager.getGuildByPlayerHash(player.hashCode());
 		
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setDescription(Emoji.PAUSE+" "+mf.format(guild, "music.track.pause"));
-		MusicUtil.sendEmbled(guild, builder);		
+		builder.setDescription(Emojis.PAUSE+" "+mf.format(guildid, "music.track.pause"));
+		MusicUtil.sendEmbled(guildid, builder);		
 	}
 	
 	@Override
 	public void onPlayerResume(AudioPlayer player) {
-		Guild guild = melody.shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
+		long guildid = melody.playerManager.getGuildByPlayerHash(player.hashCode());
 		
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setDescription(Emoji.RESUME+" "+mf.format(guild, "music.track.resume"));
-		MusicUtil.sendEmbled(guild, builder);		
+		builder.setDescription(Emojis.RESUME+" "+mf.format(guildid, "music.track.resume"));
+		MusicUtil.sendEmbled(guildid, builder);		
 	}
 	
 	
@@ -47,80 +50,102 @@ public class TrackScheduler extends AudioEventAdapter{
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
-		Guild guild = melody.shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
-		MusicController controller = playerManager.getController(guild.getIdLong());
+		long guildid = melody.playerManager.getGuildByPlayerHash(player.hashCode());
+		Guild guild = melody.shardMan.getGuildById(guildid);
+		MusicController controller = melody.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
-		GuildEntity ge = melody.entityManager.getGuildEntity(guild);
-		if(controller.isLoop() == false && controller.isLoopQueue() == false && ge.canAnnounceSongs()) {
+		if(queue.isLoop() == false && queue.isLoopQueue() == false) {
 			EmbedBuilder builder = new EmbedBuilder();
 			AudioTrackInfo info = track.getInfo();
+			builder.setDescription(guild.getJDA().getEmoteById(Emojis.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guildid, "music.track.currently-playing")+ info.title);
 			String url = info.uri;
-			builder.setDescription("["+guild.getJDA().getEmoteById(Emoji.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guild, "music.track.now-playing")+"]("+Config.homepagelink+")");
-			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", true);
-			builder.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(info,0l),true);
-			builder.addBlankField(true);
-			builder.setFooter(mf.format(guild, "music.user.who-requested")+ queue.currentlyPlaying().getWhoQueued().getUser().getAsTag());
-			builder.setColor(Config.HEXEmbeld);
+			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", false);
+			builder.addField(mf.format(guildid, "music.track.length"), MusicUtil.getTime(info,0l),true);
+			builder.setFooter(mf.format(guildid, "music.user.who-requested")+ queue.currentplaying.getWhoQueued().getUser().getAsTag());
+			builder.setColor(Melody.HEXEmbeld);
 			if(url.startsWith("https://www.youtube.com/watch?v=")) {
 				String videoID = url.replace("https://www.youtube.com/watch?v=", "");
 				//builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
 				builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
 			}
-			MusicUtil.getChannel(guild).sendMessage(builder.build()).queue((trackmessage) ->{
+			MusicUtil.getChannel(guildid).sendMessage(builder.build()).queue((trackmessage) ->{
 				TrackReaction te = new TrackReaction(info);
 				melody.entityManager.getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(trackmessage.getIdLong(), te);
-				trackmessage.addReaction(Emoji.SPARKLING_HEART).queue();
+				trackmessage.addReaction(Emojis.SPARKLING_HEART).queue();
 			});
+	
+			VoiceChannel vc;
+			if((vc = controller.getGuild().getSelfMember().getVoiceState().getChannel()) != null) {
+				for(Member vcm : vc.getMembers()) {
+					if(!vcm.getUser().isBot()) {
+						if(!Utils.doesUserExist(vcm.getIdLong())) {
+							try {
+								PreparedStatement ps = melody.getDatabase().getConnection().prepareStatement("INSERT INTO userdata(userid) VALUES(?)");
+								ps.setLong(1, vcm.getIdLong());
+								ps.executeUpdate();
+							} catch (SQLException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {	
-		long guildid = playerManager.getGuildByPlayerHash(player.hashCode());
+		long guildid = melody.playerManager.getGuildByPlayerHash(player.hashCode());
 		Guild guild = melody.shardMan.getGuildById(guildid);
 		MusicController controller = melody.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
 		if(endReason.mayStartNext) {	
 			GuildVoiceState state;
-			VoiceChannel vc;
-			if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
-				if(!controller.isLoop()) {
-					if(!controller.isLoopQueue()) {
-						if(queue.next(1) != 1) { 
-							if(vc.getMembers().size() > 1) {
-								controller.setAfkTime(600);
+			if((state = guild.getSelfMember().getVoiceState()) != null) {
+				VoiceChannel vc;
+				if((vc = state.getChannel()) != null) {
+					if(!queue.isLoop()) {
+						if(!queue.isLoopQueue()) {
+							if(!queue.next()) { 
+								if(vc.getMembers().size() > 1) {
+									controller.setAfkTime(600);
+								}
+							}else {
+								return;
 							}
 						}else {
+							AudioPlayerManager apm = melody.audioPlayerManager;
+							final String uri = track.getInfo().uri;
+							apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false, false, true));
 							return;
 						}
 					}else {
+						AudioPlayerManager apm = melody.audioPlayerManager;
 						final String uri = track.getInfo().uri;
-						melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
+						apm.loadItem(uri, new AudioLoadResult(controller, uri, null, false, true, false));
 						return;
 					}
-				}else {
-					final String uri = track.getInfo().uri;
-					melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
-					return;
 				}
 			}
 		}
-		if(controller.isLoop()) {
-			controller.setLoop(false);	
+		if(queue.isLoop()) {
+			queue.setLoop(false);	
 		}
 		player.stopTrack();
 	}
 	
 	  @Override
-	  public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {}
+	  public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
+
+	  }
 	  
 	  @Override
 	  public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-		 Guild guild = melody.shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
+		 long guildid = melody.playerManager.getGuildByPlayerHash(player.hashCode());
 		 EmbedBuilder builder = new EmbedBuilder();
 		 builder.setDescription("An error occured.");
 		 builder.addField("Errormessage",exception.getMessage(), false);
 		 builder.addField("Errorcode",exception.getCause()+"", false);
-		 MusicUtil.sendEmbled(guild, builder);
+		 MusicUtil.sendEmbled(guildid, builder);
 	 }
 }

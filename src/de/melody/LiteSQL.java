@@ -8,8 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import de.melody.utils.ConsoleLogger;
-
 
 
 public class LiteSQL {
@@ -29,7 +27,7 @@ public class LiteSQL {
 			
 			ConsoleLogger.info("SQLDatabase", "Verbindung zur Datenbank hergestellt");
 			stmt = conn.createStatement();
-			onUpdate("CREATE TABLE IF NOT EXISTs guilds(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, channelid INTEGER, volume INTEGER, djrole INTEGER, prefix VARCHAR, voteskip BOOLEAN, staymode BOOLEAN, language VARCHAR, announcesongs BOOLEAN, preventduplicates BOOLEAN, maxusersongs INTEGER, maxqueuelength INTEGER, revocablecommands BOOLEAN)");
+			onUpdate("CREATE TABLE IF NOT EXISTs guilds(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, channelid INTEGER, volume INTEGER, pitch INTEGER, speed INTEGER, djrole INTEGER, prefix VARCHAR, voteskip BOOLEAN, staymode BOOLEAN, language VARCHAR, announcesongs BOOLEAN, preventduplicates BOOLEAN, maxusersongs INTEGER, maxqueuelength INTEGER)");
 			onUpdate("CREATE TABLE IF NOT EXISTs userdata(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, userid INTEGER, favoritemusic INTEGER, heardtime INTEGER)");	
 			/*
 			 * token = XXXXXXXXXX / = Example -> dnQW1cgh2s

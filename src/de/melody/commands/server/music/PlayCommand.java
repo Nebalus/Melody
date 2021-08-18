@@ -38,7 +38,7 @@ public class PlayCommand implements ServerCommand{
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
-		GuildEntity guildentity = melody.entityManager.getGuildEntity(guild);
+		GuildEntity guildentity = melody.entityManager.getGuildEntity(guild.getIdLong());
 		guildentity.setChannelId(channel.getIdLong());
 		if(args.length > 1) {
 			GuildVoiceState state;
@@ -57,7 +57,7 @@ public class PlayCommand implements ServerCommand{
 				}
 				if(url.startsWith("https://open.spotify.com/")) {
 					SpotifyApi spotify = new SpotifyApi.Builder()
-							.setAccessToken(Melody.INSTANCE.spotifyutils.getToken())
+							.setAccessToken(Melody.INSTANCE.spotifyapi.getToken())
 							.build();
 					if(url.toLowerCase().startsWith("https://open.spotify.com/track/")){
 						String[] urlid = url.split("/");
@@ -71,7 +71,7 @@ public class PlayCommand implements ServerCommand{
 							
 							final String uri = "ytsearch: " + track.getName() + " "+track.getArtists()[0].getName();
 							
-							apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false));
+							apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false, false, false));
 							} catch (CompletionException e) {
 						      System.out.println("Error: " + e.getCause().getMessage());
 							} catch (CancellationException e) {
@@ -115,7 +115,7 @@ public class PlayCommand implements ServerCommand{
 								};
 								
 								final String uri = "ytsearch: " + playlist.getName();
-								apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false));
+								apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false, false, false));
 								} catch (CompletionException e) {
 							      System.out.println("Error: " + e.getCause().getMessage());
 								} catch (CancellationException e) {
@@ -125,20 +125,15 @@ public class PlayCommand implements ServerCommand{
 				}else if(MusicUtil.isUrlVerified(url) || isytsearch == true) {
 					manager.openAudioConnection(vc);
 					final String uri = url;
-					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false));
+					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false, false, false));
 				}else {
-					MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.non-whitelisted-domain",MusicUtil.getDomain(url)));
+					MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.error.non-whitelisted-domain",MusicUtil.getDomain(url)));
 				}					
 			}else {
-				MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.user-not-in-vc"));
+				MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.music.user-not-in-vc"));
 			}
 		}else {
-			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.info.command-usage",guildentity.getPrefix()+"play <url/search query>"));
+			MusicUtil.sendEmbledError(guild.getIdLong(), mf.format(guild.getIdLong(), "feedback.info.command-usage",guildentity.getPrefix()+"play <url/search query>"));
 		}
-	}
-
-	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("play","p");
 	}
 }

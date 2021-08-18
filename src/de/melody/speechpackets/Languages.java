@@ -1,11 +1,9 @@
 package de.melody.speechpackets;
 
-import de.melody.utils.Emoji;
-
 public enum Languages {
 
-	ENGLISH("English","English.json","US",Emoji.UNITED_STATES_FLAG),
-	GERMAN("Deutsch","German.json","DE",Emoji.GERMANY_FLAG);
+	ENGLISH("English","English.json","US","🇺🇸"),
+	GERMAN("Deutsch","German.json","DE","🇩🇪");
 	
 	String name;
 	String file;
@@ -22,15 +20,11 @@ public enum Languages {
 	public String getFileName() {
 		return file;
 	}
+	
 	public String getCode() {
 		return code;
 	}
-	public String getIcon() {
-		return icon;
-	}
-	public String getName() {
-		return name;
-	}
+	
 	
 	public static Languages getLanguage(String code) {
 		 for (Languages language : values()) {

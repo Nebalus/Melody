@@ -13,14 +13,13 @@ import javax.imageio.ImageIO;
 
 import de.melody.Melody;
 import de.melody.speechpackets.MessageFormatter;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 
 public class Images {
 
 	private static MessageFormatter mf = Melody.INSTANCE.getMessageFormatter();
 	
-	public static File tracktopng(String trackname,long trackplaytime, long tracklength, String trackauthor, Guild guild, Member userqueued) {
+	public static File tracktopng(String trackname,long trackplaytime, long tracklength, String trackauthor, Long guildid, Member userqueued) {
 		try {
 			BufferedImage background = ImageIO.read((Images.class.getResource("/trackinfo.png")));
 			
@@ -51,7 +50,7 @@ public class Images {
 			graph.setColor(Color.WHITE);
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 30));
 			
-			final int maxcharacter = 42;
+			final int maxcharacter = 38;
 			String currenttrackname = "";
 			if(trackname != null) {
 				int currentcharacters = 0;
@@ -64,9 +63,9 @@ public class Images {
 					}
 			    }    
 			}else {	
-				currenttrackname = mf.format(guild,"music.track.playing-nothing");
+				currenttrackname = mf.format(guildid,"music.track.playing-nothing");
 				}
-			graph.drawString(mf.format(guild, "music.track.currently-playing")+currenttrackname, 69, 90);
+			graph.drawString(mf.format(guildid, "music.track.currently-playing")+currenttrackname, 69, 90);
 			
 			//Author text
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 23));
@@ -74,9 +73,9 @@ public class Images {
 			if(trackauthor != null) {
 				currenttrackauthor = trackauthor;
 			}else {
-				currenttrackauthor = mf.format(guild, "music.track.author-null");
+				currenttrackauthor = mf.format(guildid, "music.track.author-null");
 			}
-			graph.drawString(mf.format(guild, "music.track.author",currenttrackauthor), 119, 160);
+			graph.drawString(mf.format(guildid, "music.track.author",currenttrackauthor), 119, 160);
 		
 			//Playing text
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 20));	
@@ -91,13 +90,13 @@ public class Images {
 			
 			String currenttracklength = Utils.getTimeFormat(tracklength);
 			if(currenttracklength == null) {
-				currenttracklength = "INFINITE "+Emoji.INFINITY;
+				currenttracklength = "INFINITE "+Emojis.INFINITY;
 			}
 			graph.drawString(currenttracklength, 960,250);
 			
 			//Requested by text
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 23));
-			graph.drawString(mf.format(guild, "music.user.who-requested"), 25,height-95);
+			graph.drawString(mf.format(guildid, "music.user.who-requested"), 25,height-95);
 			
 			graph.setFont(new Font("SansSerif",Font.PLAIN, 36));
 			
@@ -118,12 +117,12 @@ public class Images {
 			}		
 			graph.dispose();	
 			
-			File images = new File(Utils.getCurrentJarPath()+"/images/");
+			File images = new File(Melody.INSTANCE.getCurrentJarPath()+"/images/");
 			if(!images.exists()) {
 				images.mkdirs();
 			}
 			
-			File newfile = new File(Utils.getCurrentJarPath()+"/images/"+ID_Manager.generateID()+".png");
+			File newfile = new File(Melody.INSTANCE.getCurrentJarPath()+"/images/"+ID_Manager.generateID()+".png");
 			newfile.createNewFile();
 			ImageIO.write(buffimg, "png", newfile);
 			return newfile;

@@ -9,14 +9,14 @@ import java.util.Base64;
 
 import org.json.JSONObject;
 
-public class SpotifyUtils {
+public class SpotifyAPI {
 	
 	private String clientId;
 	private String clientSecret;
 	private JSONObject container;
 	private Long expiretime = 0l;
 	
-	public SpotifyUtils(String clientId, String clientSecret) {
+	public SpotifyAPI(String clientId, String clientSecret) {
 		this.clientId = clientId;
 		this.clientSecret = clientSecret;
 		update();
@@ -27,8 +27,6 @@ public class SpotifyUtils {
 		update();
 		return token;
 	}
-	
-	
 	
 	public void update() {
 		if(expiretime < System.currentTimeMillis()) {
@@ -63,4 +61,31 @@ public class SpotifyUtils {
 			}
 		}
 	}
+	/*
+	public SpotifyAPI(String clientId, String clientSecret) {
+		final String test = Base64.getEncoder().encodeToString((clientId+":"+clientSecret).getBytes());
+		try {
+			URL url = new URL("https://accounts.spotify.com/api/token");
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+				conn.setRequestMethod("POST");
+			    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			    conn.setRequestProperty("Authorization", "Basic "+ test);
+			    conn.setRequestProperty("Accept", "application/json");
+			    Map<String, String> requestMap = new HashMap<String, String>();
+		        requestMap.put("grant_type", "client_credentials");
+		        conn.
+			try(BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+				StringBuilder response = new StringBuilder();
+				String responseLine = null;
+				while ((responseLine = br.readLine()) != null) {
+			    	response.append(responseLine.trim());
+			    	}
+				System.out.println(response.toString());
+			}
+		}catch(Exception e) {
+			System.out.println(test);
+			e.printStackTrace();
+		}
+	}
+	*/
 }

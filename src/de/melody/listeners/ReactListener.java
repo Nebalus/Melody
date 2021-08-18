@@ -8,7 +8,7 @@ import de.melody.entities.reacts.QueueReaction;
 import de.melody.entities.reacts.ReactionManager;
 import de.melody.entities.reacts.ReactionTypes;
 import de.melody.entities.reacts.TrackReaction;
-import de.melody.utils.Emoji;
+import de.melody.utils.Emojis;
 import de.melody.utils.ID_Manager;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
@@ -24,7 +24,7 @@ public class ReactListener extends ListenerAdapter{
 	public void onMessageReactionAdd(MessageReactionAddEvent event) {
 		if(event.isFromType(ChannelType.TEXT)) {
 			User user = event.getUser();
-			if(!user.isBot() && event.getReactionEmote().isEmoji()) {
+			if(!user.isBot()) {
 				Guild guild = event.getGuild();
 				Long messageid = event.getMessageIdLong();
 				String emoji = event.getReactionEmote().getEmoji();
@@ -34,7 +34,7 @@ public class ReactListener extends ListenerAdapter{
 				
 				TrackReaction tr = (TrackReaction) reactionManager.getReacton(messageid, ReactionTypes.TRACKREACTION);
 				if(tr != null) {
-					if(emoji.equals(Emoji.SPARKLING_HEART)) {
+					if(emoji.equals(Emojis.SPARKLING_HEART)) {
 						if(Melody.INSTANCE.entityManager.getUserEntity(user).getFavoriteMusicId() > 0) {
 				
 							
@@ -53,27 +53,27 @@ public class ReactListener extends ListenerAdapter{
 				QueueReaction qr;
 				if((qr = (QueueReaction) reactionManager.getReacton(messageid, ReactionTypes.QUEUEREACTION)) != null) {
 					switch (emoji) {
-					case Emoji.BACK:
+					case Emojis.BACK:
 						channel.removeReactionById(messageid, emoji, user).queue();
 						if(qr.removePage()) {
 							channel.editMessageById(messageid, QueueCommand.loadQueueEmbed(guild,qr).build()).queue();		
 						}
 						break;
 						
-					case Emoji.RESUME:
+					case Emojis.RESUME:
 						channel.removeReactionById(messageid, emoji, user).queue();
 						if(qr.addPage()) {
 							channel.editMessageById(messageid, QueueCommand.loadQueueEmbed(guild,qr).build()).queue();	
 						}
 						break;
 					
-					case Emoji.REFRESH:
+					case Emojis.REFRESH:
 						channel.removeReactionById(messageid, emoji, user).queue();
 						channel.editMessageById(messageid, QueueCommand.loadQueueEmbed(guild,qr).build()).queue();
 						break;
 					}
 				}
-			}
+			 }
 		}
 	}	
 }
