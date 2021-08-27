@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.util.List;
 
 public class Config {
-	public static final String buildversion = "Beta 0.5.7a";	
-	public static final String builddate = "9/8/2021";	
+	public static final String buildversion = "Beta 0.5.8";	
+	public static final String builddate = "18/8/2021";	
 	public static final String buildname = "Melody";
 	
 	public static final Long entityexpiretime = 1000l*60l*60l;

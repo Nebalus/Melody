@@ -46,7 +46,6 @@ public class MusicUtil extends ListenerAdapter{
 			channel.sendMessage(builder.build()).queue();
 		}			
 	}
-	
 	@SuppressWarnings("deprecation")
 	public static void sendEmbledError(Guild guild, String errormessage) {
 		TextChannel channel;
@@ -169,7 +168,7 @@ public class MusicUtil extends ListenerAdapter{
 		String uri = getDomain(url);
 		if(uri != null) {
 			for(String vurl : verifiedurl) {
-				if(vurl.endsWith(uri)) {
+				if(uri.endsWith(vurl)) {
 					return true;	
 				}
 			}
