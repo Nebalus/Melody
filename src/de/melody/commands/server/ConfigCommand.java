@@ -126,7 +126,7 @@ public class ConfigCommand implements ServerCommand{
 				}
 			}
 		}else {
-			Utils.sendErrorEmbled(channel,mf.format(guild, "feedback.error.user-no-permmisions", "MANAGE_SERVER"), m);
+			Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.error.user-no-permmisions", "MANAGE_SERVER"), m);
 		}
 	}
 	@SuppressWarnings("deprecation")

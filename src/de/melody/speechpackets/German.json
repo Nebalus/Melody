@@ -33,7 +33,7 @@
     "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nErstellungsdatum: {2}\nLaeuft auf Servern: {3}\n\nZu dem Zeitpunkt, wo du das ansehst, hoerten {4} Leute {5} lang Musik ueber {6}!",
     "feedback.info.prefix": "**Mein Praefix auf diesem Server ist `{0}`**",
     "feedback.info.unknown-command": "`hmm, es sieht so aus als wenn ich diesen Befehl nicht kennen wuerde. Bitte nutze um die Befehls liste zu sehen {0}help.`",
-    "feedback.info.error.bot-no-permmisions": "Ich habe nicht genug Rechte, ich benoetige die **Rechte**: `{0}`",
+    "feedback.info.bot-no-permmisions": "Ich habe nicht genug Rechte, ich benoetige die **Rechte**: `{0}`",
     "feedback.error.user-no-permmisions": "Du hast nicht genug **Rechte**: `{0}`",
     "feedback.info.command-usage": "Bitte nutze {0}",
     
@@ -41,7 +41,7 @@
     "feedback.music.nothing-in-link": "Hmm es sieht so aus als wenn der link die du gesendet hast kein lied/stream beinhaltet :(",
     "feedback.music.bot-not-in-vc": "Ich bin nicht in einen Sprachkanal.",
     "feedback.music.user-not-in-vc": "Du befindest dich nicht in einen Sprachkanal.",
-    "feedback.music.error.non-whitelisted-domain": "Die domain **{0}** wuerde nicht in meinen System gewhitelisted.",
+    "feedback.music.non-whitelisted-domain": "Die domain **{0}** wuerde nicht in meinen System gewhitelisted.",
     "feedback.music.currently-playing-null": "Grade spiele ich keinen lied.",
     
     "music.info.loop-enabled": " **aktiviert!**",

@@ -42,6 +42,7 @@ public class CommandListener extends ListenerAdapter{
 					}
 					if(args.length > 0){
 						if(!melody.getCmdMan().performServer(args[0], event.getMember(), channel, event.getMessage(), event.getGuild())) {
+							
 							channel.sendMessage(event.getJDA().getEmoteById(Emoji.ANIMATED_THINKING_EMOJI).getAsMention()+" "+mf.format(guild, "feedback.info.unknown-command",ge.getPrefix())).queue();
 						}
 					}
