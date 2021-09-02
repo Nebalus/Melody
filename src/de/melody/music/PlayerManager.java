@@ -2,7 +2,7 @@ package de.melody.music;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.melody.Melody;
+import de.melody.core.Melody;
 
 
 public class PlayerManager {

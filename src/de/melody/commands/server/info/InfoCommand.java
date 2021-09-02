@@ -1,31 +1,40 @@
 package de.melody.commands.server.info;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import de.melody.Config;
-import de.melody.Melody;
+import de.melody.CommandManager.CommandType;
 import de.melody.commands.types.ServerCommand;
+import de.melody.core.Constants;
+import de.melody.core.Melody;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
-public class BotInfoCommand implements ServerCommand{
 
-	@SuppressWarnings("deprecation")
+public class InfoCommand implements ServerCommand{
+
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		
-		int serversRunning = channel.getJDA().getGuilds().size(); 
+		channel.sendMessageEmbeds(getInfoEmbed(guild).build()).queue();
+	}
+	
+	@Override
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+		event.replyEmbeds(getInfoEmbed(guild).build()).queue();
+	}
+
+	private EmbedBuilder getInfoEmbed(Guild guild) {
+		int serversRunning = guild.getJDA().getGuilds().size(); 
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(0x23cba7);
-		builder.setThumbnail(guild.getSelfMember().getUser().getAvatarUrl());
+		builder.setColor(Constants.EMBEDCOLOR);
+		builder.setThumbnail(guild.getJDA().getSelfUser().getEffectiveAvatarUrl());
 		
 		Runtime r = Runtime.getRuntime();
 		Properties prop = System.getProperties();
@@ -34,34 +43,40 @@ public class BotInfoCommand implements ServerCommand{
 		
 		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(guild, "feedback.info.botinfo",
 			"JDA",
-			Config.buildversion,
-			Config.builddate,
+			Constants.BUILDVERSION,
+			Constants.BUILDDATE,
 			serversRunning,
 			Utils.getUserInt(),
 			Utils.decodeStringFromTimeMillis(Melody.INSTANCE.playedmusictime,true),
 			guild.getSelfMember().getAsMention())
 				
 			+" \n \n```OS: "+prop.getProperty("os.name")+"\n"
-			+ "System Name: Node 3\n"
 			+ "Cores: "+r.availableProcessors()+"\n"
 			+ "CPU Arch: "+prop.getProperty("os.arch")+"\n"
 			+ "Memory Usage: "+bigmemory+"."+smallmemory.substring(bigmemory.length())+"MB\n"
 			+ "Uptime: "+Utils.decodeStringFromTimeMillis(Melody.INSTANCE.uptime,true)+"```");
-		
-		
-			
 		builder.setFooter("Made by Nebalus#1665 with <3");
-		channel.sendMessage(builder.build()).queue();
-	}
-	
-	public String botstart() {
-		Date date = new Date(Melody.INSTANCE.startuptime);
-		String DateFormat = new SimpleDateFormat("EEE, d MMM HH:mm:ss yyyy").format(date);
-		return DateFormat;
+		
+		return builder;
 	}
 
 	@Override
 	public List<String> getCommandPrefix() {
-		return List.of("botinfo");
+		return List.of("info");
+	}
+
+	@Override
+	public CommandType getCommandType() {
+		return CommandType.INFO_COMMAND;
+	}
+
+	@Override
+	public boolean isSlashCommandCompatible() {
+		return true;
+	}
+	
+	@Override
+	public String getCommandDescription() {
+		return "Show some information about "+Constants.BUILDNAME;
 	}
 }

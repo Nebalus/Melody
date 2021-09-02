@@ -2,9 +2,10 @@ package de.melody.commands.server;
 
 import java.util.List;
 
-import de.melody.Config;
-import de.melody.Melody;
+import de.melody.CommandManager.CommandType;
 import de.melody.commands.types.ServerCommand;
+import de.melody.core.Constants;
+import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.Languages;
 import de.melody.speechpackets.MessageFormatter;
@@ -15,7 +16,10 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+
 
 public class ConfigCommand implements ServerCommand{
 	
@@ -132,8 +136,8 @@ public class ConfigCommand implements ServerCommand{
 	@SuppressWarnings("deprecation")
 	private void sendMainMenu(TextChannel channel, String prefix) {
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Config.HEXEmbeld);
-		builder.setTitle("**"+Config.buildname+" Config**");	
+		builder.setColor(Constants.EMBEDCOLOR);
+		builder.setTitle("**"+Constants.BUILDNAME+" Config**");	
 		for(ConfigSubCommands command : ConfigSubCommands.values()) {
 			builder.addField(command.title, "`"+prefix+"config "+command.name()+"`", true);
 		}
@@ -143,8 +147,8 @@ public class ConfigCommand implements ServerCommand{
 	private void sendSubCommandMenu(Object currentvalue, TextChannel channel,ConfigSubCommands subcommand,String prefix,String customvalidsettigs) {
 		Guild guild = channel.getGuild();
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Config.HEXEmbeld);
-		builder.setTitle(mf.format(guild, "config.info.submenu.title",Config.buildname,subcommand.title));	
+		builder.setColor(Constants.EMBEDCOLOR);
+		builder.setTitle(mf.format(guild, "config.info.submenu.title",Constants.BUILDNAME,subcommand.title));	
 		builder.setDescription(mf.format(guild, "config.sub."+subcommand.name()+".info"));
 		builder.addField(Emoji.CLIPBOARD+" "+mf.format(guild, "config.info.submenu.current-value"), "`"+currentvalue.toString()+"`", false);
 		builder.addField(Emoji.PENCIL+" "+mf.format(guild, "config.info.submenu.usage"), "`"+prefix+"config " +subcommand.name()+" "+subcommand.usage+"`", false);
@@ -171,5 +175,22 @@ public class ConfigCommand implements ServerCommand{
 	@Override
 	public List<String> getCommandPrefix() {
 		return List.of("config");
+	}
+	@Override
+	public CommandType getCommandType() {
+		return CommandType.BETA_COMMAND;
+	}
+	@Override
+	public boolean isSlashCommandCompatible() {
+		return false;
+	}
+	@Override
+	public String getCommandDescription() {
+		return null;
+	}
+
+	@Override
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+		
 	}
 }

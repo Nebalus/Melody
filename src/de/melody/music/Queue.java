@@ -109,4 +109,24 @@ public class Queue {
 		return queuelist;
 	}
 	
+	
+	
+	public class QueuedTrack {
+
+		private AudioTrack track;
+		private Member whoQueued;
+		
+		public QueuedTrack(AudioTrack track, Member whoQueued) {
+			this.track = track;
+			this.whoQueued = whoQueued;
+		}
+		
+		public Member getWhoQueued() {
+			return whoQueued;
+		}
+		
+		public AudioTrack getTrack() {
+			return track;
+		}
+	}
 }

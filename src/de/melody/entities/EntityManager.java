@@ -3,7 +3,7 @@ package de.melody.entities;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.melody.Melody;
+import de.melody.core.Melody;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 

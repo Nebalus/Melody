@@ -8,8 +8,8 @@ import java.util.HashMap;
 
 import org.json.JSONObject;
 
-import de.melody.Config;
-import de.melody.Melody;
+import de.melody.core.Constants;
+import de.melody.core.Melody;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.entities.Guild;
 
@@ -50,7 +50,7 @@ public class MessageFormatter {
 				message = message.replace("[ö]", "oe");
 				message = message.replace("[ü]", "ue");
 			}
-			message = message.replace("[botname]", Config.buildname);
+			message = message.replace("[botname]", Constants.BUILDNAME);
 			
 			for(int i = 0; i < args.length; ++i) {
 				message = message.replace("{" + i + "}", String.valueOf(args[i]));

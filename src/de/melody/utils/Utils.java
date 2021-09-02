@@ -10,11 +10,10 @@ import java.sql.SQLException;
 
 import org.json.JSONObject;
 
-import de.melody.Config;
-import de.melody.Melody;
+import de.melody.core.Constants;
+import de.melody.core.Melody;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 public class Utils {
@@ -198,7 +197,7 @@ public class Utils {
 	public static void sendErrorEmbled(TextChannel channel, String discription, Member m) {				
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(channel.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+m.getUser().getAsMention()+" "+discription);
-		builder.setColor(Config.HEXEmbeldError);
+		builder.setColor(Constants.EMBELD_ERRORCOLOR);
 		channel.sendMessage(builder.build()).queue();
 	}
 	

@@ -3,7 +3,7 @@ package de.melody.music;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import de.melody.Melody;
+import de.melody.core.Melody;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class MusicController {

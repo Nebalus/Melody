@@ -4,13 +4,14 @@ import java.util.List;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import de.melody.Config;
-import de.melody.Melody;
+import de.melody.CommandManager.CommandType;
 import de.melody.commands.types.ServerCommand;
+import de.melody.core.Constants;
+import de.melody.core.Melody;
 import de.melody.entities.reacts.QueueReaction;
 import de.melody.music.MusicController;
 import de.melody.music.Queue;
-import de.melody.music.QueuedTrack;
+import de.melody.music.Queue.QueuedTrack;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
@@ -18,7 +19,10 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+
 
 public class QueueCommand implements ServerCommand{
 
@@ -46,7 +50,7 @@ public class QueueCommand implements ServerCommand{
 		Queue queue = controller.getQueue();
 		builder.setTitle(mf.format(guild, "music.queue.from-guild",guild.getName()));
 		builder.setThumbnail(guild.getIconUrl());
-		builder.setColor(Config.HEXEmbeld);
+		builder.setColor(Constants.EMBEDCOLOR);
 		String list = null;
 		if(controller.getPlayer().getPlayingTrack() != null) {
 			if(queue.currentlyPlaying() != null) {
@@ -80,5 +84,22 @@ public class QueueCommand implements ServerCommand{
 	@Override
 	public List<String> getCommandPrefix() {
 		return List.of("queue","q");
+	}
+	@Override
+	public CommandType getCommandType() {
+		return CommandType.MUSIC_COMMAND;
+	}
+	@Override
+	public boolean isSlashCommandCompatible() {
+		return false;
+	}
+	@Override
+	public String getCommandDescription() {
+		return null;
+	}
+
+	@Override
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+		
 	}
 }
