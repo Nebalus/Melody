@@ -2,8 +2,8 @@ package de.melody.listeners;
 
 import java.util.concurrent.TimeUnit;
 
-import de.melody.Melody;
 import de.melody.commands.server.music.QueueCommand;
+import de.melody.core.Melody;
 import de.melody.entities.reacts.QueueReaction;
 import de.melody.entities.reacts.ReactionManager;
 import de.melody.entities.reacts.ReactionTypes;

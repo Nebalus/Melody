@@ -11,7 +11,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-import de.melody.Melody;
+import de.melody.core.Melody;
 import de.melody.speechpackets.MessageFormatter;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;

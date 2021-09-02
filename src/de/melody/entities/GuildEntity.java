@@ -4,9 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.melody.Config;
 import de.melody.LiteSQL;
-import de.melody.Melody;
+import de.melody.core.Constants;
+import de.melody.core.Melody;
 import de.melody.speechpackets.Languages;
 import de.melody.utils.ConsoleLogger;
 import net.dv8tion.jda.api.entities.Guild;
@@ -25,7 +25,7 @@ public class GuildEntity {
 	private boolean preventduplicates = false;
 	private Languages language = Languages.ENGLISH;
 	
-	private Long expiretime = System.currentTimeMillis() + Config.entityexpiretime;
+	private Long expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
 	private Boolean needtoexport = false;
 	
 	private Melody melody = Melody.INSTANCE;
@@ -171,7 +171,7 @@ public class GuildEntity {
 	}
 	
 	private void renewExpireTime() {
-		this.expiretime = System.currentTimeMillis() + Config.entityexpiretime;
+		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
 	}
 	
 	public boolean exportData() {

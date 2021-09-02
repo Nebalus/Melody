@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
-import de.melody.Melody;
+import de.melody.CommandManager.CommandType;
 import de.melody.commands.types.ServerCommand;
+import de.melody.core.Melody;
 import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.music.Queue;
@@ -15,7 +16,10 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+
 
 public class StopCommand implements ServerCommand{
 
@@ -44,5 +48,22 @@ public class StopCommand implements ServerCommand{
 	@Override
 	public List<String> getCommandPrefix() {
 		return List.of("stop");
+	}
+	@Override
+	public CommandType getCommandType() {
+		return CommandType.MUSIC_COMMAND;
+	}
+	@Override
+	public boolean isSlashCommandCompatible() {
+		return false;
+	}
+	@Override
+	public String getCommandDescription() {
+		return null;
+	}
+
+	@Override
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+		
 	}
 }
