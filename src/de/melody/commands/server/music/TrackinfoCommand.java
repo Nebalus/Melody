@@ -19,11 +19,8 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 public class TrackinfoCommand implements ServerCommand{
 	
-	private Melody melody = Melody.INSTANCE;
-	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		melody.entityManager.getGuildEntity(guild).setChannelId(channel.getIdLong());
 		try {
 			MusicController controller = Melody.INSTANCE.playerManager.getController(guild.getIdLong());
 			AudioTrack audiotrack = controller.getPlayer().getPlayingTrack();

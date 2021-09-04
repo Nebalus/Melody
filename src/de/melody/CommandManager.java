@@ -12,7 +12,7 @@ import de.melody.commands.server.music.FastforwardCommand;
 import de.melody.commands.server.music.JoinCommand;
 import de.melody.commands.server.music.LeaveCommand;
 import de.melody.commands.server.music.LoopCommand;
-import de.melody.commands.server.music.NextCommand;
+import de.melody.commands.server.music.SkipCommand;
 import de.melody.commands.server.music.PauseCommand;
 import de.melody.commands.server.music.PlayCommand;
 import de.melody.commands.server.music.PlaylistCommand;
@@ -62,7 +62,7 @@ public class CommandManager {
 				new LeaveCommand(),
 				new TrackinfoCommand(),
 				new QueueCommand(),
-				new NextCommand(),
+				new SkipCommand(),
 				new InfoCommand(),
 				new PingCommand(),
 				new ConfigCommand(),

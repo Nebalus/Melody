@@ -29,7 +29,6 @@ public class VolumeCommand implements ServerCommand{
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
 		GuildEntity ge = melody.entityManager.getGuildEntity(guild);
-		ge.setChannelId(channel.getIdLong());
 		if(args.length == 1) {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setDescription(mf.format(guild, "command.volume.show",ge.getVolume()));
@@ -37,19 +36,16 @@ public class VolumeCommand implements ServerCommand{
 		}else {
 			try {
 				int amount = Integer.parseInt(args[1]);			
-				if(amount <= maxvolume) {
-					if(amount >= 1) {
-						melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
-						EmbedBuilder builder = new EmbedBuilder();
-						ge.setVolume(amount);
-						builder.setDescription(mf.format(guild, "command.volume.set",amount));
-						MusicUtil.sendEmbled(guild, builder);
-					}else
-						Utils.sendErrorEmbled(channel, mf.format(guild, "command.volume.min-int"), m);
+				if(amount <= maxvolume && amount >= 1) {
+					melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
+					EmbedBuilder builder = new EmbedBuilder();
+					ge.setVolume(amount);
+					builder.setDescription(mf.format(guild, "command.volume.set",amount));
+					MusicUtil.sendEmbled(guild, builder);
 				}else
-					Utils.sendErrorEmbled(channel, mf.format(guild, "command.volume.max-int",maxvolume), m);
+					Utils.sendErrorEmbled(message, mf.format(guild, "command.volume.out-of-bounds",maxvolume), m);
 			}catch(NumberFormatException e) {
-				Utils.sendErrorEmbled(channel, mf.format(guild, "command.volume.out-of-bounds",maxvolume), m);
+				Utils.sendErrorEmbled(message, mf.format(guild, "command.volume.out-of-bounds",maxvolume), m);
 			}
 		}
 	}

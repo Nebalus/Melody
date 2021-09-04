@@ -58,7 +58,6 @@ public class TrackScheduler extends AudioEventAdapter{
 			builder.setDescription("["+guild.getJDA().getEmoteById(Emoji.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guild, "music.track.now-playing")+"]("+Constants.WEBSITE_URL+")");
 			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", true);
 			builder.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(info,0l),true);
-			builder.addBlankField(true);
 			builder.setFooter(mf.format(guild, "music.user.who-requested")+ queue.currentlyPlaying().getWhoQueued().getUser().getAsTag());
 			builder.setColor(Constants.EMBEDCOLOR);
 			if(url.startsWith("https://www.youtube.com/watch?v=")) {

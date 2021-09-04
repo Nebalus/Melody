@@ -14,7 +14,7 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.Message;
 
 public class Utils {
 	
@@ -193,12 +193,11 @@ public class Utils {
 		return endTime;
 	}
 	
-	@SuppressWarnings("deprecation")
-	public static void sendErrorEmbled(TextChannel channel, String discription, Member m) {				
+	public static void sendErrorEmbled(Message message, String discription, Member m) {				
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setDescription(channel.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+m.getUser().getAsMention()+" "+discription);
+		builder.setDescription(message.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+m.getUser().getAsMention()+" "+discription);
 		builder.setColor(Constants.EMBELD_ERRORCOLOR);
-		channel.sendMessage(builder.build()).queue();
+		message.replyEmbeds(builder.build()).queue();
 	}
 	
 	public static void loadSystemData(Melody melody) {

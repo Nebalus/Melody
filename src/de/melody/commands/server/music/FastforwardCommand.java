@@ -58,9 +58,9 @@ public class FastforwardCommand implements ServerCommand{
 				builder.setDescription(Emoji.FAST_FORWARD+" "+mf.format(guild, "command.fastforward.set",Utils.decodeStringFromTimeMillis(fastforwardmillis,false)));
 				channel.sendMessage(builder.build()).queue();
 			}else 
-				Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.currently-playing-null"),m);
+				Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.currently-playing-null"),m);
 		}else 
-			Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
+			Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
 	}
 
 	@Override

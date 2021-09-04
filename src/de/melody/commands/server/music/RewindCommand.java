@@ -28,6 +28,7 @@ public class RewindCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
@@ -56,9 +57,9 @@ public class RewindCommand implements ServerCommand{
 				builder.setDescription(Emoji.REWIND+" "+mf.format(guild, "command.rewind.set",Utils.decodeStringFromTimeMillis(rewindmillis,false)));
 				channel.sendMessage(builder.build()).queue();
 			}else 
-				Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.currently-playing-null"),m);
+				Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.currently-playing-null"),m);
 		}else 
-			Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
+			Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
 	}
 
 	@Override

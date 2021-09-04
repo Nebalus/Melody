@@ -24,11 +24,10 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 
 public class MusicUtil extends ListenerAdapter{
 
-	private static final List<String> verifiedurl = List.of("youtube.com","youtu.be");		
+	private static final List<String> verifiedurl = List.of("youtube.com","youtu.be","soundcloud.com");		
 	//verifiedurl.add("www.twitch.tv");	
 	//verifiedurl.add("vimeo.com");		
 	//verifiedurl.add("bandcamp.com");		
-	//verifiedurl.add("soundcloud.com");
 	private Melody melody = Melody.INSTANCE;
 	
 	public static TextChannel getChannel(Guild guild) {
@@ -77,19 +76,9 @@ public class MusicUtil extends ListenerAdapter{
 		if(event.getMember() == guild.getSelfMember()) {
 			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
 			player.setPaused(false);
-			if(event.getMember().hasPermission(Permission.VOICE_DEAF_OTHERS)) {
-				guild.getSelfMember().deafen(true).queue();
-			}
 		}
 	}
 	
-	@Override
-	public void onGuildVoiceDeafen(GuildVoiceDeafenEvent event) {
-		Guild guild = event.getGuild();
-		if(event.getMember() == guild.getSelfMember() && event.getMember().hasPermission(Permission.VOICE_DEAF_OTHERS) && !event.isDeafened()) {
-			guild.getSelfMember().deafen(true).queue();
-		}
-	}
 	
 	public static void onRefreshAutoDisabler(ShardManager shardMan) {
 		try {
