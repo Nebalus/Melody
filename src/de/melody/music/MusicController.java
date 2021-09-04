@@ -3,6 +3,7 @@ package de.melody.music;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import de.melody.core.Constants;
 import de.melody.core.Melody;
 import net.dv8tion.jda.api.entities.Guild;
 
@@ -18,8 +19,9 @@ public class MusicController {
 	public MusicController(Guild guild) {
 		this.guild = guild;
 		this.player = Melody.INSTANCE.audioPlayerManager.createPlayer();
+		this.player.setPaused(false);
 		this.queue = new Queue(this);
-		this.afktime = 60;
+		this.afktime = Constants.MUSIK_AFK_DEFAULT;
 		
 		this.guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 		this.player.addListener(new TrackScheduler());

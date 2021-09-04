@@ -27,7 +27,6 @@ public class LoopCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		melody.entityManager.getGuildEntity(guild).setChannelId(channel.getIdLong());
 
 		GuildVoiceState state;
 		if((state = m.getVoiceState()) != null && state.getChannel() != null) {

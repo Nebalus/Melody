@@ -23,7 +23,7 @@ public class InviteCommand implements ServerCommand{
 
 	@Override
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
-		channel.sendMessage(Melody.INSTANCE.getMessageFormatter().format(guild, "feedback.info.invite", member.getAsMention(), Constants.INVITE_URL)).queue();
+		event.reply(Melody.INSTANCE.getMessageFormatter().format(guild, "feedback.info.invite", member.getAsMention(), Constants.INVITE_URL)).queue();
 	}
 	
 	@Override

@@ -13,14 +13,13 @@ import net.dv8tion.jda.api.entities.Guild;
 
 public class GuildEntity {
 	
-	private Long guildid;
+	private Guild guild;
 	private Long channelid;
 	private int volume = 50;
 	private Long djroleid = 0l;
 	private String prefix = "m!";
 	private boolean voteskip = false;
 	private boolean staymode = false;
-	private boolean revocablecommands = false;
 	private boolean announcesongs = true;
 	private boolean preventduplicates = false;
 	private Languages language = Languages.ENGLISH;
@@ -32,10 +31,10 @@ public class GuildEntity {
 	private LiteSQL database = melody.getDatabase();
 	
 	public GuildEntity(Guild guild) {
-		this.guildid = guild.getIdLong();
+		this.guild = guild;
 		if(database.isConnected()) {
 			try {
-				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE guildid = " + guildid);	
+				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE guildid = " + getGuildId());	
 				if(rs.next()) {
 					channelid = rs.getLong("channelid");	
 					if(rs.getInt("volume") > 0) {
@@ -57,15 +56,12 @@ public class GuildEntity {
 					if(rs.getString("preventduplicates") != null) {
 						preventduplicates = rs.getBoolean("preventduplicates");	
 					}
-					if(rs.getString("revocablecommands") != null) {
-						revocablecommands = rs.getBoolean("revocablecommands");	
-					}
 					if(rs.getString("language") != null) {
 						language = Languages.getLanguage(rs.getString("language"));
 					}
 				}else {
 					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(guildid) VALUES(?)");
-					ps.setLong(1, guildid);
+					ps.setLong(1, getGuildId());
 					ps.executeUpdate();
 				}
 			}catch(SQLException e) {
@@ -76,13 +72,19 @@ public class GuildEntity {
 	
 	public Long getGuildId() {
 		renewExpireTime();
-		return this.guildid;
+		return this.guild.getIdLong();
+	}
+	
+	public Guild getGuild() {
+		renewExpireTime();
+		return this.guild;
 	}
 	
 	public Long getChannelId() {
 		renewExpireTime();
 		return this.channelid;
 	}
+	
 	public void setChannelId(Long newchannelid) {
 		this.channelid = newchannelid;
 		update();
@@ -144,14 +146,6 @@ public class GuildEntity {
 		update();
 	}
 	
-	public Boolean canRevokeCommand() {
-		return revocablecommands;
-	}
-	public void setRevokeCommand(Boolean newrevocablecommands) {
-		this.revocablecommands = newrevocablecommands;
-		update();
-	}
-	
 	public Boolean isPreventDuplicates() {
 		renewExpireTime();
 		return this.preventduplicates;
@@ -187,8 +181,7 @@ public class GuildEntity {
 							+ "staymode = ?,"
 							+ "language = ?,"
 							+ "announcesongs = ?,"
-							+ "preventduplicates = ?,"
-							+ "revocablecommands = ? WHERE guildid = ?");
+							+ "preventduplicates = ? WHERE guildid = ?");
 					ps.setLong(1, channelid);
 					ps.setInt(2, volume);
 					ps.setLong(3, djroleid);
@@ -198,10 +191,9 @@ public class GuildEntity {
 					ps.setString(7, language.getCode());
 					ps.setBoolean(8, announcesongs);
 					ps.setBoolean(9, preventduplicates);
-					ps.setBoolean(10, revocablecommands);
-					ps.setLong(11, guildid);
+					ps.setLong(10, getGuildId());
 					ps.executeUpdate();
-					ConsoleLogger.info("export guild", guildid);
+					ConsoleLogger.info("export guild", getGuildId());
 				} catch (SQLException e) {
 					e.printStackTrace();
 					return false;

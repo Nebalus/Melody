@@ -50,9 +50,6 @@ public class ConfigCommand implements ServerCommand{
 						case announcesongs:
 							sendSubCommandMenu(Utils.getStringFromBoolean(ge.canAnnounceSongs()), channel, ConfigSubCommands.announcesongs, ge.getPrefix(),Utils.getStringFromBoolean(true)+", "+Utils.getStringFromBoolean(false));
 							break;
-						case revocablecommands: 
-							sendSubCommandMenu(Utils.getStringFromBoolean(ge.canRevokeCommand()), channel, ConfigSubCommands.revocablecommands, ge.getPrefix(), null);
-							break;
 						default:
 							sendMainMenu(channel,ge.getPrefix());
 							break;
@@ -107,20 +104,6 @@ public class ConfigCommand implements ServerCommand{
 								sendSubCommandMenu(Utils.getStringFromBoolean(ge.canAnnounceSongs()), channel, ConfigSubCommands.announcesongs, ge.getPrefix(),Utils.getStringFromBoolean(true)+", "+Utils.getStringFromBoolean(false));
 							}
 							break;
-						case revocablecommands: 
-							boolean value1 = Utils.getBooleanFromString(args[2]);
-							if(Utils.isStringValidBoolean(args[2]) && value1 != ge.canRevokeCommand()) {
-								if(value1) {
-									channel.sendMessage("**I will now delete every new command**").queue();	
-									ge.setRevokeCommand(true);
-								}else {
-									channel.sendMessage("**I will no longer delete every new command**").queue();	
-									ge.setRevokeCommand(false);
-								}
-							}else {
-								sendSubCommandMenu(Utils.getStringFromBoolean(ge.canRevokeCommand()), channel, ConfigSubCommands.revocablecommands, ge.getPrefix(),Utils.getStringFromBoolean(true)+", "+Utils.getStringFromBoolean(false));
-							}
-							break;
 						default:
 							sendMainMenu(channel,ge.getPrefix());
 							break;
@@ -130,7 +113,7 @@ public class ConfigCommand implements ServerCommand{
 				}
 			}
 		}else {
-			Utils.sendErrorEmbled(channel, mf.format(guild, "feedback.error.user-no-permmisions", "MANAGE_SERVER"), m);
+			Utils.sendErrorEmbled(message, mf.format(guild, "feedback.error.user-no-permmisions", "MANAGE_SERVER"), m);
 		}
 	}
 	@SuppressWarnings("deprecation")
@@ -162,8 +145,7 @@ public class ConfigCommand implements ServerCommand{
 	private enum ConfigSubCommands{
 		prefix("[new prefix]",Emoji.EXCLAMATION_MARK+" Prefix"),
 		language("[new language]",Emoji.WHITE_FLAG+" Language"),
-		announcesongs("[on|off]",Emoji.BELL+" Announce Songs"),
-		revocablecommands("[on|off]",Emoji.FIRECRACKER+" Revocable Commands");
+		announcesongs("[on|off]",Emoji.BELL+" Announce Songs");
 		
 		String usage;
 		String title;

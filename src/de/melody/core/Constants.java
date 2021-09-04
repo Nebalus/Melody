@@ -3,6 +3,8 @@ package de.melody.core;
 import java.awt.Color;
 import java.util.List;
 
+import net.dv8tion.jda.api.EmbedBuilder;
+
 public class Constants {
 	
 	public static boolean DEVMODE = false;
@@ -17,6 +19,9 @@ public class Constants {
 	
 	public static final Color EMBEDCOLOR = Color.decode("#2eb8bf");
 	public static final Color EMBELD_ERRORCOLOR = Color.RED;
+	
+	public static final EmbedBuilder EMBED_DEFAULT = new EmbedBuilder().setColor(EMBEDCOLOR);
+	public static final EmbedBuilder EMBED_ERROR = new EmbedBuilder().setColor(EMBELD_ERRORCOLOR);
 	
 	public static final int MAXQUEUELENGTH = 200;
 	public static final int MAXPLAYERQUEUELENGTH = 100;

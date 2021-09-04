@@ -22,8 +22,6 @@
     "command.staymode.disabled": "24/7 mode has been deaktivated.",
     "command.volume.show": "The volume from [botname]: {0}",
     "command.volume.set": "The volume from [botname] has been set to {0}.",
-    "command.volume.max-int": "the max volume you can use is {0}.",
-    "command.volume.min-int": "the min volume you can use is 1.",
     "command.volume.out-of-bounds": "Please choose a number between 1-{0}.",
     "command.fastforward.set": "Fast forwarding {0}",
     "command.rewind.set": "Rewinding {0}",

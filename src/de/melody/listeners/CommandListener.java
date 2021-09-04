@@ -1,8 +1,6 @@
 package de.melody.listeners;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
@@ -35,9 +33,6 @@ public class CommandListener extends ListenerAdapter{
 						count++;
 					}
 					String[] args = message.substring(count).split(" ");
-					if(ge.canRevokeCommand()) {
-						event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
-					}
 					if(args.length > 0){
 						if(!melody.getCmdMan().performServer(args[0], event.getMember(), channel, event.getMessage(), event.getGuild())) {	
 							channel.sendMessage(event.getJDA().getEmoteById(Emoji.ANIMATED_THINKING_EMOJI).getAsMention()+" "+mf.format(guild, "feedback.info.unknown-command",ge.getPrefix())).queue();
