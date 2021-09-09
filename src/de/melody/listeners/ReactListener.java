@@ -9,7 +9,7 @@ import de.melody.entities.reacts.ReactionManager;
 import de.melody.entities.reacts.ReactionTypes;
 import de.melody.entities.reacts.TrackReaction;
 import de.melody.utils.Emoji;
-import de.melody.utils.ID_Manager;
+import de.melody.utils.IDManager;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -41,7 +41,7 @@ public class ReactListener extends ListenerAdapter{
 							
 						}else {
 							user.openPrivateChannel().queue((ch) ->{
-								ch.sendMessage("Token: "+ID_Manager.generateID()).queue((message) ->{
+								ch.sendMessage("Token: "+IDManager.generateID()).queue((message) ->{
 									message.delete().queueAfter(120, TimeUnit.SECONDS);
 								});
 							});	

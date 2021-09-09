@@ -5,15 +5,16 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import de.melody.CommandManager.CommandType;
-import de.melody.commands.types.ServerCommand;
-import de.melody.core.Constants;
+import de.nebalus.botbuilder.command.CommandInfo;
+import de.nebalus.botbuilder.command.CommandType;
+import de.melody.core.Config;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
+import de.nebalus.botbuilder.command.ServerCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -22,6 +23,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 
 public class FastforwardCommand implements ServerCommand{
@@ -54,7 +56,7 @@ public class FastforwardCommand implements ServerCommand{
 					track.setPosition(player.getPlayingTrack().getPosition()+fastforwardmillis);
 				}
 				EmbedBuilder builder = new EmbedBuilder();
-				builder.setColor(Constants.EMBEDCOLOR);
+				builder.setColor(Config.EMBEDCOLOR);
 				builder.setDescription(Emoji.FAST_FORWARD+" "+mf.format(guild, "command.fastforward.set",Utils.decodeStringFromTimeMillis(fastforwardmillis,false)));
 				channel.sendMessage(builder.build()).queue();
 			}else 
@@ -69,11 +71,12 @@ public class FastforwardCommand implements ServerCommand{
 	}
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.MUSIC_COMMAND;
+		return CommandType.CHAT_COMMAND;
 	}
+
 	@Override
-	public boolean isSlashCommandCompatible() {
-		return false;
+	public CommandInfo getCommandInfo() {
+		return CommandInfo.INFO_COMMAND;
 	}
 	@Override
 	public String getCommandDescription() {
@@ -83,5 +86,11 @@ public class FastforwardCommand implements ServerCommand{
 	@Override
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
 		
+	}
+
+	@Override
+	public List<OptionData> getCommandOptions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -123,7 +123,7 @@ public class Images {
 				images.mkdirs();
 			}
 			
-			File newfile = new File(Utils.getCurrentJarPath()+"/images/"+ID_Manager.generateID()+".png");
+			File newfile = new File(Utils.getCurrentJarPath()+"/images/"+IDManager.generateID()+".png");
 			newfile.createNewFile();
 			ImageIO.write(buffimg, "png", newfile);
 			return newfile;

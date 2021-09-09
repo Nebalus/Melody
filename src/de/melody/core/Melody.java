@@ -15,9 +15,31 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
-import de.melody.CommandManager;
 import de.melody.LiteSQL;
 import de.melody.Secure;
+import de.melody.commands.server.ConfigCommand;
+import de.melody.commands.server.info.InfoCommand;
+import de.melody.commands.server.info.InviteCommand;
+import de.melody.commands.server.info.PingCommand;
+import de.melody.commands.server.music.BackCommand;
+import de.melody.commands.server.music.FastforwardCommand;
+import de.melody.commands.server.music.JoinCommand;
+import de.melody.commands.server.music.LeaveCommand;
+import de.melody.commands.server.music.LoopCommand;
+import de.melody.commands.server.music.PauseCommand;
+import de.melody.commands.server.music.PlayCommand;
+import de.melody.commands.server.music.PlaylistCommand;
+import de.melody.commands.server.music.QueueCommand;
+import de.melody.commands.server.music.ResumeCommand;
+import de.melody.commands.server.music.RewindCommand;
+import de.melody.commands.server.music.SeekCommand;
+import de.melody.commands.server.music.ShuffelCommand;
+import de.melody.commands.server.music.SkipCommand;
+import de.melody.commands.server.music.StayCommand;
+import de.melody.commands.server.music.StopCommand;
+import de.melody.commands.server.music.TrackinfoCommand;
+import de.melody.commands.server.music.VolumeCommand;
+import de.melody.commands.server.slash.PrefixCommand;
 import de.melody.entities.EntityManager;
 import de.melody.entities.GuildEntity;
 import de.melody.entities.UserEntity;
@@ -27,10 +49,13 @@ import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.music.PlayerManager;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.ConsoleLogger;
 import de.melody.utils.Emoji;
 import de.melody.utils.SpotifyUtils;
 import de.melody.utils.Utils;
+import de.nebalus.botbuilder.command.CommandManager;
+import de.nebalus.botbuilder.core.BotBuilder;
+import de.nebalus.botbuilder.core.BotCore;
+import de.nebalus.botbuilder.console.ConsoleLogger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -47,10 +72,9 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
-public class Melody {
+public class Melody implements BotCore{
 	public static Melody INSTANCE;
 	public ShardManager shardMan;
-	private CommandManager cmdMan;
 	private MessageFormatter messageformatter;
 	private Thread loop;
 	private Thread auto_save;
@@ -58,6 +82,7 @@ public class Melody {
 	public PlayerManager playerManager;
 	public EntityManager entityManager;
 	public LiteSQL database;
+	private BotBuilder botbuilder;
 	
 	public SpotifyUtils spotifyutils;
 	
@@ -95,10 +120,22 @@ public class Melody {
 		this.entityManager = new EntityManager();
 		
 		this.shardMan = builder.build();
+		
 		for(JDA jda : this.shardMan.getShards()) {
-			jda.awaitReady();
+			try {
+				jda.awaitReady();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-		this.cmdMan = new CommandManager();
+		
+		this.botbuilder = new BotBuilder(this);
+		botbuilder.getCommandManager().registerCommands(new JoinCommand(), new FastforwardCommand(), new RewindCommand(), new SeekCommand(),
+				new PlayCommand(), new PlaylistCommand(), new VolumeCommand(), new PauseCommand(), new ResumeCommand(),
+				new StopCommand(), new LeaveCommand(), new TrackinfoCommand(), new QueueCommand(), new SkipCommand(),
+				new InfoCommand(), new PingCommand(), new ConfigCommand(), new InviteCommand(), new ShuffelCommand(),
+				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand());
+		
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
 		AudioSourceManagers.registerLocalSource(audioPlayerManager);
 		audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
@@ -231,7 +268,7 @@ public class Melody {
 					jda.getPresence().setActivity(Activity.streaming("music on " +musicguilds+" server"+(musicguilds < 1 ? "s": "") +"!","https://twitch.tv/nebalus"));
 					break;
 				case 1:
-					jda.getPresence().setActivity(Activity.listening("m!help | "+Constants.BUILDVERSION));
+					jda.getPresence().setActivity(Activity.listening("m!help | "+Config.BUILDVERSION));
 					break;
 				case 2:
 					jda.getPresence().setActivity(Activity.listening("@"+jda.getSelfUser().getName()));
@@ -323,7 +360,7 @@ public class Melody {
 	}
 	
 	public CommandManager getCmdMan() {
-		return cmdMan;
+		return botbuilder.getCommandManager();
 	}
 
     public MessageFormatter getMessageFormatter() {
@@ -333,4 +370,12 @@ public class Melody {
     public LiteSQL getDatabase() {
     	return database;
     }
+
+	@Override
+	public ShardManager getShardManager() {
+		return shardMan;
+	}
+
+
+
 }

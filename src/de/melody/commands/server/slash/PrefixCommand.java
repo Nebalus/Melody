@@ -2,17 +2,19 @@ package de.melody.commands.server.slash;
 
 import java.util.List;
 
-import de.melody.CommandManager.CommandType;
-import de.melody.commands.types.ServerCommand;
-import de.melody.core.Constants;
+import de.nebalus.botbuilder.command.CommandInfo;
+import de.nebalus.botbuilder.command.CommandType;
+import de.melody.core.Config;
 import de.melody.core.Melody;
 import de.melody.speechpackets.MessageFormatter;
+import de.nebalus.botbuilder.command.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 
 public class PrefixCommand implements ServerCommand{
@@ -39,12 +41,16 @@ public class PrefixCommand implements ServerCommand{
 	}
 
 	@Override
-	public boolean isSlashCommandCompatible() {
-		return true;
+	public CommandInfo getCommandInfo() {
+		return CommandInfo.INFO_COMMAND;
 	}
 	
 	@Override
 	public String getCommandDescription() {
-		return "Gets the current prefix from "+Constants.BUILDNAME;
+		return "Gets the current prefix from "+Config.BUILDNAME;
+	}
+	@Override
+	public List<OptionData> getCommandOptions() {
+		return null;
 	}
 }

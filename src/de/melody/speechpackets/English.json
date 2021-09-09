@@ -11,12 +11,13 @@
     
     "config.sub.prefix.info": "Changes the prefix to use [botname]'s commands.",
     "config.sub.prefix.valid-settings": "Any text, at most 6 characters.",
-    "config.sub.prefix.succes": "**You have updated [botname]'s prefix from** `{0}` **to** `{1}`**.**",
+    "config.sub.prefix.succes": "You have updated [botname]'s prefix from `{0}` to `{1}`.",
     "config.sub.language.info": "Changes the output language from [botname].",   
-    "config.sub.language.succes": "**You have updated [botname]'s language from **`{0}` **to** `{1}`**.**",   
+    "config.sub.language.succes": "You have updated [botname]'s language from `{0}` to `{1}`.",   
     "config.sub.announcesongs.info": "Toggles [botname] announcing each song as it plays them.",
-    "config.sub.announcesongs.succes.on": "**[botname] will now announce new songs.**",
-    "config.sub.announcesongs.succes.off": "**[botname] will no longer announce new songs.**",
+    "config.sub.announcesongs.succes.on": "[botname] will now announce new songs.",
+    "config.sub.announcesongs.succes.off": "[botname] will no longer announce new songs.",
+    "config.sub.alwaysplaying.info": "Toggles [botname]",
     
     "command.staymode.enabled": "24/7 mode has been aktivated.",
     "command.staymode.disabled": "24/7 mode has been deaktivated.",

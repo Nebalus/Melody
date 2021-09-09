@@ -5,9 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import de.melody.LiteSQL;
-import de.melody.core.Constants;
+import de.melody.core.Config;
 import de.melody.core.Melody;
-import de.melody.utils.ConsoleLogger;
+import de.nebalus.botbuilder.console.ConsoleLogger;
 import net.dv8tion.jda.api.entities.User;
 
 public class UserEntity {
@@ -16,7 +16,7 @@ public class UserEntity {
 	private Long userid;
 	private Long heardtime = 0l;
 	
-	private Long expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
+	private Long expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
 	private Boolean needtoexport = false;
 	
 	private Melody melody = Melody.INSTANCE;
@@ -66,7 +66,7 @@ public class UserEntity {
 	
 	private void update() {
 		needtoexport = true;
-		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
+		this.expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
 	}
 	
 	public Long getExpireTime() {
@@ -78,7 +78,7 @@ public class UserEntity {
 	}
 	
 	private void renewExpireTime() {
-		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
+		this.expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
 	}
 	
 	public boolean exportData() {
