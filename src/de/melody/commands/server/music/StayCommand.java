@@ -8,6 +8,7 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
 import de.nebalus.botbuilder.command.ServerCommand;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -27,10 +28,10 @@ public class StayCommand implements ServerCommand{
 		GuildEntity guildentity = melody.entityManager.getGuildEntity(guild);
 		if(guildentity.is24_7()) {
 			guildentity.set24_7(false);
-			channel.sendMessage(mf.format(guild, "command.staymode.disabled")).queue();
+			Messenger.sendMessageEmbed(channel, mf.format(guild, "command.staymode.disabled")).queue();
 		}else {
 			guildentity.set24_7(true);
-			channel.sendMessage(mf.format(guild, "command.staymode.enabled")).queue();
+			Messenger.sendMessageEmbed(channel, mf.format(guild, "command.staymode.enabled")).queue();
 		}
 	}
 

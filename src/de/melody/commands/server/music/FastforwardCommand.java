@@ -7,7 +7,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.nebalus.botbuilder.command.CommandInfo;
 import de.nebalus.botbuilder.command.CommandType;
-import de.melody.core.Config;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
@@ -15,7 +14,7 @@ import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
 import de.nebalus.botbuilder.command.ServerCommand;
-import net.dv8tion.jda.api.EmbedBuilder;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -31,7 +30,7 @@ public class FastforwardCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
-	@SuppressWarnings({ "unused", "deprecation" })
+	@SuppressWarnings({ "unused" })
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		GuildVoiceState state;
@@ -55,10 +54,7 @@ public class FastforwardCommand implements ServerCommand{
 					fastforwardmillis = Utils.decodeTimeMillisFromString(subTime);
 					track.setPosition(player.getPlayingTrack().getPosition()+fastforwardmillis);
 				}
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.setColor(Config.EMBEDCOLOR);
-				builder.setDescription(Emoji.FAST_FORWARD+" "+mf.format(guild, "command.fastforward.set",Utils.decodeStringFromTimeMillis(fastforwardmillis,false)));
-				channel.sendMessage(builder.build()).queue();
+				Messenger.sendMessageEmbed(channel, Emoji.FAST_FORWARD+" "+mf.format(guild, "command.fastforward.set",Utils.decodeStringFromTimeMillis(fastforwardmillis,false))).queue();
 			}else 
 				Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.currently-playing-null"),m);
 		}else 

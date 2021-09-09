@@ -6,7 +6,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.nebalus.botbuilder.command.CommandInfo;
 import de.nebalus.botbuilder.command.CommandType;
-import de.melody.core.Config;
 import de.melody.core.Melody;
 import de.melody.entities.reacts.QueueReaction;
 import de.melody.music.MusicController;
@@ -16,6 +15,7 @@ import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
 import de.nebalus.botbuilder.command.ServerCommand;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -31,28 +31,25 @@ public class QueueCommand implements ServerCommand{
 	private static Melody melody = Melody.INSTANCE;
 	private static MessageFormatter mf = melody.getMessageFormatter();
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {	
-		channel.sendMessage("Loading...").queue((queuemessage) ->{
+		Messenger.sendMessageEmbed(channel,"Loading...").queue((queuemessage) ->{
 			queuemessage.addReaction(Emoji.BACK).queue();	
 			queuemessage.addReaction(Emoji.RESUME).queue();	
 			queuemessage.addReaction(Emoji.REFRESH).queue();
 
 			QueueReaction qe = new QueueReaction(melody.playerManager.getController(guild.getIdLong()).getQueue());
 			Melody.INSTANCE.entityManager.getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
-			queuemessage.editMessage(loadQueueEmbed(guild,qe).build()).queue();
-			queuemessage.editMessage("‏‏‎ ‎").queue();
+			queuemessage.editMessageEmbeds(loadQueueEmbed(guild,qe).build()).queue();
 		});		
 	}
 	
 	public static EmbedBuilder loadQueueEmbed(Guild guild, QueueReaction qe) {
 		MusicController controller = melody.playerManager.getController(guild.getIdLong());
-		EmbedBuilder builder = new EmbedBuilder();
 		Queue queue = controller.getQueue();
+		EmbedBuilder builder = new EmbedBuilder();
 		builder.setTitle(mf.format(guild, "music.queue.from-guild",guild.getName()));
 		builder.setThumbnail(guild.getIconUrl());
-		builder.setColor(Config.EMBEDCOLOR);
 		String list = null;
 		if(controller.getPlayer().getPlayingTrack() != null) {
 			if(queue.currentlyPlaying() != null) {

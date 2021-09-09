@@ -29,7 +29,7 @@
     
     "feedback.info.invite": "{0} here is my invite link which you can add me to your Discord server:\n\n Invitelink: {1}",
     "feedback.info.ping": "The latency of [botname] is %dms",
-    "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nBuilddate: {2}\nRunning on servers: {3}\n\nAt the time you look at this {4} people listened for {5} to music thru {6}!",
+    "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nBuilddate: {2}\nRunning on servers: {3}\n\n{4} Users listened for {5} to music thru {6}!",
     "feedback.info.prefix": "**My prefix on this server is `{0}`**",
     "feedback.info.unknown-command": "`hmm, it looks like I don't know this command. Please use {0}help to see the command list.`",
     "feedback.error.bot-no-permmisions": "I don't have enough permissions, please give me the following **Permisions**: `{0}`",

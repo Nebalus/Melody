@@ -12,6 +12,7 @@ import de.melody.utils.Utils;
 import de.nebalus.botbuilder.command.CommandInfo;
 import de.nebalus.botbuilder.command.CommandType;
 import de.nebalus.botbuilder.command.ServerCommand;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -117,21 +118,17 @@ public class ConfigCommand implements ServerCommand{
 			Utils.sendErrorEmbled(message, mf.format(guild, "feedback.error.user-no-permmisions", "MANAGE_SERVER"), m);
 		}
 	}
-	@SuppressWarnings("deprecation")
 	private void sendMainMenu(TextChannel channel, String prefix) {
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Config.EMBEDCOLOR);
 		builder.setTitle("**"+Config.BUILDNAME+" Config**");	
 		for(ConfigSubCommands command : ConfigSubCommands.values()) {
 			builder.addField(command.title, "`"+prefix+"config "+command.name()+"`", true);
 		}
-		channel.sendMessage(builder.build()).queue();
+		Messenger.sendMessageEmbed(channel, builder).queue();
 	}
-	@SuppressWarnings("deprecation")
 	private void sendSubCommandMenu(Object currentvalue, TextChannel channel,ConfigSubCommands subcommand,String prefix,String customvalidsettigs) {
 		Guild guild = channel.getGuild();
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Config.EMBEDCOLOR);
 		builder.setTitle(mf.format(guild, "config.info.submenu.title",Config.BUILDNAME,subcommand.title));	
 		builder.setDescription(mf.format(guild, "config.sub."+subcommand.name()+".info"));
 		builder.addField(Emoji.CLIPBOARD+" "+mf.format(guild, "config.info.submenu.current-value"), "`"+currentvalue.toString()+"`", false);
@@ -141,7 +138,7 @@ public class ConfigCommand implements ServerCommand{
 		}else {
 			builder.addField(Emoji.CHECK_MARK+" "+mf.format(guild, "config.info.submenu.valid-settings"), "`"+customvalidsettigs+"`", false);
 		}
-		channel.sendMessage(builder.build()).queue();
+		Messenger.sendMessageEmbed(channel, builder).queue();
 	}
 	private enum ConfigSubCommands{
 		prefix("[new prefix]",Emoji.EXCLAMATION_MARK+" Prefix"),

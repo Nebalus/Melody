@@ -25,7 +25,7 @@ public class ResumeCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		melody.entityManager.getGuildEntity(guild).setChannelId(channel.getIdLong());
+		melody.entityManager.getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			melody.playerManager.getController(guild.getIdLong()).getPlayer().setPaused(false);

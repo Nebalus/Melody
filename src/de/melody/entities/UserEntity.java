@@ -81,7 +81,7 @@ public class UserEntity {
 		this.expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
 	}
 	
-	public boolean exportData() {
+	public boolean export() {
 		if(database.isConnected()) {
 			if(needtoexport) {
 				try {

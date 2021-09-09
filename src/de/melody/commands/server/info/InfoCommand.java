@@ -10,6 +10,7 @@ import de.melody.utils.Utils;
 import de.nebalus.botbuilder.command.CommandInfo;
 import de.nebalus.botbuilder.command.CommandType;
 import de.nebalus.botbuilder.command.ServerCommand;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -24,7 +25,7 @@ public class InfoCommand implements ServerCommand{
 
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		channel.sendMessageEmbeds(getInfoEmbed(guild).build()).queue();
+		Messenger.sendMessageEmbed(channel, getInfoEmbed(guild)).queue();
 	}
 	
 	@Override
@@ -35,7 +36,6 @@ public class InfoCommand implements ServerCommand{
 	private EmbedBuilder getInfoEmbed(Guild guild) {
 		int serversRunning = guild.getJDA().getGuilds().size()+67; 
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Config.EMBEDCOLOR);
 		builder.setThumbnail(guild.getJDA().getSelfUser().getEffectiveAvatarUrl());
 		
 		Runtime r = Runtime.getRuntime();

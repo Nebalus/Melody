@@ -46,7 +46,7 @@ public class EntityManager {
 	}
 	
 	public void removeUserEntity(UserEntity ue) {
-		if(ue.exportData()) {
+		if(ue.export()) {
 			userentity.remove(ue.getUserId());
 		}
 	}
@@ -64,7 +64,7 @@ public class EntityManager {
 	}
 	
 	public void removeGuildEntity(GuildEntity ge) {
-		if(ge.exportData()) {
+		if(ge.export()) {
 			guildentity.remove(ge.getGuildId());
 		}
 	}
