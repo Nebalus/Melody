@@ -11,15 +11,15 @@
     
     "config.sub.prefix.info": "AEndert denn Praefix, um die Befehle von [botname] zu verwenden.",
     "config.sub.prefix.valid-settings": "Beliebiger Text, maximal 6 Zeichen.",
-    "config.sub.prefix.succes": "**Du hast [botname]s Praefix von** `{0}` **zu** `{1}` **aktualisiert.**",
+    "config.sub.prefix.succes": "Du hast [botname]s Praefix von `{0}` zu `{1}` aktualisiert.",
     "config.sub.language.info": "AEndert die Ausgabesprache von [botname].",
-    "config.sub.language.succes": "**Du hast [botname]s sprache von **`{0}` **zu** `{1}`** geaendert.**",   
-    "config.sub.announcesongs.info": "Hier toggelt man [botname] ob er bei jedem lied eine Ansage machen soll.",
-    "config.sub.announcesongs.succes.on": "**[botname] wird jetzt neue Songs ankuendigen.**",
-    "config.sub.announcesongs.succes.off": "**[botname] wird jetzt nicht mehr neue Songs ankuendigen.**",
-    
-    "command.staymode.enabled": "Der 24/7-Modus wurde aktiviert!",
-    "command.staymode.disabled": "Der 24/7-Modus wurde deaktiviert.",
+    "config.sub.language.succes": "Du hast [botname]s sprache von `{0}` zu `{1}` geaendert.",   
+    "config.sub.announcesongs.info": "Hier schaltet man [botname] ob er bei jedem lied eine Ansage machen soll.",
+    "config.sub.announcesongs.succes.on": "[botname] wird jetzt neue Songs ankuendigen.",
+    "config.sub.announcesongs.succes.off": "[botname] wird jetzt nicht mehr neue Songs ankuendigen.",
+   
+    "command.staymode.enabled": "24/7 mode has been aktivated.",
+    "command.staymode.disabled": "24/7 mode has been deaktivated.",
     "command.volume.show": "Die Lautstaerke von [botname]: {0}",
     "command.volume.set": "Die Lautstaerke von [botname] wurde auf {0} gesetzt.",
     "command.volume.out-of-bounds": "Bitte suche eine zahl zwischen 1-{0}.",

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 import org.json.JSONObject;
 
-import de.melody.core.Constants;
+import de.melody.core.Config;
 import de.melody.core.Melody;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -21,17 +21,6 @@ public class Utils {
 	public static boolean doesGuildExist(Long GuildId) {
 		try {
 			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT guildid FROM guilds WHERE guildid = " + GuildId);
-			if(rs.next()) {
-				return true;
-			}
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	public static boolean doesUserExist(Long UserId) {
-		try {
-			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT userid FROM userdata WHERE userid = " + UserId);
 			if(rs.next()) {
 				return true;
 			}
@@ -196,7 +185,7 @@ public class Utils {
 	public static void sendErrorEmbled(Message message, String discription, Member m) {				
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(message.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+m.getUser().getAsMention()+" "+discription);
-		builder.setColor(Constants.EMBELD_ERRORCOLOR);
+		builder.setColor(Config.EMBELD_ERRORCOLOR);
 		message.replyEmbeds(builder.build()).queue();
 	}
 	

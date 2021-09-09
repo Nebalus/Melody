@@ -4,13 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import de.melody.LiteSQL;
-import de.melody.core.Constants;
+import de.melody.core.Config;
 import de.melody.core.Melody;
-import de.melody.utils.ID_Manager;
+import de.melody.utils.IDManager;
 
 public class PlaylistEntity {
 
-	private String token = ID_Manager.generateID();
+	private String token = IDManager.generateID();
 	private Long createdtime = System.currentTimeMillis();
 	private Long ownerid = 0l;
 	private String name = "Unknown - "+token;
@@ -22,7 +22,7 @@ public class PlaylistEntity {
 	private LiteSQL database = melody.getDatabase();
 	
 	public PlaylistEntity(int playlistlistid) {
-		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
+		this.expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
 		if(database.isConnected()) {
 			try {
 				ResultSet rs = database.onQuery("SELECT * FROM playlist WHERE id = " + playlistlistid);	

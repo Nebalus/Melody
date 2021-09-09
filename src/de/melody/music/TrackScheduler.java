@@ -7,7 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import de.melody.core.Constants;
+import de.melody.core.Config;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.entities.reacts.TrackReaction;
@@ -55,11 +55,11 @@ public class TrackScheduler extends AudioEventAdapter{
 			EmbedBuilder builder = new EmbedBuilder();
 			AudioTrackInfo info = track.getInfo();
 			String url = info.uri;
-			builder.setDescription("["+guild.getJDA().getEmoteById(Emoji.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guild, "music.track.now-playing")+"]("+Constants.WEBSITE_URL+")");
+			builder.setDescription("["+guild.getJDA().getEmoteById(Emoji.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guild, "music.track.now-playing")+"]("+Config.WEBSITE_URL+")");
 			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", true);
 			builder.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(info,0l),true);
 			builder.setFooter(mf.format(guild, "music.user.who-requested")+ queue.currentlyPlaying().getWhoQueued().getUser().getAsTag());
-			builder.setColor(Constants.EMBEDCOLOR);
+			builder.setColor(Config.EMBEDCOLOR);
 			if(url.startsWith("https://www.youtube.com/watch?v=")) {
 				String videoID = url.replace("https://www.youtube.com/watch?v=", "");
 				//builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");

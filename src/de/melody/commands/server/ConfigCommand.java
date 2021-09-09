@@ -2,15 +2,16 @@ package de.melody.commands.server;
 
 import java.util.List;
 
-import de.melody.CommandManager.CommandType;
-import de.melody.commands.types.ServerCommand;
-import de.melody.core.Constants;
+import de.melody.core.Config;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.Languages;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
+import de.nebalus.botbuilder.command.CommandInfo;
+import de.nebalus.botbuilder.command.CommandType;
+import de.nebalus.botbuilder.command.ServerCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -19,6 +20,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 
 public class ConfigCommand implements ServerCommand{
@@ -59,8 +61,7 @@ public class ConfigCommand implements ServerCommand{
 				}
 			}else if(args.length >= 3) {
 				try {
-					ConfigSubCommands subcommand = ConfigSubCommands.valueOf(args[1]);
-					switch(subcommand) {
+					switch(ConfigSubCommands.valueOf(args[1])) {
 						case prefix:
 							if(args[2].length() <= 6) {					 
 								channel.sendMessage(mf.format(guild, "config.sub.prefix.succes", ge.getPrefix(),args[2])).queue();	
@@ -119,8 +120,8 @@ public class ConfigCommand implements ServerCommand{
 	@SuppressWarnings("deprecation")
 	private void sendMainMenu(TextChannel channel, String prefix) {
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Constants.EMBEDCOLOR);
-		builder.setTitle("**"+Constants.BUILDNAME+" Config**");	
+		builder.setColor(Config.EMBEDCOLOR);
+		builder.setTitle("**"+Config.BUILDNAME+" Config**");	
 		for(ConfigSubCommands command : ConfigSubCommands.values()) {
 			builder.addField(command.title, "`"+prefix+"config "+command.name()+"`", true);
 		}
@@ -130,8 +131,8 @@ public class ConfigCommand implements ServerCommand{
 	private void sendSubCommandMenu(Object currentvalue, TextChannel channel,ConfigSubCommands subcommand,String prefix,String customvalidsettigs) {
 		Guild guild = channel.getGuild();
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Constants.EMBEDCOLOR);
-		builder.setTitle(mf.format(guild, "config.info.submenu.title",Constants.BUILDNAME,subcommand.title));	
+		builder.setColor(Config.EMBEDCOLOR);
+		builder.setTitle(mf.format(guild, "config.info.submenu.title",Config.BUILDNAME,subcommand.title));	
 		builder.setDescription(mf.format(guild, "config.sub."+subcommand.name()+".info"));
 		builder.addField(Emoji.CLIPBOARD+" "+mf.format(guild, "config.info.submenu.current-value"), "`"+currentvalue.toString()+"`", false);
 		builder.addField(Emoji.PENCIL+" "+mf.format(guild, "config.info.submenu.usage"), "`"+prefix+"config " +subcommand.name()+" "+subcommand.usage+"`", false);
@@ -160,11 +161,12 @@ public class ConfigCommand implements ServerCommand{
 	}
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.BETA_COMMAND;
+		return CommandType.CHAT_COMMAND;
 	}
+
 	@Override
-	public boolean isSlashCommandCompatible() {
-		return false;
+	public CommandInfo getCommandInfo() {
+		return CommandInfo.INFO_COMMAND;
 	}
 	@Override
 	public String getCommandDescription() {
@@ -174,5 +176,9 @@ public class ConfigCommand implements ServerCommand{
 	@Override
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
 		
+	}
+	@Override
+	public List<OptionData> getCommandOptions() {
+		return null;
 	}
 }

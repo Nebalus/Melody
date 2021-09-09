@@ -5,17 +5,15 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import de.melody.core.Constants;
+import de.melody.core.Config;
 import de.melody.core.Melody;
 import de.melody.music.Queue.QueuedTrack;
 import de.melody.utils.Emoji;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceDeafenEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -42,7 +40,7 @@ public class MusicUtil extends ListenerAdapter{
 	public static void sendEmbled(Guild guild, EmbedBuilder builder) {		
 		TextChannel channel;
 		if((channel = getChannel(guild)) != null) {
-			builder.setColor(Constants.EMBEDCOLOR);
+			builder.setColor(Config.EMBEDCOLOR);
 			channel.sendMessage(builder.build()).queue();
 		}			
 	}
@@ -52,7 +50,7 @@ public class MusicUtil extends ListenerAdapter{
 		if((channel = getChannel(guild)) != null) {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setDescription(channel.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+errormessage);
-			builder.setColor(Constants.EMBELD_ERRORCOLOR);
+			builder.setColor(Config.EMBELD_ERRORCOLOR);
 			channel.sendMessage(builder.build()).queue();
 		}				
 	}

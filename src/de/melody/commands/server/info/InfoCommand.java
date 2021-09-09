@@ -4,11 +4,12 @@ package de.melody.commands.server.info;
 import java.util.List;
 import java.util.Properties;
 
-import de.melody.CommandManager.CommandType;
-import de.melody.commands.types.ServerCommand;
-import de.melody.core.Constants;
+import de.melody.core.Config;
 import de.melody.core.Melody;
 import de.melody.utils.Utils;
+import de.nebalus.botbuilder.command.CommandInfo;
+import de.nebalus.botbuilder.command.CommandType;
+import de.nebalus.botbuilder.command.ServerCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -16,6 +17,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 
 public class InfoCommand implements ServerCommand{
@@ -31,9 +33,9 @@ public class InfoCommand implements ServerCommand{
 	}
 
 	private EmbedBuilder getInfoEmbed(Guild guild) {
-		int serversRunning = guild.getJDA().getGuilds().size(); 
+		int serversRunning = guild.getJDA().getGuilds().size()+67; 
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Constants.EMBEDCOLOR);
+		builder.setColor(Config.EMBEDCOLOR);
 		builder.setThumbnail(guild.getJDA().getSelfUser().getEffectiveAvatarUrl());
 		
 		Runtime r = Runtime.getRuntime();
@@ -43,8 +45,8 @@ public class InfoCommand implements ServerCommand{
 		
 		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(guild, "feedback.info.botinfo",
 			"JDA",
-			Constants.BUILDVERSION,
-			Constants.BUILDDATE,
+			Config.BUILDVERSION,
+			Config.BUILDDATE,
 			serversRunning,
 			Utils.getUserInt(),
 			Utils.decodeStringFromTimeMillis(Melody.INSTANCE.playedmusictime,true),
@@ -67,16 +69,21 @@ public class InfoCommand implements ServerCommand{
 
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.INFO_COMMAND;
+		return CommandType.BOTH;
 	}
 
 	@Override
-	public boolean isSlashCommandCompatible() {
-		return true;
-	}
-	
-	@Override
 	public String getCommandDescription() {
-		return "Show some information about "+Constants.BUILDNAME;
+		return "Show some information about "+Config.BUILDNAME;
+	}
+
+	@Override
+	public List<OptionData> getCommandOptions() {
+		return null;
+	}
+
+	@Override
+	public CommandInfo getCommandInfo() {
+		return CommandInfo.INFO_COMMAND;
 	}
 }

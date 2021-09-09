@@ -5,10 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import de.melody.LiteSQL;
-import de.melody.core.Constants;
+import de.melody.core.Config;
 import de.melody.core.Melody;
 import de.melody.speechpackets.Languages;
-import de.melody.utils.ConsoleLogger;
+import de.nebalus.botbuilder.console.ConsoleLogger;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class GuildEntity {
@@ -24,7 +24,7 @@ public class GuildEntity {
 	private boolean preventduplicates = false;
 	private Languages language = Languages.ENGLISH;
 	
-	private Long expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
+	private Long expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
 	private Boolean needtoexport = false;
 	
 	private Melody melody = Melody.INSTANCE;
@@ -84,7 +84,6 @@ public class GuildEntity {
 		renewExpireTime();
 		return this.channelid;
 	}
-	
 	public void setChannelId(Long newchannelid) {
 		this.channelid = newchannelid;
 		update();
@@ -165,7 +164,7 @@ public class GuildEntity {
 	}
 	
 	private void renewExpireTime() {
-		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
+		this.expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
 	}
 	
 	public boolean exportData() {

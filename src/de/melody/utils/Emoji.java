@@ -37,3 +37,4 @@ public class Emoji {
 	public final static String GERMANY_FLAG = "🇩🇪";
 	public final static String UNITED_STATES_FLAG = "🇺🇸";
 }
+

@@ -2,7 +2,7 @@ package de.melody.utils;
 
 import java.util.Random;
 
-public class ID_Manager{
+public class IDManager{
 		
 	public static String generateToken() {
 		String zufallstr1;

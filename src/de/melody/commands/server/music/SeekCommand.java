@@ -5,12 +5,13 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import de.melody.CommandManager.CommandType;
-import de.melody.commands.types.ServerCommand;
+import de.nebalus.botbuilder.command.CommandInfo;
+import de.nebalus.botbuilder.command.CommandType;
 import de.melody.core.Melody;
 import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
+import de.nebalus.botbuilder.command.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -18,6 +19,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 
 public class SeekCommand implements ServerCommand{
@@ -55,11 +57,12 @@ public class SeekCommand implements ServerCommand{
 	}
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.MUSIC_COMMAND;
+		return CommandType.CHAT_COMMAND;
 	}
+
 	@Override
-	public boolean isSlashCommandCompatible() {
-		return false;
+	public CommandInfo getCommandInfo() {
+		return CommandInfo.INFO_COMMAND;
 	}
 	@Override
 	public String getCommandDescription() {
@@ -69,5 +72,11 @@ public class SeekCommand implements ServerCommand{
 	@Override
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
 		
+	}
+
+	@Override
+	public List<OptionData> getCommandOptions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
