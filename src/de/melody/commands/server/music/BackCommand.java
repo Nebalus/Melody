@@ -14,6 +14,7 @@ import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
 import de.nebalus.botbuilder.command.ServerCommand;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -41,7 +42,7 @@ public class BackCommand implements ServerCommand{
 			if(player.getPlayingTrack() != null) {
 				player.stopTrack();
 				builder.setDescription(Emoji.PREVIOUS_TITLE+" test");
-				MusicUtil.sendEmbled(guild, builder);
+				Messenger.sendMessageEmbed(channel, builder).queue();
 				try {
 					int i = Integer.valueOf(args[1]);
 					queue.back(i);
@@ -77,6 +78,7 @@ public class BackCommand implements ServerCommand{
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
 		
 	}
+	
 	@Override
 	public List<OptionData> getCommandOptions() {
 		return null;

@@ -6,11 +6,10 @@ import de.nebalus.botbuilder.command.CommandInfo;
 import de.nebalus.botbuilder.command.CommandType;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
-import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
 import de.nebalus.botbuilder.command.ServerCommand;
-import net.dv8tion.jda.api.EmbedBuilder;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -32,18 +31,14 @@ public class VolumeCommand implements ServerCommand{
 		String[] args = message.getContentDisplay().split(" ");
 		GuildEntity ge = melody.entityManager.getGuildEntity(guild);
 		if(args.length == 1) {
-			EmbedBuilder builder = new EmbedBuilder();
-			builder.setDescription(mf.format(guild, "command.volume.show",ge.getVolume()));
-			MusicUtil.sendEmbled(guild, builder);
+			Messenger.sendMessageEmbed(channel, mf.format(guild, "command.volume.show",ge.getVolume())).queue();
 		}else {
 			try {
 				int amount = Integer.parseInt(args[1]);			
 				if(amount <= maxvolume && amount >= 1) {
 					melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
-					EmbedBuilder builder = new EmbedBuilder();
 					ge.setVolume(amount);
-					builder.setDescription(mf.format(guild, "command.volume.set",amount));
-					MusicUtil.sendEmbled(guild, builder);
+					Messenger.sendMessageEmbed(channel, mf.format(guild, "command.volume.set",amount)).queue();
 				}else
 					Utils.sendErrorEmbled(message, mf.format(guild, "command.volume.out-of-bounds",maxvolume), m);
 			}catch(NumberFormatException e) {

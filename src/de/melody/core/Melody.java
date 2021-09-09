@@ -1,6 +1,5 @@
 package de.melody.core;
 
-import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -98,11 +97,12 @@ public class Melody implements BotCore{
 	}
 	
 	private Melody() throws LoginException, IllegalArgumentException, InterruptedException {
+		/*
 		String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		for (int i = 0; i < fonts.length; i++){
 			System.out.println(fonts[i]);
 		}
-		
+		*/
 		final Long startupMillis = System.currentTimeMillis();
 		INSTANCE = this;
 		database = new LiteSQL();
@@ -122,11 +122,7 @@ public class Melody implements BotCore{
 		this.shardMan = builder.build();
 		
 		for(JDA jda : this.shardMan.getShards()) {
-			try {
-				jda.awaitReady();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			jda.awaitReady();
 		}
 		
 		this.botbuilder = new BotBuilder(this);
@@ -188,7 +184,7 @@ public class Melody implements BotCore{
 								entityManager.removeGuildEntity(value);
 								export = true;
 							}else if(value.getNeedToExport()) {
-								value.exportData();
+								value.export();
 								export = true;
 							}
 						}
@@ -198,7 +194,7 @@ public class Melody implements BotCore{
 								entityManager.removeUserEntity(value);
 								export = true;
 							}else if(value.getNeedToExport()) {
-								value.exportData();
+								value.export();
 								export = true;
 							}
 						}

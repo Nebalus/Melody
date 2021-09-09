@@ -13,6 +13,7 @@ import de.melody.entities.GuildEntity;
 import de.melody.entities.reacts.TrackReaction;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emoji;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -44,7 +45,6 @@ public class TrackScheduler extends AudioEventAdapter{
 	
 	
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
 		Guild guild = melody.shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
@@ -59,13 +59,12 @@ public class TrackScheduler extends AudioEventAdapter{
 			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", true);
 			builder.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(info,0l),true);
 			builder.setFooter(mf.format(guild, "music.user.who-requested")+ queue.currentlyPlaying().getWhoQueued().getUser().getAsTag());
-			builder.setColor(Config.EMBEDCOLOR);
 			if(url.startsWith("https://www.youtube.com/watch?v=")) {
 				String videoID = url.replace("https://www.youtube.com/watch?v=", "");
 				//builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
 				builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
 			}
-			MusicUtil.getChannel(guild).sendMessage(builder.build()).queue((trackmessage) ->{
+			Messenger.sendMessageEmbed(ge.getMusicChannel(), builder).queue((trackmessage) ->{
 				TrackReaction te = new TrackReaction(info);
 				melody.entityManager.getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(trackmessage.getIdLong(), te);
 				trackmessage.addReaction(Emoji.SPARKLING_HEART).queue();

@@ -12,6 +12,7 @@ import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emoji;
 import de.nebalus.botbuilder.command.ServerCommand;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -37,10 +38,10 @@ public class LoopCommand implements ServerCommand{
 			if(player.getPlayingTrack() != null) {
 				if(controller.isLoop()) {
 					controller.setLoop(false);
-					channel.sendMessage(Emoji.SINGLE_LOOP+mf.format(guild, "music.info.loop-disabled")).queue();
+					Messenger.sendMessageEmbed(channel,Emoji.SINGLE_LOOP+mf.format(guild, "music.info.loop-disabled")).queue();
 				}else {
 					controller.setLoop(true);
-					channel.sendMessage(Emoji.SINGLE_LOOP+mf.format(guild, "music.info.loop-enabled")).queue();
+					Messenger.sendMessageEmbed(channel,Emoji.SINGLE_LOOP+mf.format(guild, "music.info.loop-enabled")).queue();
 				}	
 			}else 
 				MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.currently-playing-null"));				

@@ -4,16 +4,16 @@ import java.util.List;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
-import de.nebalus.botbuilder.command.CommandInfo;
-import de.nebalus.botbuilder.command.CommandType;
 import de.melody.core.Melody;
 import de.melody.music.MusicController;
-import de.melody.music.MusicUtil;
 import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
+import de.nebalus.botbuilder.command.CommandInfo;
+import de.nebalus.botbuilder.command.CommandType;
 import de.nebalus.botbuilder.command.ServerCommand;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -43,7 +43,7 @@ public class SkipCommand implements ServerCommand{
 			if(player.getPlayingTrack() != null) {
 				player.stopTrack();
 				builder.setDescription(Emoji.NEXT_TITLE+" "+mf.format(guild, "music.track.skip"));
-				MusicUtil.sendEmbled(guild, builder);
+				Messenger.sendMessageEmbed(channel, builder).queue();
 				try {
 					int i = Integer.valueOf(args[1]);
 					queue.next(i);

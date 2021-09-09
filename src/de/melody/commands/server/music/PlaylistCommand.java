@@ -33,7 +33,7 @@ public class PlaylistCommand implements ServerCommand{
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
 		GuildEntity guildentity = melody.entityManager.getGuildEntity(guild);
-		guildentity.setChannelId(channel.getIdLong());
+		guildentity.setMusicChannelId(channel.getIdLong());
 		if(args.length > 1) {
 			GuildVoiceState state;
 			VoiceChannel vc;

@@ -10,11 +10,12 @@ import de.melody.core.Melody;
 import de.melody.speechpackets.Languages;
 import de.nebalus.botbuilder.console.ConsoleLogger;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 public class GuildEntity {
 	
 	private Guild guild;
-	private Long channelid;
+	private Long musicchannelid;
 	private int volume = 50;
 	private Long djroleid = 0l;
 	private String prefix = "m!";
@@ -36,7 +37,7 @@ public class GuildEntity {
 			try {
 				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE guildid = " + getGuildId());	
 				if(rs.next()) {
-					channelid = rs.getLong("channelid");	
+					musicchannelid = rs.getLong("musicchannelid");	
 					if(rs.getInt("volume") > 0) {
 						volume = rs.getInt("volume");
 					}
@@ -80,13 +81,23 @@ public class GuildEntity {
 		return this.guild;
 	}
 	
-	public Long getChannelId() {
+	public Long getMusicChannelId() {
 		renewExpireTime();
-		return this.channelid;
+		return this.musicchannelid;
 	}
-	public void setChannelId(Long newchannelid) {
-		this.channelid = newchannelid;
+	public void setMusicChannelId(Long newchannelid) {
+		this.musicchannelid = newchannelid;
 		update();
+	}
+	public TextChannel getMusicChannel() {
+		renewExpireTime();
+		TextChannel channel;
+		if((channel = guild.getTextChannelById(this.musicchannelid)) != null) {
+			return channel;
+		}
+		channel = guild.getTextChannels().get(0);
+		musicchannelid = channel.getIdLong();
+		return channel;
 	}
 	
 	public int getVolume() {
@@ -100,8 +111,7 @@ public class GuildEntity {
 	public Long getDjRoleId() {
 		renewExpireTime();
 		return this.djroleid;
-	}
-	
+	}	
 	public String getPrefix() {
 		renewExpireTime();
 		return this.prefix;
@@ -167,12 +177,12 @@ public class GuildEntity {
 		this.expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
 	}
 	
-	public boolean exportData() {
+	public boolean export() {
 		if(database.isConnected()) {
 			if(needtoexport) {
 				try {
 					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE guilds SET "
-							+ "channelid = ?,"
+							+ "musicchannelid = ?,"
 							+ "volume = ?,"
 							+ "djrole = ?,"
 							+ "prefix = ?,"
@@ -181,7 +191,7 @@ public class GuildEntity {
 							+ "language = ?,"
 							+ "announcesongs = ?,"
 							+ "preventduplicates = ? WHERE guildid = ?");
-					ps.setLong(1, channelid);
+					ps.setLong(1, musicchannelid);
 					ps.setInt(2, volume);
 					ps.setLong(3, djroleid);
 					ps.setString(4, prefix);
@@ -198,7 +208,6 @@ public class GuildEntity {
 					return false;
 				}
 				needtoexport = false;
-				return true;
 			}
 			return true;
 		}

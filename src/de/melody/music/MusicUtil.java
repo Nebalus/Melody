@@ -9,6 +9,7 @@ import de.melody.core.Config;
 import de.melody.core.Melody;
 import de.melody.music.Queue.QueuedTrack;
 import de.melody.utils.Emoji;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -28,26 +29,16 @@ public class MusicUtil extends ListenerAdapter{
 	//verifiedurl.add("bandcamp.com");		
 	private Melody melody = Melody.INSTANCE;
 	
-	public static TextChannel getChannel(Guild guild) {
-		TextChannel channel;
-		if((channel = guild.getTextChannelById(Melody.INSTANCE.entityManager.getGuildEntity(guild).getChannelId())) != null) {
-			return channel;
-		}
-		return null;
-	}
-	
-	@SuppressWarnings("deprecation")
 	public static void sendEmbled(Guild guild, EmbedBuilder builder) {		
 		TextChannel channel;
-		if((channel = getChannel(guild)) != null) {
-			builder.setColor(Config.EMBEDCOLOR);
-			channel.sendMessage(builder.build()).queue();
+		if((channel = Melody.INSTANCE.entityManager.getGuildEntity(guild).getMusicChannel()) != null) {
+			Messenger.sendMessageEmbed(channel, builder).queue();
 		}			
 	}
 	@SuppressWarnings("deprecation")
 	public static void sendEmbledError(Guild guild, String errormessage) {
 		TextChannel channel;
-		if((channel = getChannel(guild)) != null) {
+		if((channel = Melody.INSTANCE.entityManager.getGuildEntity(guild).getMusicChannel()) != null) {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setDescription(channel.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+errormessage);
 			builder.setColor(Config.EMBELD_ERRORCOLOR);

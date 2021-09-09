@@ -8,6 +8,7 @@ import de.melody.core.Melody;
 import de.nebalus.botbuilder.command.CommandInfo;
 import de.nebalus.botbuilder.command.CommandType;
 import de.nebalus.botbuilder.command.ServerCommand;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -21,7 +22,7 @@ public class InviteCommand implements ServerCommand{
 
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		channel.sendMessage(Melody.INSTANCE.getMessageFormatter().format(channel.getGuild(), "feedback.info.invite", m.getAsMention(), Config.INVITE_URL)).queue();
+		Messenger.sendMessageEmbed(channel,Melody.INSTANCE.getMessageFormatter().format(channel.getGuild(), "feedback.info.invite", m.getAsMention(), Config.INVITE_URL)).queue();
 	}
 
 	@Override

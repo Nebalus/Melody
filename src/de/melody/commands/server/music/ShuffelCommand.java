@@ -9,6 +9,7 @@ import de.melody.music.MusicController;
 import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
 import de.nebalus.botbuilder.command.ServerCommand;
+import de.nebalus.botbuilder.utils.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -29,9 +30,9 @@ public class ShuffelCommand implements ServerCommand{
 		Queue queue = controller.getQueue();
 		if(queue.getQueuelist().size() > 1) {
 			queue.shuffel(); 
-			channel.sendMessage(mf.format(guild, "music.shuffel.successful",queue.getQueueSize())).queue();
+			Messenger.sendMessageEmbed(channel, mf.format(guild, "music.shuffel.successful",queue.getQueueSize())).queue();
 		}else {
-			channel.sendMessage(mf.format(guild, "music.shuffel.emptyqueue")).queue();
+			Messenger.sendMessageEmbed(channel, mf.format(guild, "music.shuffel.emptyqueue")).queue();
 		}
 	}
 
@@ -60,7 +61,6 @@ public class ShuffelCommand implements ServerCommand{
 
 	@Override
 	public List<OptionData> getCommandOptions() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }
