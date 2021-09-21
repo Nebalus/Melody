@@ -16,29 +16,29 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
 import de.melody.LiteSQL;
 import de.melody.Secure;
-import de.melody.commands.server.ConfigCommand;
-import de.melody.commands.server.info.InfoCommand;
-import de.melody.commands.server.info.InviteCommand;
-import de.melody.commands.server.info.PingCommand;
-import de.melody.commands.server.music.BackCommand;
-import de.melody.commands.server.music.FastforwardCommand;
-import de.melody.commands.server.music.JoinCommand;
-import de.melody.commands.server.music.LeaveCommand;
-import de.melody.commands.server.music.LoopCommand;
-import de.melody.commands.server.music.PauseCommand;
-import de.melody.commands.server.music.PlayCommand;
-import de.melody.commands.server.music.PlaylistCommand;
-import de.melody.commands.server.music.QueueCommand;
-import de.melody.commands.server.music.ResumeCommand;
-import de.melody.commands.server.music.RewindCommand;
-import de.melody.commands.server.music.SeekCommand;
-import de.melody.commands.server.music.ShuffelCommand;
-import de.melody.commands.server.music.SkipCommand;
-import de.melody.commands.server.music.StayCommand;
-import de.melody.commands.server.music.StopCommand;
-import de.melody.commands.server.music.TrackinfoCommand;
-import de.melody.commands.server.music.VolumeCommand;
-import de.melody.commands.server.slash.PrefixCommand;
+import de.melody.commands.ConfigCommand;
+import de.melody.commands.info.InfoCommand;
+import de.melody.commands.info.InviteCommand;
+import de.melody.commands.info.PingCommand;
+import de.melody.commands.music.BackCommand;
+import de.melody.commands.music.FastforwardCommand;
+import de.melody.commands.music.JoinCommand;
+import de.melody.commands.music.LeaveCommand;
+import de.melody.commands.music.LoopCommand;
+import de.melody.commands.music.PauseCommand;
+import de.melody.commands.music.PlayCommand;
+import de.melody.commands.music.PlaylistCommand;
+import de.melody.commands.music.QueueCommand;
+import de.melody.commands.music.ResumeCommand;
+import de.melody.commands.music.RewindCommand;
+import de.melody.commands.music.SeekCommand;
+import de.melody.commands.music.ShuffleCommand;
+import de.melody.commands.music.SkipCommand;
+import de.melody.commands.music.StayCommand;
+import de.melody.commands.music.StopCommand;
+import de.melody.commands.music.TrackinfoCommand;
+import de.melody.commands.music.VolumeCommand;
+import de.melody.commands.slash.PrefixCommand;
 import de.melody.entities.EntityManager;
 import de.melody.entities.GuildEntity;
 import de.melody.entities.UserEntity;
@@ -97,12 +97,6 @@ public class Melody implements BotCore{
 	}
 	
 	private Melody() throws LoginException, IllegalArgumentException, InterruptedException {
-		/*
-		String fonts[] = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		for (int i = 0; i < fonts.length; i++){
-			System.out.println(fonts[i]);
-		}
-		*/
 		final Long startupMillis = System.currentTimeMillis();
 		INSTANCE = this;
 		database = new LiteSQL();
@@ -129,7 +123,7 @@ public class Melody implements BotCore{
 		botbuilder.getCommandManager().registerCommands(new JoinCommand(), new FastforwardCommand(), new RewindCommand(), new SeekCommand(),
 				new PlayCommand(), new PlaylistCommand(), new VolumeCommand(), new PauseCommand(), new ResumeCommand(),
 				new StopCommand(), new LeaveCommand(), new TrackinfoCommand(), new QueueCommand(), new SkipCommand(),
-				new InfoCommand(), new PingCommand(), new ConfigCommand(), new InviteCommand(), new ShuffelCommand(),
+				new InfoCommand(), new PingCommand(), new ConfigCommand(), new InviteCommand(), new ShuffleCommand(),
 				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
@@ -225,21 +219,17 @@ public class Melody implements BotCore{
 					MusicController controller = playerManager.getController(vc.getGuild().getIdLong());	
 					AudioPlayer player = controller.getPlayer();
 					if(player.getPlayingTrack() != null && !player.isPaused()) {
-						int users = 0;
 						for(Member m : vc.getMembers()) {
 							if(!m.getUser().isBot()) {
-								users++;
 								
 								//onCaculatingHeardMusic
 								UserEntity ue = entityManager.getUserEntity(m.getUser());
 								Long listendata = ue.getHeardTime();
 								listendata++;
 								ue.setHeardTime(listendata);
+								playedmusictime++;
 								//
 							}
-						}
-						if(users > 0) {
-							playedmusictime++;
 						}
 					}
 				}
@@ -297,7 +287,7 @@ public class Melody implements BotCore{
 										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+g.getJDA().getEmoteById(Emoji.ANIMATED_HEARTS).getAsMention()).queue();
 								mentioned = true;
 								//loads the guild in the database
-								entityManager.getGuildEntity(g);
+								entityManager.getGuildEntity(g).setMusicChannelId(tc.getIdLong());
 								guildCache.add(tc.getIdLong());
 							}catch(InsufficientPermissionException e) {}
 						}
@@ -340,7 +330,7 @@ public class Melody implements BotCore{
 		}).start();	
 	}
 	
-	public void configureMemoryUsage(DefaultShardManagerBuilder builder) {
+	private void configureMemoryUsage(DefaultShardManagerBuilder builder) {
 	    // Disable cache for member activities (streaming/games/spotify)
 	    builder.disableCache(CacheFlag.ACTIVITY);
 
@@ -366,12 +356,13 @@ public class Melody implements BotCore{
     public LiteSQL getDatabase() {
     	return database;
     }
+    
+    public EntityManager getEntityManager() {
+    	return entityManager;
+    }
 
 	@Override
 	public ShardManager getShardManager() {
 		return shardMan;
 	}
-
-
-
 }

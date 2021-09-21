@@ -31,14 +31,14 @@ public class MusicUtil extends ListenerAdapter{
 	
 	public static void sendEmbled(Guild guild, EmbedBuilder builder) {		
 		TextChannel channel;
-		if((channel = Melody.INSTANCE.entityManager.getGuildEntity(guild).getMusicChannel()) != null) {
+		if((channel = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getMusicChannel()) != null) {
 			Messenger.sendMessageEmbed(channel, builder).queue();
 		}			
 	}
 	@SuppressWarnings("deprecation")
 	public static void sendEmbledError(Guild guild, String errormessage) {
 		TextChannel channel;
-		if((channel = Melody.INSTANCE.entityManager.getGuildEntity(guild).getMusicChannel()) != null) {
+		if((channel = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getMusicChannel()) != null) {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setDescription(channel.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+errormessage);
 			builder.setColor(Config.EMBELD_ERRORCOLOR);

@@ -50,7 +50,7 @@ public class TrackScheduler extends AudioEventAdapter{
 		Guild guild = melody.shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
 		MusicController controller = playerManager.getController(guild.getIdLong());
 		Queue queue = controller.getQueue();
-		GuildEntity ge = melody.entityManager.getGuildEntity(guild);
+		GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
 		if(controller.isLoop() == false && controller.isLoopQueue() == false && ge.canAnnounceSongs()) {
 			EmbedBuilder builder = new EmbedBuilder();
 			AudioTrackInfo info = track.getInfo();
@@ -61,12 +61,12 @@ public class TrackScheduler extends AudioEventAdapter{
 			builder.setFooter(mf.format(guild, "music.user.who-requested")+ queue.currentlyPlaying().getWhoQueued().getUser().getAsTag());
 			if(url.startsWith("https://www.youtube.com/watch?v=")) {
 				String videoID = url.replace("https://www.youtube.com/watch?v=", "");
-				//builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
-				builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
+				builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
+				//builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
 			}
 			Messenger.sendMessageEmbed(ge.getMusicChannel(), builder).queue((trackmessage) ->{
 				TrackReaction te = new TrackReaction(info);
-				melody.entityManager.getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(trackmessage.getIdLong(), te);
+				melody.getEntityManager().getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(trackmessage.getIdLong(), te);
 				trackmessage.addReaction(Emoji.SPARKLING_HEART).queue();
 			});
 		}
