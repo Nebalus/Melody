@@ -3,13 +3,17 @@ package de.melody.entities;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import de.melody.LiteSQL;
 import de.melody.core.Config;
 import de.melody.core.Melody;
 import de.melody.speechpackets.Languages;
 import de.nebalus.botbuilder.console.ConsoleLogger;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 public class GuildEntity {
@@ -18,6 +22,7 @@ public class GuildEntity {
 	private Long musicchannelid;
 	private int volume = 50;
 	private Long djroleid = 0l;
+	private boolean djonly = false;
 	private String prefix = "m!";
 	private boolean voteskip = false;
 	private boolean staymode = false;
@@ -37,13 +42,18 @@ public class GuildEntity {
 			try {
 				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE guildid = " + getGuildId());	
 				if(rs.next()) {
-					musicchannelid = rs.getLong("musicchannelid");	
+					if(rs.getLong("musicchannelid") != 0l) {
+						musicchannelid = rs.getLong("musicchannelid");	
+					}
 					if(rs.getInt("volume") > 0) {
 						volume = rs.getInt("volume");
 					}
 					djroleid = rs.getLong("djrole");
 					if(rs.getString("prefix") != null) {
 						prefix = rs.getString("prefix");
+					}
+					if(rs.getString("djonly") != null) {
+						djonly = rs.getBoolean("djonly");	
 					}
 					if(rs.getString("voteskip") != null) {
 						voteskip = rs.getBoolean("voteskip");	
@@ -155,6 +165,25 @@ public class GuildEntity {
 		update();
 	}
 	
+	public Boolean isDjOnly() {
+		renewExpireTime();
+		return this.djonly;
+	}
+	
+	public Boolean isMemberDJ(Member member) {
+		List<Role> roles = member.getRoles();
+		if(isDjOnly()) {
+			for(Role role : roles) {
+				if(role.getIdLong() == djroleid && member.hasPermission(Permission.MANAGE_SERVER)) {
+					return true;
+				}
+			}	
+			return false;
+		}else {
+			return true;
+		}
+	}
+	
 	public Boolean isPreventDuplicates() {
 		renewExpireTime();
 		return this.preventduplicates;
@@ -190,7 +219,8 @@ public class GuildEntity {
 							+ "staymode = ?,"
 							+ "language = ?,"
 							+ "announcesongs = ?,"
-							+ "preventduplicates = ? WHERE guildid = ?");
+							+ "preventduplicates = ?,"
+							+ "djonly = ? WHERE guildid = ?");
 					ps.setLong(1, musicchannelid);
 					ps.setInt(2, volume);
 					ps.setLong(3, djroleid);
@@ -200,7 +230,8 @@ public class GuildEntity {
 					ps.setString(7, language.getCode());
 					ps.setBoolean(8, announcesongs);
 					ps.setBoolean(9, preventduplicates);
-					ps.setLong(10, getGuildId());
+					ps.setBoolean(10, djonly);
+					ps.setLong(11, getGuildId());
 					ps.executeUpdate();
 					ConsoleLogger.info("export guild", getGuildId());
 				} catch (SQLException e) {

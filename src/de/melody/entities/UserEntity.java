@@ -15,6 +15,8 @@ public class UserEntity {
 	private int favoritemusicid = 0;
 	private Long userid;
 	private Long heardtime = 0l;
+	private Long firsttimeheard = System.currentTimeMillis();
+	private Long lasttimeheard = System.currentTimeMillis();	
 	
 	private Long expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
 	private Boolean needtoexport = false;
@@ -30,9 +32,12 @@ public class UserEntity {
 				if(rs.next()) {
 					favoritemusicid = rs.getInt("favoritemusic");
 					heardtime = rs.getLong("heardtime");
+					firsttimeheard = rs.getLong("firsttimeheard");
+					lasttimeheard = rs.getLong("lasttimeheard");
 				}else {
-					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO userdata(userid) VALUES(?)");
+					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO userdata(userid,firsttimeheard) VALUES(?,?)");
 					ps.setLong(1, userid);
+					ps.setLong(2, firsttimeheard);
 					ps.executeUpdate();
 				}
 			}catch(SQLException e) {
@@ -47,6 +52,7 @@ public class UserEntity {
 	}
 	public void setHeardTime(Long newheardtime) {
 		heardtime = newheardtime;
+		lasttimeheard = System.currentTimeMillis();
 		update();
 	}
 	
@@ -86,10 +92,13 @@ public class UserEntity {
 			if(needtoexport) {
 				try {
 					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE userdata SET "
-							+ "favoritemusic = ?, heardtime = ? WHERE userid = ?");
+							+ "favoritemusic = ?,"
+							+ "heardtime = ?,"
+							+ "lasttimeheard = ? WHERE userid = ?");
 					ps.setInt(1, favoritemusicid);
 					ps.setLong(2, heardtime);
-					ps.setLong(3, userid);
+					ps.setLong(3, lasttimeheard);
+					ps.setLong(4, userid);
 					ps.executeUpdate();
 					ConsoleLogger.info("export user", userid);
 				} catch (SQLException e) {

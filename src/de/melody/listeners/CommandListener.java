@@ -26,7 +26,7 @@ public class CommandListener extends ListenerAdapter{
 				List<User> MentionedUsers = event.getMessage().getMentionedUsers();
 				TextChannel channel = event.getTextChannel();
 				Guild guild = event.getGuild();
-				GuildEntity ge = melody.entityManager.getGuildEntity(guild);
+				GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
 				if(message.startsWith(ge.getPrefix())) {
 					int count = 0;
 					for (int i = 0; i < ge.getPrefix().length(); i++) {

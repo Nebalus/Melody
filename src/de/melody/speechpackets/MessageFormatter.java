@@ -33,7 +33,7 @@ public class MessageFormatter {
 	}
 	
 	public String format(Guild guild, String key, Object... args) {
-		Languages language = melody.entityManager.getGuildEntity(guild).getLanguage();
+		Languages language = melody.getEntityManager().getGuildEntity(guild).getLanguage();
 		String message = "JSON-Error {"+key+"} - "+language.code;
 	    try {
 			JSONObject json = getJSONMessage.get(language);

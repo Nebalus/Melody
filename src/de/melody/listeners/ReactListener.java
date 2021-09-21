@@ -2,7 +2,7 @@ package de.melody.listeners;
 
 import java.util.concurrent.TimeUnit;
 
-import de.melody.commands.server.music.QueueCommand;
+import de.melody.commands.music.QueueCommand;
 import de.melody.core.Melody;
 import de.melody.entities.reacts.QueueReaction;
 import de.melody.entities.reacts.ReactionManager;
@@ -29,13 +29,12 @@ public class ReactListener extends ListenerAdapter{
 				Long messageid = event.getMessageIdLong();
 				String emoji = event.getReactionEmote().getEmoji();
 				TextChannel channel = event.getTextChannel();
-				
-				ReactionManager reactionManager = Melody.INSTANCE.entityManager.getGuildController(guild.getIdLong()).getReactionManager();
-				
+				ReactionManager reactionManager = Melody.INSTANCE.getEntityManager().getGuildController(guild.getIdLong()).getReactionManager();
 				TrackReaction tr = (TrackReaction) reactionManager.getReacton(messageid, ReactionTypes.TRACKREACTION);
+				
 				if(tr != null) {
 					if(emoji.equals(Emoji.SPARKLING_HEART)) {
-						if(Melody.INSTANCE.entityManager.getUserEntity(user).getFavoriteMusicId() > 0) {
+						if(Melody.INSTANCE.getEntityManager().getUserEntity(user).getFavoriteMusicId() > 0) {
 				
 							
 							
@@ -46,7 +45,6 @@ public class ReactListener extends ListenerAdapter{
 								});
 							});	
 						}
-						channel.removeReactionById(messageid, emoji, user).queue();
 					}
 				}
 				
