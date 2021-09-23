@@ -27,7 +27,6 @@ import de.melody.commands.music.LeaveCommand;
 import de.melody.commands.music.LoopCommand;
 import de.melody.commands.music.PauseCommand;
 import de.melody.commands.music.PlayCommand;
-import de.melody.commands.music.PlaylistCommand;
 import de.melody.commands.music.QueueCommand;
 import de.melody.commands.music.ResumeCommand;
 import de.melody.commands.music.RewindCommand;
@@ -121,7 +120,7 @@ public class Melody implements BotCore{
 		
 		this.botbuilder = new BotBuilder(this);
 		botbuilder.getCommandManager().registerCommands(new JoinCommand(), new FastforwardCommand(), new RewindCommand(), new SeekCommand(),
-				new PlayCommand(), new PlaylistCommand(), new VolumeCommand(), new PauseCommand(), new ResumeCommand(),
+				new PlayCommand(), new VolumeCommand(), new PauseCommand(), new ResumeCommand(),
 				new StopCommand(), new LeaveCommand(), new TrackinfoCommand(), new QueueCommand(), new SkipCommand(),
 				new InfoCommand(), new PingCommand(), new ConfigCommand(), new InviteCommand(), new ShuffleCommand(),
 				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand());

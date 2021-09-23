@@ -15,8 +15,8 @@ public class UserEntity {
 	private int favoritemusicid = 0;
 	private Long userid;
 	private Long heardtime = 0l;
-	private Long firsttimeheard = System.currentTimeMillis();
-	private Long lasttimeheard = System.currentTimeMillis();	
+	private Long firsttimeheard = 0l;
+	private Long lasttimeheard = 0l;	
 	
 	private Long expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
 	private Boolean needtoexport = false;
@@ -26,6 +26,8 @@ public class UserEntity {
 	
 	public UserEntity(User user) {
 		this.userid = user.getIdLong();
+		this.lasttimeheard = System.currentTimeMillis();
+		this.firsttimeheard = System.currentTimeMillis();
 		if(database.isConnected()) {
 			try {
 				ResultSet rs = database.onQuery("SELECT * FROM userdata WHERE userid = " + userid);	
@@ -72,7 +74,7 @@ public class UserEntity {
 	
 	private void update() {
 		needtoexport = true;
-		this.expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
+		renewExpireTime();
 	}
 	
 	public Long getExpireTime() {

@@ -76,7 +76,7 @@ public class PlayCommand implements ServerCommand{
 							
 							final String uri = "ytsearch: " + track.getName() + " "+track.getArtists()[0].getName();
 							
-							apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false));
+							apm.loadItem(uri, new AudioLoadResult(controller, uri, m));
 							} catch (CompletionException e) {
 						      System.out.println("Error: " + e.getCause().getMessage());
 							} catch (CancellationException e) {
@@ -120,7 +120,7 @@ public class PlayCommand implements ServerCommand{
 								};
 								
 								final String uri = "ytsearch: " + playlist.getName();
-								apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false));
+								apm.loadItem(uri, new AudioLoadResult(controller, uri, m));
 								} catch (CompletionException e) {
 							      System.out.println("Error: " + e.getCause().getMessage());
 								} catch (CancellationException e) {
@@ -130,7 +130,7 @@ public class PlayCommand implements ServerCommand{
 				}else if(MusicUtil.isUrlVerified(url) || isytsearch == true) {
 					manager.openAudioConnection(vc);
 					final String uri = url;
-					apm.loadItem(uri, new AudioLoadResult(controller, uri, m, false));
+					apm.loadItem(uri, new AudioLoadResult(controller, uri, m));
 				}else {
 					MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.non-whitelisted-domain",MusicUtil.getDomain(url)));
 				}					

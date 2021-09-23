@@ -30,9 +30,8 @@ public class LoopCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-
 		GuildVoiceState state;
-		if((state = m.getVoiceState()) != null && state.getChannel() != null) {
+		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
 			AudioPlayer player = controller.getPlayer();
 			if(player.getPlayingTrack() != null) {
