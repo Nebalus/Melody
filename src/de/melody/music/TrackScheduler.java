@@ -93,12 +93,12 @@ public class TrackScheduler extends AudioEventAdapter{
 						}
 					}else {
 						final String uri = track.getInfo().uri;
-						melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
+						melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null));
 						return;
 					}
 				}else {
 					final String uri = track.getInfo().uri;
-					melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null, false));
+					melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null));
 					return;
 				}
 			}

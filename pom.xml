@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>Melody</groupId>
   <artifactId>Melody</artifactId>
-  <version>Beta 0.5.8</version>
+  <version>Beta 0.6.0</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
@@ -41,7 +41,7 @@
     <dependency>
    	  <groupId>net.dv8tion</groupId>
 	  <artifactId>JDA</artifactId>
-	  <version>4.3.0_315</version>
+	  <version>4.3.0_330</version>
 	</dependency>
 	<dependency>
      <groupId>com.jagrosh</groupId>

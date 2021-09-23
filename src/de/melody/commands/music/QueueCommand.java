@@ -40,7 +40,7 @@ public class QueueCommand implements ServerCommand{
 
 			QueueReaction qe = new QueueReaction(melody.playerManager.getController(guild.getIdLong()).getQueue());
 			Melody.INSTANCE.getEntityManager().getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
-			queuemessage.editMessageEmbeds(loadQueueEmbed(guild,qe).build()).queue();
+			queuemessage.editMessageEmbeds(Messenger.getMessageEmbed(guild,loadQueueEmbed(guild,qe))).queue();
 		});		
 	}
 	
