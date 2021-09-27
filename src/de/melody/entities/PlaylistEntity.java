@@ -2,6 +2,7 @@ package de.melody.entities;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import de.melody.LiteSQL;
 import de.melody.core.Constants;
@@ -13,8 +14,8 @@ public class PlaylistEntity {
 	private String token;
 	private Long createdtime;
 	private Long ownerid = 0l;
-	private String name;
-	
+	private String title;
+	private HashMap<Long, TrackEntity> content;
 	private Long expiretime;
 	
 	private Melody melody = Melody.INSTANCE;
@@ -24,20 +25,20 @@ public class PlaylistEntity {
 		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
 		if(database.isConnected()) {
 			try {
-				ResultSet rs_playlistinfo = database.onQuery("SELECT * FROM playlistinfo WHERE id = " + playlistlistid);	
+				ResultSet rs_playlistinfo = database.onQuery("SELECT * FROM playlistinfo WHERE PK_playlistinfo = " + playlistlistid);	
 				if(rs_playlistinfo.next()) {
 					this.token = rs_playlistinfo.getString("token");	
 					this.createdtime = rs_playlistinfo.getLong("createdtime");
 					this.ownerid = rs_playlistinfo.getLong("ownerid");
-					this.name = rs_playlistinfo.getString("name");
-					ResultSet rs_playlistcontent = database.onQuery("SELECT * FROM playlistcontent WHERE id = " + playlistlistid);
+					this.title = rs_playlistinfo.getString("title");
+					ResultSet rs_playlistcontent = database.onQuery("SELECT * FROM playlistcontent WHERE FK_playlistinfo = " + playlistlistid);
 					while(rs_playlistcontent.next()) {
-						
+						content.put(rs_playlistcontent.getLong("position"),new TrackEntity(rs_playlistcontent.getInt("FK_track")));
 					}
 				}else {
 					this.token = IDGenerator.generateID();
 					this.createdtime = System.currentTimeMillis();
-					this.name = "Unknown - "+this.token;
+					this.title = "Unknown - "+this.token;
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
@@ -45,12 +46,27 @@ public class PlaylistEntity {
 		}
 	}
 	
+	public HashMap<Long, TrackEntity> getContent(){
+		return content;
+	}
+	
+	public Long getOwnerID() {
+		return this.ownerid;
+	}
+	
+	public Long getCreatedTime() {
+		return this.createdtime;
+	}
+	
+	public String getTitle() {
+		return this.title;
+	}
+	
 	public PlaylistEntity() {
 		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
 		this.token = IDGenerator.generateID();
 		this.createdtime = System.currentTimeMillis();
-		this.name = "Unknown - "+this.token;
-		
+		this.title = "Unknown - "+this.token;
 	}
 	
 	public Long getExpireTime() {
