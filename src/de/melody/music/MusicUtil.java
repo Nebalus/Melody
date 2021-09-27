@@ -5,11 +5,11 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import de.melody.core.Config;
+import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.music.Queue.QueuedTrack;
-import de.melody.utils.Emoji;
-import de.nebalus.botbuilder.utils.Messenger;
+import de.melody.utils.Messenger;
+import de.melody.utils.Utils.Emoji;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -41,7 +41,7 @@ public class MusicUtil extends ListenerAdapter{
 		if((channel = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getMusicChannel()) != null) {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.setDescription(channel.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+errormessage);
-			builder.setColor(Config.EMBELD_ERRORCOLOR);
+			builder.setColor(Constants.ERROREMBEDCOLOR);
 			channel.sendMessage(builder.build()).queue();
 		}				
 	}

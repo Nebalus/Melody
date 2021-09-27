@@ -2,12 +2,16 @@ package de.melody.commands.music;
 
 import java.util.List;
 
-import de.nebalus.botbuilder.command.CommandInfo;
-import de.nebalus.botbuilder.command.CommandType;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+
 import de.melody.core.Melody;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
-import de.nebalus.botbuilder.command.ServerCommand;
+import de.melody.utils.Utils.Emoji;
+import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandType;
+import de.melody.utils.commandbuilder.ServerCommand;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -23,12 +27,35 @@ public class PauseCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
+	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
 		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
 		GuildVoiceState state;
-		if((state = m.getGuild().getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
-			melody.playerManager.getController(guild.getIdLong()).getPlayer().setPaused(true);
+		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
+			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
+			if(!player.isPaused()) {
+				EmbedBuilder builder = new EmbedBuilder();
+				builder.setDescription(Emoji.PAUSE+" "+mf.format(guild, "music.track.pause"));
+				MusicUtil.sendEmbled(guild, builder);		
+				player.setPaused(true);
+			}
+		}else
+			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.bot-not-in-vc"));
+	}
+	
+	@Override
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
+		GuildVoiceState state;
+		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
+			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
+			if(!player.isPaused()) {
+				EmbedBuilder builder = new EmbedBuilder();
+				builder.setDescription(Emoji.PAUSE+" "+mf.format(guild, "music.track.pause"));
+				MusicUtil.sendEmbled(guild, builder);		
+				player.setPaused(true);
+			}
 		}else
 			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.bot-not-in-vc"));
 	}
@@ -39,26 +66,20 @@ public class PauseCommand implements ServerCommand{
 	}
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.CHAT_COMMAND;
+		return CommandType.BOTH;
 	}
 
 	@Override
 	public CommandInfo getCommandInfo() {
-		return CommandInfo.INFO_COMMAND;
+		return CommandInfo.DJ_COMMAND;
 	}
 	@Override
 	public String getCommandDescription() {
-		return null;
-	}
-
-	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
-		
+		return "Pauses the currently playing track";
 	}
 
 	@Override
 	public List<OptionData> getCommandOptions() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

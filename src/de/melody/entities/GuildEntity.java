@@ -6,10 +6,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import de.melody.LiteSQL;
-import de.melody.core.Config;
+import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.speechpackets.Languages;
-import de.nebalus.botbuilder.console.ConsoleLogger;
+import de.melody.utils.Utils.ConsoleLogger;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -30,7 +30,7 @@ public class GuildEntity {
 	private boolean preventduplicates = false;
 	private Languages language = Languages.ENGLISH;
 	
-	private Long expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
+	private Long expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
 	private Boolean needtoexport = false;
 	
 	private Melody melody = Melody.INSTANCE;
@@ -44,6 +44,12 @@ public class GuildEntity {
 				if(rs.next()) {
 					if(rs.getLong("musicchannelid") != 0l) {
 						musicchannelid = rs.getLong("musicchannelid");	
+					}else {
+						for(TextChannel tc : guild.getTextChannels()) {
+							if(musicchannelid == null || guild.getTextChannelById(musicchannelid) != null && guild.getSelfMember().hasAccess(tc)) {
+								musicchannelid = tc.getIdLong();
+							}
+						}
 					}
 					if(rs.getInt("volume") > 0) {
 						volume = rs.getInt("volume");
@@ -174,13 +180,13 @@ public class GuildEntity {
 		List<Role> roles = member.getRoles();
 		if(isDjOnly()) {
 			for(Role role : roles) {
-				if(role.getIdLong() == djroleid && member.hasPermission(Permission.MANAGE_SERVER)) {
+				if(role.getIdLong() == djroleid && member.hasPermission(Permission.MANAGE_SERVER )) {
 					return true;
 				}
 			}	
 			return false;
 		}else {
-			return true;
+			return false;
 		}
 	}
 	
@@ -203,7 +209,7 @@ public class GuildEntity {
 	}
 	
 	private void renewExpireTime() {
-		this.expiretime = System.currentTimeMillis() + Config.ENTITYEXPIRETIME;
+		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
 	}
 	
 	public boolean export() {

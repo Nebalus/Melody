@@ -3,6 +3,7 @@ package de.melody.core;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -16,7 +17,8 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
 import de.melody.LiteSQL;
 import de.melody.Secure;
-import de.melody.commands.ConfigCommand;
+import de.melody.commands.admin.ConfigCommand;
+import de.melody.commands.dev.RestartCommand;
 import de.melody.commands.info.InfoCommand;
 import de.melody.commands.info.InviteCommand;
 import de.melody.commands.info.PingCommand;
@@ -47,13 +49,10 @@ import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.music.PlayerManager;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emoji;
 import de.melody.utils.SpotifyUtils;
 import de.melody.utils.Utils;
-import de.nebalus.botbuilder.command.CommandManager;
-import de.nebalus.botbuilder.core.BotBuilder;
-import de.nebalus.botbuilder.core.BotCore;
-import de.nebalus.botbuilder.console.ConsoleLogger;
+import de.melody.utils.Utils.ConsoleLogger;
+import de.melody.utils.Utils.Emoji;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -69,8 +68,9 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import de.melody.utils.commandbuilder.CommandManager;
 
-public class Melody implements BotCore{
+public class Melody{
 	public static Melody INSTANCE;
 	public ShardManager shardMan;
 	private MessageFormatter messageformatter;
@@ -80,7 +80,7 @@ public class Melody implements BotCore{
 	public PlayerManager playerManager;
 	public EntityManager entityManager;
 	public LiteSQL database;
-	private BotBuilder botbuilder;
+	private CommandManager cmdManager;
 	
 	public SpotifyUtils spotifyutils;
 	
@@ -111,19 +111,18 @@ public class Melody implements BotCore{
 		this.audioPlayerManager = new DefaultAudioPlayerManager();
 		this.playerManager = new PlayerManager();
 		this.entityManager = new EntityManager();
-		
+		this.cmdManager = new CommandManager(this);
 		this.shardMan = builder.build();
 		
 		for(JDA jda : this.shardMan.getShards()) {
 			jda.awaitReady();
 		}
 		
-		this.botbuilder = new BotBuilder(this);
-		botbuilder.getCommandManager().registerCommands(new JoinCommand(), new FastforwardCommand(), new RewindCommand(), new SeekCommand(),
+		cmdManager.registerCommands(new JoinCommand(), new FastforwardCommand(), new RewindCommand(), new SeekCommand(),
 				new PlayCommand(), new VolumeCommand(), new PauseCommand(), new ResumeCommand(),
 				new StopCommand(), new LeaveCommand(), new TrackinfoCommand(), new QueueCommand(), new SkipCommand(),
 				new InfoCommand(), new PingCommand(), new ConfigCommand(), new InviteCommand(), new ShuffleCommand(),
-				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand());
+				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand(), new RestartCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
 		AudioSourceManagers.registerLocalSource(audioPlayerManager);
@@ -253,7 +252,7 @@ public class Melody implements BotCore{
 					jda.getPresence().setActivity(Activity.streaming("music on " +musicguilds+" server"+(musicguilds < 1 ? "s": "") +"!","https://twitch.tv/nebalus"));
 					break;
 				case 1:
-					jda.getPresence().setActivity(Activity.listening("m!help | "+Config.BUILDVERSION));
+					jda.getPresence().setActivity(Activity.listening("m!help | "+Constants.BUILDVERSION));
 					break;
 				case 2:
 					jda.getPresence().setActivity(Activity.listening("@"+jda.getSelfUser().getName()));
@@ -269,7 +268,7 @@ public class Melody implements BotCore{
 	Integer guildScannerCooldown = 0;
 	ArrayList<Long> guildCache = new ArrayList<>();
 	public void scanGuilds() {
-		if(guildScannerCooldown <= 10) {
+		if(guildScannerCooldown < 20) {
 			for(Guild g : shardMan.getGuilds()) {
 				if(!guildCache.contains(g.getIdLong()) && !Utils.doesGuildExist(g.getIdLong())) {		
 					boolean mentioned = false;
@@ -345,23 +344,38 @@ public class Melody implements BotCore{
 	}
 	
 	public CommandManager getCmdMan() {
-		return botbuilder.getCommandManager();
+		return this.cmdManager;
 	}
 
     public MessageFormatter getMessageFormatter() {
-		return messageformatter;
+		return this.messageformatter;
     }
     
     public LiteSQL getDatabase() {
-    	return database;
+    	return this.database;
     }
     
     public EntityManager getEntityManager() {
-    	return entityManager;
+    	return this.entityManager;
     }
 
-	@Override
 	public ShardManager getShardManager() {
-		return shardMan;
+		return this.shardMan;
+	}
+	
+	public static String getCurrentJarPath() {
+	 	String path = getJarPath();
+	 	if(path.endsWith(".jar")) {
+	    	return path.substring(0, path.lastIndexOf("/"));
+	 	}
+	 	return path;
+	}
+	    
+	public static String getJarPath() {
+		final CodeSource source = Melody.INSTANCE.getClass().getProtectionDomain().getCodeSource();
+		if (source != null) {
+	    	return source.getLocation().getPath().replaceAll("%20", " ");
+		}
+	return null;
 	}
 }

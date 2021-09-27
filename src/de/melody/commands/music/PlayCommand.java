@@ -15,15 +15,15 @@ import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistRequest;
 import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 
-import de.nebalus.botbuilder.command.CommandInfo;
-import de.nebalus.botbuilder.command.CommandType;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.AudioLoadResult;
 import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
-import de.nebalus.botbuilder.command.ServerCommand;
+import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandType;
+import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -153,7 +153,7 @@ public class PlayCommand implements ServerCommand{
 
 	@Override
 	public CommandInfo getCommandInfo() {
-		return CommandInfo.INFO_COMMAND;
+		return CommandInfo.MUSIC_COMMAND;
 	}
 	@Override
 	public String getCommandDescription() {
