@@ -27,8 +27,8 @@ public class LiteSQL {
 			
 			ConsoleLogger.info("SQLDatabase", "Verbindung zur Datenbank hergestellt");
 			stmt = conn.createStatement();
-			onUpdate("CREATE TABLE IF NOT EXISTs guilds(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, musicchannelid INTEGER, volume INTEGER, djrole INTEGER, prefix VARCHAR, voteskip BOOLEAN, staymode BOOLEAN, language VARCHAR, announcesongs BOOLEAN, preventduplicates BOOLEAN, maxusersongs INTEGER, maxqueuelength INTEGER, djonly BOOLEAN)");
-			onUpdate("CREATE TABLE IF NOT EXISTs userdata(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, userid INTEGER, favoritemusic INTEGER, heardtime INTEGER, firsttimeheard INTEGER, lasttimeheard INTEGER)");	
+			onUpdate("CREATE TABLE IF NOT EXISTs guilds(guildid INTEGER PRIMARY KEY NOT NULL, musicchannelid INTEGER, volume INTEGER, djrole INTEGER, prefix VARCHAR, voteskip BOOLEAN, staymode BOOLEAN, language VARCHAR, announcesongs BOOLEAN, preventduplicates BOOLEAN, maxusersongs INTEGER, maxqueuelength INTEGER, djonly BOOLEAN)");
+			onUpdate("CREATE TABLE IF NOT EXISTs userdata(userid INTEGER PRIMARY KEY NOT NULL, favoritemusic INTEGER, heardtime INTEGER, firsttimeheard INTEGER, lasttimeheard INTEGER)");	
 			/*
 			 * token = XXXXXXXXXX / = Example -> dnQW1cgh2s
 			 * createdtime is when a user creates a playlist
@@ -48,8 +48,9 @@ public class LiteSQL {
 			 * 
 			 * saved create test esdf 
 			 */
-			onUpdate("CREATE TABLE IF NOT EXISTs playlist(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, token VARCHAR, createdtime INTEGER, ownerid INTEGER, privacytype INTEGER, name VARCHAR, tracks VARCHAR)");
-			onUpdate("CREATE TABLE IF NOT EXISTs track(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, url VARCHAR, name VARCHAR)");
+			onUpdate("CREATE TABLE IF NOT EXISTs playlistinfo(PK_playlistinfo INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, token VARCHAR, createdtime INTEGER, ownerid INTEGER, privacytype INTEGER, name VARCHAR)");
+			onUpdate("CREATE TABLE IF NOT EXISTs playlistcontent(FK_playlistinfo INTEGER NOT NULL, FK_track INTEGER NOT NULL)");
+			onUpdate("CREATE TABLE IF NOT EXISTs track(PK_track INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, url VARCHAR, name VARCHAR, provider INTEGER NOT NULL)");
 			onUpdate("CREATE TABLE IF NOT EXISTs system(playedmusictime INTEGER)");
 		} catch (SQLException | IOException e1) {
 			e1.printStackTrace();

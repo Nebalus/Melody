@@ -10,11 +10,10 @@ import de.melody.utils.Utils.IDGenerator;
 
 public class PlaylistEntity {
 
-	private String token = IDGenerator.generateID();
-	private Long createdtime = System.currentTimeMillis();
+	private String token;
+	private Long createdtime;
 	private Long ownerid = 0l;
-	private String name = "Unknown - "+token;
-	private String tracks = "{}";
+	private String name;
 	
 	private Long expiretime;
 	
@@ -25,18 +24,33 @@ public class PlaylistEntity {
 		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
 		if(database.isConnected()) {
 			try {
-				ResultSet rs = database.onQuery("SELECT * FROM playlist WHERE id = " + playlistlistid);	
-				if(rs.next()) {
-					token = rs.getString("token");	
-					createdtime = rs.getLong("createdtime");
-					ownerid = rs.getLong("ownerid");
-					name = rs.getString("name");
-					tracks = rs.getString("tracks");
+				ResultSet rs_playlistinfo = database.onQuery("SELECT * FROM playlistinfo WHERE id = " + playlistlistid);	
+				if(rs_playlistinfo.next()) {
+					this.token = rs_playlistinfo.getString("token");	
+					this.createdtime = rs_playlistinfo.getLong("createdtime");
+					this.ownerid = rs_playlistinfo.getLong("ownerid");
+					this.name = rs_playlistinfo.getString("name");
+					ResultSet rs_playlistcontent = database.onQuery("SELECT * FROM playlistcontent WHERE id = " + playlistlistid);
+					while(rs_playlistcontent.next()) {
+						
+					}
+				}else {
+					this.token = IDGenerator.generateID();
+					this.createdtime = System.currentTimeMillis();
+					this.name = "Unknown - "+this.token;
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public PlaylistEntity() {
+		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
+		this.token = IDGenerator.generateID();
+		this.createdtime = System.currentTimeMillis();
+		this.name = "Unknown - "+this.token;
+		
 	}
 	
 	public Long getExpireTime() {

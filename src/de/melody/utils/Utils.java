@@ -34,11 +34,9 @@ public class Utils {
 	
 	public static Long getUserInt() {
 		try {
-			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT seq FROM sqlite_sequence WHERE name = \"userdata\"");
+			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT COUNT(*) FROM userdata");
 			if(rs.next()) {
-				if(rs.getString("seq") != null) {
-					return rs.getLong("seq");	
-				}
+				return rs.getLong("COUNT(*)");
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
