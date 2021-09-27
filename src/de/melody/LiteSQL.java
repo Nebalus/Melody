@@ -18,7 +18,7 @@ public class LiteSQL {
 	public LiteSQL(){
 		conn = null;
 		try {
-			File file = new File("Datenbank.db");
+			File file = new File("datenbank.db");
 			if(!file.exists()) {
 				file.createNewFile();
 			}
@@ -48,9 +48,9 @@ public class LiteSQL {
 			 * 
 			 * saved create test esdf 
 			 */
-			onUpdate("CREATE TABLE IF NOT EXISTs playlistinfo(PK_playlistinfo INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, token VARCHAR, createdtime INTEGER, ownerid INTEGER, privacytype INTEGER, name VARCHAR)");
-			onUpdate("CREATE TABLE IF NOT EXISTs playlistcontent(FK_playlistinfo INTEGER NOT NULL, FK_track INTEGER NOT NULL)");
-			onUpdate("CREATE TABLE IF NOT EXISTs track(PK_track INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, url VARCHAR, name VARCHAR, provider INTEGER NOT NULL)");
+			onUpdate("CREATE TABLE IF NOT EXISTs playlistinfo(PK_playlistinfo INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, token VARCHAR, createdtime INTEGER, ownerid INTEGER, privacytype INTEGER, title VARCHAR)");
+			onUpdate("CREATE TABLE IF NOT EXISTs playlistcontent(FK_playlistinfo INTEGER NOT NULL, FK_track INTEGER NOT NULL, position INTEGER)");
+			onUpdate("CREATE TABLE IF NOT EXISTs track(PK_track INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, url VARCHAR NOT NULL, title VARCHAR, provider INTEGER NOT NULL DEFAULT 1)");
 			onUpdate("CREATE TABLE IF NOT EXISTs system(playedmusictime INTEGER)");
 		} catch (SQLException | IOException e1) {
 			e1.printStackTrace();
