@@ -186,7 +186,7 @@ public class GuildEntity {
 			}	
 			return false;
 		}else {
-			return false;
+			return true;
 		}
 	}
 	

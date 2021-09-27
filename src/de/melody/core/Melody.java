@@ -286,6 +286,7 @@ public class Melody{
 								mentioned = true;
 								//loads the guild in the database
 								entityManager.getGuildEntity(g).setMusicChannelId(tc.getIdLong());
+								entityManager.getGuildEntity(g).export();
 								guildCache.add(tc.getIdLong());
 							}catch(InsufficientPermissionException e) {}
 						}
