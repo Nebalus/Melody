@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import de.nebalus.botbuilder.console.ConsoleLogger;
+import de.melody.utils.Utils.ConsoleLogger;
 
 public class LiteSQL {
 	
@@ -77,6 +77,7 @@ public class LiteSQL {
 	 
 	public void onUpdate(String sql) {
 		try {
+			ConsoleLogger.debug("LITESQL onUpdate", sql);
 			stmt.execute(sql);
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -85,6 +86,7 @@ public class LiteSQL {
 		
 	public ResultSet onQuery(String sql) {
 		try {
+			ConsoleLogger.debug("LITESQL onQuery", sql);
 			return stmt.executeQuery(sql);
 		}catch (SQLException e) {
 			e.printStackTrace();

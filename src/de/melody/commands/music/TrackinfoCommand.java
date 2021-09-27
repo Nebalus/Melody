@@ -4,12 +4,12 @@ import java.util.List;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import de.nebalus.botbuilder.command.CommandInfo;
-import de.nebalus.botbuilder.command.CommandType;
 import de.melody.core.Melody;
 import de.melody.music.MusicController;
 import de.melody.utils.Images;
-import de.nebalus.botbuilder.command.ServerCommand;
+import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandType;
+import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -60,7 +60,7 @@ public class TrackinfoCommand implements ServerCommand{
 
 	@Override
 	public CommandInfo getCommandInfo() {
-		return CommandInfo.INFO_COMMAND;
+		return CommandInfo.MUSIC_COMMAND;
 	}
 	@Override
 	public String getCommandDescription() {

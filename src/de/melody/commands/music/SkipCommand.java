@@ -8,12 +8,12 @@ import de.melody.core.Melody;
 import de.melody.music.MusicController;
 import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emoji;
+import de.melody.utils.Messenger;
 import de.melody.utils.Utils;
-import de.nebalus.botbuilder.command.CommandInfo;
-import de.nebalus.botbuilder.command.CommandType;
-import de.nebalus.botbuilder.command.ServerCommand;
-import de.nebalus.botbuilder.utils.Messenger;
+import de.melody.utils.Utils.Emoji;
+import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandType;
+import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -67,7 +67,7 @@ public class SkipCommand implements ServerCommand{
 
 	@Override
 	public CommandInfo getCommandInfo() {
-		return CommandInfo.INFO_COMMAND;
+		return CommandInfo.DJ_COMMAND;
 	}
 	@Override
 	public String getCommandDescription() {

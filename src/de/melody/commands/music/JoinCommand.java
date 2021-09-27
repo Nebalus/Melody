@@ -4,15 +4,14 @@ import java.util.List;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
-import de.nebalus.botbuilder.command.CommandInfo;
-import de.nebalus.botbuilder.command.CommandType;
 import de.melody.core.Melody;
-import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emoji;
 import de.melody.utils.Utils;
-import de.nebalus.botbuilder.command.ServerCommand;
+import de.melody.utils.Utils.Emoji;
+import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandType;
+import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -30,21 +29,18 @@ public class JoinCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
-		if(ge.isMemberDJ(m)) {
-			GuildVoiceState state;
-			VoiceChannel vc;
-			if((state = m.getVoiceState()) != null && (vc = state.getChannel()) != null) {
-				guild.getAudioManager().openAudioConnection(vc);
-				MusicController controller = melody.playerManager.getController(guild.getIdLong());
-				AudioPlayer player = controller.getPlayer();
-				message.addReaction(Emoji.OK_HAND).queue();
-				if(player.getPlayingTrack() == null) {
-					controller.setAfkTime(600);
-				}
-			}else 
-				Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.user-not-in-vc"), m);
-		}
+		GuildVoiceState state;
+		VoiceChannel vc;
+		if((state = m.getVoiceState()) != null && (vc = state.getChannel()) != null) {
+			guild.getAudioManager().openAudioConnection(vc);
+			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			AudioPlayer player = controller.getPlayer();
+			message.addReaction(Emoji.OK_HAND).queue();
+			if(player.getPlayingTrack() == null) {
+				controller.setAfkTime(600);
+			}
+		}else 
+			Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.user-not-in-vc"), m);
 	}
 
 	@Override
@@ -58,7 +54,7 @@ public class JoinCommand implements ServerCommand{
 
 	@Override
 	public CommandInfo getCommandInfo() {
-		return CommandInfo.INFO_COMMAND;
+		return CommandInfo.DJ_COMMAND;
 	}
 	@Override
 	public String getCommandDescription() {
@@ -72,7 +68,6 @@ public class JoinCommand implements ServerCommand{
 
 	@Override
 	public List<OptionData> getCommandOptions() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

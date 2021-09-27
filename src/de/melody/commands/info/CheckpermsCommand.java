@@ -1,5 +1,5 @@
 package de.melody.commands.info;
 
-public class HelpCommand{
+public class CheckpermsCommand {
 
 }

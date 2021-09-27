@@ -2,12 +2,12 @@ package de.melody.commands.info;
 
 import java.util.List;
 
-import de.nebalus.botbuilder.command.CommandInfo;
-import de.nebalus.botbuilder.command.CommandType;
-import de.melody.core.Config;
+import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.speechpackets.MessageFormatter;
-import de.nebalus.botbuilder.command.ServerCommand;
+import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandType;
+import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -54,7 +54,7 @@ public class PingCommand implements ServerCommand{
 	
 	@Override
 	public String getCommandDescription() {
-		return "See the response time of "+Config.BUILDNAME+" to the Discord Gateway";
+		return "See the response time of "+Constants.BUILDNAME+" to the Discord Gateway";
 	}
 	@Override
 	public List<OptionData> getCommandOptions() {

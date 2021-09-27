@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 
 import de.melody.core.Melody;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.utils.Utils.Emoji;
+import de.melody.utils.Utils.IDGenerator;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -118,12 +120,12 @@ public class Images {
 			}		
 			graph.dispose();	
 			
-			File images = new File(Utils.getCurrentJarPath()+"/images/");
+			File images = new File(Melody.getCurrentJarPath()+"/images/");
 			if(!images.exists()) {
 				images.mkdirs();
 			}
 			
-			File newfile = new File(Utils.getCurrentJarPath()+"/images/"+IDManager.generateID()+".png");
+			File newfile = new File(Melody.getCurrentJarPath()+"/images/"+IDGenerator.generateID()+".png");
 			newfile.createNewFile();
 			ImageIO.write(buffimg, "png", newfile);
 			return newfile;

@@ -4,13 +4,13 @@ package de.melody.commands.info;
 import java.util.List;
 import java.util.Properties;
 
-import de.melody.core.Config;
+import de.melody.core.Constants;
 import de.melody.core.Melody;
+import de.melody.utils.Messenger;
 import de.melody.utils.Utils;
-import de.nebalus.botbuilder.command.CommandInfo;
-import de.nebalus.botbuilder.command.CommandType;
-import de.nebalus.botbuilder.command.ServerCommand;
-import de.nebalus.botbuilder.utils.Messenger;
+import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandType;
+import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -34,7 +34,7 @@ public class InfoCommand implements ServerCommand{
 	}
 
 	private EmbedBuilder getInfoEmbed(Guild guild) {
-		int serversRunning = guild.getJDA().getGuilds().size()+67; 
+		int serversRunning = guild.getJDA().getGuilds().size(); 
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setThumbnail(guild.getJDA().getSelfUser().getEffectiveAvatarUrl());
 		
@@ -45,8 +45,8 @@ public class InfoCommand implements ServerCommand{
 		
 		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(guild, "feedback.info.botinfo",
 			"JDA",
-			Config.BUILDVERSION,
-			Config.BUILDDATE,
+			Constants.BUILDVERSION,
+			Constants.BUILDDATE,
 			serversRunning,
 			Utils.getUserInt(),
 			Utils.decodeStringFromTimeMillis(Melody.INSTANCE.playedmusictime,true),
@@ -74,7 +74,7 @@ public class InfoCommand implements ServerCommand{
 
 	@Override
 	public String getCommandDescription() {
-		return "Show some information about "+Config.BUILDNAME;
+		return "Show some information about "+Constants.BUILDNAME;
 	}
 
 	@Override

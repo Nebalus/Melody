@@ -3,12 +3,12 @@ package de.melody.commands.info;
 import java.util.List;
 
 
-import de.melody.core.Config;
+import de.melody.core.Constants;
 import de.melody.core.Melody;
-import de.nebalus.botbuilder.command.CommandInfo;
-import de.nebalus.botbuilder.command.CommandType;
-import de.nebalus.botbuilder.command.ServerCommand;
-import de.nebalus.botbuilder.utils.Messenger;
+import de.melody.utils.Messenger;
+import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandType;
+import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -22,12 +22,12 @@ public class InviteCommand implements ServerCommand{
 
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		Messenger.sendMessage(channel,Melody.INSTANCE.getMessageFormatter().format(channel.getGuild(), "feedback.info.invite", m.getAsMention(), Config.INVITE_URL)).queue();
+		Messenger.sendMessage(channel,Melody.INSTANCE.getMessageFormatter().format(channel.getGuild(), "feedback.info.invite", m.getAsMention(), Constants.INVITE_URL)).queue();
 	}
 
 	@Override
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
-		event.reply(Melody.INSTANCE.getMessageFormatter().format(guild, "feedback.info.invite", member.getAsMention(), Config.INVITE_URL)).queue();
+		event.reply(Melody.INSTANCE.getMessageFormatter().format(guild, "feedback.info.invite", member.getAsMention(), Constants.INVITE_URL)).queue();
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class InviteCommand implements ServerCommand{
 	}
 	@Override
 	public String getCommandDescription() {
-		return "Invite "+Config.BUILDNAME+" to your own Discord Server";
+		return "Invite "+Constants.BUILDNAME+" to your own Discord Server";
 	}
 	@Override
 	public List<OptionData> getCommandOptions() {

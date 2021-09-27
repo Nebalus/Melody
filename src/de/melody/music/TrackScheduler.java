@@ -7,13 +7,12 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import de.melody.core.Config;
+import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
-import de.melody.entities.reacts.TrackReaction;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Emoji;
-import de.nebalus.botbuilder.utils.Messenger;
+import de.melody.utils.Messenger;
+import de.melody.utils.Utils.Emoji;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -26,13 +25,7 @@ public class TrackScheduler extends AudioEventAdapter{
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void onPlayerPause(AudioPlayer player) {
-		Guild guild = melody.shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
-		
-		EmbedBuilder builder = new EmbedBuilder();
-		builder.setDescription(Emoji.PAUSE+" "+mf.format(guild, "music.track.pause"));
-		MusicUtil.sendEmbled(guild, builder);		
-	}
+	public void onPlayerPause(AudioPlayer player) {}
 	
 	@Override
 	public void onPlayerResume(AudioPlayer player) {
@@ -55,7 +48,7 @@ public class TrackScheduler extends AudioEventAdapter{
 			EmbedBuilder builder = new EmbedBuilder();
 			AudioTrackInfo info = track.getInfo();
 			String url = info.uri;
-			builder.setDescription("["+guild.getJDA().getEmoteById(Emoji.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guild, "music.track.now-playing")+"]("+Config.WEBSITE_URL+")");
+			builder.setDescription("["+guild.getJDA().getEmoteById(Emoji.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guild, "music.track.now-playing")+"]("+Constants.WEBSITE_URL+")");
 			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", true);
 			builder.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(info,0l),true);
 			builder.setFooter(mf.format(guild, "music.user.who-requested")+ queue.currentlyPlaying().getWhoQueued().getUser().getAsTag());
@@ -65,9 +58,9 @@ public class TrackScheduler extends AudioEventAdapter{
 				//builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
 			}
 			Messenger.sendMessageEmbed(ge.getMusicChannel(), builder).queue((trackmessage) ->{
-				TrackReaction te = new TrackReaction(info);
-				melody.getEntityManager().getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(trackmessage.getIdLong(), te);
-				trackmessage.addReaction(Emoji.SPARKLING_HEART).queue();
+				//TrackReaction te = new TrackReaction(info);
+				//melody.getEntityManager().getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(trackmessage.getIdLong(), te);
+				//trackmessage.addReaction(Emoji.SPARKLING_HEART).queue();
 			});
 		}
 	}
