@@ -10,8 +10,8 @@ import net.dv8tion.jda.api.entities.Member;
 
 public class Queue {
 	
-	private ArrayList<QueuedTrack> queuelist;
-	private ArrayList<QueuedTrack> playedlist;
+	public ArrayList<QueuedTrack> queuelist;
+	public ArrayList<QueuedTrack> playedlist;
 	private MusicController controller;
 	
 	public Queue(MusicController controller) {
@@ -23,7 +23,7 @@ public class Queue {
 	public int next(int amount) {
 		if(amount == 0) amount++;
 		if(amount < 0) amount *= -1;
-		if(amount > queuelist.size()) amount = queuelist.size();
+		//if(amount > queuelist.size()) amount = queuelist.size();
 		if(!queuelist.isEmpty()) {
 			for (int i = 1; i < amount;) {
 				++i;
@@ -31,8 +31,8 @@ public class Queue {
 			}
 			if (!queuelist.isEmpty() && queuelist.get(0) != null) {
 				QueuedTrack qt = queuelist.remove(0);
-				controller.play(qt.getTrack().makeClone());
 				playedlist.add(qt);
+				controller.play(qt.getTrack().makeClone());
 				return amount;
 			}
 		}

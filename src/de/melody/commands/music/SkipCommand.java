@@ -8,12 +8,12 @@ import de.melody.core.Melody;
 import de.melody.music.MusicController;
 import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Messenger;
-import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -23,7 +23,6 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-
 
 public class SkipCommand implements ServerCommand{
 
@@ -47,13 +46,15 @@ public class SkipCommand implements ServerCommand{
 				try {
 					int i = Integer.valueOf(args[1]);
 					queue.next(i);
-				}catch(NumberFormatException | IndexOutOfBoundsException e) {
+				}catch(Exception e) {
 					queue.next(1);
 				}
-			}else 
-				Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.currently-playing-null"),m);
-		}else
-			Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
+			}else {
+				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.currently-playing-null"));
+			}
+		}else {
+			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
+		}
 	}
 
 	@Override

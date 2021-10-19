@@ -6,11 +6,11 @@ import java.util.Properties;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
-import de.melody.utils.Messenger;
 import de.melody.utils.Utils;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;

@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.melody.core.Melody;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -91,7 +92,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 				
 				MusicUtil.sendEmbled(guild, builder);
 			}else {
-				MusicUtil.sendEmbledError(guild, userWhoQueued.getAsMention()+ " "+mf.format(guild, "music.playlist.empty"));
+				MusicUtil.sendEmbledError(guild, new ErrorMessageBuilder().setMessageFormat(guild, "music.playlist-empty"));
 			}
 		}
 	}
@@ -99,11 +100,9 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	@Override
 	public void noMatches() {
 		if(uri.startsWith("ytsearch: ")) {
-			EmbedBuilder builder = new EmbedBuilder()
-					.setDescription(mf.format(guild, "feedback.music.no-match"));	
-			MusicUtil.sendEmbled(guild, builder);
+			MusicUtil.sendEmbledError(guild, new ErrorMessageBuilder().setMessageFormat(guild, "music.no-match"));
 		}else {
-			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.nothing-in-link"));
+			MusicUtil.sendEmbledError(guild, new ErrorMessageBuilder().setMessageFormat(guild, "music.nothing-in-link"));
 		}
 	}
 

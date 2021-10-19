@@ -10,8 +10,8 @@ public class Constants{
 	
 	public static final long STARTUP = System.currentTimeMillis();
 	
-	public static final String BUILDVERSION = "Beta 0.6.1";	
-	public static final String BUILDDATE = "26/9/2021";	
+	public static final String BUILDVERSION = "BETA 0.6.2";	
+	public static final String BUILDDATE = "19/10/2021";	
 	public static final String BUILDNAME = "Melody";
 	
 	public static final Long ENTITYEXPIRETIME = 1000l*60l*60l;
@@ -29,4 +29,8 @@ public class Constants{
 	public static final int MUSIK_AFK_DEFAULT = 60;
 	
 	public static final List<Long> DEVELOPERIDS = List.of(502213965485703168l);
+	
+	public static final String PIC_DEFAULT_AVATAR_URL = "/default-avatar.png";
+	public static final String PIC_ERROR_LINE_URL = "/error-line.png";
+	public static final String PIC_TRACKINFO_URL = "/trackinfo.png";
 }

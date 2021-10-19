@@ -49,7 +49,7 @@ public class LiteSQL {
 			 * saved create test esdf 
 			 */
 			onUpdate("CREATE TABLE IF NOT EXISTs playlistinfo(PK_playlistinfo INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, token VARCHAR, createdtime INTEGER, ownerid INTEGER, privacytype INTEGER, title VARCHAR)");
-			onUpdate("CREATE TABLE IF NOT EXISTs playlistcontent(FK_playlistinfo INTEGER NOT NULL, FK_track INTEGER NOT NULL, position INTEGER)");
+			onUpdate("CREATE TABLE IF NOT EXISTs playlistcontent(PK_playlistcontent INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, FK_playlistinfo INTEGER NOT NULL, FK_track INTEGER NOT NULL, position INTEGER)");
 			onUpdate("CREATE TABLE IF NOT EXISTs track(PK_track INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, url VARCHAR NOT NULL, title VARCHAR, provider INTEGER NOT NULL DEFAULT 1)");
 			onUpdate("CREATE TABLE IF NOT EXISTs system(playedmusictime INTEGER)");
 		} catch (SQLException | IOException e1) {

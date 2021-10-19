@@ -6,13 +6,13 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import de.melody.core.Melody;
 import de.melody.music.MusicController;
-import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Messenger;
 import de.melody.utils.Utils.Emoji;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -42,10 +42,12 @@ public class LoopCommand implements ServerCommand{
 					controller.setLoop(true);
 					Messenger.sendMessageEmbed(channel,Emoji.SINGLE_LOOP+mf.format(guild, "music.info.loop-enabled")).queue();
 				}	
-			}else 
-				MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.currently-playing-null"));				
-		}else 
-			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.bot-not-in-vc"));
+			}else {
+				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.currently-playing-null"));
+			}
+		}else {
+			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
+		}
 	}
 
 	@Override

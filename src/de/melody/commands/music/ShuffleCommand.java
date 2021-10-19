@@ -6,10 +6,10 @@ import de.melody.core.Melody;
 import de.melody.music.MusicController;
 import de.melody.music.Queue;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Messenger;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -30,9 +30,9 @@ public class ShuffleCommand implements ServerCommand{
 		Queue queue = controller.getQueue();
 		if(queue.getQueuelist().size() > 1) {
 			queue.shuffel(); 
-			Messenger.sendMessageEmbed(channel, mf.format(guild, "music.shuffel.successful",queue.getQueueSize())).queue();
+			Messenger.sendMessageEmbed(channel, mf.format(guild, "music.shuffle.successful",queue.getQueueSize())).queue();
 		}else {
-			Messenger.sendMessageEmbed(channel, mf.format(guild, "music.shuffel.emptyqueue")).queue();
+			Messenger.sendMessageEmbed(channel, mf.format(guild, "music.shuffle.emptyqueue")).queue();
 		}
 	}
 	
@@ -42,9 +42,9 @@ public class ShuffleCommand implements ServerCommand{
 		Queue queue = controller.getQueue();
 		if(queue.getQueuelist().size() > 1) {
 			queue.shuffel(); 
-			event.replyEmbeds(Messenger.getMessageEmbed(guild, mf.format(guild, "music.shuffel.successful",queue.getQueueSize()))).queue();
+			event.replyEmbeds(Messenger.getMessageEmbed(guild, mf.format(guild, "music.shuffle.successful",queue.getQueueSize()))).queue();
 		}else {
-			event.replyEmbeds(Messenger.getMessageEmbed(guild, mf.format(guild, "music.shuffel.emptyqueue"))).queue();
+			event.replyEmbeds(Messenger.getMessageEmbed(guild, mf.format(guild, "music.shuffle.emptyqueue"))).queue();
 		}
 	}
 

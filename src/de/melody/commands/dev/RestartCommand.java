@@ -48,6 +48,7 @@ public class RestartCommand implements ServerCommand{
 		} catch (Exception e) {
 			channel.sendMessage("Error Something failed: "+e.getMessage()).queue();
 			e.printStackTrace();
+			
 		}
 	}
 

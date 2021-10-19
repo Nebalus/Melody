@@ -2,14 +2,13 @@ package de.melody.commands.music;
 
 import java.util.List;
 
-import de.melody.core.Melody;
 import de.melody.music.MusicUtil;
-import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -21,9 +20,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 
 public class LeaveCommand implements ServerCommand{
-
-	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
@@ -32,7 +28,7 @@ public class LeaveCommand implements ServerCommand{
 			MusicUtil.MusicKiller(guild);
 			message.addReaction(Emoji.OK_HAND).queue();
 		}else 
-			Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
+			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
 	}
 
 	@Override

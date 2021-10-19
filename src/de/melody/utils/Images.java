@@ -11,6 +11,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils.Emoji;
@@ -24,7 +25,7 @@ public class Images {
 	
 	public static File tracktopng(String trackname,long trackplaytime, long tracklength, String trackauthor, Guild guild, Member userqueued) {
 		try {
-			BufferedImage background = ImageIO.read((Images.class.getResource("/trackinfo.png")));
+			BufferedImage background = ImageIO.read((Images.class.getResource(Constants.PIC_TRACKINFO_URL)));
 			
 			final int width = background.getWidth();
 			final int height = background.getHeight();
@@ -114,26 +115,27 @@ public class Images {
 				graph.drawImage(buffavatar, 50, height-75, 50, 50, null);
 				graph.drawString(userqueued.getUser().getAsTag(), 112, height-35);
 			}else {
-				BufferedImage buffavatar = ImageIO.read((Images.class.getResource("/default-avatar.png")));
+				BufferedImage buffavatar = ImageIO.read((Images.class.getResource(Constants.PIC_DEFAULT_AVATAR_URL)));
 				graph.drawImage(buffavatar, 50, height-75, 50, 50, null);	
 				graph.drawString("Nobody#0042", 112, height-35);
 			}		
 			graph.dispose();	
-			
-			File images = new File(Melody.getCurrentJarPath()+"/images/");
-			if(!images.exists()) {
-				images.mkdirs();
-			}
-			
-			File newfile = new File(Melody.getCurrentJarPath()+"/images/"+IDGenerator.generateID()+".png");
-			newfile.createNewFile();
-			ImageIO.write(buffimg, "png", newfile);
-			return newfile;
-		} 
-		catch (IOException e) {
+			return generateNewImage(buffimg);
+		}catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static File generateNewImage(BufferedImage image) throws IOException {
+		File images = new File(Melody.getCurrentJarPath()+"/images/");
+		if(!images.exists()) {
+			images.mkdir();
+		}
+		File newfile = new File(Melody.getCurrentJarPath()+"/images/"+IDGenerator.generateID()+".png");
+		newfile.createNewFile();
+		ImageIO.write(image, "png", newfile);
+		return newfile;
 	}
 	
 	private static int getPercent(Long number, Long maxNumber){

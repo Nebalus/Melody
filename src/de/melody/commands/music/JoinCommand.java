@@ -6,12 +6,12 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import de.melody.core.Melody;
 import de.melody.music.MusicController;
-import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -25,7 +25,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class JoinCommand implements ServerCommand{
 	
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
@@ -39,8 +38,9 @@ public class JoinCommand implements ServerCommand{
 			if(player.getPlayingTrack() == null) {
 				controller.setAfkTime(600);
 			}
-		}else 
-			Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.user-not-in-vc"), m);
+		}else {
+			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.user-not-in-vc"));	
+		}	
 	}
 
 	@Override

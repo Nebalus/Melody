@@ -2,12 +2,17 @@ package de.melody.commands.music;
 
 import java.util.List;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+
 import de.melody.core.Melody;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.utils.Utils.Emoji;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -28,15 +33,21 @@ public class ResumeCommand implements ServerCommand{
 		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
-			melody.playerManager.getController(guild.getIdLong()).getPlayer().setPaused(false);
-		}else
-			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.bot-not-in-vc"));
+			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
+			if(player.isPaused()) {
+				MusicUtil.sendEmbled(guild, Emoji.RESUME+" "+mf.format(guild, "music.track.resume"));		
+				player.setPaused(false);
+			}
+		}else {
+			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
+		}
 	}
 
 	@Override
 	public List<String> getCommandPrefix() {
 		return List.of("resume","unpause");
 	}
+	
 	@Override
 	public CommandType getCommandType() {
 		return CommandType.CHAT_COMMAND;
@@ -46,6 +57,7 @@ public class ResumeCommand implements ServerCommand{
 	public CommandInfo getCommandInfo() {
 		return CommandInfo.DJ_COMMAND;
 	}
+	
 	@Override
 	public String getCommandDescription() {
 		return null;
