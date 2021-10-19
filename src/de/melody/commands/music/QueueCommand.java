@@ -10,12 +10,12 @@ import de.melody.music.MusicController;
 import de.melody.music.Queue;
 import de.melody.music.Queue.QueuedTrack;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Messenger;
 import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -74,7 +74,7 @@ public class QueueCommand implements ServerCommand{
 			builder.setFooter(mf.format(guild, "music.queue.page", qe.getPage()+"/"+maxpage));
 			
 		}else {
-			list = mf.format(guild, "feedback.music.currently-playing-null");
+			list = mf.format(guild, "error.music.currently-playing-null.body");
 		}
 		builder.setDescription(list);
 		return builder;

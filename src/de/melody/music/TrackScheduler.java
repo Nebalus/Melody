@@ -11,8 +11,8 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Messenger;
 import de.melody.utils.Utils.Emoji;
+import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -28,15 +28,7 @@ public class TrackScheduler extends AudioEventAdapter{
 	public void onPlayerPause(AudioPlayer player) {}
 	
 	@Override
-	public void onPlayerResume(AudioPlayer player) {
-		Guild guild = melody.shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
-		
-		EmbedBuilder builder = new EmbedBuilder();
-		builder.setDescription(Emoji.RESUME+" "+mf.format(guild, "music.track.resume"));
-		MusicUtil.sendEmbled(guild, builder);		
-	}
-	
-	
+	public void onPlayerResume(AudioPlayer player) {}
 	
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {

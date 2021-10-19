@@ -252,7 +252,7 @@ public class Melody{
 					jda.getPresence().setActivity(Activity.streaming("music on " +musicguilds+" server"+(musicguilds < 1 ? "s": "") +"!","https://twitch.tv/nebalus"));
 					break;
 				case 1:
-					jda.getPresence().setActivity(Activity.listening("m!help | "+Constants.BUILDVERSION));
+					jda.getPresence().setActivity(Activity.watching(Constants.BUILDVERSION));
 					break;
 				case 2:
 					jda.getPresence().setActivity(Activity.listening("@"+jda.getSelfUser().getName()));

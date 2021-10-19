@@ -39,6 +39,7 @@ public class MessageFormatter {
 			JSONObject json = getJSONMessage.get(language);
 			message = json.getString(key);
 			if(language.equals(Languages.GERMAN)) {
+				message = message.replace("ss", "ß");
 				message = message.replace("ae", "ä");
 				message = message.replace("oe", "ö");
 				message = message.replace("ue", "ü");
@@ -46,6 +47,7 @@ public class MessageFormatter {
 				message = message.replace("OE", "Ö");
 				message = message.replace("UE", "Ü");
 				
+				message = message.replace("[ß]", "ss");
 				message = message.replace("[ä]", "ae");
 				message = message.replace("[ö]", "oe");
 				message = message.replace("[ü]", "ue");

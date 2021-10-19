@@ -7,12 +7,13 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.Languages;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Messenger;
 import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -115,7 +116,7 @@ public class ConfigCommand implements ServerCommand{
 				}
 			}
 		}else {
-			Utils.sendErrorEmbled(message, mf.format(guild, "feedback.error.user-no-permmisions", "MANAGE_SERVER"), m);
+			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "user-no-permmisions", "MANAGE_SERVER"));
 		}
 	}
 	private void sendMainMenu(TextChannel channel, String prefix) {

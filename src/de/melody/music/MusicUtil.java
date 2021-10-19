@@ -5,11 +5,11 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
-import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.music.Queue.QueuedTrack;
-import de.melody.utils.Messenger;
-import de.melody.utils.Utils.Emoji;
+import de.melody.utils.Utils;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -29,23 +29,6 @@ public class MusicUtil extends ListenerAdapter{
 	//verifiedurl.add("bandcamp.com");		
 	private Melody melody = Melody.INSTANCE;
 	
-	public static void sendEmbled(Guild guild, EmbedBuilder builder) {		
-		TextChannel channel;
-		if((channel = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getMusicChannel()) != null) {
-			Messenger.sendMessageEmbed(channel, builder).queue();
-		}			
-	}
-	@SuppressWarnings("deprecation")
-	public static void sendEmbledError(Guild guild, String errormessage) {
-		TextChannel channel;
-		if((channel = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getMusicChannel()) != null) {
-			EmbedBuilder builder = new EmbedBuilder();
-			builder.setDescription(channel.getJDA().getEmoteById(Emoji.ANIMATED_TICK_RED).getAsMention()+" "+errormessage);
-			builder.setColor(Constants.ERROREMBEDCOLOR);
-			channel.sendMessage(builder.build()).queue();
-		}				
-	}
-	
 	@Override
 	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
 		VoiceChannel vc = event.getChannelLeft();
@@ -57,6 +40,27 @@ public class MusicUtil extends ListenerAdapter{
 				melody.playerManager.getController(guild.getIdLong()).setAfkTime(240);
 			}
 		}
+	}
+	
+	public static void sendEmbled(Guild guild, EmbedBuilder builder) {		
+		TextChannel channel;
+		if((channel = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getMusicChannel()) != null) {
+			Messenger.sendMessageEmbed(channel, builder).queue();
+		}			
+	}
+	
+	public static void sendEmbled(Guild guild, String content) {		
+		TextChannel channel;
+		if((channel = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getMusicChannel()) != null) {
+			Messenger.sendMessageEmbed(channel, content).queue();
+		}			
+	}
+	
+	public static void sendEmbledError(Guild guild, ErrorMessageBuilder builder) {
+		TextChannel channel;
+		if((channel = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getMusicChannel()) != null) {
+			Messenger.sendErrorMessage(channel, builder);
+		}				
 	}
 	
 	@Override
@@ -144,7 +148,7 @@ public class MusicUtil extends ListenerAdapter{
 	}
 	
 	public static Boolean isUrlVerified(String url) {
-		String uri = getDomain(url);
+		String uri = Utils.getDomain(url);
 		if(uri != null) {
 			for(String vurl : verifiedurl) {
 				if(uri.endsWith(vurl)) {
@@ -153,13 +157,5 @@ public class MusicUtil extends ListenerAdapter{
 			}
 		}
 		return false;
-	}
-	
-	public static String getDomain(String url) {
-		if(url.startsWith("http://") || url.startsWith("https://")) {
-			String[] args = url.split("/");
-			return args[2].toLowerCase();
-		}
-		return null;
 	}
 }

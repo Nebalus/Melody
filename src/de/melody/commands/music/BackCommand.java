@@ -7,9 +7,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import de.melody.core.Melody;
 import de.melody.music.MusicController;
 import de.melody.music.Queue;
-import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Messenger;
-import de.melody.utils.Utils;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import de.melody.utils.Utils.Emoji;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
@@ -27,7 +26,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class BackCommand implements ServerCommand{
 
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
 	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
@@ -48,12 +46,13 @@ public class BackCommand implements ServerCommand{
 				}catch(NumberFormatException | IndexOutOfBoundsException e) {
 					queue.back(1);
 				}
-			}else 
-				Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.currently-playing-null"),m);
-		}else
-			Utils.sendErrorEmbled(message, mf.format(guild, "feedback.music.bot-not-in-vc"), m);
+			}else {
+				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.currently-playing-null"));
+			}
+		}else {
+			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
+		}
 	}
-
 	@Override
 	public List<String> getCommandPrefix() {
 		return List.of("back","b");

@@ -6,6 +6,8 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.utils.Utils.ConsoleLogger;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -69,7 +71,7 @@ public class CommandManager {
 					if(guildentity.isMemberDJ(member)) {
 						cmd.performCommand(member, channel, message, guild);
 					}else {
-						channel.sendMessage("test").queue();
+						Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.user-not-dj"));
 					}
 					return true;
 				default:

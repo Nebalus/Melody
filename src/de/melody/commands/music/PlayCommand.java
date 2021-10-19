@@ -21,9 +21,12 @@ import de.melody.music.AudioLoadResult;
 import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.utils.Utils;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -82,8 +85,7 @@ public class PlayCommand implements ServerCommand{
 							} catch (CancellationException e) {
 						      System.out.println("Async operation cancelled.");
 							}
-					}else
-						if(url.toLowerCase().startsWith("https://open.spotify.com/playlist/")){
+					}else if(url.toLowerCase().startsWith("https://open.spotify.com/playlist/")){
 							String[] urlid = url.split("/");
 							String id = urlid[4].substring(0, 22);
 							
@@ -121,24 +123,24 @@ public class PlayCommand implements ServerCommand{
 								
 								final String uri = "ytsearch: " + playlist.getName();
 								apm.loadItem(uri, new AudioLoadResult(controller, uri, m));
-								} catch (CompletionException e) {
-							      System.out.println("Error: " + e.getCause().getMessage());
-								} catch (CancellationException e) {
-							      System.out.println("Async operation cancelled.");
-								}
+							} catch (CompletionException e) {
+								System.out.println("Error: " + e.getCause().getMessage());
+							} catch (CancellationException e) {
+								System.out.println("Async operation cancelled.");
+							}
 						}
 				}else if(MusicUtil.isUrlVerified(url) || isytsearch == true) {
 					manager.openAudioConnection(vc);
 					final String uri = url;
 					apm.loadItem(uri, new AudioLoadResult(controller, uri, m));
 				}else {
-					MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.non-whitelisted-domain",MusicUtil.getDomain(url)));
+					Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.non-whitelisted-domain", Utils.getDomain(url)));
 				}					
 			}else {
-				MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.music.user-not-in-vc"));
-			}
+				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.user-not-in-vc"));	
+			}	
 		}else {
-			MusicUtil.sendEmbledError(guild, mf.format(guild, "feedback.info.command-usage",ge.getPrefix()+"play <url/search query>"));
+			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", ge.getPrefix()+"play <url/search query>"));	
 		}
 	}
 

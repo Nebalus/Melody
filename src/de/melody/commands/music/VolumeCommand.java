@@ -5,11 +5,11 @@ import java.util.List;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Messenger;
-import de.melody.utils.Utils;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -39,10 +39,11 @@ public class VolumeCommand implements ServerCommand{
 					melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
 					ge.setVolume(amount);
 					Messenger.sendMessageEmbed(channel, mf.format(guild, "command.volume.set",amount)).queue();
-				}else
-					Utils.sendErrorEmbled(message, mf.format(guild, "command.volume.out-of-bounds",maxvolume), m);
+				}else {
+					Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "command.volume.out-of-bounds", maxvolume));		
+				}
 			}catch(NumberFormatException e) {
-				Utils.sendErrorEmbled(message, mf.format(guild, "command.volume.out-of-bounds",maxvolume), m);
+				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "command.volume.out-of-bounds", maxvolume));	
 			}
 		}
 	}
