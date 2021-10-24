@@ -24,13 +24,13 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class InfoCommand implements ServerCommand{
 
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		Messenger.sendMessageEmbed(channel, getInfoEmbed(guild)).queue();
 	}
 	
 	@Override
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
-		event.replyEmbeds(Messenger.getMessageEmbed(guild, getInfoEmbed(guild))).queue();
+		event.replyEmbeds(Messenger.getMessageEmbed(getInfoEmbed(guild))).queue();
 	}
 
 	private EmbedBuilder getInfoEmbed(Guild guild) {

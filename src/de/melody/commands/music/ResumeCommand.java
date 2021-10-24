@@ -5,7 +5,6 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import de.melody.core.Melody;
-import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils.Emoji;
 import de.melody.utils.commandbuilder.CommandInfo;
@@ -22,20 +21,19 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-
 public class ResumeCommand implements ServerCommand{
 
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
 			if(player.isPaused()) {
-				MusicUtil.sendEmbled(guild, Emoji.RESUME+" "+mf.format(guild, "music.track.resume"));		
+				Messenger.sendMessageEmbed(channel, Emoji.RESUME+" "+mf.format(guild, "music.track.resume"));		
 				player.setPaused(false);
 			}
 		}else {

@@ -20,7 +20,6 @@ import de.melody.entities.GuildEntity;
 import de.melody.music.AudioLoadResult;
 import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
-import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
@@ -41,17 +40,16 @@ import net.dv8tion.jda.api.managers.AudioManager;
 public class PlayCommand implements ServerCommand{
 
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
 		GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
 		ge.setMusicChannelId(channel.getIdLong());
 		if(args.length > 1) {
 			GuildVoiceState state;
 			VoiceChannel vc;
-			if((state = m.getVoiceState()) != null && (vc = state.getChannel()) != null) {
+			if((state = member.getVoiceState()) != null && (vc = state.getChannel()) != null) {
 				MusicController controller = melody.playerManager.getController(guild.getIdLong());
 				AudioPlayerManager apm = melody.audioPlayerManager;
 				AudioManager manager = guild.getAudioManager();
@@ -79,10 +77,10 @@ public class PlayCommand implements ServerCommand{
 							
 							final String uri = "ytsearch: " + track.getName() + " "+track.getArtists()[0].getName();
 							
-							apm.loadItem(uri, new AudioLoadResult(controller, uri, m));
-							} catch (CompletionException e) {
+							apm.loadItem(uri, new AudioLoadResult(controller, uri, member));
+							}catch (CompletionException e) {
 						      System.out.println("Error: " + e.getCause().getMessage());
-							} catch (CancellationException e) {
+							}catch (CancellationException e) {
 						      System.out.println("Async operation cancelled.");
 							}
 					}else if(url.toLowerCase().startsWith("https://open.spotify.com/playlist/")){
@@ -122,7 +120,7 @@ public class PlayCommand implements ServerCommand{
 								};
 								
 								final String uri = "ytsearch: " + playlist.getName();
-								apm.loadItem(uri, new AudioLoadResult(controller, uri, m));
+								apm.loadItem(uri, new AudioLoadResult(controller, uri, member));
 							} catch (CompletionException e) {
 								System.out.println("Error: " + e.getCause().getMessage());
 							} catch (CancellationException e) {
@@ -132,7 +130,7 @@ public class PlayCommand implements ServerCommand{
 				}else if(MusicUtil.isUrlVerified(url) || isytsearch == true) {
 					manager.openAudioConnection(vc);
 					final String uri = url;
-					apm.loadItem(uri, new AudioLoadResult(controller, uri, m));
+					apm.loadItem(uri, new AudioLoadResult(controller, uri, member));
 				}else {
 					Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.non-whitelisted-domain", Utils.getDomain(url)));
 				}					

@@ -24,7 +24,7 @@ public class StayCommand implements ServerCommand{
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
 		if(ge.is24_7()) {
 			ge.set24_7(false);

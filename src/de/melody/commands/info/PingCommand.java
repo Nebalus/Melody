@@ -18,11 +18,12 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 
 public class PingCommand implements ServerCommand{
-
-	private MessageFormatter mf = Melody.INSTANCE.getMessageFormatter();
+	
+	private Melody melody = Melody.INSTANCE;
+	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) 	{		
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) 	{		
 		long gatewayping = channel.getJDA().getGatewayPing();
 		channel.getJDA().getRestPing().queue( (time) ->
 			channel.sendMessageFormat(mf.format(channel.getGuild(), "feedback.info.ping"), time, gatewayping).queue()

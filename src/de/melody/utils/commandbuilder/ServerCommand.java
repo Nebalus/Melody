@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public interface ServerCommand {
 
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild);
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild);
 	
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event);
 	

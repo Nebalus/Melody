@@ -1,36 +1,19 @@
 package de.melody.entities;
 
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
-
-import de.melody.core.Melody;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
 public class EntityManager {
 
-	private ConcurrentHashMap<Long, GuildEntityController> guildcontroller;
 	public HashMap<Long, UserEntity> userentity;
 	public HashMap<Long, GuildEntity> guildentity;
 	public HashMap<Integer, PlaylistEntity> playlistentity;
 	
 	public EntityManager() {
-		this.guildcontroller = new ConcurrentHashMap<Long, GuildEntityController>();
 		this.userentity = new HashMap<Long, UserEntity>();
 		this.guildentity = new HashMap<Long, GuildEntity>();
 		this.playlistentity = new HashMap<Integer, PlaylistEntity>();
-	}
-	
-	public GuildEntityController getGuildController(long guildid) {
-		GuildEntityController ec = null;
-		
-		if(this.guildcontroller.containsKey(guildid)) {
-			ec = this.guildcontroller.get(guildid);
-		}else {
-			ec = new GuildEntityController(Melody.INSTANCE.shardMan.getGuildById(guildid));
-			this.guildcontroller.put(guildid, ec);
-		}
-		return ec;
 	}
 	
 	public UserEntity getUserEntity(User user) {

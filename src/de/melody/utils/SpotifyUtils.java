@@ -28,8 +28,6 @@ public class SpotifyUtils {
 		return token;
 	}
 	
-	
-	
 	public void update() {
 		if(expiretime < System.currentTimeMillis()) {
 			final String encodedid = Base64.getEncoder().encodeToString((clientId+":"+clientSecret).getBytes());

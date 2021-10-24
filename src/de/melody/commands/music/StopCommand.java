@@ -28,12 +28,12 @@ public class StopCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
 		MusicController controller = melody.playerManager.getController(guild.getIdLong());
 		AudioPlayer player = controller.getPlayer();
 		GuildVoiceState state;
-		if((state = m.getVoiceState()) != null && state.getChannel() != null) {
+		if((state = member.getVoiceState()) != null && state.getChannel() != null) {
 			if(player.getPlayingTrack() != null) {
 				Queue queue = controller.getQueue();
 				player.stopTrack();

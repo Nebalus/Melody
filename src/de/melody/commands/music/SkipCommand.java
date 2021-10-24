@@ -30,8 +30,7 @@ public class SkipCommand implements ServerCommand{
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
-		
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {	
 		GuildVoiceState state;
 		EmbedBuilder builder = new EmbedBuilder();
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
@@ -41,14 +40,13 @@ public class SkipCommand implements ServerCommand{
 			Queue queue = controller.getQueue();
 			if(player.getPlayingTrack() != null) {
 				player.stopTrack();
-				builder.setDescription(Emoji.NEXT_TITLE+" "+mf.format(guild, "music.track.skip"));
-				Messenger.sendMessageEmbed(channel, builder).queue();
 				try {
 					int i = Integer.valueOf(args[1]);
-					queue.next(i);
+					builder.setDescription(Emoji.NEXT_TITLE+" "+mf.format(guild, "music.track.skip", queue.next(i)));
 				}catch(Exception e) {
-					queue.next(1);
+					builder.setDescription(Emoji.NEXT_TITLE+" "+mf.format(guild, "music.track.skip", queue.next(1)));
 				}
+				Messenger.sendMessageEmbed(channel, builder).queue();
 			}else {
 				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.currently-playing-null"));
 			}

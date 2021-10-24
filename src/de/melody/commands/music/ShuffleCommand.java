@@ -25,11 +25,11 @@ public class ShuffleCommand implements ServerCommand{
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		MusicController controller = melody.playerManager.getController(guild.getIdLong());
 		Queue queue = controller.getQueue();
 		if(queue.getQueuelist().size() > 1) {
-			queue.shuffel(); 
+			queue.shuffle(); 
 			Messenger.sendMessageEmbed(channel, mf.format(guild, "music.shuffle.successful",queue.getQueueSize())).queue();
 		}else {
 			Messenger.sendMessageEmbed(channel, mf.format(guild, "music.shuffle.emptyqueue")).queue();
@@ -41,10 +41,10 @@ public class ShuffleCommand implements ServerCommand{
 		MusicController controller = melody.playerManager.getController(guild.getIdLong());
 		Queue queue = controller.getQueue();
 		if(queue.getQueuelist().size() > 1) {
-			queue.shuffel(); 
-			event.replyEmbeds(Messenger.getMessageEmbed(guild, mf.format(guild, "music.shuffle.successful",queue.getQueueSize()))).queue();
+			queue.shuffle(); 
+			event.replyEmbeds(Messenger.getMessageEmbed(mf.format(guild, "music.shuffle.successful",queue.getQueueSize()))).queue();
 		}else {
-			event.replyEmbeds(Messenger.getMessageEmbed(guild, mf.format(guild, "music.shuffle.emptyqueue"))).queue();
+			event.replyEmbeds(Messenger.getMessageEmbed(mf.format(guild, "music.shuffle.emptyqueue"))).queue();
 		}
 	}
 

@@ -1,6 +1,5 @@
 package de.melody.utils.messenger;
 
-import java.awt.Color;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -14,20 +13,14 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 public class Messenger {
-
+	
 	public static MessageAction sendMessageEmbed(TextChannel channel, String message) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Constants.EMBEDCOLOR);
-		builder.setDescription(message);
-		return channel.sendMessageEmbeds(builder.build());
-	}
-	
-	public static MessageAction sendMessageEmbed(TextChannel channel, String message, Color color) {
-		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(color);
 		builder.setDescription(message);
 		return channel.sendMessageEmbeds(builder.build());
 	}
@@ -37,19 +30,14 @@ public class Messenger {
 		return channel.sendMessageEmbeds(builder.build());
 	}
 	
-	public static MessageAction sendMessageEmbed(TextChannel channel, EmbedBuilder builder, Color color) {
-		builder.setColor(color);
-		return channel.sendMessageEmbeds(builder.build());
-	}
-	
-	public static MessageEmbed getMessageEmbed(Guild guild, String message) {
+	public static MessageEmbed getMessageEmbed(String message) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setColor(Constants.EMBEDCOLOR);
 		builder.setDescription(message);
 		return builder.build();
 	}
 	
-	public static MessageEmbed getMessageEmbed(Guild guild, EmbedBuilder builder) {
+	public static MessageEmbed getMessageEmbed(EmbedBuilder builder) {
 		builder.setColor(Constants.EMBEDCOLOR);
 		return builder.build();
 	}
@@ -69,6 +57,16 @@ public class Messenger {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void sendErrorSlashMessage(SlashCommandEvent event, ErrorMessageBuilder message) {
+		event.replyEmbeds(message.build()).queue((picture)->{
+			try {
+				picture.editOriginal(Images.generateNewImage(ImageIO.read(Messenger.class.getResource(Constants.PIC_ERROR_LINE_URL))), "error-line.png").queue();
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	@SuppressWarnings("deprecation")

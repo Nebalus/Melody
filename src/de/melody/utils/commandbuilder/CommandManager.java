@@ -96,7 +96,7 @@ public class CommandManager {
 					if(guildentity.isMemberDJ(member)) {
 						cmd.performSlashCommand(member, channel, guild, event);
 					}else {
-						channel.sendMessage("test").queue();
+						Messenger.sendErrorSlashMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "music.user-not-dj"));
 					}
 					return true;
 				default:

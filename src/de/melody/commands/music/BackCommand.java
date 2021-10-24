@@ -7,13 +7,13 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import de.melody.core.Melody;
 import de.melody.music.MusicController;
 import de.melody.music.Queue;
+import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import de.melody.utils.Utils.Emoji;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -26,11 +26,11 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class BackCommand implements ServerCommand{
 
 	private Melody melody = Melody.INSTANCE;
+	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		GuildVoiceState state;
-		EmbedBuilder builder = new EmbedBuilder();
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
 			String[] args = message.getContentDisplay().split(" ");
@@ -38,13 +38,11 @@ public class BackCommand implements ServerCommand{
 			Queue queue = controller.getQueue();
 			if(player.getPlayingTrack() != null) {
 				player.stopTrack();
-				builder.setDescription(Emoji.PREVIOUS_TITLE+" test");
-				Messenger.sendMessageEmbed(channel, builder).queue();
 				try {
 					int i = Integer.valueOf(args[1]);
-					queue.back(i);
+					Messenger.sendMessageEmbed(channel, Emoji.PREVIOUS_TITLE+" "+mf.format(guild, "music.track.back", queue.back(i))).queue();
 				}catch(NumberFormatException | IndexOutOfBoundsException e) {
-					queue.back(1);
+					Messenger.sendMessageEmbed(channel, Emoji.PREVIOUS_TITLE+" "+mf.format(guild, "music.track.back", queue.back(1))).queue();
 				}
 			}else {
 				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.currently-playing-null"));
@@ -53,10 +51,12 @@ public class BackCommand implements ServerCommand{
 			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
 		}
 	}
+	
 	@Override
 	public List<String> getCommandPrefix() {
 		return List.of("back","b");
 	}
+	
 	@Override
 	public CommandType getCommandType() {
 		return CommandType.CHAT_COMMAND;

@@ -1,14 +1,10 @@
-package de.melody.commands.info;
+package de.melody.commands.dev;
 
 import java.util.List;
 
-
-import de.melody.core.Constants;
-import de.melody.core.Melody;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
-import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -17,37 +13,39 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-
-public class InviteCommand implements ServerCommand{
+public class ExportcmdCommand implements ServerCommand {
 
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
-		Messenger.sendMessage(channel,Melody.INSTANCE.getMessageFormatter().format(channel.getGuild(), "feedback.info.invite", Constants.INVITE_URL)).queue();
+		
 	}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
-		event.reply(Melody.INSTANCE.getMessageFormatter().format(guild, "feedback.info.invite", Constants.INVITE_URL)).queue();
-	}
-	
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {}
+
 	@Override
 	public List<String> getCommandPrefix() {
-		return List.of("invite");
+		return List.of("exportcommands");
 	}
+
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.BOTH;
+		return CommandType.CHAT_COMMAND;
 	}
+
 	@Override
 	public CommandInfo getCommandInfo() {
-		return CommandInfo.INFO_COMMAND;
+		return CommandInfo.DEVELOPER_COMMAND;
 	}
-	@Override
-	public String getCommandDescription() {
-		return "Invite "+Constants.BUILDNAME+" to your own Discord Server";
-	}
+
 	@Override
 	public List<OptionData> getCommandOptions() {
 		return null;
 	}
+
+	@Override
+	public String getCommandDescription() {
+		return "Exports all commands in a HTML format";
+	}
+
 }
