@@ -22,7 +22,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class TrackinfoCommand implements ServerCommand{
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		MusicController controller = Melody.INSTANCE.playerManager.getController(guild.getIdLong());
 		if(controller.isPlayingTrack()) {
 			AudioTrack at = controller.getPlayer().getPlayingTrack();

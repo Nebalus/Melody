@@ -29,7 +29,7 @@ public class ReactListener extends ListenerAdapter{
 				Long messageid = event.getMessageIdLong();
 				String emoji = event.getReactionEmote().getEmoji();
 				TextChannel channel = event.getTextChannel();
-				ReactionManager reactionManager = Melody.INSTANCE.getEntityManager().getGuildController(guild.getIdLong()).getReactionManager();
+				ReactionManager reactionManager = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getReactionManager();
 				TrackReaction tr = (TrackReaction) reactionManager.getReacton(messageid, ReactionTypes.TRACKREACTION);
 				
 				if(tr != null) {

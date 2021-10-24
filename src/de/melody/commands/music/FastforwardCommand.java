@@ -33,7 +33,7 @@ public class FastforwardCommand implements ServerCommand{
 	
 	@SuppressWarnings({ "unused" })
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			String[] args = message.getContentDisplay().split(" ");
@@ -68,6 +68,7 @@ public class FastforwardCommand implements ServerCommand{
 	public List<String> getCommandPrefix() {
 		return List.of("fastforward","fw","f");
 	}
+	
 	@Override
 	public CommandType getCommandType() {
 		return CommandType.CHAT_COMMAND;
@@ -77,6 +78,7 @@ public class FastforwardCommand implements ServerCommand{
 	public CommandInfo getCommandInfo() {
 		return CommandInfo.DJ_COMMAND;
 	}
+	
 	@Override
 	public String getCommandDescription() {
 		return null;

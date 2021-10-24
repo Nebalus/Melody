@@ -5,7 +5,6 @@ import java.util.List;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import de.melody.core.Melody;
-import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils.Emoji;
 import de.melody.utils.commandbuilder.CommandInfo;
@@ -13,7 +12,6 @@ import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -29,17 +27,14 @@ public class PauseCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
-	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
 			if(!player.isPaused()) {
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.setDescription(Emoji.PAUSE+" "+mf.format(guild, "music.track.pause"));
-				MusicUtil.sendEmbled(guild, builder);		
+				Messenger.sendMessageEmbed(channel, Emoji.PAUSE+" "+mf.format(guild, "music.track.pause"));	
 				player.setPaused(true);
 			}
 		}else {
@@ -54,13 +49,11 @@ public class PauseCommand implements ServerCommand{
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
 			if(!player.isPaused()) {
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.setDescription(Emoji.PAUSE+" "+mf.format(guild, "music.track.pause"));
-				MusicUtil.sendEmbled(guild, builder);		
+				event.replyEmbeds(Messenger.getMessageEmbed(Emoji.PAUSE+" "+mf.format(guild, "music.track.pause"))).queue();
 				player.setPaused(true);
 			}
 		}else {
-			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
+			Messenger.sendErrorSlashMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
 		}
 	}
 

@@ -23,7 +23,7 @@ public class Queue {
 	public int next(int amount) {
 		if(amount == 0) amount++;
 		if(amount < 0) amount *= -1;
-		//if(amount > queuelist.size()) amount = queuelist.size();
+		if(amount > queuelist.size()) amount = queuelist.size()+1;
 		if(!queuelist.isEmpty()) {
 			for (int i = 1; i < amount;) {
 				++i;
@@ -97,7 +97,7 @@ public class Queue {
 		}
 	}
 	
-	public void shuffel() {
+	public void shuffle() {
 		Collections.shuffle(queuelist);
 	}
 	
@@ -108,8 +108,6 @@ public class Queue {
 	public List<QueuedTrack> getQueuelist(){
 		return queuelist;
 	}
-	
-	
 	
 	public class QueuedTrack {
 

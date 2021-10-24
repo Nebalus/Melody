@@ -32,15 +32,15 @@ public class QueueCommand implements ServerCommand{
 	private static MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {	
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {	
 		Messenger.sendMessageEmbed(channel,"Loading...").queue((queuemessage) ->{
 			queuemessage.addReaction(Emoji.BACK).queue();	
 			queuemessage.addReaction(Emoji.RESUME).queue();	
 			queuemessage.addReaction(Emoji.REFRESH).queue();
 
 			QueueReaction qe = new QueueReaction(melody.playerManager.getController(guild.getIdLong()).getQueue());
-			Melody.INSTANCE.getEntityManager().getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
-			queuemessage.editMessageEmbeds(Messenger.getMessageEmbed(guild,loadQueueEmbed(guild,qe))).queue();
+			melody.getEntityManager().getGuildEntity(guild).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
+			queuemessage.editMessageEmbeds(Messenger.getMessageEmbed(loadQueueEmbed(guild,qe))).queue();
 		});		
 	}
 	

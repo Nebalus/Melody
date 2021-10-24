@@ -50,7 +50,7 @@
     "error.info.command-usage.body": "Bitte nutze {0}",
     "error.info.command-usage.header": "Falsche benutzung",
     
-    "feedback.info.invite": "{0} hier ist mein Einladungslink wo du mich zu deinem Server hinzufuegen kannst:\n\n Einladungslink: {1}",
+    "feedback.info.invite": "Hier ist mein Einladungslink wo du mich zu deinem Server hinzufuegen kannst:\n Einladungslink: {0}",
     "feedback.info.ping": "Die Latenz von [botname] ist %dms",
     "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nErstellungsdatum: {2}\nLaeuft auf Servern: {3}\n\n{4} Benutzer hoerten insgesammt {5} lang Musik ueber {6}!",
     "feedback.info.prefix": "**Mein Praefix auf diesem Server ist `{0}`**",
@@ -59,6 +59,9 @@
     
     "music.info.loop-enabled": " **aktiviert!**",
     "music.info.loop-disabled": " **deaktiviert!**",
+    "music.info.bot-join-vc": "[botname] ist {0} beigetreten",
+    "music.info.bot-leave-vc": "[botname] hat {0} verlassen",
+    
     "music.user.who-requested": "Angefordert von ",
     "music.queue.in-queue": "In der Warteschlange:",
     "music.queue.from-guild": "**Warteschlange von {0}**",
@@ -67,7 +70,8 @@
     "music.shuffel.successful": "{0} Lieder wurden gemischt.",
     "music.shuffel.emptyqueue": "Es gibt nichts zu mischen.",
    
-    "music.track.skip": "Lied uebersprungen.",
+    "music.track.skip": "{0} Lieder uebersprungen.",
+    "music.track.back": "{0} Lieder zurueckgespuelt.",
     "music.track.author": "Autor: {0}",
     "music.track.author-null": "Niemand",
     "music.track.playing-nothing": "Spielt grade nichts...",

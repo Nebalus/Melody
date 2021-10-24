@@ -21,7 +21,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class RestartCommand implements ServerCommand{
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		try {
 			channel.sendMessage("Preparing Restart.sh").queue();
 			TimeUnit.SECONDS.sleep(2);

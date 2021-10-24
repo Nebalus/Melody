@@ -23,7 +23,7 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 
 public class MusicUtil extends ListenerAdapter{
 
-	private static final List<String> verifiedurl = List.of("youtube.com","youtu.be","soundcloud.com");		
+	private static final List<String> verifiedurl = List.of("youtube.com","youtu.be","soundcloud.com","discordapp.com");		
 	//verifiedurl.add("www.twitch.tv");	
 	//verifiedurl.add("vimeo.com");		
 	//verifiedurl.add("bandcamp.com");		

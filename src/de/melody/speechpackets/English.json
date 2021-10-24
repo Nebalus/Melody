@@ -51,7 +51,7 @@
     "error.info.command-usage.body": "Please use {0}",
     "error.info.command-usage.header": "Wrong Usage",
     
-    "feedback.info.invite": "{0} here is my invite link which you can add me to your Discord server:\n\n Invitelink: {1}",
+    "feedback.info.invite": "Here is my invite link which you can add me to your Discord server:\n Invitelink: {0}",
     "feedback.info.ping": "The latency of [botname] is %dms",
     "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nBuilddate: {2}\nRunning on servers: {3}\n\n{4} Users listened for {5} to music thru {6}!",
     "feedback.info.prefix": "**My prefix on this server is `{0}`**",
@@ -59,6 +59,8 @@
     
     "music.info.loop-enabled": " **enabled!**",
     "music.info.loop-disabled": " **disabled!**",
+    "music.info.bot-join-vc": "[botname] joined {0}",
+    "music.info.bot-leave-vc": "[botname] disconnected from {0}",
    
     "music.user.who-requested": "Requested by ",
     
@@ -69,7 +71,8 @@
     "music.shuffle.successful": "{0} tracks have been shuffled.",
     "music.shuffle.emptyqueue": "There is nothing to be shuffled.",
    
-    "music.track.skip": "Track skipped.",
+    "music.track.skip": "{0} tracks skipped.",
+    "music.track.back": "{0} tracks rewined.",
     "music.track.author": "Author: {0}",
     "music.track.author-null": "Nobody",
     "music.track.playing-nothing": "Nothing playing...",

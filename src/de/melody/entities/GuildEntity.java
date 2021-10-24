@@ -8,6 +8,7 @@ import java.util.List;
 import de.melody.LiteSQL;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
+import de.melody.entities.reacts.ReactionManager;
 import de.melody.speechpackets.Languages;
 import de.melody.utils.Utils.ConsoleLogger;
 import net.dv8tion.jda.api.Permission;
@@ -33,11 +34,13 @@ public class GuildEntity {
 	private Long expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
 	private Boolean needtoexport = false;
 	
+	private ReactionManager reactionmanager;
 	private Melody melody = Melody.INSTANCE;
 	private LiteSQL database = melody.getDatabase();
 	
 	public GuildEntity(Guild guild) {
 		this.guild = guild;
+		this.reactionmanager = new ReactionManager();
 		if(database.isConnected()) {
 			try {
 				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE guildid = " + getGuildId());	
@@ -87,6 +90,10 @@ public class GuildEntity {
 		}
 	}
 	
+	public ReactionManager getReactionManager() {
+		return reactionmanager;
+	}
+	
 	public Long getGuildId() {
 		renewExpireTime();
 		return this.guild.getIdLong();
@@ -101,10 +108,12 @@ public class GuildEntity {
 		renewExpireTime();
 		return this.musicchannelid;
 	}
+	
 	public void setMusicChannelId(Long newchannelid) {
 		this.musicchannelid = newchannelid;
 		update();
 	}
+	
 	public TextChannel getMusicChannel() {
 		renewExpireTime();
 		TextChannel channel;
@@ -120,18 +129,22 @@ public class GuildEntity {
 		renewExpireTime();
 		return this.volume;
 	}
+	
 	public void setVolume(int newvolume) {
 		this.volume = newvolume;
 		update();
 	}
+	
 	public Long getDjRoleId() {
 		renewExpireTime();
 		return this.djroleid;
-	}	
+	}
+	
 	public String getPrefix() {
 		renewExpireTime();
 		return this.prefix;
 	}
+	
 	public void setPrefix(String newprefix) {
 		this.prefix = newprefix;
 		update();
@@ -146,6 +159,7 @@ public class GuildEntity {
 		renewExpireTime();
 		return this.staymode;
 	}
+	
 	public void set24_7(Boolean new24_7) {
 		this.staymode = new24_7;
 		update();
@@ -180,7 +194,7 @@ public class GuildEntity {
 		List<Role> roles = member.getRoles();
 		if(isDjOnly()) {
 			for(Role role : roles) {
-				if(role.getIdLong() == djroleid && member.hasPermission(Permission.MANAGE_SERVER )) {
+				if(role.getIdLong() == djroleid && member.hasPermission(Permission.MANAGE_SERVER)) {
 					return true;
 				}
 			}	

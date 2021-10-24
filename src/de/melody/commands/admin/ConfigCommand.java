@@ -31,10 +31,10 @@ public class ConfigCommand implements ServerCommand{
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
 		GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
-		if(m.hasPermission(Permission.ADMINISTRATOR) || m.hasPermission(Permission.MANAGE_SERVER)) {
+		if(member.hasPermission(Permission.ADMINISTRATOR) || member.hasPermission(Permission.MANAGE_SERVER)) {
 			if(args.length == 1) {
 				sendMainMenu(channel,ge.getPrefix());
 			}else if(args.length == 2) {

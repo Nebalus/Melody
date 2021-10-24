@@ -27,7 +27,7 @@ public class VolumeCommand implements ServerCommand{
 	private final int maxvolume = 100;
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
 		GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
 		if(args.length == 1) {
