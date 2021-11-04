@@ -22,6 +22,9 @@ public class CommandManager {
 
 	private ConcurrentHashMap<String, ServerCommand> chatcommands;
 	private ConcurrentHashMap<String, ServerCommand> slashcommands;
+	
+	
+	
 	private Melody melody;
 	public CommandManager(Melody melody) {
 		this.chatcommands = new ConcurrentHashMap<>();
@@ -57,6 +60,7 @@ public class CommandManager {
 		}
 		return this;
 	}
+	
 	public boolean performServer(String command, Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {	
 		ServerCommand cmd;
 		if((cmd = this.chatcommands.get(command.toLowerCase())) != null && cmd.getCommandType().isChat()) {

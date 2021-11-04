@@ -4,7 +4,8 @@ import java.util.List;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Utils.Emoji;
+import de.melody.utils.messenger.Messenger;
+import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -35,7 +36,7 @@ public class CommandListener extends ListenerAdapter{
 					String[] args = message.substring(count).split(" ");
 					if(args.length > 0){
 						if(!melody.getCmdMan().performServer(args[0], event.getMember(), channel, event.getMessage(), event.getGuild(), ge)) {	
-							channel.sendMessage(event.getJDA().getEmoteById(Emoji.ANIMATED_THINKING_EMOJI).getAsMention()+" "+mf.format(guild, "feedback.info.unknown-command",ge.getPrefix())).queue();
+							Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.unknown-command"));
 						}
 					}
 				}else if(MentionedUsers.contains(channel.getJDA().getSelfUser())) {

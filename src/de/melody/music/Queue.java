@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-
-import net.dv8tion.jda.api.entities.Member;
-
 public class Queue {
 	
 	public ArrayList<QueuedTrack> queuelist;
@@ -88,8 +84,8 @@ public class Queue {
 		return false;
 	}
 	
-	public void addTrackToQueue(AudioTrack track, Member m) {
-		this.queuelist.add(new QueuedTrack(track, m));
+	public void addTrackToQueue(QueuedTrack queuedtrack) {
+		this.queuelist.add(queuedtrack);
 		if(!controller.isPlayingTrack()) {
 			QueuedTrack qt = this.queuelist.remove(0);
 			playedlist.add(qt);
@@ -107,24 +103,5 @@ public class Queue {
 	
 	public List<QueuedTrack> getQueuelist(){
 		return queuelist;
-	}
-	
-	public class QueuedTrack {
-
-		private AudioTrack track;
-		private Member whoQueued;
-		
-		public QueuedTrack(AudioTrack track, Member whoQueued) {
-			this.track = track;
-			this.whoQueued = whoQueued;
-		}
-		
-		public Member getWhoQueued() {
-			return whoQueued;
-		}
-		
-		public AudioTrack getTrack() {
-			return track;
-		}
 	}
 }

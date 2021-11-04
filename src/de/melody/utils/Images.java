@@ -128,11 +128,11 @@ public class Images {
 	}
 	
 	public static File generateNewImage(BufferedImage image) throws IOException {
-		File images = new File(Melody.getCurrentJarPath()+"/images/");
+		File images = new File(Melody.getCurrentJarPath()+"/temp/");
 		if(!images.exists()) {
 			images.mkdir();
 		}
-		File newfile = new File(Melody.getCurrentJarPath()+"/images/"+IDGenerator.generateID()+".png");
+		File newfile = new File(Melody.getCurrentJarPath()+"/temp/"+IDGenerator.generateID()+".png");
 		newfile.createNewFile();
 		ImageIO.write(image, "png", newfile);
 		return newfile;

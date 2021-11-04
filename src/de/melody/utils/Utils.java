@@ -329,13 +329,6 @@ public class Utils {
 	}
 	
 	public static class Emoji {
-
-		public final static Long ANIMATED_TICK_RED = 757615100315304057l;
-		public final static Long ANIMATED_TICK_GREEN = 757617377038041249l;
-		public final static Long ANIMATED_THINKING_EMOJI = 757615001291849739l;
-		public final static Long ANIMATED_PLAYING = 757615142912393399l;
-		public final static Long ANIMATED_HEARTS = 757622259304235059l;
-		public final static Long ANIMATED_LOADING = 834847291474051102l;
 		
 		public final static Long HEY_GUYS = 801638731136237568l;
 		

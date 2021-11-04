@@ -282,7 +282,7 @@ public class Melody{
 										+ " `-` When you dont like something in my config then you can easyly change it by typing `m!config help`\n"
 										+ " \n"
 										+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
-										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+g.getJDA().getEmoteById(Emoji.ANIMATED_HEARTS).getAsMention()).queue();
+										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+Emoji.SPARKLING_HEART).queue();
 								mentioned = true;
 								//loads the guild in the database
 								entityManager.getGuildEntity(g).setMusicChannelId(tc.getIdLong());

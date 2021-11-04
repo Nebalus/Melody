@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
+import de.melody.entities.GuildEntity;
 import de.melody.utils.Utils;
 import net.dv8tion.jda.api.entities.Guild;
 
@@ -33,7 +34,8 @@ public class MessageFormatter {
 	}
 	
 	public String format(Guild guild, String key, Object... args) {
-		Languages language = melody.getEntityManager().getGuildEntity(guild).getLanguage();
+		GuildEntity guildentity = melody.getEntityManager().getGuildEntity(guild);
+		Languages language = guildentity.getLanguage();
 		String message = "JSON-Error {"+key+"} - "+language.code;
 	    try {
 			JSONObject json = getJSONMessage.get(language);
@@ -53,6 +55,7 @@ public class MessageFormatter {
 				message = message.replace("[ü]", "ue");
 			}
 			message = message.replace("[botname]", Constants.BUILDNAME);
+			message = message.replace("[prefix]", guildentity.getPrefix());
 			
 			for(int i = 0; i < args.length; ++i) {
 				message = message.replace("{" + i + "}", String.valueOf(args[i]));
