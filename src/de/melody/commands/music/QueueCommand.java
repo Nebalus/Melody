@@ -8,7 +8,7 @@ import de.melody.core.Melody;
 import de.melody.entities.reacts.QueueReaction;
 import de.melody.music.MusicController;
 import de.melody.music.Queue;
-import de.melody.music.Queue.QueuedTrack;
+import de.melody.music.QueuedTrack;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;

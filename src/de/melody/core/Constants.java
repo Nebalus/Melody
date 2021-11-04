@@ -10,8 +10,8 @@ public class Constants{
 	
 	public static final long STARTUP = System.currentTimeMillis();
 	
-	public static final String BUILDVERSION = "BETA 0.6.2";	
-	public static final String BUILDDATE = "19/10/2021";	
+	public static final String BUILDVERSION = "BETA 0.6.3";	
+	public static final String BUILDDATE = "05/11/2021";	
 	public static final String BUILDNAME = "Melody";
 	
 	public static final Long ENTITYEXPIRETIME = 1000l*60l*60l;
@@ -20,7 +20,7 @@ public class Constants{
 	public static final Color ERROREMBEDCOLOR = Color.RED;
 	
 	public static final int MAXQUEUELENGTH = 200;
-	public static final int MAXPLAYERQUEUELENGTH = 100;
+	public static final int MAXPLAYEDQUEUELENGTH = 100;
 	
 	public static final String INVITE_URL = "https://melodybot.ga/invite";
 	public static final String COMMAND_URL = "https://melodybot.ga/commands";

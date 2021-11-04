@@ -11,7 +11,6 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Utils.Emoji;
 import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -31,24 +30,31 @@ public class TrackScheduler extends AudioEventAdapter{
 	public void onPlayerResume(AudioPlayer player) {}
 	
 	@Override
-	public void onTrackStart(AudioPlayer player, AudioTrack track) {
+	public void onTrackStart(AudioPlayer player, AudioTrack track_UNUSED) {
 		Guild guild = melody.shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
 		MusicController controller = playerManager.getController(guild.getIdLong());
 		Queue queue = controller.getQueue();
 		GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
 		if(controller.isLoop() == false && controller.isLoopQueue() == false && ge.canAnnounceSongs()) {
 			EmbedBuilder builder = new EmbedBuilder();
-			AudioTrackInfo info = track.getInfo();
-			String url = info.uri;
-			builder.setDescription("["+guild.getJDA().getEmoteById(Emoji.ANIMATED_PLAYING).getAsMention()+" "+mf.format(guild, "music.track.now-playing")+"]("+Constants.WEBSITE_URL+")");
-			builder.addField("**"+info.author+"**","[" + info.title+"]("+url+")", true);
+			QueuedTrack queuedtrack = queue.currentlyPlaying();
+			AudioTrackInfo info = queuedtrack.getTrack().getInfo();
+			switch(queuedtrack.getService()) {
+				case YOUTUBE:
+					builder.setImage(queuedtrack.getImageURL());
+					break;
+					
+				case SPOTIFY:
+					builder.setThumbnail(queuedtrack.getImageURL());
+					break;
+					
+				default:
+					break;
+			}
+			builder.setDescription("  ["+mf.format(guild, "music.track.now-playing")+"]("+Constants.WEBSITE_URL+")");
+			builder.addField("**"+info.author+"**","[" + info.title+"]("+info.uri+")", true);
 			builder.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(info,0l),true);
 			builder.setFooter(mf.format(guild, "music.user.who-requested")+ queue.currentlyPlaying().getWhoQueued().getUser().getAsTag());
-			if(url.startsWith("https://www.youtube.com/watch?v=")) {
-				String videoID = url.replace("https://www.youtube.com/watch?v=", "");
-				builder.setImage("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
-				//builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");		
-			}
 			Messenger.sendMessageEmbed(ge.getMusicChannel(), builder).queue((trackmessage) ->{
 				//TrackReaction te = new TrackReaction(info);
 				//melody.getEntityManager().getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(trackmessage.getIdLong(), te);
@@ -63,6 +69,7 @@ public class TrackScheduler extends AudioEventAdapter{
 		Guild guild = melody.shardMan.getGuildById(guildid);
 		MusicController controller = melody.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
+		QueuedTrack queuedtrack = queue.currentlyPlaying();
 		if(endReason.mayStartNext) {	
 			GuildVoiceState state;
 			VoiceChannel vc;
@@ -78,12 +85,12 @@ public class TrackScheduler extends AudioEventAdapter{
 						}
 					}else {
 						final String uri = track.getInfo().uri;
-						melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null));
+						melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, queuedtrack.getService()));
 						return;
 					}
 				}else {
 					final String uri = track.getInfo().uri;
-					melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null));
+					melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, queuedtrack.getService()));
 					return;
 				}
 			}

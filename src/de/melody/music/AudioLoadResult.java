@@ -21,35 +21,59 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	private final Boolean isLoop;
 	private final Boolean isLoopQueue;
 	private final Guild guild;
+	private final String imageUrl;
+	private final Service service;
 	
 	private MessageFormatter mf = Melody.INSTANCE.getMessageFormatter();
 	
-    public AudioLoadResult(MusicController controller,String uri,Member userWhoQueued) {
+    public AudioLoadResult(MusicController controller, String uri, Service service) {
     	this.controller = controller;
 		this.uri = uri;
-		this.userWhoQueued = userWhoQueued;
+		this.imageUrl = null;
+		this.userWhoQueued = null;
+		this.service = service;
 		this.isLoop = controller.isLoop();
 		this.isLoopQueue = controller.isLoopQueue();
 		this.guild = controller.getGuild();
 	}
-	
+    
+    public AudioLoadResult(MusicController controller, String uri, Service service, Member userWhoQueued) {
+    	this.controller = controller;
+		this.uri = uri;
+		this.imageUrl = null;
+		this.userWhoQueued = userWhoQueued;
+		this.service = service;
+		this.isLoop = controller.isLoop();
+		this.isLoopQueue = controller.isLoopQueue();
+		this.guild = controller.getGuild();
+	}
+    
+    public AudioLoadResult(MusicController controller, String uri, Service service, Member userWhoQueued, String imageUrl) {
+    	this.controller = controller;
+		this.uri = uri;
+		this.imageUrl = imageUrl;
+		this.userWhoQueued = userWhoQueued;
+		this.service = service;
+		this.isLoop = controller.isLoop();
+		this.isLoopQueue = controller.isLoopQueue();
+		this.guild = controller.getGuild();
+	}
+    
 	@Override
 	public void trackLoaded(AudioTrack track) {
 		Queue queue = controller.getQueue();
+		QueuedTrack queuedtrack = new QueuedTrack(track, userWhoQueued, service, imageUrl);
 		if(controller.isPlayingTrack() && isLoop == false && isLoopQueue == false) {
 			EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guild, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
 					.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
 					.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
 					.addField(mf.format(guild, "music.track.position-in-queue"), queue.getQueueSize()+1+"", true)
-					.addField(mf.format(guild, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
-							
-			if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
-				String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
-				builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
-			}					
+					.addField(mf.format(guild, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true)
+					.setThumbnail(queuedtrack.getImageURL());		
+			
 			MusicUtil.sendEmbled(guild, builder);
 		}
-		queue.addTrackToQueue(track,userWhoQueued);	
+		queue.addTrackToQueue(queuedtrack);	
 	}
 
 	@Override
@@ -57,27 +81,23 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 		Queue queue = controller.getQueue();
 	
 		if(uri.startsWith("ytsearch: ")) {
+			QueuedTrack queuedtrack = new QueuedTrack(playlist.getTracks().get(0), userWhoQueued, service, imageUrl);
 			if(controller.isPlayingTrack()) {
 				AudioTrack track = playlist.getTracks().get(0);
 				EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guild, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
 						.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
 						.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
 						.addField(mf.format(guild, "music.track.position-in-queue"), queue.getQueueSize()+1+"", true)
-						.addField(mf.format(guild, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
-				
-				if(track.getInfo().uri.startsWith("https://www.youtube.com/watch?v=")) {
-					String videoID = track.getInfo().uri.replace("https://www.youtube.com/watch?v=", "");
-					builder.setThumbnail("https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp");
-				}
-				
+						.addField(mf.format(guild, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true)
+						.setThumbnail(queuedtrack.getImageURL());
 				MusicUtil.sendEmbled(guild, builder);
 			}	
-			queue.addTrackToQueue(playlist.getTracks().get(0), userWhoQueued);	
+			queue.addTrackToQueue(queuedtrack);	
 			return;
 		}else {
 			Long timeUntil = 0l;
 			for(AudioTrack track : playlist.getTracks()) {
-				queue.addTrackToQueue(track,userWhoQueued);
+				queue.addTrackToQueue(new QueuedTrack(track, userWhoQueued, service));
 				timeUntil = timeUntil + track.getDuration();
 			}
 			if(playlist.getTracks().size() >= 1) {

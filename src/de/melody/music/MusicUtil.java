@@ -1,12 +1,9 @@
 package de.melody.music;
 
-import java.util.List;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import de.melody.core.Melody;
-import de.melody.music.Queue.QueuedTrack;
 import de.melody.utils.Utils;
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
@@ -23,10 +20,7 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 
 public class MusicUtil extends ListenerAdapter{
 
-	private static final List<String> verifiedurl = List.of("youtube.com","youtu.be","soundcloud.com","discordapp.com");		
-	//verifiedurl.add("www.twitch.tv");	
-	//verifiedurl.add("vimeo.com");		
-	//verifiedurl.add("bandcamp.com");		
+
 	private Melody melody = Melody.INSTANCE;
 	
 	@Override
@@ -136,6 +130,15 @@ public class MusicUtil extends ListenerAdapter{
 		return null;
 	}
 	
+	public static String getTrackImageURL(String url) {
+		String imageUrl = null;
+		if(url.startsWith("https://www.youtube.com/watch?v=")) {
+			String videoID = new String(url.replace("https://www.youtube.com/watch?v=", ""));
+			imageUrl = "https://i.ytimg.com/vi_webp/"+videoID+"/maxresdefault.webp";
+		}
+		return imageUrl;
+	}
+	
 	public static Long getTimeUntil(MusicController controller) {
 		Queue queue = controller.getQueue();
 		AudioPlayer player = controller.getPlayer();
@@ -147,15 +150,14 @@ public class MusicUtil extends ListenerAdapter{
 		return timeUntil;
 	}
 	
-	public static Boolean isUrlVerified(String url) {
-		String uri = Utils.getDomain(url);
-		if(uri != null) {
-			for(String vurl : verifiedurl) {
-				if(uri.endsWith(vurl)) {
-					return true;	
-				}
+	public static Service isUrlVerified(String url) {
+		String domain = Utils.getDomain(url);
+		Service service;
+		if(domain != null) {
+			if((service = Service.getFromDomain(domain)) != null) {
+				return service;
 			}
 		}
-		return false;
+		return null;
 	}
 }
