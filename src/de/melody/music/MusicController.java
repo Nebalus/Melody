@@ -1,14 +1,10 @@
 package de.melody.music;
 
-import java.util.Arrays;
-
-import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
-import de.melody.entities.GuildEntity;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class MusicController {

@@ -22,8 +22,6 @@
     "command.staymode.disabled": "Der 24/7-Modus wurde deaktiviert.",
     "command.volume.show": "Die Lautstaerke von [botname]: {0}",
     "command.volume.set": "Die Lautstaerke von [botname] wurde auf {0} gesetzt.",
-    "error.command.volume.out-of-bounds.body": "Bitte suche eine zahl zwischen 1-{0}.",
-    "error.command.volume.out-of-bounds.header": "Ausserhalb der Grenzen",
     "command.fastforward.set": "Spule {0} vor.",
     "command.rewind.set": "Spule {0} zurueck.",
     
@@ -47,7 +45,7 @@
     "error.music.nothing-in-link.header": "Link leer",
     "error.music.non-whitelisted-domain.body": "Die domain **{0}** wuerde nicht in meinen System gewhitelisted.",
     "error.music.non-whitelisted-domain.header": "Gesperrte Domain",
-    "error.info.command-usage.body": "Bitte nutze {0}",
+    "error.info.command-usage.body": "Bitte nutze `[prefix]{0}`",
     "error.info.command-usage.header": "Falsche benutzung",
     "error.info.unknown-command.body": "Hmm, es sieht so aus als wenn ich diesen Befehl nicht kennen wuerde. Bitte nutze um die Befehls liste zu sehen `[prefix]help`.",
     "error.info.unknown-command.header": "Unbekannter Kommand",

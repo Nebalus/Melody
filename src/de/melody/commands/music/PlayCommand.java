@@ -101,7 +101,7 @@ public class PlayCommand implements ServerCommand{
 				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.user-not-in-vc"));	
 			}	
 		}else {
-			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", ge.getPrefix()+"play <url/search query>"));	
+			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix().get(0)+" <url/search query>"));	
 		}
 	}
 
