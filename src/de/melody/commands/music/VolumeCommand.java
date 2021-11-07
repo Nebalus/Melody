@@ -2,6 +2,7 @@ package de.melody.commands.music;
 
 import java.util.List;
 
+import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
@@ -24,8 +25,6 @@ public class VolumeCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
-	private final int maxvolume = 100;
-	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
 		String[] args = message.getContentDisplay().split(" ");
@@ -35,15 +34,15 @@ public class VolumeCommand implements ServerCommand{
 		}else {
 			try {
 				int amount = Integer.parseInt(args[1]);			
-				if(amount <= maxvolume && amount >= 1) {
+				if(amount <= Constants.MAXVOLUME && amount >= 1) {
 					melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
 					ge.setVolume(amount);
 					Messenger.sendMessageEmbed(channel, mf.format(guild, "command.volume.set",amount)).queue();
 				}else {
-					Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "command.volume.out-of-bounds", maxvolume));		
+					Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix().get(0)+" <1-"+Constants.MAXVOLUME+">"));		
 				}
 			}catch(NumberFormatException e) {
-				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "command.volume.out-of-bounds", maxvolume));	
+				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix().get(0)+" <1-"+Constants.MAXVOLUME+">"));		
 			}
 		}
 	}

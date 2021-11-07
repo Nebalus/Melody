@@ -23,8 +23,6 @@
     "command.staymode.disabled": "24/7 mode has been deaktivated.",
     "command.volume.show": "The volume from [botname]: {0}",
     "command.volume.set": "The volume from [botname] has been set to {0}.",
-    "error.command.volume.out-of-bounds.body": "Please choose a number between 1-{0}.",
-    "error.command.volume.out-of-bounds.header": "Out of bounds",
     "command.fastforward.set": "Fast forwarding {0}",
     "command.rewind.set": "Rewinding {0}",
     
@@ -48,7 +46,7 @@
     "error.music.nothing-in-link.header": "Link Empty",
     "error.music.non-whitelisted-domain.body": "The domain **{0}** is not whitelisted in my system.",
     "error.music.non-whitelisted-domain.header": "Blocked Domain",
-    "error.info.command-usage.body": "Please use {0}",
+    "error.info.command-usage.body": "Please use `[prefix]{0}`",
     "error.info.command-usage.header": "Wrong Usage",
     "error.info.unknown-command.body": "Hmm, it looks like I don't know this command. Please use `[prefix]help` to see the command list.",
     "error.info.unknown-command.header": "Unknown Command",

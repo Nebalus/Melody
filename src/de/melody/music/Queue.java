@@ -21,8 +21,7 @@ public class Queue {
 		if(amount < 0) amount *= -1;
 		if(amount > queuelist.size()) amount = queuelist.size()+1;
 		if(!queuelist.isEmpty()) {
-			for (int i = 1; i < amount;) {
-				++i;
+			for (int i = 1; i < amount; ++i) {
 				playedlist.add(queuelist.remove(0));
 			}
 			if (!queuelist.isEmpty() && queuelist.get(0) != null) {
@@ -32,7 +31,7 @@ public class Queue {
 				return amount;
 			}
 		}
-		return 0;
+		return 1;
 	}
 	
 	public int back(int amount) {
@@ -42,8 +41,7 @@ public class Queue {
 		if(amount > playedlist.size()) amount = playedlist.size()-1;
 		if(!playedlist.isEmpty()) {
 			ArrayList<QueuedTrack> cache = new ArrayList<QueuedTrack>();
-			for (int i = 0; i < amount;) {
-				++i;
+			for (int i = 0; i < amount; ++i) {
 				cache.add(playedlist.remove(playedlist.size()-1));
 			}
 			Collections.reverse(cache);
@@ -54,7 +52,7 @@ public class Queue {
 				return amount;
 			}
 		}
-		return 0;
+		return 1;
 	}
 	
 	public QueuedTrack currentlyPlaying() {

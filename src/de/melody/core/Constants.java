@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Constants{
 	
-	public static boolean DEVMODE = false;
-	public static boolean DEBUGMODE = false;
+	public static final boolean DEVMODE = false;
+	public static final boolean DEBUGMODE = true;
 	
 	public static final long STARTUP = System.currentTimeMillis();
 	
@@ -29,6 +29,10 @@ public class Constants{
 	public static final int MUSIK_AFK_DEFAULT = 60;
 	
 	public static final List<Long> DEVELOPERIDS = List.of(502213965485703168l);
+	
+	public static final int MAXVOLUME = 100;
+	public static final int MAXCLEANMESSAGES = 200;	
+	public static final int DEFAULTCLEANMESSAGES = 100;	
 	
 	public static final String PIC_DEFAULT_AVATAR_URL = "/default-avatar.png";
 	public static final String PIC_ERROR_LINE_URL = "/error-line.png";

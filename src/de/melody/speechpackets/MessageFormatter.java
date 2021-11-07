@@ -59,6 +59,21 @@ public class MessageFormatter {
 			
 			for(int i = 0; i < args.length; ++i) {
 				message = message.replace("{" + i + "}", String.valueOf(args[i]));
+				//Trying to make a pronoun system example 1 track, 2 tracks
+				/*
+				Long count;
+				if((count = Long.getLong((String) args[i])) != null) {
+					if(count == 1) {
+						//sp stands for single pronoun
+						message = message.replace("{" + i + "-sp}", String.valueOf(args[i]));	
+						message = message.replace("{" + i + "-mp}", "");	
+					}else {
+						//mp stands for multiple pronoun
+						message = message.replace("{" + i + "-mp}", String.valueOf(args[i]));	
+						message = message.replace("{" + i + "-sp}", "");	
+					}
+				}
+				*/
 		    }
 		} catch (Exception e) {
 			e.printStackTrace();

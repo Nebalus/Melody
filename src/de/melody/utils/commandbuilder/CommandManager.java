@@ -9,6 +9,7 @@ import de.melody.utils.Utils.ConsoleLogger;
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -22,8 +23,6 @@ public class CommandManager {
 
 	private ConcurrentHashMap<String, ServerCommand> chatcommands;
 	private ConcurrentHashMap<String, ServerCommand> slashcommands;
-	
-	
 	
 	private Melody melody;
 	public CommandManager(Melody melody) {
@@ -71,6 +70,14 @@ public class CommandManager {
 						return true;
 					}
 					break;
+				case ADMIN_COMMAND:
+					if(member.hasPermission(Permission.MANAGE_CHANNEL) || member.hasPermission(Permission.ADMINISTRATOR)) {
+						cmd.performCommand(member, channel, message, guild);
+						return true;
+					}else {
+						Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "user-no-permmisions", "MANAGE_SERVER"));
+					}
+					break;
 				case DJ_COMMAND:
 					if(guildentity.isMemberDJ(member)) {
 						cmd.performCommand(member, channel, message, guild);
@@ -94,6 +101,14 @@ public class CommandManager {
 					if(Constants.DEVELOPERIDS.contains(member.getIdLong())) {
 						cmd.performSlashCommand(member, channel, guild, event);
 						return true;
+					}
+					break;
+				case ADMIN_COMMAND:
+					if(member.hasPermission(Permission.MANAGE_CHANNEL) || member.hasPermission(Permission.ADMINISTRATOR)) {
+						cmd.performSlashCommand(member, channel, guild, event);
+						return true;
+					}else {
+						Messenger.sendErrorSlashMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "user-no-permmisions", "MANAGE_SERVER"));
 					}
 					break;
 				case DJ_COMMAND:

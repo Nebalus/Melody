@@ -17,6 +17,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
 import de.melody.LiteSQL;
 import de.melody.Secure;
+import de.melody.commands.admin.CleanCommand;
 import de.melody.commands.admin.ConfigCommand;
 import de.melody.commands.dev.RestartCommand;
 import de.melody.commands.info.InfoCommand;
@@ -122,7 +123,8 @@ public class Melody{
 				new PlayCommand(), new VolumeCommand(), new PauseCommand(), new ResumeCommand(),
 				new StopCommand(), new LeaveCommand(), new TrackinfoCommand(), new QueueCommand(), new SkipCommand(),
 				new InfoCommand(), new PingCommand(), new ConfigCommand(), new InviteCommand(), new ShuffleCommand(),
-				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand(), new RestartCommand());
+				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand(), new RestartCommand(),
+				new CleanCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
 		AudioSourceManagers.registerLocalSource(audioPlayerManager);
@@ -196,7 +198,7 @@ public class Melody{
 						}else {
 							ConsoleLogger.info("Auto-Saver", "There is nothing to export to the database");
 						}
-					}catch(Exception e){
+					}catch(Exception e) {
 						ConsoleLogger.warning("Thread", "The current action from the Auto-Saver has been aborted");
 						e.printStackTrace();
 					}
