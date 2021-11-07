@@ -68,8 +68,11 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 					.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
 					.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
 					.addField(mf.format(guild, "music.track.position-in-queue"), queue.getQueueSize()+1+"", true)
-					.addField(mf.format(guild, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true)
-					.setThumbnail(queuedtrack.getImageURL());		
+					.addField(mf.format(guild, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
+			
+			if(queuedtrack.getImageURL() != null) {
+				builder.setThumbnail(queuedtrack.getImageURL());
+			}
 			
 			MusicUtil.sendEmbled(guild, builder);
 		}
@@ -88,8 +91,11 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 						.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
 						.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
 						.addField(mf.format(guild, "music.track.position-in-queue"), queue.getQueueSize()+1+"", true)
-						.addField(mf.format(guild, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true)
-						.setThumbnail(queuedtrack.getImageURL());
+						.addField(mf.format(guild, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
+				
+				if(queuedtrack.getImageURL() != null) {
+					builder.setThumbnail(queuedtrack.getImageURL());
+				}
 				MusicUtil.sendEmbled(guild, builder);
 			}	
 			queue.addTrackToQueue(queuedtrack);	

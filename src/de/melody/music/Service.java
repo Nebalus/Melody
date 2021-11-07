@@ -5,8 +5,8 @@ import java.util.List;
 public enum Service {
 	YOUTUBE(List.of("youtube.com","youtu.be")),
 	DISCORD(List.of("discordapp.com")),
-	SPOTIFY(List.of("spotify.com"));
-	//("www.twitch.tv");	
+	SPOTIFY(List.of("spotify.com")),
+	TWITCH(List.of("twitch.tv"));
 	//("vimeo.com");		
 	//("bandcamp.com");		
 	List<String> validdomains;
