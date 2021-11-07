@@ -1,5 +1,7 @@
 package de.melody.music;
 
+import java.util.concurrent.TimeUnit;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -74,13 +76,20 @@ public class TrackScheduler extends AudioEventAdapter{
 			GuildVoiceState state;
 			VoiceChannel vc;
 			if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
-				if(!controller.isLoop()) {
-					if(!controller.isLoopQueue()) {
-						if(queue.next(1) != 1) { 
-							if(vc.getMembers().size() > 1) {
-								controller.setAfkTime(600);
+				try {
+					TimeUnit.SECONDS.sleep(1);
+					if(!controller.isLoop()) {
+						if(!controller.isLoopQueue()) {
+							if(queue.next(1) != 1) { 
+								if(vc.getMembers().size() > 1) {
+									controller.setAfkTime(600);
+								}
+							}else {
+								return;
 							}
 						}else {
+							final String uri = track.getInfo().uri;
+							melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, queuedtrack.getService()));
 							return;
 						}
 					}else {
@@ -88,10 +97,8 @@ public class TrackScheduler extends AudioEventAdapter{
 						melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, queuedtrack.getService()));
 						return;
 					}
-				}else {
-					final String uri = track.getInfo().uri;
-					melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, queuedtrack.getService()));
-					return;
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 		}

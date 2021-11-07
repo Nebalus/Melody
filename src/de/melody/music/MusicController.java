@@ -1,10 +1,14 @@
 package de.melody.music;
 
+import java.util.Arrays;
+
+import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
+import de.melody.entities.GuildEntity;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class MusicController {
@@ -30,14 +34,15 @@ public class MusicController {
 		this.isloopqueue = false;
 		
 		/*
-		 * Funktioniert nicht auf einen raspberry pi
 		this.player.setFilterFactory((track, format, output)->{
-			GuildEntity ge = PixelBeat.INSTANCE.entityManager.getGuildEntity(guild.getIdLong());
+			GuildEntity ge = Melody.INSTANCE.entityManager.getGuildEntity(guild);
 			TimescalePcmAudioFilter timescale = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
-		    timescale.setSpeed(ge.getSpeed());
+		    timescale.setSpeed(1.1);
+		    timescale.setPitch(1.4);
 		    return Arrays.asList(timescale);
 		});
 		*/
+		
 	}
 	
 	public Boolean isPlayingTrack() {
