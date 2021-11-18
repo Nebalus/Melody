@@ -4,19 +4,21 @@ import de.melody.utils.Utils.Emoji;
 
 public enum Languages {
 
-	ENGLISH("English","English.json","US",Emoji.UNITED_STATES_FLAG),
-	GERMAN("Deutsch","German.json","DE",Emoji.GERMANY_FLAG);
+	ENGLISH("English","English.json","US",Emoji.UNITED_STATES_FLAG,0),
+	GERMAN("Deutsch","German.json","DE",Emoji.GERMANY_FLAG,1);
 	
 	String name;
 	String file;
 	String code;
 	String icon;
-
-	private Languages(String name,String file,String code,String icon) {
+	int databaseid;
+	
+	private Languages(String name,String file,String code,String icon,int databaseid) {
 		this.name = name;
 		this.file = file;
 		this.code = code;	
 		this.icon = icon;	
+		this.databaseid = databaseid;
 	}
 	
 	public String getFileName() {
@@ -30,6 +32,9 @@ public enum Languages {
 	}
 	public String getName() {
 		return name;
+	}
+	public int getDatabaseID() {
+		return databaseid;
 	}
 	
 	public static Languages getLanguage(String code) {

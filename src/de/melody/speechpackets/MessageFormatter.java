@@ -12,7 +12,6 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.utils.Utils;
-import de.melody.utils.Utils.ConsoleLogger;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class MessageFormatter {

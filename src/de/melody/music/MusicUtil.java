@@ -93,7 +93,6 @@ public class MusicUtil extends ListenerAdapter{
 			int time = controller.getAfkTime();
 			if(time > 0) {
 				time--;
-				ConsoleLogger.info(time);
 				controller.setAfkTime(time);
 			}else {
 				MusicKiller(g);

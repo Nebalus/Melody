@@ -70,7 +70,7 @@ public class TrackScheduler extends AudioEventAdapter{
 		Guild guild = melody.shardMan.getGuildById(guildid);
 		MusicController controller = melody.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
-		if(endReason.mayStartNext) {	
+		if(endReason.mayStartNext) {
 			GuildVoiceState state;
 			VoiceChannel vc;
 			if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {

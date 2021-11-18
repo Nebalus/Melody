@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.entities.User;
 
 public class UserEntity {
 	
-	private int favoritemusicid = 0;
+	private int favoriteplaylistid = 0;
 	private Long userid;
 	private Long heardtime = 0l;
 	private Long firsttimeheard = 0l;
@@ -32,7 +32,7 @@ public class UserEntity {
 			try {
 				ResultSet rs = database.onQuery("SELECT * FROM userdata WHERE PK_userid = " + userid);	
 				if(rs.next()) {
-					favoritemusicid = rs.getInt("favoritemusic");
+					favoriteplaylistid = rs.getInt("favoriteplaylist");
 					heardtime = rs.getLong("heardtime");
 					firsttimeheard = rs.getLong("firsttimeheard");
 					lasttimeheard = rs.getLong("lasttimeheard");
@@ -63,12 +63,12 @@ public class UserEntity {
 		return this.userid;
 	}
 	
-	public int getFavoriteMusicId() {
+	public int getFavoritePlaylistId() {
 		renewExpireTime();
-		return this.favoritemusicid;
+		return this.favoriteplaylistid;
 	}
-	public void setFavoriteMusicId(int newplaylistid) {
-		favoritemusicid = newplaylistid;
+	public void setFavoritePlaylistId(int newplaylistid) {
+		favoriteplaylistid = newplaylistid;
 		update();
 	}
 	
@@ -94,10 +94,10 @@ public class UserEntity {
 			if(needtoexport) {
 				try {
 					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE userdata SET "
-							+ "favoritemusic = ?,"
+							+ "favoriteplaylist = ?,"
 							+ "heardtime = ?,"
 							+ "lasttimeheard = ? WHERE PK_userid = ?");
-					ps.setInt(1, favoritemusicid);
+					ps.setInt(1, favoriteplaylistid);
 					ps.setLong(2, heardtime);
 					ps.setLong(3, lasttimeheard);
 					ps.setLong(4, userid);
