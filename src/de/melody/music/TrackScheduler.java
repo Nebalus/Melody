@@ -1,7 +1,5 @@
 package de.melody.music;
 
-import java.util.concurrent.TimeUnit;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -12,6 +10,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
+import de.melody.music.audioloader.AudioLoadResult;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -71,34 +70,28 @@ public class TrackScheduler extends AudioEventAdapter{
 		Guild guild = melody.shardMan.getGuildById(guildid);
 		MusicController controller = melody.playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
-		QueuedTrack queuedtrack = queue.currentlyPlaying();
 		if(endReason.mayStartNext) {	
 			GuildVoiceState state;
 			VoiceChannel vc;
 			if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
-				try {
-					TimeUnit.SECONDS.sleep(1);
-					if(!controller.isLoop()) {
-						if(!controller.isLoopQueue()) {
-							if(queue.next(1) != 1) { 
-								if(vc.getMembers().size() > 1) {
-									controller.setAfkTime(600);
-								}
-							}else {
-								return;
+				if(!controller.isLoop()) {
+					if(!controller.isLoopQueue()) {
+						if(queue.next(1) != 1) { 
+							if(vc.getMembers().size() > 1) {
+								controller.setAfkTime(600);
 							}
 						}else {
-							final String uri = track.getInfo().uri;
-							melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, queuedtrack.getService()));
 							return;
 						}
 					}else {
 						final String uri = track.getInfo().uri;
-						melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, queuedtrack.getService()));
+						melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null));
 						return;
 					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				}else {
+					final String uri = track.getInfo().uri;
+					melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null));
+					return;
 				}
 			}
 		}
@@ -106,7 +99,7 @@ public class TrackScheduler extends AudioEventAdapter{
 			controller.setLoop(false);	
 		}
 		player.stopTrack();
-	}
+	  }
 	
 	  @Override
 	  public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {}

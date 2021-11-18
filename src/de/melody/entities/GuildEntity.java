@@ -11,11 +11,13 @@ import de.melody.core.Melody;
 import de.melody.entities.reacts.ReactionManager;
 import de.melody.speechpackets.Languages;
 import de.melody.utils.Utils.ConsoleLogger;
+import de.melody.utils.Utils.Emoji;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 public class GuildEntity {
 	
@@ -43,7 +45,7 @@ public class GuildEntity {
 		this.reactionmanager = new ReactionManager();
 		if(database.isConnected()) {
 			try {
-				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE guildid = " + getGuildId());	
+				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE PK_guildid = " + getGuildId());	
 				if(rs.next()) {
 					if(rs.getLong("musicchannelid") != 0l) {
 						musicchannelid = rs.getLong("musicchannelid");	
@@ -80,14 +82,38 @@ public class GuildEntity {
 						language = Languages.getLanguage(rs.getString("language"));
 					}
 				}else {
-					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(guildid) VALUES(?)");
+					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(PK_guildid,musicchannelid,firsttimeloaded) VALUES(?,?,?)");
 					ps.setLong(1, getGuildId());
+					ps.setLong(2, firstTimeRoutine());
+					ps.setLong(3, System.currentTimeMillis());
 					ps.executeUpdate();
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private Long firstTimeRoutine() {
+		boolean mentioned = false;
+		for(TextChannel tc : guild.getTextChannels()) {
+			if(!mentioned) {
+				try {
+					tc.sendMessage("Hello everybody, i'm "+guild.getJDA().getSelfUser().getAsMention()+" "+guild.getJDA().getEmoteById(Emoji.HEY_GUYS).getAsMention()+"\n"
+							+ " \n"
+							+ " `-` My prefix on "+guild.getName()+" is `"+getPrefix()+"`\n"
+							+ " `-` If you do not understand how I work then you can see all my commands by typing `"+getPrefix()+"help`\n"
+							+ " `-` When you dont like something in my config then you can easyly change it by typing `"+getPrefix()+"config help`\n"
+							+ " \n"
+							+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
+							+ "PS: Thanks a lot for your support, that you added me to your discord server! "+Emoji.SPARKLING_HEART).queue();
+					mentioned = true;
+					return tc.getIdLong();
+					//loads the guild in the database
+				}catch(InsufficientPermissionException e) {}
+			}
+		}
+		return 0l;
 	}
 	
 	public ReactionManager getReactionManager() {
@@ -240,7 +266,7 @@ public class GuildEntity {
 							+ "language = ?,"
 							+ "announcesongs = ?,"
 							+ "preventduplicates = ?,"
-							+ "djonly = ? WHERE guildid = ?");
+							+ "djonly = ? WHERE PK_guildid = ?");
 					ps.setLong(1, musicchannelid);
 					ps.setInt(2, volume);
 					ps.setLong(3, djroleid);

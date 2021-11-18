@@ -4,11 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.CodeSource;
-import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.security.auth.login.LoginException;
+
+import org.apache.commons.io.FileUtils;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -51,18 +52,14 @@ import de.melody.music.MusicUtil;
 import de.melody.music.PlayerManager;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.SpotifyUtils;
-import de.melody.utils.Utils;
 import de.melody.utils.Utils.ConsoleLogger;
-import de.melody.utils.Utils.Emoji;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -86,23 +83,32 @@ public class Melody{
 	public SpotifyUtils spotifyutils;
 	
 	public int uptime; 
-	public long playedmusictime;
 	
 	public static void main(String[] args) {		
 		try {
 			new Melody();
-		} catch (LoginException | IllegalArgumentException | InterruptedException e) {
+		} catch (LoginException | IllegalArgumentException | InterruptedException | IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private Melody() throws LoginException, IllegalArgumentException, InterruptedException {
+	private Melody() throws LoginException, IllegalArgumentException, InterruptedException, IOException {
 		final Long startupMillis = System.currentTimeMillis();
+		
 		INSTANCE = this;
+		if(Constants.TEMP_DIRECTORY.exists()) {
+			FileUtils.cleanDirectory(Constants.TEMP_DIRECTORY);
+		}else {
+			Constants.TEMP_DIRECTORY.mkdir();
+		}
+		//Loads the local SQL database
 		database = new LiteSQL();
+		//Connects to the Spotify API to retriev track information
 		spotifyutils = new SpotifyUtils(Secure.SPOTIFY_CLIENTID, Secure.SPOTIFY_CLIENTSECRET);
+		//Loads the language system
 		messageformatter = new MessageFormatter();
-	
+		
+		//builds the bot 
 		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(Secure.TOKEN);
 		configureMemoryUsage(builder); 
 	
@@ -131,13 +137,11 @@ public class Melody{
 		audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
 		
 		uptime = 0;
-		Utils.loadSystemData(this);
 		
 		runLoop();
 		//shutdown();
 		ConsoleLogger.info("Bot", "Melody online! ("+(System.currentTimeMillis() - startupMillis)+"ms)");
 	}
-	
 	
 	public void runLoop() {
 		this.loop = new Thread(() -> {	
@@ -147,9 +151,6 @@ public class Melody{
 					try{
 						time = System.currentTimeMillis()+1000;
 						MusicUtil.onRefreshAutoDisabler(shardMan);
-						if(database.isConnected()) {
-							scanGuilds();	
-						}
 						spotifyutils.update();
 						onStatusUpdate();
 						uptime++;
@@ -192,7 +193,6 @@ public class Melody{
 								export = true;
 							}
 						}
-						Utils.saveSystemData(this);
 						if(export) {
 							ConsoleLogger.info("Auto-Saver", "Export ended sucessfully");
 						}else {
@@ -227,7 +227,6 @@ public class Melody{
 								Long listendata = ue.getHeardTime();
 								listendata++;
 								ue.setHeardTime(listendata);
-								playedmusictime++;
 								//
 							}
 						}
@@ -267,40 +266,8 @@ public class Melody{
 		}
 	}
 	
-	Integer guildScannerCooldown = 0;
-	ArrayList<Long> guildCache = new ArrayList<>();
-	public void scanGuilds() {
-		if(guildScannerCooldown < 20) {
-			for(Guild g : shardMan.getGuilds()) {
-				if(!guildCache.contains(g.getIdLong()) && !Utils.doesGuildExist(g.getIdLong())) {		
-					boolean mentioned = false;
-					for(TextChannel tc : g.getTextChannels()) {
-						if(!mentioned) {
-							try {
-								tc.sendMessage("Hello everybody, i'm "+g.getJDA().getSelfUser().getAsMention()+" "+g.getJDA().getEmoteById(Emoji.HEY_GUYS).getAsMention()+"\n"
-										+ " \n"
-										+ " `-` My prefix on "+g.getName()+" is `m!`\n"
-										+ " `-` If you do not understand how I work then you can see all my commands by typing `m!help`\n"
-										+ " `-` When you dont like something in my config then you can easyly change it by typing `m!config help`\n"
-										+ " \n"
-										+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
-										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+Emoji.SPARKLING_HEART).queue();
-								mentioned = true;
-								//loads the guild in the database
-								entityManager.getGuildEntity(g).setMusicChannelId(tc.getIdLong());
-								entityManager.getGuildEntity(g).export();
-								guildCache.add(tc.getIdLong());
-							}catch(InsufficientPermissionException e) {}
-						}
-					}
-				}else {
-					guildCache.add(g.getIdLong());
-				}	
-			}
-			guildScannerCooldown = 0;
-		}
-		guildScannerCooldown++;
-	}
+	
+	
 	
 	public void shutdown() {
 		new Thread(() -> {		

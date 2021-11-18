@@ -5,6 +5,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import de.melody.core.Melody;
 import de.melody.utils.Utils;
+import de.melody.utils.Utils.ConsoleLogger;
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -92,6 +93,7 @@ public class MusicUtil extends ListenerAdapter{
 			int time = controller.getAfkTime();
 			if(time > 0) {
 				time--;
+				ConsoleLogger.info(time);
 				controller.setAfkTime(time);
 			}else {
 				MusicKiller(g);

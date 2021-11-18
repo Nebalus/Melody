@@ -49,7 +49,7 @@ public class InfoCommand implements ServerCommand{
 			Constants.BUILDDATE,
 			serversRunning,
 			Utils.getUserInt(),
-			Utils.decodeStringFromTimeMillis(Melody.INSTANCE.playedmusictime,true),
+			Utils.decodeStringFromTimeMillis(Utils.getAllUsersHeardTimeInt(),true),
 			guild.getSelfMember().getAsMention())
 				
 			+" \n \n```OS: "+prop.getProperty("os.name")+"\n"

@@ -2,12 +2,11 @@ package de.melody.commands.admin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
-import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Utils.ConsoleLogger;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
@@ -49,6 +48,7 @@ public class CleanCommand implements ServerCommand{
 				if(--i <= 0) break;
 			}
 			channel.purgeMessages(purgemessages);	
+			channel.sendMessage(purgemessages.size() + " from "+clearmessages+" Messages have been deleted.").complete().delete().queueAfter(7, TimeUnit.SECONDS);
 		}else {
 			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix().get(0)+" <1-"+Constants.MAXCLEANMESSAGES+">"));		
 		}
@@ -61,7 +61,7 @@ public class CleanCommand implements ServerCommand{
 
 	@Override
 	public List<String> getCommandPrefix() {
-		return List.of("clean");
+		return List.of("clean", "clear");
 	}
 
 	@Override

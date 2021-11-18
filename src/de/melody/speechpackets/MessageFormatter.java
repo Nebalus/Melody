@@ -12,6 +12,7 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.utils.Utils;
+import de.melody.utils.Utils.ConsoleLogger;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class MessageFormatter {
@@ -22,11 +23,9 @@ public class MessageFormatter {
 		for (Languages language : Languages.values()) {
 			try {
 				InputStream link = getClass().getResourceAsStream("/de/melody/speechpackets/"+language.getFileName());
-				File file = new File(language.getFileName());
+				File file = new File(Constants.TEMP_DIRECTORY + "/" +language.getFileName());
 				Files.copy(link, file.getAbsoluteFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
-				
 				getJSONMessage.put(language, Utils.getJsonObject(file));
-					
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
