@@ -1,13 +1,18 @@
 package de.melody;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import de.melody.core.Constants;
 import de.melody.utils.Utils.ConsoleLogger;
 
 public class LiteSQL {
@@ -18,17 +23,20 @@ public class LiteSQL {
 	public LiteSQL(){
 		conn = null;
 		try {
-			File file = new File("datenbank.db");
-			if(!file.exists()) {
-				file.createNewFile();
+			File databasefile = new File("database.db");
+			if(databasefile.exists()) {
+				InputStream link = new FileInputStream(databasefile.getAbsoluteFile().getPath());
+				File file = new File(Constants.TEMP_DIRECTORY + "/" +"OLD_database.db");
+				Files.copy(link, file.getAbsoluteFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
+			}else {
+				InputStream link = getClass().getResourceAsStream(Constants.STORAGE_DATABASE_URL);
+				Files.copy(link, databasefile.getAbsoluteFile().toPath());	
 			}
-			String url = "jdbc:sqlite:"+ file.getPath();
+			String url = "jdbc:sqlite:"+ databasefile.getPath();
 			conn = DriverManager.getConnection(url);
 			
-			ConsoleLogger.info("SQLDatabase", "Verbindung zur Datenbank hergestellt");
+			ConsoleLogger.info("SQLDatabase", "Connection to the database established");
 			stmt = conn.createStatement();
-			onUpdate("CREATE TABLE IF NOT EXISTs guilds(guildid INTEGER PRIMARY KEY NOT NULL, musicchannelid INTEGER, volume INTEGER, djrole INTEGER, prefix VARCHAR, voteskip BOOLEAN, staymode BOOLEAN, language VARCHAR, announcesongs BOOLEAN, preventduplicates BOOLEAN, maxusersongs INTEGER, maxqueuelength INTEGER, djonly BOOLEAN)");
-			onUpdate("CREATE TABLE IF NOT EXISTs userdata(userid INTEGER PRIMARY KEY NOT NULL, favoritemusic INTEGER, heardtime INTEGER, firsttimeheard INTEGER, lasttimeheard INTEGER)");	
 			/*
 			 * token = XXXXXXXXXX / = Example -> dnQW1cgh2s
 			 * createdtime is when a user creates a playlist
@@ -48,10 +56,6 @@ public class LiteSQL {
 			 * 
 			 * saved create test esdf 
 			 */
-			onUpdate("CREATE TABLE IF NOT EXISTs playlistinfo(PK_playlistinfo INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, token VARCHAR, createdtime INTEGER, ownerid INTEGER, privacytype INTEGER, title VARCHAR)");
-			onUpdate("CREATE TABLE IF NOT EXISTs playlistcontent(PK_playlistcontent INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, FK_playlistinfo INTEGER NOT NULL, FK_track INTEGER NOT NULL, position INTEGER)");
-			onUpdate("CREATE TABLE IF NOT EXISTs track(PK_track INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, url VARCHAR NOT NULL, title VARCHAR, provider INTEGER NOT NULL DEFAULT 1)");
-			onUpdate("CREATE TABLE IF NOT EXISTs system(playedmusictime INTEGER)");
 		} catch (SQLException | IOException e1) {
 			e1.printStackTrace();
 		}
@@ -61,7 +65,7 @@ public class LiteSQL {
 		try {
 			if(isConnected()) {
 				conn.close();
-				ConsoleLogger.info("SQLDatabase", "Verbindung zur Datenbank getrennt");
+				ConsoleLogger.info("SQLDatabase", "Connection to the database disconnected");
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();

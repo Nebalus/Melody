@@ -1,17 +1,18 @@
 package de.melody.core;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.List;
 
-public class Constants{
+public final class Constants{
 	
 	public static final boolean DEVMODE = false;
 	public static final boolean DEBUGMODE = true;
 	
 	public static final long STARTUP = System.currentTimeMillis();
 	
-	public static final String BUILDVERSION = "BETA 0.6.3";	
-	public static final String BUILDDATE = "05/11/2021";	
+	public static final String BUILDVERSION = "BETA 0.6.4";	
+	public static final String BUILDDATE = "2021-11-18";	
 	public static final String BUILDNAME = "Melody";
 	
 	public static final Long ENTITYEXPIRETIME = 1000l*60l*60l;
@@ -34,7 +35,11 @@ public class Constants{
 	public static final int MAXCLEANMESSAGES = 200;	
 	public static final int DEFAULTCLEANMESSAGES = 100;	
 	
+	public static final File TEMP_DIRECTORY = new File(Melody.getCurrentJarPath()+"/temp/");
+	
 	public static final String PIC_DEFAULT_AVATAR_URL = "/default-avatar.png";
 	public static final String PIC_ERROR_LINE_URL = "/error-line.png";
 	public static final String PIC_TRACKINFO_URL = "/trackinfo.png";
+	
+	public static final String STORAGE_DATABASE_URL = "/database.db";
 }

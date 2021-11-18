@@ -30,14 +30,14 @@ public class UserEntity {
 		this.firsttimeheard = System.currentTimeMillis();
 		if(database.isConnected()) {
 			try {
-				ResultSet rs = database.onQuery("SELECT * FROM userdata WHERE userid = " + userid);	
+				ResultSet rs = database.onQuery("SELECT * FROM userdata WHERE PK_userid = " + userid);	
 				if(rs.next()) {
 					favoritemusicid = rs.getInt("favoritemusic");
 					heardtime = rs.getLong("heardtime");
 					firsttimeheard = rs.getLong("firsttimeheard");
 					lasttimeheard = rs.getLong("lasttimeheard");
 				}else {
-					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO userdata(userid,firsttimeheard) VALUES(?,?)");
+					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO userdata(PK_userid,firsttimeheard) VALUES(?,?)");
 					ps.setLong(1, userid);
 					ps.setLong(2, firsttimeheard);
 					ps.executeUpdate();
@@ -96,7 +96,7 @@ public class UserEntity {
 					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE userdata SET "
 							+ "favoritemusic = ?,"
 							+ "heardtime = ?,"
-							+ "lasttimeheard = ? WHERE userid = ?");
+							+ "lasttimeheard = ? WHERE PK_userid = ?");
 					ps.setInt(1, favoritemusicid);
 					ps.setLong(2, heardtime);
 					ps.setLong(3, lasttimeheard);

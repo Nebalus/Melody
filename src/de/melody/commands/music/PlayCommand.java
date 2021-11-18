@@ -13,10 +13,10 @@ import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
-import de.melody.music.AudioLoadResult;
 import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.music.Service;
+import de.melody.music.audioloader.AudioLoadResult;
 import de.melody.utils.Utils;
 import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;

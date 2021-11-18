@@ -3,7 +3,6 @@ package de.melody.utils;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -34,6 +33,18 @@ public class Utils {
 			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT COUNT(*) FROM userdata");
 			if(rs.next()) {
 				return rs.getLong("COUNT(*)");
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0l;
+	}
+	
+	public static Long getAllUsersHeardTimeInt() {
+		try {
+			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT SUM(heardtime) FROM userdata");
+			if(rs.next()) {
+				return rs.getLong("SUM(heardtime)");
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -178,38 +189,7 @@ public class Utils {
 		}
 		return endTime;
 	}
-	
-	public static void loadSystemData(Melody melody) {
-		if(melody.getDatabase().isConnected()) {
-			try {
-				ResultSet rs = melody.getDatabase().onQuery("SELECT playedmusictime FROM system");
-				if(rs.next()) {
-					melody.playedmusictime = rs.getInt("playedmusictime");
-				}
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public static void saveSystemData(Melody melody) {
-		if(melody.getDatabase().isConnected()) {
-			try {
-				ResultSet rs = melody.getDatabase().onQuery("SELECT playedmusictime FROM system");
-				if(rs.next()) {	
-					PreparedStatement ps = melody.getDatabase().getConnection().prepareStatement("UPDATE `system` SET `playedmusictime` = ?");
-					ps.setLong(1, melody.playedmusictime);
-					ps.executeUpdate();	
-				}else {
-					PreparedStatement ps = melody.getDatabase().getConnection().prepareStatement("INSERT INTO system (playedmusictime) VALUES (?)");
-					ps.setLong(1, melody.playedmusictime);
-					ps.executeUpdate();
-				}
-			}catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+
 	
 	public static String getDomain(String url) {
 		if(url.startsWith("http://") || url.startsWith("https://")) {
