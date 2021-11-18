@@ -15,7 +15,7 @@ public class PlaylistEntity {
 	private Long createdtime;
 	private Long ownerid = 0l;
 	private String title;
-	private HashMap<Long, TrackEntity> content;
+	private HashMap<Integer, TrackEntity> content;
 	private Long expiretime;
 	
 	private Melody melody = Melody.INSTANCE;
@@ -25,7 +25,7 @@ public class PlaylistEntity {
 		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
 		if(database.isConnected()) {
 			try {
-				ResultSet rs_playlistinfo = database.onQuery("SELECT * FROM playlistinfo WHERE PK_playlistinfo = " + playlistlistid);	
+				ResultSet rs_playlistinfo = database.onQuery("SELECT * FROM playlistinfo, playlistcontent WHERE PK_playlistinfo = " + playlistlistid);	
 				if(rs_playlistinfo.next()) {
 					this.token = rs_playlistinfo.getString("token");	
 					this.createdtime = rs_playlistinfo.getLong("createdtime");
@@ -33,7 +33,7 @@ public class PlaylistEntity {
 					this.title = rs_playlistinfo.getString("title");
 					ResultSet rs_playlistcontent = database.onQuery("SELECT * FROM playlistcontent WHERE FK_playlistinfo = " + playlistlistid);
 					while(rs_playlistcontent.next()) {
-						content.put(rs_playlistcontent.getLong("position"),new TrackEntity(rs_playlistcontent.getInt("FK_track")));
+						content.put(rs_playlistcontent.getInt("position"),new TrackEntity(rs_playlistcontent.getInt("FK_track")));
 					}
 				}else {
 					this.token = IDGenerator.generateID();
@@ -46,7 +46,7 @@ public class PlaylistEntity {
 		}
 	}
 	
-	public HashMap<Long, TrackEntity> getContent(){
+	public HashMap<Integer, TrackEntity> getContent(){
 		return content;
 	}
 	

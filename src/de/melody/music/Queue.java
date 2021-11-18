@@ -31,7 +31,7 @@ public class Queue {
 				return amount;
 			}
 		}
-		return 1;
+		return 0;
 	}
 	
 	public int back(int amount) {
@@ -52,7 +52,7 @@ public class Queue {
 				return amount;
 			}
 		}
-		return 1;
+		return 0;
 	}
 	
 	public QueuedTrack currentlyPlaying() {

@@ -34,13 +34,13 @@ public class ReactListener extends ListenerAdapter{
 				
 				if(tr != null) {
 					if(emoji.equals(Emoji.SPARKLING_HEART)) {
-						if(Melody.INSTANCE.getEntityManager().getUserEntity(user).getFavoriteMusicId() > 0) {
+						if(Melody.INSTANCE.getEntityManager().getUserEntity(user).getFavoritePlaylistId() > 0) {
 				
 							
 							
 						}else {
 							user.openPrivateChannel().queue((ch) ->{
-								ch.sendMessage("Token: "+IDGenerator.generateID()).queue((message) ->{
+								ch.sendMessage("RequestToken: "+IDGenerator.generateID()).queue((message) ->{
 									message.delete().queueAfter(120, TimeUnit.SECONDS);
 								});
 							});	

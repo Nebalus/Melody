@@ -19,18 +19,20 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
-public class GuildEntity {
+public class GuildEntity{
 	
 	private Guild guild;
 	private Long musicchannelid;
 	private int volume = 50;
 	private Long djroleid = 0l;
-	private boolean djonly = false;
 	private String prefix = "m!";
+	
+	private boolean djonly = false;
 	private boolean voteskip = false;
 	private boolean staymode = false;
 	private boolean announcesongs = true;
 	private boolean preventduplicates = false;
+	
 	private Languages language = Languages.ENGLISH;
 	
 	private Long expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
@@ -87,6 +89,7 @@ public class GuildEntity {
 					ps.setLong(2, firstTimeRoutine());
 					ps.setLong(3, System.currentTimeMillis());
 					ps.executeUpdate();
+					export();
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
@@ -273,7 +276,7 @@ public class GuildEntity {
 					ps.setString(4, prefix);
 					ps.setBoolean(5, voteskip);
 					ps.setBoolean(6, staymode);
-					ps.setString(7, language.getCode());
+					ps.setInt(7, language.getDatabaseID());
 					ps.setBoolean(8, announcesongs);
 					ps.setBoolean(9, preventduplicates);
 					ps.setBoolean(10, djonly);
