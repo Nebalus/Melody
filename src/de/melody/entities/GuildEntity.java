@@ -111,6 +111,7 @@ public class GuildEntity{
 							+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
 							+ "PS: Thanks a lot for your support, that you added me to your discord server! "+Emoji.SPARKLING_HEART).queue();
 					mentioned = true;
+					musicchannelid = tc.getIdLong();
 					return tc.getIdLong();
 					//loads the guild in the database
 				}catch(InsufficientPermissionException e) {}

@@ -20,6 +20,7 @@ import de.melody.LiteSQL;
 import de.melody.Secure;
 import de.melody.commands.admin.CleanCommand;
 import de.melody.commands.admin.ConfigCommand;
+import de.melody.commands.dev.GetHostIPCommand;
 import de.melody.commands.dev.RestartCommand;
 import de.melody.commands.info.InfoCommand;
 import de.melody.commands.info.InviteCommand;
@@ -130,7 +131,7 @@ public class Melody{
 				new StopCommand(), new LeaveCommand(), new TrackinfoCommand(), new QueueCommand(), new SkipCommand(),
 				new InfoCommand(), new PingCommand(), new ConfigCommand(), new InviteCommand(), new ShuffleCommand(),
 				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand(), new RestartCommand(),
-				new CleanCommand());
+				new CleanCommand(), new GetHostIPCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
 		AudioSourceManagers.registerLocalSource(audioPlayerManager);

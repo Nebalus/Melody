@@ -1,5 +1,8 @@
 package de.melody.music;
 
+import java.util.Arrays;
+
+import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
@@ -32,10 +35,9 @@ public class MusicController {
 		
 		/*
 		this.player.setFilterFactory((track, format, output)->{
-			GuildEntity ge = Melody.INSTANCE.entityManager.getGuildEntity(guild);
 			TimescalePcmAudioFilter timescale = new TimescalePcmAudioFilter(output, format.channelCount, format.sampleRate);
 		    timescale.setSpeed(1.1);
-		    timescale.setPitch(1.4);
+		    timescale.setPitch(1.2);
 		    return Arrays.asList(timescale);
 		});
 		*/
