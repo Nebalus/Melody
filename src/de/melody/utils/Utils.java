@@ -189,7 +189,6 @@ public class Utils {
 		}
 		return endTime;
 	}
-
 	
 	public static String getDomain(String url) {
 		if(url.startsWith("http://") || url.startsWith("https://")) {
