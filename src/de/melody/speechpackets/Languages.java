@@ -45,4 +45,13 @@ public enum Languages {
          }
 		return ENGLISH;
 	}
+	
+	public static Languages getLanguage(int id) {
+		 for (Languages language : values()) {
+			 if(language.databaseid == id) {
+				 return language;
+			 }
+        }
+		return ENGLISH;
+	}
 }

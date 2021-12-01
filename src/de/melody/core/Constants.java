@@ -11,8 +11,8 @@ public final class Constants{
 	
 	public static final long STARTUP = System.currentTimeMillis();
 	
-	public static final String BUILDVERSION = "BETA 0.6.4";	
-	public static final String BUILDDATE = "2021-11-18";	
+	public static final String BUILDVERSION = "BETA 0.6.4a";	
+	public static final String BUILDDATE = "2021-12-01";	
 	public static final String BUILDNAME = "Melody";
 	
 	public static final Long ENTITYEXPIRETIME = 1000l*60l*60l;

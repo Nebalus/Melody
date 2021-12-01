@@ -52,6 +52,7 @@ public class UserEntity {
 		renewExpireTime();
 		return this.heardtime;
 	}
+	
 	public void setHeardTime(Long newheardtime) {
 		heardtime = newheardtime;
 		lasttimeheard = System.currentTimeMillis();
@@ -67,6 +68,7 @@ public class UserEntity {
 		renewExpireTime();
 		return this.favoriteplaylistid;
 	}
+	
 	public void setFavoritePlaylistId(int newplaylistid) {
 		favoriteplaylistid = newplaylistid;
 		update();

@@ -81,7 +81,7 @@ public class GuildEntity{
 						preventduplicates = rs.getBoolean("preventduplicates");	
 					}
 					if(rs.getString("language") != null) {
-						language = Languages.getLanguage(rs.getString("language"));
+						language = Languages.getLanguage(rs.getInt("language"));
 					}
 				}else {
 					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(PK_guildid,musicchannelid,firsttimeloaded) VALUES(?,?,?)");
