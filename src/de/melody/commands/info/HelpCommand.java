@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
-import de.melody.utils.Utils.ConsoleLogger;
 import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;

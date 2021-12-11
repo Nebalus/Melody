@@ -8,6 +8,7 @@ public final class Constants{
 	
 	public static final boolean DEVMODE = false;
 	public static final boolean DEBUGMODE = true;
+	public static final boolean ALLOWSLASHCOMMANDS = false;
 	
 	public static final long STARTUP = System.currentTimeMillis();
 	

@@ -1,9 +1,8 @@
 package de.melody.commands.music;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
+import de.melody.music.LoopMode;
 import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils.Emoji;
@@ -32,17 +31,21 @@ public class LoopCommand implements ServerCommand{
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
-			AudioPlayer player = controller.getPlayer();
-			if(player.getPlayingTrack() != null) {
-				if(controller.isLoop()) {
-					controller.setLoop(false);
-					Messenger.sendMessageEmbed(channel,Emoji.SINGLE_LOOP+mf.format(guild, "music.info.loop-disabled")).queue();
-				}else {
-					controller.setLoop(true);
-					Messenger.sendMessageEmbed(channel,Emoji.SINGLE_LOOP+mf.format(guild, "music.info.loop-enabled")).queue();
-				}	
-			}else {
-				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.currently-playing-null"));
+			switch(controller.getLoopMode()) {
+				case QUEUE:
+					controller.setLoopMode(LoopMode.SONG);
+					Messenger.sendMessageEmbed(channel,Emoji.SINGLE_LOOP+mf.format(guild, "music.info.loopmode-song")).queue();
+					break;
+				case SONG:
+					controller.setLoopMode(LoopMode.NONE);
+					Messenger.sendMessageEmbed(channel,Emoji.EXIT+mf.format(guild, "music.info.loopmode-none")).queue();
+					break;
+				case NONE:
+					controller.setLoopMode(LoopMode.QUEUE);
+					Messenger.sendMessageEmbed(channel,Emoji.QUEUE_LOOP+mf.format(guild, "music.info.loopmode-queue")).queue();
+					break;
+				default: 
+					break;
 			}
 		}else {
 			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
