@@ -13,9 +13,9 @@ import javax.imageio.ImageIO;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
+import de.melody.datamanager.GenerateFile;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils.Emoji;
-import de.melody.utils.Utils.IDGenerator;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -128,10 +128,9 @@ public class Images {
 	}
 	
 	public static File generateNewImage(BufferedImage image) throws IOException {
-		File newfile = new File(Constants.TEMP_DIRECTORY + "/" + IDGenerator.generateID() + ".png");
-		newfile.createNewFile();
-		ImageIO.write(image, "png", newfile);
-		return newfile;
+		File file = new GenerateFile("png").getFile();
+		ImageIO.write(image, "png", file);
+		return file;
 	}
 	
 	private static int getPercent(Long number, Long maxNumber){

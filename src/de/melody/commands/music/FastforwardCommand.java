@@ -1,7 +1,5 @@
 package de.melody.commands.music;
 
-import java.util.List;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
@@ -11,7 +9,6 @@ import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;
-import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -31,13 +28,11 @@ public class FastforwardCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
-	@SuppressWarnings({ "unused" })
 	@Override
-	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			String[] args = message.getContentDisplay().split(" ");
-			GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
 			if(controller.isPlayingTrack()) {
 				AudioPlayer player = controller.getPlayer();
@@ -65,18 +60,13 @@ public class FastforwardCommand implements ServerCommand{
 	}
 
 	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("fastforward","fw","f");
+	public String[] getCommandPrefix() {
+		return new String[] {"fastforward","fw","f"};
 	}
 	
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.CHAT_COMMAND;
-	}
-
-	@Override
-	public CommandInfo getCommandInfo() {
-		return CommandInfo.DJ_COMMAND;
+		return CommandType.CHAT;
 	}
 	
 	@Override
@@ -85,12 +75,12 @@ public class FastforwardCommand implements ServerCommand{
 	}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
 		
 	}
 
 	@Override
-	public List<OptionData> getCommandOptions() {
+	public OptionData[] getCommandOptions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

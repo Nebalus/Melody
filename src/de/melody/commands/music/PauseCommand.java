@@ -1,13 +1,11 @@
 package de.melody.commands.music;
 
-import java.util.List;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import de.melody.core.Melody;
+import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils.Emoji;
-import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -28,7 +26,7 @@ public class PauseCommand implements ServerCommand{
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
@@ -43,7 +41,7 @@ public class PauseCommand implements ServerCommand{
 	}
 	
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
 		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
@@ -58,8 +56,8 @@ public class PauseCommand implements ServerCommand{
 	}
 
 	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("pause");
+	public String[] getCommandPrefix() {
+		return new String[] {"pause"};
 	}
 	@Override
 	public CommandType getCommandType() {
@@ -67,16 +65,12 @@ public class PauseCommand implements ServerCommand{
 	}
 
 	@Override
-	public CommandInfo getCommandInfo() {
-		return CommandInfo.DJ_COMMAND;
-	}
-	@Override
 	public String getCommandDescription() {
 		return "Pauses the currently playing track";
 	}
 
 	@Override
-	public List<OptionData> getCommandOptions() {
+	public OptionData[] getCommandOptions() {
 		return null;
 	}
 }

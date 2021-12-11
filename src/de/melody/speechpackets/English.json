@@ -26,7 +26,7 @@
     "command.fastforward.set": "Fast forwarding {0}",
     "command.rewind.set": "Rewinding {0}",
     
-    "error.bot-no-permmisions.body": "I don't have enough permissions, please give me the following Permisions: `{0}`",
+    "error.bot-no-permmisions.body": "Please give me the following Permisions: `{0}`",
     "error.bot-no-permmisions.header": "Not enough Permissions",
     "error.user-no-permmisions.body": "You don't have enough Permisions: `{0}`",
     "error.user-no-permmisions.header": "Not enough Permissions",

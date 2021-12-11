@@ -1,15 +1,12 @@
 package de.melody.utils.commandbuilder;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.utils.Utils.ConsoleLogger;
-import de.melody.utils.messenger.Messenger;
-import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -24,15 +21,23 @@ public class CommandManager {
 	private ConcurrentHashMap<String, ServerCommand> chatcommands;
 	private ConcurrentHashMap<String, ServerCommand> slashcommands;
 	
+	private ArrayList<ServerCommand> rawcommands;
+	
 	private Melody melody;
 	public CommandManager(Melody melody) {
 		this.chatcommands = new ConcurrentHashMap<>();
 		this.melody = melody;
 		this.slashcommands = new ConcurrentHashMap<>();
+		this.rawcommands = new ArrayList<ServerCommand>();
 	}
 	
+	public ArrayList<ServerCommand> getRawCommands(){
+		return rawcommands;
+	}
+	//Versuche die beiden forschleifen zusammenfügen
 	public CommandManager registerCommands(ServerCommand... cmd) {
 		for(ServerCommand sc : cmd) {
+			rawcommands.add(sc);
 			if(sc.getCommandType().isChat()) {
 				for(String command : sc.getCommandPrefix()) {
 					ConsoleLogger.debug("COMMAND-REGISTER", "Loading Command '"+command+"'");
@@ -45,13 +50,13 @@ public class CommandManager {
 			for(ServerCommand sc : cmd) {
 				if(sc.getCommandType().isSlash()) {
 					if(sc.getCommandOptions() == null) {
-						slashcommands.addCommands(new CommandData(sc.getCommandPrefix().get(0), sc.getCommandDescription()));
-						ConsoleLogger.debug("SLASH-BUILDER", sc.getCommandPrefix().get(0)+" added naked Slash Command");
-						this.slashcommands.put(sc.getCommandPrefix().get(0), sc);
+						slashcommands.addCommands(new CommandData(sc.getCommandPrefix()[0], sc.getCommandDescription()));
+						ConsoleLogger.debug("SLASH-BUILDER", sc.getCommandPrefix()[0]+" added naked Slash Command");
+						this.slashcommands.put(sc.getCommandPrefix()[0], sc);
 					}else {
-						slashcommands.addCommands(new CommandData(sc.getCommandPrefix().get(0), sc.getCommandDescription()).addOptions(sc.getCommandOptions()));
-						ConsoleLogger.debug("SLASH-BUILDER", sc.getCommandPrefix().get(0)+" added Slash Command");
-						this.slashcommands.put(sc.getCommandPrefix().get(0), sc);
+						slashcommands.addCommands(new CommandData(sc.getCommandPrefix()[0], sc.getCommandDescription()).addOptions(sc.getCommandOptions()));
+						ConsoleLogger.debug("SLASH-BUILDER", sc.getCommandPrefix()[0]+" added Slash Command");
+						this.slashcommands.put(sc.getCommandPrefix()[0], sc);
 					}
 				}
 			}
@@ -63,14 +68,15 @@ public class CommandManager {
 	public boolean performServer(String command, Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {	
 		ServerCommand cmd;
 		if((cmd = this.chatcommands.get(command.toLowerCase())) != null && cmd.getCommandType().isChat()) {
-			switch(cmd.getCommandInfo()) {
-				case DEVELOPER_COMMAND:
+			switch(command) {
+			/*
+				case DEVELOPER:
 					if(Constants.DEVELOPERIDS.contains(member.getIdLong())) {
 						cmd.performCommand(member, channel, message, guild);
 						return true;
 					}
 					break;
-				case ADMIN_COMMAND:
+				case ADMIN:
 					if(member.hasPermission(Permission.MANAGE_CHANNEL) || member.hasPermission(Permission.ADMINISTRATOR)) {
 						cmd.performCommand(member, channel, message, guild);
 						return true;
@@ -78,15 +84,16 @@ public class CommandManager {
 						Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "user-no-permmisions", "MANAGE_SERVER"));
 					}
 					break;
-				case DJ_COMMAND:
+				case DJ:
 					if(guildentity.isMemberDJ(member)) {
 						cmd.performCommand(member, channel, message, guild);
 					}else {
 						Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.user-not-dj"));
 					}
 					return true;
+					*/
 				default:
-					cmd.performCommand(member, channel, message, guild);
+					cmd.performCommand(member, channel, message, guild, guildentity);
 					return true;
 			}
 		}
@@ -96,14 +103,15 @@ public class CommandManager {
 	public boolean performServerSlash(String name, Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
 		ServerCommand cmd;
 		if((cmd = this.slashcommands.get(name.toLowerCase())) != null && cmd.getCommandType().isSlash()) {
-			switch(cmd.getCommandInfo()) {
-				case DEVELOPER_COMMAND:
+			switch(name) {
+			/*
+				case DEVELOPER:
 					if(Constants.DEVELOPERIDS.contains(member.getIdLong())) {
 						cmd.performSlashCommand(member, channel, guild, event);
 						return true;
 					}
 					break;
-				case ADMIN_COMMAND:
+				case ADMIN:
 					if(member.hasPermission(Permission.MANAGE_CHANNEL) || member.hasPermission(Permission.ADMINISTRATOR)) {
 						cmd.performSlashCommand(member, channel, guild, event);
 						return true;
@@ -111,15 +119,16 @@ public class CommandManager {
 						Messenger.sendErrorSlashMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "user-no-permmisions", "MANAGE_SERVER"));
 					}
 					break;
-				case DJ_COMMAND:
+				case DJ:
 					if(guildentity.isMemberDJ(member)) {
 						cmd.performSlashCommand(member, channel, guild, event);
 					}else {
 						Messenger.sendErrorSlashMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "music.user-not-dj"));
 					}
 					return true;
+					*/
 				default:
-					cmd.performSlashCommand(member, channel, guild, event);
+					cmd.performSlashCommand(member, channel, guild, guildentity, event);
 					return true;
 			}
 		}

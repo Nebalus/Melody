@@ -11,17 +11,16 @@ public final class Constants{
 	
 	public static final long STARTUP = System.currentTimeMillis();
 	
-	public static final String BUILDVERSION = "BETA 0.6.4a";	
-	public static final String BUILDDATE = "2021-12-01";	
+	public static final String BUILDVERSION = "BETA 0.6.4b";	
+	public static final String BUILDDATE = "2021-12-09";	
 	public static final String BUILDNAME = "Melody";
+	
+	public static final String DEFAULTPREFIX = "m!";
 	
 	public static final Long ENTITYEXPIRETIME = 1000l*60l*60l;
 	
 	public static final Color EMBEDCOLOR = Color.decode("#2eb8bf");
 	public static final Color ERROREMBEDCOLOR = Color.RED;
-	
-	public static final int MAXQUEUELENGTH = 200;
-	public static final int MAXPLAYEDQUEUELENGTH = 100;
 	
 	public static final String INVITE_URL = "https://melodybot.ga/invite";
 	public static final String COMMAND_URL = "https://melodybot.ga/commands";
@@ -34,6 +33,8 @@ public final class Constants{
 	public static final int MAXVOLUME = 100;
 	public static final int MAXCLEANMESSAGES = 200;	
 	public static final int DEFAULTCLEANMESSAGES = 100;	
+	public static final int MAXQUEUELENGTH = 200;
+	public static final int MAXPLAYEDQUEUELENGTH = 200;
 	
 	public static final File TEMP_DIRECTORY = new File(Melody.getCurrentJarPath()+"/temp/");
 	
