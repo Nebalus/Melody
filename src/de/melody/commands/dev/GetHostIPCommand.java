@@ -2,6 +2,7 @@ package de.melody.commands.dev;
 
 import de.melody.core.Constants;
 import de.melody.entities.GuildEntity;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
@@ -47,5 +48,8 @@ public class GetHostIPCommand implements ServerCommand{
 	public String getCommandDescription() {
 		return "Gets the public IP from the "+Constants.BUILDNAME;
 	}
-
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.DEVELOPER;
+	}
 }

@@ -5,6 +5,7 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -63,5 +64,9 @@ public class LeaveCommand implements ServerCommand{
 	@Override
 	public OptionData[] getCommandOptions() {
 		return null;
+	}
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.DJ;
 	}
 }

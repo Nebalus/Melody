@@ -23,6 +23,7 @@ import de.melody.commands.admin.StayCommand;
 import de.melody.commands.dev.ExportcmdCommand;
 import de.melody.commands.dev.GetHostIPCommand;
 import de.melody.commands.dev.RestartCommand;
+import de.melody.commands.info.HelpCommand;
 import de.melody.commands.info.InfoCommand;
 import de.melody.commands.info.InviteCommand;
 import de.melody.commands.info.PingCommand;
@@ -132,7 +133,7 @@ public class Melody{
 				new StopCommand(), new LeaveCommand(), new TrackinfoCommand(), new QueueCommand(), new SkipCommand(),
 				new InfoCommand(), new PingCommand(), new ConfigCommand(), new InviteCommand(), new ShuffleCommand(),
 				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand(), new RestartCommand(),
-				new CleanCommand(), new GetHostIPCommand(), new ExportcmdCommand());
+				new CleanCommand(), new GetHostIPCommand(), new ExportcmdCommand(), new HelpCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
 		AudioSourceManagers.registerLocalSource(audioPlayerManager);

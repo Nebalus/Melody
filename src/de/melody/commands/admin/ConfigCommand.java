@@ -7,6 +7,7 @@ import de.melody.speechpackets.Languages;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -164,5 +165,9 @@ public class ConfigCommand implements ServerCommand{
 	@Override
 	public OptionData[] getCommandOptions() {
 		return null;
+	}
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.ADMIN;
 	}
 }

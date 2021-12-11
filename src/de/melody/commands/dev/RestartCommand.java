@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
@@ -73,5 +74,8 @@ public class RestartCommand implements ServerCommand{
 	public String getCommandDescription() {
 		return "Restarts the bot";
 	}
-
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.DEVELOPER;
+	}
 }
