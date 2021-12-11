@@ -12,6 +12,7 @@ import de.melody.music.MusicUtil;
 import de.melody.music.Queue;
 import de.melody.music.QueuedTrack;
 import de.melody.music.Service;
+import de.melody.music.LoopMode;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -23,8 +24,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	private final MusicController controller;
 	private final String uri;
 	private final Member userWhoQueued;
-	private final Boolean isLoop;
-	private final Boolean isLoopQueue;
+	private final LoopMode loopMode;
 	private final Guild guild;
 	private final String imageUrl;
 	private final Service service;
@@ -37,8 +37,8 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 		this.imageUrl = null;
 		this.userWhoQueued = null;
 		this.service = service;
-		this.isLoop = controller.isLoop();
-		this.isLoopQueue = controller.isLoopQueue();
+		this.loopMode = controller.getLoopMode();
+		
 		this.guild = controller.getGuild();
 	}
     
@@ -48,8 +48,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 		this.imageUrl = null;
 		this.userWhoQueued = userWhoQueued;
 		this.service = service;
-		this.isLoop = controller.isLoop();
-		this.isLoopQueue = controller.isLoopQueue();
+		this.loopMode = controller.getLoopMode();
 		this.guild = controller.getGuild();
 	}
     
@@ -59,8 +58,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 		this.imageUrl = imageUrl;
 		this.userWhoQueued = userWhoQueued;
 		this.service = service;
-		this.isLoop = controller.isLoop();
-		this.isLoopQueue = controller.isLoopQueue();
+		this.loopMode = controller.getLoopMode();
 		this.guild = controller.getGuild();
 	}
     
@@ -68,7 +66,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	public void trackLoaded(AudioTrack track) {
 		Queue queue = controller.getQueue();
 		QueuedTrack queuedtrack = new QueuedTrack(track, userWhoQueued, service, imageUrl);
-		if(controller.isPlayingTrack() && isLoop == false && isLoopQueue == false) {
+		if(controller.isPlayingTrack() && loopMode.equals(LoopMode.NONE)) {
 			EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guild, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
 					.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
 					.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)

@@ -3,7 +3,6 @@ package de.melody.utils.commandbuilder;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.melody.commands.info.HelpCommand;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
@@ -53,16 +52,18 @@ public class CommandManager {
 		}
 		for(JDA jda : melody.shardMan.getShards()) {
 			CommandListUpdateAction slashcommands = jda.updateCommands();
-			for(ServerCommand sc : cmd) {
-				if(sc.getCommandType().isSlash()) {
-					if(sc.getCommandOptions() == null) {
-						slashcommands.addCommands(new CommandData(sc.getCommandPrefix()[0], sc.getCommandDescription()));
-						ConsoleLogger.debug("SLASH-BUILDER", sc.getCommandPrefix()[0]+" added naked Slash Command");
-						this.slashcommands.put(sc.getCommandPrefix()[0], sc);
-					}else {
-						slashcommands.addCommands(new CommandData(sc.getCommandPrefix()[0], sc.getCommandDescription()).addOptions(sc.getCommandOptions()));
-						ConsoleLogger.debug("SLASH-BUILDER", sc.getCommandPrefix()[0]+" added Slash Command");
-						this.slashcommands.put(sc.getCommandPrefix()[0], sc);
+			if(Constants.ALLOWSLASHCOMMANDS) {
+				for(ServerCommand sc : cmd) {
+					if(sc.getCommandType().isSlash()) {
+						if(sc.getCommandOptions() == null) {
+							slashcommands.addCommands(new CommandData(sc.getCommandPrefix()[0], sc.getCommandDescription()));
+							ConsoleLogger.debug("SLASH-BUILDER", sc.getCommandPrefix()[0]+" added naked Slash Command");
+							this.slashcommands.put(sc.getCommandPrefix()[0], sc);
+						}else {
+							slashcommands.addCommands(new CommandData(sc.getCommandPrefix()[0], sc.getCommandDescription()).addOptions(sc.getCommandOptions()));
+							ConsoleLogger.debug("SLASH-BUILDER", sc.getCommandPrefix()[0]+" added Slash Command");
+							this.slashcommands.put(sc.getCommandPrefix()[0], sc);
+						}
 					}
 				}
 			}
