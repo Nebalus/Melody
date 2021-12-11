@@ -1,14 +1,12 @@
 package de.melody.commands.music;
 
-import java.util.List;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import de.melody.core.Melody;
+import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
 import de.melody.music.Queue;
 import de.melody.utils.Utils.Emoji;
-import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -28,7 +26,7 @@ public class StopCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	
 	@Override
-	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
 		MusicController controller = melody.playerManager.getController(guild.getIdLong());
 		AudioPlayer player = controller.getPlayer();
@@ -49,31 +47,44 @@ public class StopCommand implements ServerCommand{
 	}
 
 	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("stop");
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
+		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
+		MusicController controller = melody.playerManager.getController(guild.getIdLong());
+		AudioPlayer player = controller.getPlayer();
+		GuildVoiceState state;
+		if((state = member.getVoiceState()) != null && state.getChannel() != null) {
+			if(player.getPlayingTrack() != null) {
+				Queue queue = controller.getQueue();
+				player.stopTrack();
+				queue.clear();
+				melody.playerManager.getController(guild.getIdLong()).setAfkTime(600);
+			}else {
+				Messenger.sendErrorSlashMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "music.currently-playing-null"));
+			}
+		}else {
+			Messenger.sendErrorSlashMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
+		}
 	}
+	
+	@Override
+	public String[] getCommandPrefix() {
+		return new String[] {"stop"};
+	}
+	
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.CHAT_COMMAND;
+		return CommandType.BOTH;
 	}
 
-	@Override
-	public CommandInfo getCommandInfo() {
-		return CommandInfo.DJ_COMMAND;
-	}
+	
+	
 	@Override
 	public String getCommandDescription() {
-		return null;
+		return "Stops the player and clears the queue";
 	}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
-		
-	}
-
-	@Override
-	public List<OptionData> getCommandOptions() {
-		// TODO Auto-generated method stub
+	public OptionData[] getCommandOptions() {
 		return null;
 	}
 }

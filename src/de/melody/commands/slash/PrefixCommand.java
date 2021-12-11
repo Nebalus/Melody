@@ -1,11 +1,9 @@
 package de.melody.commands.slash;
 
-import java.util.List;
-
 import de.melody.core.Constants;
 import de.melody.core.Melody;
+import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.commandbuilder.CommandInfo;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
@@ -23,34 +21,29 @@ public class PrefixCommand implements ServerCommand{
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member m, TextChannel channel, Message message, Guild guild) {}
+	public void performCommand(Member m, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
-		event.reply(mf.format(guild, "feedback.info.prefix",melody.getEntityManager().getGuildEntity(guild).getPrefix())).queue();
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
+		event.reply(mf.format(guild, "feedback.info.prefix",guildentity.getPrefix())).queue();
 	}
 	
 	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("prefix");
+	public String[] getCommandPrefix() {
+		return new String[] {"prefix"};
 	}
 
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.SLASH_COMMAND;
+		return CommandType.SLASH;
 	}
 
-	@Override
-	public CommandInfo getCommandInfo() {
-		return CommandInfo.INFO_COMMAND;
-	}
-	
 	@Override
 	public String getCommandDescription() {
 		return "Gets the current prefix from "+Constants.BUILDNAME;
 	}
 	@Override
-	public List<OptionData> getCommandOptions() {
+	public OptionData[] getCommandOptions() {
 		return null;
 	}
 }
