@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.melody.core.Constants;
 import de.melody.entities.GuildEntity;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
@@ -39,7 +40,7 @@ public class CleanCommand implements ServerCommand{
 
 	@Override
 	public String[] getCommandPrefix() {
-		return new String[] {"cleanup ", "clean"};
+		return new String[] {"cleanup", "clean"};
 	}
 
 	@Override
@@ -55,6 +56,11 @@ public class CleanCommand implements ServerCommand{
 	@Override
 	public String getCommandDescription() {
 		return "Clears command and bot messages";
+	}
+
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.ADMIN;
 	}
 
 }

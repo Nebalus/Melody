@@ -20,7 +20,7 @@
    
     "command.staymode.enabled": "Der 24/7-Modus wurde aktiviert!",
     "command.staymode.disabled": "Der 24/7-Modus wurde deaktiviert.",
-    "command.volume.show": "Die Lautstaerke von [botname]: {0}",
+    "command.volume.show": "Die Lautstaerke von [botname] ist {0}.",
     "command.volume.set": "Die Lautstaerke von [botname] wurde auf {0} gesetzt.",
     "command.fastforward.set": "Spule {0} vor.",
     "command.rewind.set": "Spule {0} zurueck.",
@@ -50,7 +50,7 @@
     "error.info.unknown-command.body": "Hmm, es sieht so aus als wenn ich diesen Befehl nicht kennen wuerde. Bitte nutze um die Befehls liste zu sehen `[prefix]help`.",
     "error.info.unknown-command.header": "Unbekannter Befehl",
     
-    "feedback.info.invite": "Hier ist mein Einladungslink wo du mich zu deinem Server hinzufuegen kannst:\n Einladungslink: {0}",
+    "feedback.info.invite": "Hier ist mein Einladungslink wo du mich zu deinem Server hinzufuegen kannst:\nEinladungslink: {0}",
     "feedback.info.ping": "Die Latenz von [botname] ist %dms",
     "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nErstellungsdatum: {2}\nLaeuft auf Servern: {3}\n\n{4} Benutzer hoerten insgesammt {5} lang Musik ueber {6}!",
     "feedback.info.prefix": "**Mein Praefix auf diesem Server ist `{0}`**",

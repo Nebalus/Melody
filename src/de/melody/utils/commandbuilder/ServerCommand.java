@@ -23,5 +23,7 @@ public interface ServerCommand {
 	public OptionData[] getCommandOptions();
 	
 	public String getCommandDescription();
+	
+	public CommandPermissions getMainPermmision();
 }
 

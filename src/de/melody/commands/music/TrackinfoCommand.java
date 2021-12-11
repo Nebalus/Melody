@@ -6,6 +6,7 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
 import de.melody.utils.Images;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
@@ -64,5 +65,9 @@ public class TrackinfoCommand implements ServerCommand{
 	@Override
 	public OptionData[] getCommandOptions() {
 		return null;
+	}
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.EVERYONE;
 	}
 }

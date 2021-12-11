@@ -21,7 +21,7 @@
     
     "command.staymode.enabled": "24/7 mode has been aktivated.",
     "command.staymode.disabled": "24/7 mode has been deaktivated.",
-    "command.volume.show": "The volume from [botname]: {0}",
+    "command.volume.show": "The volume from [botname] is {0}.",
     "command.volume.set": "The volume from [botname] has been set to {0}.",
     "command.fastforward.set": "Fast forwarding {0}",
     "command.rewind.set": "Rewinding {0}",
@@ -51,7 +51,7 @@
     "error.info.unknown-command.body": "Hmm, it looks like I don't know this command. Please use `[prefix]help` to see the command list.",
     "error.info.unknown-command.header": "Unknown Command",
     
-    "feedback.info.invite": "Here is my invite link which you can add me to your Discord server:\n Invitelink: {0}",
+    "feedback.info.invite": "Here is my invite link which you can add me to your Discord server:\nInvitelink: {0}",
     "feedback.info.ping": "The latency of [botname] is %dms",
     "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nBuilddate: {2}\nRunning on servers: {3}\n\n{4} Users listened for {5} to music thru {6}!",
     "feedback.info.prefix": "**My prefix on this server is `{0}`**",

@@ -4,6 +4,7 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -27,14 +28,14 @@ public class VolumeCommand implements ServerCommand{
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		String[] args = message.getContentDisplay().split(" ");
 		if(args.length == 1) {
-			Messenger.sendMessageEmbed(channel, mf.format(guild, "command.volume.show",guildentity.getVolume())).queue();
+			Messenger.sendMessage(channel, mf.format(guild, "command.volume.show",guildentity.getVolume())).queue();
 		}else {
 			try {
 				int amount = Integer.parseInt(args[1]);			
 				if(amount <= Constants.MAXVOLUME && amount >= 1) {
 					melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
 					guildentity.setVolume(amount);
-					Messenger.sendMessageEmbed(channel, mf.format(guild, "command.volume.set",amount)).queue();
+					Messenger.sendMessage(channel, mf.format(guild, "command.volume.set",amount)).queue();
 				}else {
 					Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix()[0]+" <1-"+Constants.MAXVOLUME+">"));		
 				}
@@ -44,6 +45,17 @@ public class VolumeCommand implements ServerCommand{
 		}
 	}
 
+	@Override
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
+		if(event.getOption("amount") == null) {
+			event.reply(mf.format(guild, "command.volume.show",guildentity.getVolume())).queue();
+		}else {
+			melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume((int) event.getOption("amount").getAsLong());
+			guildentity.setVolume((int) event.getOption("amount").getAsLong());
+			event.reply(mf.format(guild, "command.volume.set",(int) event.getOption("amount").getAsLong())).queue();
+		}
+	}
+	
 	@Override
 	public String[] getCommandPrefix() {
 		return new String[] {"volume","vol","v"};
@@ -59,12 +71,11 @@ public class VolumeCommand implements ServerCommand{
 	}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
-		
-	}
-
-	@Override
 	public OptionData[] getCommandOptions() {
 		return new OptionData[] {new OptionData(OptionType.INTEGER, "amount", "Enter the new volume value").setMinValue(1).setMaxValue(Constants.MAXVOLUME)};
+	}
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.DJ;
 	}
 }

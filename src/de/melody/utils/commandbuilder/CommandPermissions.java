@@ -5,6 +5,4 @@ public enum CommandPermissions {
 	ADMIN,
 	DJ,
 	EVERYONE;
-	
-	
 }

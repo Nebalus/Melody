@@ -4,7 +4,9 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.datamanager.GenerateFile;
 import de.melody.entities.GuildEntity;
+import de.melody.utils.Utils.ConsoleLogger;
 import de.melody.utils.commandbuilder.CommandManager;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
@@ -115,6 +117,7 @@ public class ExportcmdCommand implements ServerCommand {
 		String content = "";
 		CommandManager cmdman = Melody.INSTANCE.getCmdMan();
 		for(ServerCommand scmd : cmdman.getRawCommands()) {
+			ConsoleLogger.info(scmd.getCommandPrefix()[0], scmd.getCommandOptions());
 			if(scmd.getCommandOptions() != null) {
 				if(scmd.getCommandOptions().length == 1) {
 					addCommand(scmd.getCommandPrefix()[0],scmd.getCommandDescription(),scmd.getCommandPrefix());
@@ -181,5 +184,8 @@ public class ExportcmdCommand implements ServerCommand {
 	public String getCommandDescription() {
 		return "Exports all commands in a HTML format";
 	}
-
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.DEVELOPER;
+	}
 }

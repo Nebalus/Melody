@@ -7,6 +7,7 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.utils.Utils;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -35,7 +36,7 @@ public class InfoCommand implements ServerCommand{
 	private EmbedBuilder getInfoEmbed(Guild guild) {
 		int serversRunning = guild.getJDA().getGuilds().size(); 
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setThumbnail(guild.getJDA().getSelfUser().getEffectiveAvatarUrl());
+		builder.setThumbnail(Constants.ICON_URL);
 		
 		Runtime r = Runtime.getRuntime();
 		Properties prop = System.getProperties();
@@ -80,5 +81,8 @@ public class InfoCommand implements ServerCommand{
 	public OptionData[] getCommandOptions() {
 		return null;
 	}
-
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.EVERYONE;
+	}
 }

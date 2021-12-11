@@ -17,6 +17,7 @@ import de.melody.music.MusicUtil;
 import de.melody.music.Service;
 import de.melody.music.audioloader.AudioLoadResult;
 import de.melody.utils.Utils;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -125,6 +126,10 @@ public class PlayCommand implements ServerCommand{
 	public OptionData[] getCommandOptions() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.EVERYONE;
 	}
 }
 /*else if(url.toLowerCase().startsWith("https://open.spotify.com/playlist/")){

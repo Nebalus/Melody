@@ -11,8 +11,8 @@ public final class Constants{
 	
 	public static final long STARTUP = System.currentTimeMillis();
 	
-	public static final String BUILDVERSION = "BETA 0.6.4b";	
-	public static final String BUILDDATE = "2021-12-09";	
+	public static final String BUILDVERSION = "BETA PATCH 0.6.4c";	
+	public static final String BUILDDATE = "2021-12-11";	
 	public static final String BUILDNAME = "Melody";
 	
 	public static final String DEFAULTPREFIX = "m!";
@@ -22,6 +22,7 @@ public final class Constants{
 	public static final Color EMBEDCOLOR = Color.decode("#2eb8bf");
 	public static final Color ERROREMBEDCOLOR = Color.RED;
 	
+	public static final String ICON_URL = "https://melodybot.ga/assets/images/icon.png";
 	public static final String INVITE_URL = "https://melodybot.ga/invite";
 	public static final String COMMAND_URL = "https://melodybot.ga/commands";
 	public static final String WEBSITE_URL = "https://melodybot.ga/";
