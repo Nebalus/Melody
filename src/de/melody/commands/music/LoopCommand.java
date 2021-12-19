@@ -1,5 +1,7 @@
 package de.melody.commands.music;
 
+import java.util.ArrayList;
+
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.LoopMode;
@@ -18,6 +20,8 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.Command.Choice;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 
@@ -28,21 +32,43 @@ public class LoopCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
+		String[] args = message.getContentDisplay().split(" ");
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			if(args.length > 1) {
+				LoopMode mode = LoopMode.getFromString(args[1]);
+				if(mode != null) {
+					controller.setLoopMode(mode);
+					switch(controller.getLoopMode()) {
+					case QUEUE:
+						Messenger.sendMessageEmbed(channel,Emoji.QUEUE_LOOP+mf.format(controller.getGuild(), "music.info.loopmode-queue")).queue();
+						break;
+					case SONG:
+						Messenger.sendMessageEmbed(channel,Emoji.SINGLE_LOOP+mf.format(controller.getGuild(), "music.info.loopmode-song")).queue();
+						break;
+					case NONE:
+						Messenger.sendMessageEmbed(channel,Emoji.EXIT+mf.format(controller.getGuild(), "music.info.loopmode-none")).queue();
+						break;
+					default: 
+						break;
+					}
+					return;
+				}
+			}
+			
 			switch(controller.getLoopMode()) {
 				case QUEUE:
 					controller.setLoopMode(LoopMode.SONG);
-					Messenger.sendMessageEmbed(channel,Emoji.SINGLE_LOOP+mf.format(guild, "music.info.loopmode-song")).queue();
+					Messenger.sendMessageEmbed(channel,Emoji.SINGLE_LOOP+mf.format(controller.getGuild(), "music.info.loopmode-song")).queue();
 					break;
 				case SONG:
 					controller.setLoopMode(LoopMode.NONE);
-					Messenger.sendMessageEmbed(channel,Emoji.EXIT+mf.format(guild, "music.info.loopmode-none")).queue();
+					Messenger.sendMessageEmbed(channel,Emoji.EXIT+mf.format(controller.getGuild(), "music.info.loopmode-none")).queue();
 					break;
 				case NONE:
 					controller.setLoopMode(LoopMode.QUEUE);
-					Messenger.sendMessageEmbed(channel,Emoji.QUEUE_LOOP+mf.format(guild, "music.info.loopmode-queue")).queue();
+					Messenger.sendMessageEmbed(channel,Emoji.QUEUE_LOOP+mf.format(controller.getGuild(), "music.info.loopmode-queue")).queue();
 					break;
 				default: 
 					break;
@@ -51,30 +77,77 @@ public class LoopCommand implements ServerCommand{
 			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
 		}
 	}
-
+	@Override
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
+		GuildVoiceState state;
+		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
+			LoopMode loopmode = LoopMode.getFromString(event.getOption("loopmode").getAsString());
+			
+				MusicController controller = melody.playerManager.getController(guild.getIdLong());
+				if(loopmode != null) {
+					controller.setLoopMode(loopmode);
+					switch(controller.getLoopMode()) {
+					case QUEUE:
+						event.replyEmbeds(Messenger.getMessageEmbed(Emoji.QUEUE_LOOP+mf.format(controller.getGuild(), "music.info.loopmode-queue"))).queue();
+						break;
+					case SONG:
+						event.replyEmbeds(Messenger.getMessageEmbed(Emoji.SINGLE_LOOP+mf.format(controller.getGuild(), "music.info.loopmode-song"))).queue();
+						break;
+					case NONE:
+						event.replyEmbeds(Messenger.getMessageEmbed(Emoji.EXIT+mf.format(controller.getGuild(), "music.info.loopmode-none"))).queue();
+						break;
+					default: 
+						break;
+					}
+					return;
+				}
+					
+				switch(controller.getLoopMode()) {
+					case QUEUE:
+						controller.setLoopMode(LoopMode.SONG);
+						event.replyEmbeds(Messenger.getMessageEmbed(Emoji.SINGLE_LOOP+mf.format(controller.getGuild(), "music.info.loopmode-song"))).queue();
+						break;
+					case SONG:
+						controller.setLoopMode(LoopMode.NONE);
+						event.replyEmbeds(Messenger.getMessageEmbed(Emoji.EXIT+mf.format(controller.getGuild(), "music.info.loopmode-none"))).queue();
+						break;
+					case NONE:
+						controller.setLoopMode(LoopMode.QUEUE);
+						event.replyEmbeds(Messenger.getMessageEmbed(Emoji.QUEUE_LOOP+mf.format(controller.getGuild(), "music.info.loopmode-queue"))).queue();
+						break;
+					default: 
+						break;
+				}
+			
+		}else {
+			Messenger.sendErrorSlashMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
+		}
+	}
+	
+	
 	@Override
 	public String[] getCommandPrefix() {
 		return new String[] {"loop"};
 	}
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.CHAT;
+		return CommandType.BOTH;
 	}
 	
 	@Override
 	public String getCommandDescription() {
-		return null;
-	}
-
-	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
-		
+		return "Cycles through all three loop modes (queue, song, off)";
 	}
 
 	@Override
 	public OptionData[] getCommandOptions() {
-		return null;
+		ArrayList<Choice> choices = new ArrayList<Choice>();
+		for(LoopMode lm : LoopMode.values()) {
+			choices.add(new Choice(lm.getTextFormat(), lm.getTextFormat()));
+		}
+		return new OptionData[] {new OptionData(OptionType.STRING, "loopmode", "Enter the loopmode").addChoices(choices)};
 	}
+	
 	@Override
 	public CommandPermissions getMainPermmision() {
 		return CommandPermissions.DJ;

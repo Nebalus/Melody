@@ -21,8 +21,8 @@
     
     "command.staymode.enabled": "24/7 mode has been aktivated.",
     "command.staymode.disabled": "24/7 mode has been deaktivated.",
-    "command.volume.show": "The volume from [botname] is {0}.",
-    "command.volume.set": "The volume from [botname] has been set to {0}.",
+    "command.volume.show": "The volume from [botname] is {0}%.",
+    "command.volume.set": "The volume from [botname] has been set to {0}%.",
     "command.fastforward.set": "Fast forwarding {0}",
     "command.rewind.set": "Rewinding {0}",
     
