@@ -1,19 +1,19 @@
 package de.melody.utils.commandbuilder;
 
 public enum CommandType{
-	CHAT_COMMAND,
-	SLASH_COMMAND,
+	CHAT,
+	SLASH,
 	BOTH;
 	
 	public boolean isChat(){
-		if(this == CHAT_COMMAND || this == BOTH) {
+		if(this == CHAT || this == BOTH) {
 			return true;
 		}
 		return false;
 	}
 	
 	public boolean isSlash(){
-		if(this == SLASH_COMMAND || this == BOTH) {
+		if(this == SLASH || this == BOTH) {
 			return true;
 		}
 		return false;

@@ -16,12 +16,14 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
-import de.melody.LiteSQL;
 import de.melody.Secure;
 import de.melody.commands.admin.CleanCommand;
 import de.melody.commands.admin.ConfigCommand;
+import de.melody.commands.admin.StayCommand;
+import de.melody.commands.dev.ExportcmdCommand;
 import de.melody.commands.dev.GetHostIPCommand;
 import de.melody.commands.dev.RestartCommand;
+import de.melody.commands.info.HelpCommand;
 import de.melody.commands.info.InfoCommand;
 import de.melody.commands.info.InviteCommand;
 import de.melody.commands.info.PingCommand;
@@ -38,11 +40,11 @@ import de.melody.commands.music.RewindCommand;
 import de.melody.commands.music.SeekCommand;
 import de.melody.commands.music.ShuffleCommand;
 import de.melody.commands.music.SkipCommand;
-import de.melody.commands.music.StayCommand;
 import de.melody.commands.music.StopCommand;
 import de.melody.commands.music.TrackinfoCommand;
 import de.melody.commands.music.VolumeCommand;
 import de.melody.commands.slash.PrefixCommand;
+import de.melody.datamanager.LiteSQL;
 import de.melody.entities.EntityManager;
 import de.melody.entities.GuildEntity;
 import de.melody.entities.UserEntity;
@@ -131,7 +133,7 @@ public class Melody{
 				new StopCommand(), new LeaveCommand(), new TrackinfoCommand(), new QueueCommand(), new SkipCommand(),
 				new InfoCommand(), new PingCommand(), new ConfigCommand(), new InviteCommand(), new ShuffleCommand(),
 				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand(), new RestartCommand(),
-				new CleanCommand(), new GetHostIPCommand());
+				new CleanCommand(), new GetHostIPCommand(), new ExportcmdCommand(), new HelpCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
 		AudioSourceManagers.registerLocalSource(audioPlayerManager);
@@ -170,7 +172,7 @@ public class Melody{
 			Long time = System.currentTimeMillis() + 150000;
 			while(true) {
 				if(System.currentTimeMillis() > time) {
-					ConsoleLogger.info("Auto-Saver", "Starting to export cache");
+					ConsoleLogger.debug("Auto-Saver", "Starting to export cache");
 					try{
 						time = System.currentTimeMillis()+ 150000;
 						boolean export = false;
@@ -195,9 +197,9 @@ public class Melody{
 							}
 						}
 						if(export) {
-							ConsoleLogger.info("Auto-Saver", "Export ended sucessfully");
+							ConsoleLogger.debug("Auto-Saver", "Export ended sucessfully");
 						}else {
-							ConsoleLogger.info("Auto-Saver", "There is nothing to export to the database");
+							ConsoleLogger.debug("Auto-Saver", "There is nothing to export to the database");
 						}
 					}catch(Exception e) {
 						ConsoleLogger.warning("Thread", "The current action from the Auto-Saver has been aborted");
@@ -266,9 +268,6 @@ public class Melody{
 			nextStatusUpdate--;
 		}
 	}
-	
-	
-	
 	
 	public void shutdown() {
 		new Thread(() -> {		

@@ -1,14 +1,13 @@
 package de.melody.commands.music;
 
-import java.util.List;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.melody.core.Melody;
+import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
 import de.melody.utils.Utils;
-import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -27,7 +26,7 @@ public class SeekCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	
 	@Override
-	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			String[] args = message.getContentDisplay().split(" ");
@@ -53,31 +52,33 @@ public class SeekCommand implements ServerCommand{
 	}
 
 	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("seek");
+	public String[] getCommandPrefix() {
+		return new String[] {"seek"};
 	}
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.CHAT_COMMAND;
+		return CommandType.CHAT;
 	}
 
-	@Override
-	public CommandInfo getCommandInfo() {
-		return CommandInfo.DJ_COMMAND;
-	}
+	
 	@Override
 	public String getCommandDescription() {
-		return null;
+		return "Seeks to a specific position in the current song";
 	}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
 		
 	}
 
 	@Override
-	public List<OptionData> getCommandOptions() {
+	public OptionData[] getCommandOptions() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.DJ;
 	}
 }

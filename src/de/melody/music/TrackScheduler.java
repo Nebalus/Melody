@@ -10,8 +10,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
-import de.melody.music.audioloader.AudioLoadResult;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.utils.Utils.ConsoleLogger;
 import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -36,7 +36,7 @@ public class TrackScheduler extends AudioEventAdapter{
 		MusicController controller = playerManager.getController(guild.getIdLong());
 		Queue queue = controller.getQueue();
 		GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
-		if(controller.isLoop() == false && controller.isLoopQueue() == false && ge.canAnnounceSongs()) {
+		if(controller.getLoopMode().equals(LoopMode.NONE) && ge.canAnnounceSongs()) {
 			EmbedBuilder builder = new EmbedBuilder();
 			QueuedTrack queuedtrack = queue.currentlyPlaying();
 			AudioTrackInfo info = queuedtrack.getTrack().getInfo();
@@ -74,29 +74,22 @@ public class TrackScheduler extends AudioEventAdapter{
 			GuildVoiceState state;
 			VoiceChannel vc;
 			if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
-				if(!controller.isLoop()) {
-					if(!controller.isLoopQueue()) {
+				switch(controller.getLoopMode()) {
+					case QUEUE:
+						queue.addTrackToQueue(queue.currentlyPlaying().refreshTrack());
+						return;
+					case SONG:
+						controller.play(track.makeClone());
+						return;
+					case NONE:
 						if(queue.next(1) != 1) { 
 							if(vc.getMembers().size() > 1) {
 								controller.setAfkTime(600);
 							}
-						}else {
+						}else 
 							return;
-						}
-					}else {
-						final String uri = track.getInfo().uri;
-						melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null));
-						return;
-					}
-				}else {
-					final String uri = track.getInfo().uri;
-					melody.audioPlayerManager.loadItem(uri, new AudioLoadResult(controller, uri, null));
-					return;
 				}
 			}
-		}
-		if(controller.isLoop()) {
-			controller.setLoop(false);	
 		}
 		player.stopTrack();
 	  }

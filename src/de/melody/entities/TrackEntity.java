@@ -3,8 +3,8 @@ package de.melody.entities;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.melody.LiteSQL;
 import de.melody.core.Melody;
+import de.melody.datamanager.LiteSQL;
 import de.melody.music.Service;
 
 public class TrackEntity {

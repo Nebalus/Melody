@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.Member;
 
 public class QueuedTrack {
 
-	private final AudioTrack track;
+	private AudioTrack track;
 	private final Member whoQueued;
 	private final String imageUrl;
 	private final Service service;
@@ -43,5 +43,10 @@ public class QueuedTrack {
 	
 	public String getImageURL() {
 		return imageUrl;
+	}
+	
+	public QueuedTrack refreshTrack() {
+		track = track.makeClone();
+		return this;
 	}
 }

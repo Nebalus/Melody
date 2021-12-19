@@ -5,9 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import de.melody.LiteSQL;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
+import de.melody.datamanager.LiteSQL;
 import de.melody.entities.reacts.ReactionManager;
 import de.melody.speechpackets.Languages;
 import de.melody.utils.Utils.ConsoleLogger;
@@ -22,10 +22,10 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 public class GuildEntity{
 	
 	private Guild guild;
-	private Long musicchannelid;
+	private Long cmdchannelid;
 	private int volume = 50;
 	private Long djroleid = 0l;
-	private String prefix = "m!";
+	private String prefix = Constants.DEFAULTPREFIX;
 	
 	private boolean djonly = false;
 	private boolean voteskip = false;
@@ -49,12 +49,12 @@ public class GuildEntity{
 			try {
 				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE PK_guildid = " + getGuildId());	
 				if(rs.next()) {
-					if(rs.getLong("musicchannelid") != 0l) {
-						musicchannelid = rs.getLong("musicchannelid");	
+					if(rs.getLong("cmdchannelid") != 0l) {
+						cmdchannelid = rs.getLong("cmdchannelid");	
 					}else {
 						for(TextChannel tc : guild.getTextChannels()) {
-							if(musicchannelid == null || guild.getTextChannelById(musicchannelid) != null && guild.getSelfMember().hasAccess(tc)) {
-								musicchannelid = tc.getIdLong();
+							if(cmdchannelid == null || guild.getTextChannelById(cmdchannelid) != null && guild.getSelfMember().hasAccess(tc)) {
+								cmdchannelid = tc.getIdLong();
 							}
 						}
 					}
@@ -84,40 +84,37 @@ public class GuildEntity{
 						language = Languages.getLanguage(rs.getInt("language"));
 					}
 				}else {
-					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(PK_guildid,musicchannelid,firsttimeloaded) VALUES(?,?,?)");
+					boolean mentioned = false;
+					for(TextChannel tc : guild.getTextChannels()) {
+						if(!mentioned) {
+							try {
+								tc.sendMessage("Hello everybody, i'm "+guild.getJDA().getSelfUser().getAsMention()+" "+guild.getJDA().getEmoteById(Emoji.HEY_GUYS).getAsMention()+"\n"
+										+ " \n"
+										+ " `-` My prefix on "+guild.getName()+" is `"+getPrefix()+"`\n"
+										+ " `-` If you do not understand how I work then you can see all my commands by typing `"+getPrefix()+"help`\n"
+										+ " `-` When you dont like something in my config then you can easyly change it by typing `"+getPrefix()+"config help`\n"
+										+ " \n"
+										+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
+										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+Emoji.SPARKLING_HEART).queue();
+								mentioned = true;
+								cmdchannelid = tc.getIdLong();
+								//loads the guild in the database
+							}catch(InsufficientPermissionException e) {}
+						}
+					}
+					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(PK_guildid,cmdchannelid,firsttimeloaded) VALUES(?,?,?)");
 					ps.setLong(1, getGuildId());
-					ps.setLong(2, firstTimeRoutine());
+					if(!mentioned) {
+						ps.setLong(2, cmdchannelid);
+					}
 					ps.setLong(3, System.currentTimeMillis());
 					ps.executeUpdate();
-					export();
+					update();
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	private Long firstTimeRoutine() {
-		boolean mentioned = false;
-		for(TextChannel tc : guild.getTextChannels()) {
-			if(!mentioned) {
-				try {
-					tc.sendMessage("Hello everybody, i'm "+guild.getJDA().getSelfUser().getAsMention()+" "+guild.getJDA().getEmoteById(Emoji.HEY_GUYS).getAsMention()+"\n"
-							+ " \n"
-							+ " `-` My prefix on "+guild.getName()+" is `"+getPrefix()+"`\n"
-							+ " `-` If you do not understand how I work then you can see all my commands by typing `"+getPrefix()+"help`\n"
-							+ " `-` When you dont like something in my config then you can easyly change it by typing `"+getPrefix()+"config help`\n"
-							+ " \n"
-							+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
-							+ "PS: Thanks a lot for your support, that you added me to your discord server! "+Emoji.SPARKLING_HEART).queue();
-					mentioned = true;
-					musicchannelid = tc.getIdLong();
-					return tc.getIdLong();
-					//loads the guild in the database
-				}catch(InsufficientPermissionException e) {}
-			}
-		}
-		return 0l;
 	}
 	
 	public ReactionManager getReactionManager() {
@@ -136,22 +133,22 @@ public class GuildEntity{
 	
 	public Long getMusicChannelId() {
 		renewExpireTime();
-		return this.musicchannelid;
+		return this.cmdchannelid;
 	}
 	
 	public void setMusicChannelId(Long newchannelid) {
-		this.musicchannelid = newchannelid;
+		this.cmdchannelid = newchannelid;
 		update();
 	}
 	
 	public TextChannel getMusicChannel() {
 		renewExpireTime();
 		TextChannel channel;
-		if((channel = guild.getTextChannelById(this.musicchannelid)) != null) {
+		if((channel = guild.getTextChannelById(this.cmdchannelid)) != null) {
 			return channel;
 		}
 		channel = guild.getTextChannels().get(0);
-		musicchannelid = channel.getIdLong();
+		cmdchannelid = channel.getIdLong();
 		return channel;
 	}
 	
@@ -261,7 +258,7 @@ public class GuildEntity{
 			if(needtoexport) {
 				try {
 					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE guilds SET "
-							+ "musicchannelid = ?,"
+							+ "cmdchannelid = ?,"
 							+ "volume = ?,"
 							+ "djrole = ?,"
 							+ "prefix = ?,"
@@ -271,7 +268,7 @@ public class GuildEntity{
 							+ "announcesongs = ?,"
 							+ "preventduplicates = ?,"
 							+ "djonly = ? WHERE PK_guildid = ?");
-					ps.setLong(1, musicchannelid);
+					ps.setLong(1, cmdchannelid);
 					ps.setInt(2, volume);
 					ps.setLong(3, djroleid);
 					ps.setString(4, prefix);
@@ -283,7 +280,7 @@ public class GuildEntity{
 					ps.setBoolean(10, djonly);
 					ps.setLong(11, getGuildId());
 					ps.executeUpdate();
-					ConsoleLogger.info("export guild", getGuildId());
+					ConsoleLogger.debug("export guild", getGuildId());
 				} catch (SQLException e) {
 					e.printStackTrace();
 					return false;
