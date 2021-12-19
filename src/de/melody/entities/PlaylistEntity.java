@@ -4,9 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import de.melody.LiteSQL;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
+import de.melody.datamanager.LiteSQL;
 import de.melody.utils.Utils.IDGenerator;
 
 public class PlaylistEntity {

@@ -4,9 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.melody.LiteSQL;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
+import de.melody.datamanager.LiteSQL;
 import de.melody.utils.Utils.ConsoleLogger;
 import net.dv8tion.jda.api.entities.User;
 
@@ -104,7 +104,7 @@ public class UserEntity {
 					ps.setLong(3, lasttimeheard);
 					ps.setLong(4, userid);
 					ps.executeUpdate();
-					ConsoleLogger.info("export user", userid);
+					ConsoleLogger.debug("export user", userid);
 				} catch (SQLException e) {
 					e.printStackTrace();
 					return false;

@@ -1,13 +1,12 @@
 package de.melody.commands.music;
 
-import java.util.List;
-
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.melody.core.Melody;
+import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
 import de.melody.utils.Images;
-import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
@@ -22,7 +21,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class TrackinfoCommand implements ServerCommand{
 	
 	@Override
-	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		MusicController controller = Melody.INSTANCE.playerManager.getController(guild.getIdLong());
 		if(controller.isPlayingTrack()) {
 			AudioTrack at = controller.getPlayer().getPlayingTrack();
@@ -33,7 +32,7 @@ public class TrackinfoCommand implements ServerCommand{
 	}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
 		MusicController controller = Melody.INSTANCE.playerManager.getController(guild.getIdLong());
 		if(controller.isPlayingTrack()) {
 			AudioTrack at = controller.getPlayer().getPlayingTrack();
@@ -50,8 +49,8 @@ public class TrackinfoCommand implements ServerCommand{
 	}
 	
 	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("trackinfo","ti","np","nowplaying");
+	public String[] getCommandPrefix() {
+		return new String[] {"trackinfo","ti","np","nowplaying"};
 	}
 	@Override
 	public CommandType getCommandType() {
@@ -59,16 +58,16 @@ public class TrackinfoCommand implements ServerCommand{
 	}
 
 	@Override
-	public CommandInfo getCommandInfo() {
-		return CommandInfo.MUSIC_COMMAND;
-	}
-	@Override
 	public String getCommandDescription() {
-		return "Shows the current playing song";
+		return "Shows details of the song currently being played";
 	}
 
 	@Override
-	public List<OptionData> getCommandOptions() {
+	public OptionData[] getCommandOptions() {
 		return null;
+	}
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.EVERYONE;
 	}
 }

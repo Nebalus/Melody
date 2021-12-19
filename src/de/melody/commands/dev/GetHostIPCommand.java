@@ -1,9 +1,8 @@
 package de.melody.commands.dev;
 
-import java.util.List;
-
 import de.melody.core.Constants;
-import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.entities.GuildEntity;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.entities.Guild;
@@ -17,10 +16,10 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class GetHostIPCommand implements ServerCommand{
 
 	@Override
-	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
-		channel.sendMessage("Scanning for the IP Adress please wait...").queue();
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
+		channel.sendMessage("Scanning for the IP Address please wait...").queue();
 		try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
-			channel.sendMessage("Curently the IP Adress from my host is `"+s.next()+"`").queue();
+			channel.sendMessage("Curently the IP Address from my host is `"+s.next()+"`").queue();
 		} catch (java.io.IOException e) {
 			channel.sendMessage("IP Request failed... Please try again later :(").queue();
 		    e.printStackTrace();
@@ -28,25 +27,20 @@ public class GetHostIPCommand implements ServerCommand{
 	}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {}
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {}
 
 	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("gethostip");
+	public String[] getCommandPrefix() {
+		return new String[] {"gethostip"};
 	}
 
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.CHAT_COMMAND;
+		return CommandType.CHAT;
 	}
 
 	@Override
-	public CommandInfo getCommandInfo() {
-		return CommandInfo.DEVELOPER_COMMAND;
-	}
-
-	@Override
-	public List<OptionData> getCommandOptions() {
+	public OptionData[] getCommandOptions() {
 		return null;
 	}
 
@@ -54,5 +48,8 @@ public class GetHostIPCommand implements ServerCommand{
 	public String getCommandDescription() {
 		return "Gets the public IP from the "+Constants.BUILDNAME;
 	}
-
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.DEVELOPER;
+	}
 }

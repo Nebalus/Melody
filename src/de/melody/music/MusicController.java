@@ -1,8 +1,5 @@
 package de.melody.music;
 
-import java.util.Arrays;
-
-import com.github.natanbc.lavadsp.timescale.TimescalePcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
@@ -17,8 +14,7 @@ public class MusicController {
 	private AudioPlayer player;
 	private Queue queue;
 	private int afktime;
-	private boolean isloop;	
-	private boolean isloopqueue;
+	private LoopMode loopmode;	
 	
 	public MusicController(Guild guild) {
 		this.guild = guild;
@@ -30,8 +26,7 @@ public class MusicController {
 		this.guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 		this.player.addListener(new TrackScheduler());
 		this.player.setVolume(Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getVolume());
-		this.isloop = false;
-		this.isloopqueue = false;
+		this.loopmode = LoopMode.NONE;
 		
 		/*
 		this.player.setFilterFactory((track, format, output)->{
@@ -76,19 +71,11 @@ public class MusicController {
 		afktime = time;
 	}
 	
-	public boolean isLoop() {
-		return isloop;
+	public LoopMode getLoopMode() {
+		return loopmode;
 	}
 	
-	public boolean isLoopQueue() {
-		return isloopqueue;
-	}
-	
-	public void setLoopQueue(Boolean loopqueue) {
-		this.isloopqueue = loopqueue;
-	}
-	
-	public void setLoop(Boolean loop) {
-		this.isloop = loop;
+	public void setLoopMode(LoopMode loopmode) {
+		this.loopmode = loopmode;
 	}	
 }

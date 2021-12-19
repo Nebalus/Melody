@@ -1,6 +1,5 @@
 package de.melody.commands.music;
 
-import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -18,7 +17,7 @@ import de.melody.music.MusicUtil;
 import de.melody.music.Service;
 import de.melody.music.audioloader.AudioLoadResult;
 import de.melody.utils.Utils;
-import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -39,10 +38,9 @@ public class PlayCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	
 	@Override
-	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		String[] args = message.getContentDisplay().split(" ");
-		GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
-		ge.setMusicChannelId(channel.getIdLong());
+		guildentity.setMusicChannelId(channel.getIdLong());
 		if(args.length > 1) {
 			GuildVoiceState state;
 			VoiceChannel vc;
@@ -101,37 +99,37 @@ public class PlayCommand implements ServerCommand{
 				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.user-not-in-vc"));	
 			}	
 		}else {
-			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix().get(0)+" <url/search query>"));	
+			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix()[0]+" <url/search query>"));	
 		}
 	}
 
 	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("play","p");
+	public String[] getCommandPrefix() {
+		return new String[] {"play","p"};
 	}
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.CHAT_COMMAND;
+		return CommandType.CHAT;
 	}
 
-	@Override
-	public CommandInfo getCommandInfo() {
-		return CommandInfo.MUSIC_COMMAND;
-	}
 	@Override
 	public String getCommandDescription() {
 		return null;
 	}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
 		
 	}
 
 	@Override
-	public List<OptionData> getCommandOptions() {
+	public OptionData[] getCommandOptions() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.EVERYONE;
 	}
 }
 /*else if(url.toLowerCase().startsWith("https://open.spotify.com/playlist/")){

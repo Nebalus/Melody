@@ -1,12 +1,11 @@
 package de.melody.commands.music;
 
-import java.util.List;
-
 import de.melody.core.Constants;
 import de.melody.core.Melody;
+import de.melody.entities.GuildEntity;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -26,7 +25,7 @@ public class LeaveCommand implements ServerCommand{
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			MusicUtil.MusicKiller(guild);
@@ -37,7 +36,7 @@ public class LeaveCommand implements ServerCommand{
 	}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			MusicUtil.MusicKiller(guild);
@@ -48,18 +47,13 @@ public class LeaveCommand implements ServerCommand{
 	}
 	
 	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("leave","l");
+	public String[] getCommandPrefix() {
+		return new String[] {"leave","l"};
 	}
 	
 	@Override
 	public CommandType getCommandType() {
 		return CommandType.BOTH;
-	}
-
-	@Override
-	public CommandInfo getCommandInfo() {
-		return CommandInfo.DJ_COMMAND;
 	}
 	
 	@Override
@@ -68,7 +62,11 @@ public class LeaveCommand implements ServerCommand{
 	}
 
 	@Override
-	public List<OptionData> getCommandOptions() {
+	public OptionData[] getCommandOptions() {
 		return null;
+	}
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.DJ;
 	}
 }

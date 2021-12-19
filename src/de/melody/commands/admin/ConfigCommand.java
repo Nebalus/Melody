@@ -1,7 +1,5 @@
 package de.melody.commands.admin;
 
-import java.util.List;
-
 import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
@@ -9,7 +7,7 @@ import de.melody.speechpackets.Languages;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;
-import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -29,49 +27,48 @@ public class ConfigCommand implements ServerCommand{
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		String[] args = message.getContentDisplay().split(" ");
-		GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
 		if(args.length == 1) {
-			sendMainMenu(channel,ge.getPrefix());
+			sendMainMenu(channel,guildentity.getPrefix());
 		}else if(args.length == 2) {
 			try {
 				ConfigSubCommands subcommand = ConfigSubCommands.valueOf(args[1]);
 				switch(subcommand) {
 					case prefix:
-						sendSubCommandMenu(ge.getPrefix(), channel, ConfigSubCommands.prefix, ge.getPrefix(),null);
+						sendSubCommandMenu(guildentity.getPrefix(), channel, ConfigSubCommands.prefix, guildentity.getPrefix(),null);
 						break;
 					case language:
 						String languagelist = "";
 						for (Languages language : Languages.values()) {
 							languagelist = languagelist+ " `"+language.getIcon()+"` - "+language.getName()+" \n";
 				        }
-						sendSubCommandMenu(" `"+ge.getLanguage().getIcon()+"` "+ge.getLanguage().getName()+" ", channel, ConfigSubCommands.language, ge.getPrefix(),languagelist);
+						sendSubCommandMenu(" `"+guildentity.getLanguage().getIcon()+"` "+guildentity.getLanguage().getName()+" ", channel, ConfigSubCommands.language, guildentity.getPrefix(),languagelist);
 						break;
 					case announcesongs:
-						sendSubCommandMenu(Utils.getStringFromBoolean(ge.canAnnounceSongs()), channel, ConfigSubCommands.announcesongs, ge.getPrefix(),Utils.getStringFromBoolean(true)+", "+Utils.getStringFromBoolean(false));
+						sendSubCommandMenu(Utils.getStringFromBoolean(guildentity.canAnnounceSongs()), channel, ConfigSubCommands.announcesongs, guildentity.getPrefix(),Utils.getStringFromBoolean(true)+", "+Utils.getStringFromBoolean(false));
 						break;
 					default:
-						sendMainMenu(channel,ge.getPrefix());
+						sendMainMenu(channel,guildentity.getPrefix());
 						break;
 				}
 			}catch(IllegalArgumentException e){
-				sendMainMenu(channel,ge.getPrefix());
+				sendMainMenu(channel,guildentity.getPrefix());
 			}
 		}else if(args.length >= 3) {
 			try {
 				switch(ConfigSubCommands.valueOf(args[1])) {
 					case prefix:
 						if(args[2].length() <= 6) {					 
-							channel.sendMessage(mf.format(guild, "config.sub.prefix.succes", ge.getPrefix(),args[2])).queue();	
-							ge.setPrefix(args[2]);
+							channel.sendMessage(mf.format(guild, "config.sub.prefix.succes", guildentity.getPrefix(),args[2])).queue();	
+							guildentity.setPrefix(args[2]);
 						}else 
-							sendSubCommandMenu(ge.getPrefix(), channel, ConfigSubCommands.prefix, ge.getPrefix(),null);
+							sendSubCommandMenu(guildentity.getPrefix(), channel, ConfigSubCommands.prefix, guildentity.getPrefix(),null);
 						break;
 						
 					case language:
 						boolean isLanguage = false;
-						Languages newLang = ge.getLanguage();
+						Languages newLang = guildentity.getLanguage();
 						for(Languages lang : Languages.values()) {
 							if(lang.getName().equalsIgnoreCase(args[2]) || lang.getCode().equalsIgnoreCase(args[2]) && newLang != lang) {
 								isLanguage = true;
@@ -79,37 +76,37 @@ public class ConfigCommand implements ServerCommand{
 							}
 						}
 						if(isLanguage) {
-							Languages oldLang = ge.getLanguage();
-							ge.setLanguage(newLang);
+							Languages oldLang = guildentity.getLanguage();
+							guildentity.setLanguage(newLang);
 							channel.sendMessage(mf.format(guild, "config.sub.language.succes", oldLang.getName(),newLang.getName())).queue();	
 						}else {
 							String languagelist = "";
 							for (Languages language : Languages.values()) {
 								languagelist = languagelist+ " `"+language.getIcon()+"` - "+language.getName()+" \n";
 					        }
-							sendSubCommandMenu(" `"+ge.getLanguage().getIcon()+"` "+ge.getLanguage().getName()+" ", channel, ConfigSubCommands.language, ge.getPrefix(),languagelist);
+							sendSubCommandMenu(" `"+guildentity.getLanguage().getIcon()+"` "+guildentity.getLanguage().getName()+" ", channel, ConfigSubCommands.language, guildentity.getPrefix(),languagelist);
 						}
 						break;
 					case announcesongs:
 						boolean value = Utils.getBooleanFromString(args[2]);
-						if(Utils.isStringValidBoolean(args[2]) && value != ge.canAnnounceSongs()) {
+						if(Utils.isStringValidBoolean(args[2]) && value != guildentity.canAnnounceSongs()) {
 							if(value) {
 								channel.sendMessage(mf.format(guild, "config.sub.announcesongs.succes.on")).queue();	
-								ge.setAnnounceSongs(true);
+								guildentity.setAnnounceSongs(true);
 							}else {
 								channel.sendMessage(mf.format(guild, "config.sub.announcesongs.succes.off")).queue();	
-								ge.setAnnounceSongs(false);
+								guildentity.setAnnounceSongs(false);
 							}
 						}else {
-							sendSubCommandMenu(Utils.getStringFromBoolean(ge.canAnnounceSongs()), channel, ConfigSubCommands.announcesongs, ge.getPrefix(),Utils.getStringFromBoolean(true)+", "+Utils.getStringFromBoolean(false));
+							sendSubCommandMenu(Utils.getStringFromBoolean(guildentity.canAnnounceSongs()), channel, ConfigSubCommands.announcesongs, guildentity.getPrefix(),Utils.getStringFromBoolean(true)+", "+Utils.getStringFromBoolean(false));
 						}
 						break;
 					default:
-						sendMainMenu(channel,ge.getPrefix());
+						sendMainMenu(channel,guildentity.getPrefix());
 						break;
 				}
 			}catch(IllegalArgumentException e){
-				sendMainMenu(channel,ge.getPrefix());
+				sendMainMenu(channel,guildentity.getPrefix());
 			}
 		}
 	}
@@ -148,29 +145,29 @@ public class ConfigCommand implements ServerCommand{
 		}
 	}
 	@Override
-	public List<String> getCommandPrefix() {
-		return List.of("config");
+	public String[] getCommandPrefix() {
+		return new String[] {"config"};
 	}
 	@Override
 	public CommandType getCommandType() {
-		return CommandType.CHAT_COMMAND;
+		return CommandType.CHAT;
 	}
 
-	@Override
-	public CommandInfo getCommandInfo() {
-		return CommandInfo.ADMIN_COMMAND;
-	}
 	@Override
 	public String getCommandDescription() {
 		return null;
 	}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
 		
 	}
 	@Override
-	public List<OptionData> getCommandOptions() {
+	public OptionData[] getCommandOptions() {
 		return null;
+	}
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.ADMIN;
 	}
 }

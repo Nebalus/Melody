@@ -1,14 +1,13 @@
 package de.melody.commands.music;
 
-import java.util.List;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
+import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.commandbuilder.CommandInfo;
+import de.melody.utils.commandbuilder.CommandPermissions;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -29,7 +28,7 @@ public class JoinCommand implements ServerCommand{
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
 	@Override
-	public void performCommand(Member member, TextChannel channel, Message message, Guild guild) {
+	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		GuildVoiceState state;
 		VoiceChannel vc;
 		if((state = member.getVoiceState()) != null && (vc = state.getChannel()) != null) {
@@ -46,7 +45,7 @@ public class JoinCommand implements ServerCommand{
 	}
 
 	@Override
-	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, SlashCommandEvent event) {
+	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
 		GuildVoiceState state;
 		VoiceChannel vc;
 		if((state = member.getVoiceState()) != null && (vc = state.getChannel()) != null) {
@@ -62,19 +61,14 @@ public class JoinCommand implements ServerCommand{
 		}	
 	}
 	
-	@Override 
-	public List<String> getCommandPrefix() {
-		return List.of("join","j");
+	@Override
+	public String[] getCommandPrefix() {
+		return new String[] {"join","j"};
 	}
 	
 	@Override
 	public CommandType getCommandType() {
 		return CommandType.BOTH;
-	}
-
-	@Override
-	public CommandInfo getCommandInfo() {
-		return CommandInfo.DJ_COMMAND;
 	}
 	
 	@Override
@@ -83,7 +77,11 @@ public class JoinCommand implements ServerCommand{
 	}
 
 	@Override
-	public List<OptionData> getCommandOptions() {
+	public OptionData[] getCommandOptions() {
 		return null;
+	}
+	@Override
+	public CommandPermissions getMainPermmision() {
+		return CommandPermissions.DJ;
 	}
 }
