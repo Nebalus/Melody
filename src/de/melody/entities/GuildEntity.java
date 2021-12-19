@@ -84,40 +84,37 @@ public class GuildEntity{
 						language = Languages.getLanguage(rs.getInt("language"));
 					}
 				}else {
+					boolean mentioned = false;
+					for(TextChannel tc : guild.getTextChannels()) {
+						if(!mentioned) {
+							try {
+								tc.sendMessage("Hello everybody, i'm "+guild.getJDA().getSelfUser().getAsMention()+" "+guild.getJDA().getEmoteById(Emoji.HEY_GUYS).getAsMention()+"\n"
+										+ " \n"
+										+ " `-` My prefix on "+guild.getName()+" is `"+getPrefix()+"`\n"
+										+ " `-` If you do not understand how I work then you can see all my commands by typing `"+getPrefix()+"help`\n"
+										+ " `-` When you dont like something in my config then you can easyly change it by typing `"+getPrefix()+"config help`\n"
+										+ " \n"
+										+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
+										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+Emoji.SPARKLING_HEART).queue();
+								mentioned = true;
+								cmdchannelid = tc.getIdLong();
+								//loads the guild in the database
+							}catch(InsufficientPermissionException e) {}
+						}
+					}
 					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(PK_guildid,cmdchannelid,firsttimeloaded) VALUES(?,?,?)");
 					ps.setLong(1, getGuildId());
-					ps.setLong(2, firstTimeRoutine());
+					if(!mentioned) {
+						ps.setLong(2, cmdchannelid);
+					}
 					ps.setLong(3, System.currentTimeMillis());
 					ps.executeUpdate();
-					export();
+					update();
 				}
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	private Long firstTimeRoutine() {
-		boolean mentioned = false;
-		for(TextChannel tc : guild.getTextChannels()) {
-			if(!mentioned) {
-				try {
-					tc.sendMessage("Hello everybody, i'm "+guild.getJDA().getSelfUser().getAsMention()+" "+guild.getJDA().getEmoteById(Emoji.HEY_GUYS).getAsMention()+"\n"
-							+ " \n"
-							+ " `-` My prefix on "+guild.getName()+" is `"+getPrefix()+"`\n"
-							+ " `-` If you do not understand how I work then you can see all my commands by typing `"+getPrefix()+"help`\n"
-							+ " `-` When you dont like something in my config then you can easyly change it by typing `"+getPrefix()+"config help`\n"
-							+ " \n"
-							+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
-							+ "PS: Thanks a lot for your support, that you added me to your discord server! "+Emoji.SPARKLING_HEART).queue();
-					mentioned = true;
-					cmdchannelid = tc.getIdLong();
-					return tc.getIdLong();
-					//loads the guild in the database
-				}catch(InsufficientPermissionException e) {}
-			}
-		}
-		return 0l;
 	}
 	
 	public ReactionManager getReactionManager() {

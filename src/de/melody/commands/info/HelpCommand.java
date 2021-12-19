@@ -69,7 +69,7 @@ public class HelpCommand implements ServerCommand{
 
 	@Override
 	public String[] getCommandPrefix() {
-		return new String[] {"help"};
+		return new String[] {"help", "h"};
 	}
 
 	@Override

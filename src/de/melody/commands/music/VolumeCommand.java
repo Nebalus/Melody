@@ -72,7 +72,7 @@ public class VolumeCommand implements ServerCommand{
 
 	@Override
 	public OptionData[] getCommandOptions() {
-		return new OptionData[] {new OptionData(OptionType.INTEGER, "amount", "Enter the new volume value").setMinValue(1).setMaxValue(Constants.MAXVOLUME)};
+		return new OptionData[] {new OptionData(OptionType.INTEGER, "amount", "Enter the new volume").setMinValue(1).setMaxValue(Constants.MAXVOLUME)};
 	}
 	@Override
 	public CommandPermissions getMainPermmision() {
