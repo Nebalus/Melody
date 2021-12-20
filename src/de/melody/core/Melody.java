@@ -88,11 +88,14 @@ public class Melody{
 	public int uptime; 
 	
 	public static void main(String[] args) {		
+		
 		try {
 			new Melody();
 		} catch (LoginException | IllegalArgumentException | InterruptedException | IOException e) {
 			e.printStackTrace();
 		}
+		
+		//System.out.println(args[0]);
 	}
 	
 	private Melody() throws LoginException, IllegalArgumentException, InterruptedException, IOException {
@@ -222,12 +225,19 @@ public class Melody{
 					MusicController controller = playerManager.getController(vc.getGuild().getIdLong());	
 					AudioPlayer player = controller.getPlayer();
 					if(player.getPlayingTrack() != null && !player.isPaused()) {
+						
+						GuildEntity ge = entityManager.getGuildEntity(g);
+						int playdata = ge.getPlayTime();
+						playdata++;
+						ge.setPlayTime(playdata);
+						ge.setLastAudioChannelId(vc.getIdLong());
+						
 						for(Member m : vc.getMembers()) {
 							if(!m.getUser().isBot()) {
 								
 								//onCaculatingHeardMusic
 								UserEntity ue = entityManager.getUserEntity(m.getUser());
-								Long listendata = ue.getHeardTime();
+								int listendata = ue.getHeardTime();
 								listendata++;
 								ue.setHeardTime(listendata);
 								//

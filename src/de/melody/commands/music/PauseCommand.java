@@ -28,10 +28,10 @@ public class PauseCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
-		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
+			melody.playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
 			if(!player.isPaused()) {
 				Messenger.sendMessageEmbed(channel, Emoji.PAUSE+" "+mf.format(guild, "music.track.pause"));	
 				player.setPaused(true);
@@ -43,10 +43,10 @@ public class PauseCommand implements ServerCommand{
 	
 	@Override
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
-		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
+			melody.playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
 			if(!player.isPaused()) {
 				event.replyEmbeds(Messenger.getMessageEmbed(Emoji.PAUSE+" "+mf.format(guild, "music.track.pause"))).queue();
 				player.setPaused(true);

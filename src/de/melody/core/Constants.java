@@ -9,11 +9,12 @@ public final class Constants{
 	public static final boolean DEVMODE = false;
 	public static final boolean DEBUGMODE = true;
 	public static final boolean ALLOWSLASHCOMMANDS = true;
+	public static final boolean AUTOUPDATE = true;
 	
 	public static final long STARTUP = System.currentTimeMillis();
 	
-	public static final String BUILDVERSION = "BETA PATCH 0.6.4c";	
-	public static final String BUILDDATE = "2021-12-11";	
+	public static final String BUILDVERSION = "BETA 0.6.5";	
+	public static final String BUILDDATE = "2021-12-20";	
 	public static final String BUILDNAME = "Melody";
 	
 	public static final String DEFAULTPREFIX = "m!";

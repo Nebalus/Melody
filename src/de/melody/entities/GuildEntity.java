@@ -17,15 +17,17 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 public class GuildEntity{
 	
 	private Guild guild;
-	private Long cmdchannelid;
 	private int volume = 50;
 	private Long djroleid = 0l;
 	private String prefix = Constants.DEFAULTPREFIX;
+	private int playtime = 0;
+	private Long lastaudiochannelid = 0l;
 	
 	private boolean djonly = false;
 	private boolean voteskip = false;
@@ -49,15 +51,6 @@ public class GuildEntity{
 			try {
 				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE PK_guildid = " + getGuildId());	
 				if(rs.next()) {
-					if(rs.getLong("cmdchannelid") != 0l) {
-						cmdchannelid = rs.getLong("cmdchannelid");	
-					}else {
-						for(TextChannel tc : guild.getTextChannels()) {
-							if(cmdchannelid == null || guild.getTextChannelById(cmdchannelid) != null && guild.getSelfMember().hasAccess(tc)) {
-								cmdchannelid = tc.getIdLong();
-							}
-						}
-					}
 					if(rs.getInt("volume") > 0) {
 						volume = rs.getInt("volume");
 					}
@@ -83,6 +76,12 @@ public class GuildEntity{
 					if(rs.getString("language") != null) {
 						language = Languages.getLanguage(rs.getInt("language"));
 					}
+					if(rs.getInt("playtime") > 0) {
+						playtime = rs.getInt("playtime");
+					}
+					if(rs.getLong("lastaudiochannel") > 0) {
+						lastaudiochannelid = rs.getLong("lastaudiochannel");
+					}
 				}else {
 					boolean mentioned = false;
 					for(TextChannel tc : guild.getTextChannels()) {
@@ -97,17 +96,13 @@ public class GuildEntity{
 										+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
 										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+Emoji.SPARKLING_HEART).queue();
 								mentioned = true;
-								cmdchannelid = tc.getIdLong();
 								//loads the guild in the database
 							}catch(InsufficientPermissionException e) {}
 						}
 					}
-					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(PK_guildid,cmdchannelid,firsttimeloaded) VALUES(?,?,?)");
+					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(PK_guildid,firsttimeloaded) VALUES(?,?)");
 					ps.setLong(1, getGuildId());
-					if(!mentioned) {
-						ps.setLong(2, cmdchannelid);
-					}
-					ps.setLong(3, System.currentTimeMillis());
+					ps.setLong(2, System.currentTimeMillis());
 					ps.executeUpdate();
 					update();
 				}
@@ -131,27 +126,36 @@ public class GuildEntity{
 		return this.guild;
 	}
 	
-	public Long getMusicChannelId() {
+	public int getPlayTime() {
 		renewExpireTime();
-		return this.cmdchannelid;
+		return this.playtime;
 	}
 	
-	public void setMusicChannelId(Long newchannelid) {
-		this.cmdchannelid = newchannelid;
+	public void setPlayTime(int newplaytime) {
+		playtime = newplaytime;
 		update();
 	}
 	
-	public TextChannel getMusicChannel() {
+	public Long getLastAudioChannelId() {
 		renewExpireTime();
-		TextChannel channel;
-		if((channel = guild.getTextChannelById(this.cmdchannelid)) != null) {
+		return this.lastaudiochannelid;
+	}
+	
+	public VoiceChannel getLastAudioChannel() {
+		renewExpireTime();
+		VoiceChannel channel;
+		if((channel = guild.getVoiceChannelById(this.lastaudiochannelid)) != null) {
 			return channel;
 		}
-		channel = guild.getTextChannels().get(0);
-		cmdchannelid = channel.getIdLong();
+		channel = guild.getVoiceChannels().get(0);
+		lastaudiochannelid = channel.getIdLong();
 		return channel;
 	}
 	
+	public void setLastAudioChannelId(Long lastaudiochannelid) {
+		this.lastaudiochannelid = lastaudiochannelid;
+		update();
+	}
 	public int getVolume() {
 		renewExpireTime();
 		return this.volume;
@@ -171,7 +175,7 @@ public class GuildEntity{
 		renewExpireTime();
 		return this.prefix;
 	}
-	
+
 	public void setPrefix(String newprefix) {
 		this.prefix = newprefix;
 		update();
@@ -258,7 +262,6 @@ public class GuildEntity{
 			if(needtoexport) {
 				try {
 					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE guilds SET "
-							+ "cmdchannelid = ?,"
 							+ "volume = ?,"
 							+ "djrole = ?,"
 							+ "prefix = ?,"
@@ -267,16 +270,17 @@ public class GuildEntity{
 							+ "language = ?,"
 							+ "announcesongs = ?,"
 							+ "preventduplicates = ?,"
+							+ "playtime = ?,"
 							+ "djonly = ? WHERE PK_guildid = ?");
-					ps.setLong(1, cmdchannelid);
-					ps.setInt(2, volume);
-					ps.setLong(3, djroleid);
-					ps.setString(4, prefix);
-					ps.setBoolean(5, voteskip);
-					ps.setBoolean(6, staymode);
-					ps.setInt(7, language.getDatabaseID());
-					ps.setBoolean(8, announcesongs);
-					ps.setBoolean(9, preventduplicates);
+					ps.setInt(1, volume);
+					ps.setLong(2, djroleid);
+					ps.setString(3, prefix);			
+					ps.setBoolean(4, voteskip);
+					ps.setBoolean(5, staymode);
+					ps.setInt(6, language.getDatabaseID());
+					ps.setBoolean(7, announcesongs);
+					ps.setBoolean(8, preventduplicates);
+					ps.setInt(9, playtime);
 					ps.setBoolean(10, djonly);
 					ps.setLong(11, getGuildId());
 					ps.executeUpdate();

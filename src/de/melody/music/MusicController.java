@@ -35,8 +35,7 @@ public class MusicController {
 		    timescale.setPitch(1.2);
 		    return Arrays.asList(timescale);
 		});
-		*/
-		
+		*/	
 	}
 	
 	public Boolean isPlayingTrack() {

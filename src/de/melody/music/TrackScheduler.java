@@ -11,7 +11,6 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Utils.ConsoleLogger;
 import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -56,7 +55,7 @@ public class TrackScheduler extends AudioEventAdapter{
 			builder.addField("**"+info.author+"**","[" + info.title+"]("+info.uri+")", true);
 			builder.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(info,0l),true);
 			builder.setFooter(mf.format(guild, "music.user.who-requested")+ queue.currentlyPlaying().getWhoQueued().getUser().getAsTag());
-			Messenger.sendMessageEmbed(ge.getMusicChannel(), builder).queue((trackmessage) ->{
+			Messenger.sendMessageEmbed(playerManager.getAnounceChannel(guild), builder).queue((trackmessage) ->{
 				//TrackReaction te = new TrackReaction(info);
 				//melody.getEntityManager().getGuildController(guild.getIdLong()).getReactionManager().addReactionMessage(trackmessage.getIdLong(), te);
 				//trackmessage.addReaction(Emoji.SPARKLING_HEART).queue();

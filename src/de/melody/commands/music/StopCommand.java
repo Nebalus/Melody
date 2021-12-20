@@ -28,11 +28,11 @@ public class StopCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
-		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
-		MusicController controller = melody.playerManager.getController(guild.getIdLong());
-		AudioPlayer player = controller.getPlayer();
 		GuildVoiceState state;
 		if((state = member.getVoiceState()) != null && state.getChannel() != null) {
+			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			melody.playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
+			AudioPlayer player = controller.getPlayer();
 			if(player.getPlayingTrack() != null) {
 				Queue queue = controller.getQueue();
 				player.stopTrack();
@@ -49,11 +49,11 @@ public class StopCommand implements ServerCommand{
 
 	@Override
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
-		melody.getEntityManager().getGuildEntity(guild).setMusicChannelId(channel.getIdLong());
-		MusicController controller = melody.playerManager.getController(guild.getIdLong());
-		AudioPlayer player = controller.getPlayer();
 		GuildVoiceState state;
 		if((state = member.getVoiceState()) != null && state.getChannel() != null) {
+			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			melody.playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
+			AudioPlayer player = controller.getPlayer();
 			if(player.getPlayingTrack() != null) {
 				Queue queue = controller.getQueue();
 				player.stopTrack();
@@ -77,8 +77,6 @@ public class StopCommand implements ServerCommand{
 		return CommandType.BOTH;
 	}
 
-	
-	
 	@Override
 	public String getCommandDescription() {
 		return "Stops the player and clears the queue";
