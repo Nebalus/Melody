@@ -40,12 +40,12 @@ public class PlayCommand implements ServerCommand{
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		String[] args = message.getContentDisplay().split(" ");
-		guildentity.setMusicChannelId(channel.getIdLong());
 		if(args.length > 1) {
 			GuildVoiceState state;
 			VoiceChannel vc;
 			if((state = member.getVoiceState()) != null && (vc = state.getChannel()) != null) {
 				MusicController controller = melody.playerManager.getController(guild.getIdLong());
+				melody.playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
 				AudioPlayerManager apm = melody.audioPlayerManager;
 				AudioManager manager = guild.getAudioManager();
 				StringBuilder strBuilder = new StringBuilder();

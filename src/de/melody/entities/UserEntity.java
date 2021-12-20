@@ -14,7 +14,7 @@ public class UserEntity {
 	
 	private int favoriteplaylistid = 0;
 	private Long userid;
-	private Long heardtime = 0l;
+	private int heardtime = 0;
 	private Long firsttimeheard = 0l;
 	private Long lasttimeheard = 0l;	
 	
@@ -33,7 +33,7 @@ public class UserEntity {
 				ResultSet rs = database.onQuery("SELECT * FROM userdata WHERE PK_userid = " + userid);	
 				if(rs.next()) {
 					favoriteplaylistid = rs.getInt("favoriteplaylist");
-					heardtime = rs.getLong("heardtime");
+					heardtime = rs.getInt("heardtime");
 					firsttimeheard = rs.getLong("firsttimeheard");
 					lasttimeheard = rs.getLong("lasttimeheard");
 				}else {
@@ -48,12 +48,12 @@ public class UserEntity {
 		}
 	}
 	
-	public Long getHeardTime() {
+	public int getHeardTime() {
 		renewExpireTime();
 		return this.heardtime;
 	}
 	
-	public void setHeardTime(Long newheardtime) {
+	public void setHeardTime(int newheardtime) {
 		heardtime = newheardtime;
 		lasttimeheard = System.currentTimeMillis();
 		update();

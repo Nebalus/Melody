@@ -19,9 +19,6 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 
 
 public class MusicUtil extends ListenerAdapter{
-
-
-	private Melody melody = Melody.INSTANCE;
 	
 	@Override
 	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
@@ -31,41 +28,40 @@ public class MusicUtil extends ListenerAdapter{
 			MusicKiller(guild);
 		}else {
 			if(vc.getMembers().contains(guild.getSelfMember()) && vc.getMembers().size() == 1) {
-				melody.playerManager.getController(guild.getIdLong()).setAfkTime(240);
+				Melody.INSTANCE.playerManager.getController(guild.getIdLong()).setAfkTime(240);
 			}
 		}
-	}
-	
-	public static void sendEmbled(Guild guild, EmbedBuilder builder) {		
-		TextChannel channel;
-		if((channel = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getMusicChannel()) != null) {
-			Messenger.sendMessageEmbed(channel, builder).queue();
-		}			
-	}
-	
-	public static void sendEmbled(Guild guild, String content) {		
-		TextChannel channel;
-		if((channel = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getMusicChannel()) != null) {
-			Messenger.sendMessageEmbed(channel, content).queue();
-		}			
-	}
-	
-	public static void sendEmbledError(Guild guild, ErrorMessageBuilder builder) {
-		TextChannel channel;
-		if((channel = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getMusicChannel()) != null) {
-			Messenger.sendErrorMessage(channel, builder);
-		}				
 	}
 	
 	@Override
 	public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
 		Guild guild = event.getGuild();
 		if(event.getMember() == guild.getSelfMember()) {
-			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
+			AudioPlayer player = Melody.INSTANCE.playerManager.getController(guild.getIdLong()).getPlayer();
 			player.setPaused(false);
 		}
 	}
 	
+	public static void sendEmbled(Guild guild, EmbedBuilder builder) {		
+		TextChannel channel;
+		if((channel = Melody.INSTANCE.playerManager.getAnounceChannel(guild)) != null) {
+			Messenger.sendMessageEmbed(channel, builder).queue();
+		}			
+	}
+	
+	public static void sendEmbled(Guild guild, String content) {		
+		TextChannel channel;
+		if((channel = Melody.INSTANCE.playerManager.getAnounceChannel(guild)) != null) {
+			Messenger.sendMessageEmbed(channel, content).queue();
+		}			
+	}
+	
+	public static void sendEmbledError(Guild guild, ErrorMessageBuilder builder) {
+		TextChannel channel;
+		if((channel = Melody.INSTANCE.playerManager.getAnounceChannel(guild)) != null) {
+			Messenger.sendErrorMessage(channel, builder);
+		}				
+	}
 	
 	public static void onRefreshAutoDisabler(ShardManager shardMan) {
 		try {
