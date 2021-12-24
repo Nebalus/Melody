@@ -24,6 +24,6 @@ public interface ServerCommand {
 	
 	public String getCommandDescription();
 	
-	public CommandPermissions getMainPermmision();
+	public CommandPermission getMainPermmision();
 }
 

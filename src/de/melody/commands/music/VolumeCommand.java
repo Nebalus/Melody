@@ -4,7 +4,7 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -75,7 +75,7 @@ public class VolumeCommand implements ServerCommand{
 		return new OptionData[] {new OptionData(OptionType.INTEGER, "amount", "Enter the new volume").setMinValue(1).setMaxValue(Constants.MAXVOLUME)};
 	}
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.DJ;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.DJ;
 	}
 }

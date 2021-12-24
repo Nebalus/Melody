@@ -6,9 +6,10 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils.Emoji;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -19,7 +20,6 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-
 
 public class PauseCommand implements ServerCommand{
 
@@ -33,7 +33,7 @@ public class PauseCommand implements ServerCommand{
 			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
 			melody.playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
 			if(!player.isPaused()) {
-				Messenger.sendMessageEmbed(channel, Emoji.PAUSE+" "+mf.format(guild, "music.track.pause"));	
+				Messenger.sendMessageEmbed(channel, Emoji.PAUSE+" "+mf.format(guild, "music.track.pause")).queue();	
 				player.setPaused(true);
 			}
 		}else {
@@ -75,7 +75,7 @@ public class PauseCommand implements ServerCommand{
 		return null;
 	}
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.DJ;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.DJ;
 	}
 }

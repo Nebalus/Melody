@@ -13,6 +13,10 @@ public class GenerateFile {
 	
 	public GenerateFile(String format) {
 		File newfile = new File(Constants.TEMP_DIRECTORY + "/" + IDGenerator.generateID() + "."+format);
+		do {
+			newfile = new File(Constants.TEMP_DIRECTORY + "/" + IDGenerator.generateID() + "."+format);
+		}while(newfile.exists());
+		
 		try {
 			newfile.createNewFile();
 		} catch (IOException e) {

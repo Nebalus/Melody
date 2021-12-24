@@ -20,8 +20,8 @@
    
     "command.staymode.enabled": "Der 24/7-Modus wurde aktiviert!",
     "command.staymode.disabled": "Der 24/7-Modus wurde deaktiviert.",
-    "command.volume.show": "Die Lautstaerke von [botname] ist {0}.",
-    "command.volume.set": "Die Lautstaerke von [botname] wurde auf {0} gesetzt.",
+    "command.volume.show": "Die Lautstaerke von [botname] betraegt {0}%.",
+    "command.volume.set": "Die Lautstaerke von [botname] wurde auf {0}% gesetzt.",
     "command.fastforward.set": "Spule {0} vor.",
     "command.rewind.set": "Spule {0} zurueck.",
     
@@ -58,8 +58,8 @@
   	"music.info.loopmode-queue": " **Wiederholungs Modus: `Wiedergabeliste`**",
     "music.info.loopmode-song": " **Wiederholungs Modus: `Akt[ue]llen Song`**",
     "music.info.loopmode-none": " **Wiederholungs Modus: `Deaktiviert`**",
-    "music.info.bot-join-vc": "[botname] ist {0} beigetreten",
-    "music.info.bot-leave-vc": "[botname] hat {0} verlassen",
+    "music.info.bot-join-vc": "[botname] versucht `{0}` beizutreten",
+    "music.info.bot-leave-vc": "[botname] hat `{0}` verlassen",
     
     "music.user.who-requested": "Angefordert von ",
     "music.queue.in-queue": "In der Wiedergabeliste:",

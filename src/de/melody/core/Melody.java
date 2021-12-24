@@ -23,6 +23,7 @@ import de.melody.commands.admin.StayCommand;
 import de.melody.commands.dev.ExportcmdCommand;
 import de.melody.commands.dev.GetHostIPCommand;
 import de.melody.commands.dev.RestartCommand;
+import de.melody.commands.dev.ShutdownCommand;
 import de.melody.commands.info.HelpCommand;
 import de.melody.commands.info.InfoCommand;
 import de.melody.commands.info.InviteCommand;
@@ -85,7 +86,7 @@ public class Melody{
 	
 	public SpotifyUtils spotifyutils;
 	
-	public int uptime; 
+	public final Long startup; 
 	
 	public static void main(String[] args) {		
 		
@@ -100,7 +101,7 @@ public class Melody{
 	
 	private Melody() throws LoginException, IllegalArgumentException, InterruptedException, IOException {
 		final Long startupMillis = System.currentTimeMillis();
-		
+		startup = System.currentTimeMillis();
 		INSTANCE = this;
 		if(Constants.TEMP_DIRECTORY.exists()) {
 			FileUtils.cleanDirectory(Constants.TEMP_DIRECTORY);
@@ -136,20 +137,19 @@ public class Melody{
 				new StopCommand(), new LeaveCommand(), new TrackinfoCommand(), new QueueCommand(), new SkipCommand(),
 				new InfoCommand(), new PingCommand(), new ConfigCommand(), new InviteCommand(), new ShuffleCommand(),
 				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand(), new RestartCommand(),
-				new CleanCommand(), new GetHostIPCommand(), new ExportcmdCommand(), new HelpCommand());
+				new CleanCommand(), new GetHostIPCommand(), new ExportcmdCommand(), new HelpCommand(), new ShutdownCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
 		AudioSourceManagers.registerLocalSource(audioPlayerManager);
 		audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
 		
-		uptime = 0;
 		
 		runLoop();
 		//shutdown();
 		ConsoleLogger.info("Bot", "Melody online! ("+(System.currentTimeMillis() - startupMillis)+"ms)");
 	}
 	
-	public void runLoop() {
+	private void runLoop() {
 		this.loop = new Thread(() -> {	
 			Long time = System.currentTimeMillis() + 1000;
 			while(true) {		
@@ -159,7 +159,6 @@ public class Melody{
 						MusicUtil.onRefreshAutoDisabler(shardMan);
 						spotifyutils.update();
 						onStatusUpdate();
-						uptime++;
 						onCaculatingPlayedMusik();
 					}catch(Exception e){
 						ConsoleLogger.warning("Thread", "The current action from the LoopThread has been aborted");
@@ -175,45 +174,49 @@ public class Melody{
 			Long time = System.currentTimeMillis() + 150000;
 			while(true) {
 				if(System.currentTimeMillis() > time) {
-					ConsoleLogger.debug("Auto-Saver", "Starting to export cache");
-					try{
-						time = System.currentTimeMillis()+ 150000;
-						boolean export = false;
-						for(Entry<Long, GuildEntity> entry : entityManager.guildentity.entrySet()) {
-							GuildEntity value = entry.getValue();
-							if(value.getExpireTime() <= System.currentTimeMillis()) {
-								entityManager.removeGuildEntity(value);
-								export = true;
-							}else if(value.getNeedToExport()) {
-								value.export();
-								export = true;
-							}
-						}
-						for(Entry<Long, UserEntity> entry : entityManager.userentity.entrySet()) {
-							UserEntity value = entry.getValue();
-							if(value.getExpireTime() <= System.currentTimeMillis()) {
-								entityManager.removeUserEntity(value);
-								export = true;
-							}else if(value.getNeedToExport()) {
-								value.export();
-								export = true;
-							}
-						}
-						if(export) {
-							ConsoleLogger.debug("Auto-Saver", "Export ended sucessfully");
-						}else {
-							ConsoleLogger.debug("Auto-Saver", "There is nothing to export to the database");
-						}
-					}catch(Exception e) {
-						ConsoleLogger.warning("Thread", "The current action from the Auto-Saver has been aborted");
-						e.printStackTrace();
-					}
+					exporttodatabase();
+					time = System.currentTimeMillis()+ 150000;
 				}
 			}
 		});
 		this.auto_save.setName("Auto-Saver");
 		this.auto_save.setPriority(Thread.MAX_PRIORITY);
 		this.auto_save.start();
+	}
+	
+	private void exporttodatabase() {
+		ConsoleLogger.debug("Auto-Saver", "Starting to export cache");
+		try{
+			boolean export = false;
+			for(Entry<Long, GuildEntity> entry : entityManager.guildentity.entrySet()) {
+				GuildEntity value = entry.getValue();
+				if(value.getExpireTime() <= System.currentTimeMillis()) {
+					entityManager.removeGuildEntity(value);
+					export = true;
+				}else if(value.getNeedToExport()) {
+					value.export();
+					export = true;
+				}
+			}
+			for(Entry<Long, UserEntity> entry : entityManager.userentity.entrySet()) {
+				UserEntity value = entry.getValue();
+				if(value.getExpireTime() <= System.currentTimeMillis()) {
+					entityManager.removeUserEntity(value);
+					export = true;
+				}else if(value.getNeedToExport()) {
+					value.export();
+					export = true;
+				}
+			}
+			if(export) {
+				ConsoleLogger.debug("Auto-Saver", "Export ended sucessfully");
+			}else {
+				ConsoleLogger.debug("Auto-Saver", "There is nothing to export to the database");
+			}
+		}catch(Exception e) {
+			ConsoleLogger.warning("Thread", "The current action from the Auto-Saver has been aborted");
+			e.printStackTrace();
+		}
 	}
 	
 	public void onCaculatingPlayedMusik() {
@@ -273,31 +276,38 @@ public class Melody{
 					break;
 				}
 			});
-			nextStatusUpdate = 15;
+			nextStatusUpdate = 30;
 		}else {
 			nextStatusUpdate--;
 		}
 	}
 	
 	public void shutdown() {
+		if(loop != null) {
+			loop.interrupt();
+		}	
+		if(auto_save != null) {
+			auto_save.interrupt();
+		}
+		exporttodatabase();
+		database.disconnect();		
+		if(shardMan != null) {
+			shardMan.setStatus(OnlineStatus.OFFLINE);
+			shardMan.shutdown();
+		}
+		ConsoleLogger.info(Constants.BUILDNAME+" offline!");
+		System.exit(0);
+	}
+	
+	
+	public void shutdownthread() {
 		new Thread(() -> {		
 			String line = "";
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 			try {
 				while((line = reader.readLine()) != null) {
 					if(line.equalsIgnoreCase("stop")) {
-						if(shardMan != null) {
-							database.disconnect();					
-							shardMan.setStatus(OnlineStatus.OFFLINE);
-							shardMan.shutdown();
-							ConsoleLogger.info("Bot", "Melody offline!");
-						}
-						if(loop != null) {
-							loop.interrupt();
-						}	
-						if(auto_save != null) {
-							auto_save.interrupt();
-						}
+						shutdown();
 						reader.close();
 						break;
 					}else {

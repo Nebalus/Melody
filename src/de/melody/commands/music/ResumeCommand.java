@@ -6,9 +6,10 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils.Emoji;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -32,7 +33,7 @@ public class ResumeCommand implements ServerCommand{
 			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
 			melody.playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
 			if(player.isPaused()) {
-				Messenger.sendMessageEmbed(channel, Emoji.RESUME+" "+mf.format(guild, "music.track.resume"));		
+				Messenger.sendMessageEmbed(channel, Emoji.RESUME+" "+mf.format(guild, "music.track.resume")).queue();		
 				player.setPaused(false);
 			}
 		}else {
@@ -49,8 +50,6 @@ public class ResumeCommand implements ServerCommand{
 	public CommandType getCommandType() {
 		return CommandType.CHAT;
 	}
-
-	
 	
 	@Override
 	public String getCommandDescription() {
@@ -69,7 +68,7 @@ public class ResumeCommand implements ServerCommand{
 	}
 	
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.DJ;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.DJ;
 	}
 }

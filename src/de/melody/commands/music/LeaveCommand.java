@@ -5,9 +5,10 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -29,7 +30,7 @@ public class LeaveCommand implements ServerCommand{
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			MusicUtil.MusicKiller(guild);
-			Messenger.sendMessage(channel, mf.format(guild, "music.info.bot-leave-vc", state.getChannel().getName()));
+			Messenger.sendMessage(channel, mf.format(guild, "music.info.bot-leave-vc", state.getChannel().getName())).queue();
 		}else {
 			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
 		}
@@ -40,9 +41,9 @@ public class LeaveCommand implements ServerCommand{
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			MusicUtil.MusicKiller(guild);
-			event.reply(mf.format(guild, "music.info.bot-leave-vc", state.getChannel().getName()));
+			event.reply(mf.format(guild, "music.info.bot-leave-vc", state.getChannel().getName())).queue();
 		}else { 
-			Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
+			Messenger.sendErrorSlashMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "music.bot-not-in-vc"));
 		}
 	}
 	
@@ -58,7 +59,7 @@ public class LeaveCommand implements ServerCommand{
 	
 	@Override
 	public String getCommandDescription() {
-		return "Let "+Constants.BUILDNAME+" leave your voice channel";
+		return "Let "+Constants.BUILDNAME+" leave your Voicechannel";
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class LeaveCommand implements ServerCommand{
 		return null;
 	}
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.DJ;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.DJ;
 	}
 }

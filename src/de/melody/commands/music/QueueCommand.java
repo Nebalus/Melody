@@ -11,9 +11,10 @@ import de.melody.music.QueuedTrack;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+
 import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -104,7 +105,7 @@ public class QueueCommand implements ServerCommand{
 		return null;
 	}
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.EVERYONE;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.EVERYONE;
 	}
 }

@@ -40,7 +40,7 @@ public class Utils {
 		return 0l;
 	}
 	
-	public static Long getAllUsersHeardTimeInt() {
+	public static Long getAllUsersHeardTimeSec() {
 		try {
 			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT SUM(heardtime) FROM userdata");
 			if(rs.next()) {
@@ -52,14 +52,9 @@ public class Utils {
 		return 0l;
 	}
 	
-	public static String decodeStringFromTimeMillis(long time,Boolean inseconds) {
-		long uptime;
-		if(inseconds) {
-			uptime = time;
-		}else {
-			uptime = time/1000;
-		}
-		
+	public static String decodeStringFromTimeMillis(long time) {
+		long uptime = time/1000;
+
 		long sekunden = uptime;
 		long minuten = sekunden/60;
 		long stunden = minuten/60;
@@ -70,19 +65,19 @@ public class Utils {
 		
 		String uptimeSuffix = "";
 		if(uptime == 0) {
-			uptimeSuffix = "0s";
+			uptimeSuffix = "0sec";
 		}
 		if(sekunden >= 1) {
-			uptimeSuffix = sekunden +"s";
+			uptimeSuffix = sekunden +"sec";
 		}
 		if(uptime >= 60) {
 			uptimeSuffix = minuten +"min "+(uptimeSuffix != null ? uptimeSuffix : "");
 		}
 		if(uptime >= 3600) {
-			uptimeSuffix = stunden +"h "+(uptimeSuffix != null ? uptimeSuffix : "");
+			uptimeSuffix = stunden +"hour "+(uptimeSuffix != null ? uptimeSuffix : "");
 		}
 		if(uptime >= 86400) {
-			uptimeSuffix = tage +"d "+(uptimeSuffix != null ? uptimeSuffix : "");
+			uptimeSuffix = tage +"day "+(uptimeSuffix != null ? uptimeSuffix : "");
 		}
 		return uptimeSuffix;
 	}
@@ -107,11 +102,11 @@ public class Utils {
 		switch(value) {
 			case "true":
 			case "on":
-				bool =true;
+				bool = true;
 				break;
 			case "false":
 			case "off":
-				bool =false;
+				bool = false;
 				break;
 		}
 		return bool;
@@ -174,18 +169,17 @@ public class Utils {
 					}
 					endTime = endTime + (minutes*60000);
 				}
-				if(args.endsWith("h")) {
-					args = args.replace("h", "");
+				if(args.endsWith("hour")) {
+					args = args.replace("hour", "");
 					int hours = Integer.valueOf(args);
 					if (hours < 0) {
 						hours *= -1;
 					}
 					endTime = endTime + (hours*3600000);
 				}
-			}catch(NumberFormatException e) {}
-		}
-		if(endTime < 1000l) {
-			endTime = 10000l;
+			}catch(NumberFormatException e) {
+				return -1l;
+			}
 		}
 		return endTime;
 	}

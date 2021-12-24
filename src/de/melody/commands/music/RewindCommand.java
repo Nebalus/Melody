@@ -9,9 +9,10 @@ import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -23,12 +24,11 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-
 public class RewindCommand implements ServerCommand{
 	
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
-
+	private final String usagemsg = "<amount sec|min|hour>";
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		GuildVoiceState state;
@@ -36,22 +36,24 @@ public class RewindCommand implements ServerCommand{
 			String[] args = message.getContentDisplay().split(" ");
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
 			if(controller.isPlayingTrack()) {
-				AudioPlayer player = controller.getPlayer();
-				Long rewindmillis;
 				if(args.length <= 1) {
-					rewindmillis = 10000l;
-					AudioTrack track = player.getPlayingTrack();
-					track.setPosition(player.getPlayingTrack().getPosition()-rewindmillis);
+					Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix()[0]+" "+usagemsg));	
 				}else {
+					Long rewindmillis;
 					String subTime = "";
 					for(int i = 1; i < args.length; i++) {
 						subTime = subTime +" "+args[i];
 					}
-					AudioTrack track = player.getPlayingTrack();
-					rewindmillis = Utils.decodeTimeMillisFromString(subTime);
-					track.setPosition(player.getPlayingTrack().getPosition()-rewindmillis);
+					if((rewindmillis = Utils.decodeTimeMillisFromString(subTime)) > 0) {
+						AudioPlayer player = controller.getPlayer();
+						AudioTrack track = player.getPlayingTrack();
+						rewindmillis = Utils.decodeTimeMillisFromString(subTime);
+						track.setPosition(player.getPlayingTrack().getPosition()-rewindmillis);	
+						Messenger.sendMessageEmbed(channel, Emoji.REWIND+" "+mf.format(guild, "command.rewind.set",Utils.decodeStringFromTimeMillis(rewindmillis))).queue();
+					}else {
+						Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix()[0]+" "+usagemsg));	
+					}
 				}
-				Messenger.sendMessageEmbed(channel, Emoji.REWIND+" "+mf.format(guild, "command.rewind.set",Utils.decodeStringFromTimeMillis(rewindmillis,false))).queue();
 			}else {
 				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.currently-playing-null"));
 			}
@@ -69,7 +71,6 @@ public class RewindCommand implements ServerCommand{
 		return CommandType.CHAT;
 	}
 
-	
 	@Override
 	public String getCommandDescription() {
 		return null;
@@ -82,12 +83,11 @@ public class RewindCommand implements ServerCommand{
 
 	@Override
 	public OptionData[] getCommandOptions() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.DJ;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.DJ;
 	}
 }

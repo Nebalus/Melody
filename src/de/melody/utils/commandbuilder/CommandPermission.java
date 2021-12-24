@@ -1,6 +1,6 @@
 package de.melody.utils.commandbuilder;
 
-public enum CommandPermissions {
+public enum CommandPermission {
 	DEVELOPER,
 	ADMIN,
 	DJ,
