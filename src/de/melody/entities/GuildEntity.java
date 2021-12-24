@@ -271,6 +271,7 @@ public class GuildEntity{
 							+ "announcesongs = ?,"
 							+ "preventduplicates = ?,"
 							+ "playtime = ?,"
+							+ "lastaudiochannel = ?,"
 							+ "djonly = ? WHERE PK_guildid = ?");
 					ps.setInt(1, volume);
 					ps.setLong(2, djroleid);
@@ -281,8 +282,9 @@ public class GuildEntity{
 					ps.setBoolean(7, announcesongs);
 					ps.setBoolean(8, preventduplicates);
 					ps.setInt(9, playtime);
-					ps.setBoolean(10, djonly);
-					ps.setLong(11, getGuildId());
+					ps.setLong(10, lastaudiochannelid);
+					ps.setBoolean(11, djonly);
+					ps.setLong(12, getGuildId());
 					ps.executeUpdate();
 					ConsoleLogger.debug("export guild", getGuildId());
 				} catch (SQLException e) {

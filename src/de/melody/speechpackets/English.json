@@ -59,8 +59,8 @@
     "music.info.loopmode-queue": " **Loopmode: `Queue`**",
     "music.info.loopmode-song": " **Loopmode: `Current Song`**",
     "music.info.loopmode-none": " **Loopmode: `Disabled`**",
-    "music.info.bot-join-vc": "[botname] joined {0}",
-    "music.info.bot-leave-vc": "[botname] disconnected from {0}",
+    "music.info.bot-join-vc": "[botname] joined `{0}`",
+    "music.info.bot-leave-vc": "[botname] disconnected from `{0}`",
    
     "music.user.who-requested": "Requested by ",
     

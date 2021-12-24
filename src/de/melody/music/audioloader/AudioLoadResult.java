@@ -12,7 +12,6 @@ import de.melody.music.MusicUtil;
 import de.melody.music.Queue;
 import de.melody.music.QueuedTrack;
 import de.melody.music.Service;
-import de.melody.music.LoopMode;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -24,7 +23,6 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	private final MusicController controller;
 	private final String uri;
 	private final Member userWhoQueued;
-	private final LoopMode loopMode;
 	private final Guild guild;
 	private final String imageUrl;
 	private final Service service;
@@ -37,7 +35,6 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 		this.imageUrl = null;
 		this.userWhoQueued = null;
 		this.service = service;
-		this.loopMode = controller.getLoopMode();
 		
 		this.guild = controller.getGuild();
 	}
@@ -48,7 +45,6 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 		this.imageUrl = null;
 		this.userWhoQueued = userWhoQueued;
 		this.service = service;
-		this.loopMode = controller.getLoopMode();
 		this.guild = controller.getGuild();
 	}
     
@@ -58,7 +54,6 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 		this.imageUrl = imageUrl;
 		this.userWhoQueued = userWhoQueued;
 		this.service = service;
-		this.loopMode = controller.getLoopMode();
 		this.guild = controller.getGuild();
 	}
     
@@ -66,7 +61,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	public void trackLoaded(AudioTrack track) {
 		Queue queue = controller.getQueue();
 		QueuedTrack queuedtrack = new QueuedTrack(track, userWhoQueued, service, imageUrl);
-		if(controller.isPlayingTrack() && loopMode.equals(LoopMode.NONE)) {
+		if(controller.isPlayingTrack()) {
 			EmbedBuilder builder = new EmbedBuilder().setAuthor(mf.format(guild, "music.track.added-to-queue"), null, userWhoQueued.getUser().getAvatarUrl())
 					.setDescription("["+track.getInfo().title+"]("+track.getInfo().uri+")")
 					.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
@@ -75,8 +70,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 			
 			if(queuedtrack.getImageURL() != null) {
 				builder.setThumbnail(queuedtrack.getImageURL());
-			}
-			
+			}	
 			MusicUtil.sendEmbled(guild, builder);
 		}
 		queue.addTrackToQueue(queuedtrack);	
@@ -95,7 +89,6 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 						.addField(mf.format(guild, "music.track.length"), MusicUtil.getTime(track.getInfo(),0l) , true)
 						.addField(mf.format(guild, "music.track.position-in-queue"), queue.getQueueSize()+1+"", true)
 						.addField(mf.format(guild, "music.track.time-until-playing"),  (MusicUtil.getTimeUntil(controller) == 0l ? "Now" : "In "+MusicUtil.getTime(null,MusicUtil.getTimeUntil(controller))), true);
-				
 				if(queuedtrack.getImageURL() != null) {
 					builder.setThumbnail(queuedtrack.getImageURL());
 				}

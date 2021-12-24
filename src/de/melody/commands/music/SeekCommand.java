@@ -7,9 +7,10 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
 import de.melody.utils.Utils;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -78,7 +79,7 @@ public class SeekCommand implements ServerCommand{
 	}
 	
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.DJ;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.DJ;
 	}
 }

@@ -11,9 +11,7 @@ public final class Constants{
 	public static final boolean ALLOWSLASHCOMMANDS = true;
 	public static final boolean AUTOUPDATE = true;
 	
-	public static final long STARTUP = System.currentTimeMillis();
-	
-	public static final String BUILDVERSION = "BETA 0.6.5";	
+	public static final String BUILDVERSION = "BETA 0.6.6";	
 	public static final String BUILDDATE = "2021-12-20";	
 	public static final String BUILDNAME = "Melody";
 	

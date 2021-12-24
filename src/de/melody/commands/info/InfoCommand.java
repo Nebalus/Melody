@@ -7,9 +7,10 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.utils.Utils;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -18,7 +19,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 
 public class InfoCommand implements ServerCommand{
@@ -49,14 +49,14 @@ public class InfoCommand implements ServerCommand{
 			Constants.BUILDDATE,
 			serversRunning,
 			Utils.getUserInt(),
-			Utils.decodeStringFromTimeMillis(Utils.getAllUsersHeardTimeInt(),true),
+			Utils.decodeStringFromTimeMillis(Utils.getAllUsersHeardTimeSec()*1000),
 			guild.getSelfMember().getAsMention())
 				
 			+" \n \n```OS: "+prop.getProperty("os.name")+"\n"
 			+ "Cores: "+r.availableProcessors()+"\n"
 			+ "CPU Arch: "+prop.getProperty("os.arch")+"\n"
 			+ "Memory Usage: "+bigmemory+"."+smallmemory.substring(bigmemory.length())+"MB\n"
-			+ "Uptime: "+Utils.decodeStringFromTimeMillis(Melody.INSTANCE.uptime,true)+"```");
+			+ "Uptime: "+Utils.decodeStringFromTimeMillis(System.currentTimeMillis() - Melody.INSTANCE.startup)+"```");
 		builder.setFooter("Made by Nebalus#1665 with <3");
 		
 		return builder;
@@ -82,7 +82,7 @@ public class InfoCommand implements ServerCommand{
 		return null;
 	}
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.EVERYONE;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.EVERYONE;
 	}
 }

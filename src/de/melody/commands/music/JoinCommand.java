@@ -7,9 +7,10 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -35,7 +36,7 @@ public class JoinCommand implements ServerCommand{
 			guild.getAudioManager().openAudioConnection(vc);
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
 			AudioPlayer player = controller.getPlayer();
-			Messenger.sendMessage(channel, mf.format(guild, "music.info.bot-join-vc", vc.getName()));
+			Messenger.sendMessage(channel, mf.format(guild, "music.info.bot-join-vc", vc.getName())).queue();
 			if(player.getPlayingTrack() == null) {
 				controller.setAfkTime(600);
 			}
@@ -81,7 +82,7 @@ public class JoinCommand implements ServerCommand{
 		return null;
 	}
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.DJ;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.DJ;
 	}
 }

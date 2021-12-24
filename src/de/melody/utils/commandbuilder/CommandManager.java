@@ -92,11 +92,10 @@ public class CommandManager {
 				case ADMIN:
 					if(member.hasPermission(Permission.MANAGE_SERVER) || member.hasPermission(Permission.ADMINISTRATOR)) {
 						cmd.performCommand(member, channel, message, guild, guildentity);
-						return true;
 					}else {
 						Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "user-no-permmisions", "MANAGE_SERVER"));
 					}
-					break;
+					return true;
 				case DJ:
 					if(guildentity.isMemberDJ(member)) {
 						cmd.performCommand(member, channel, message, guild, guildentity);
@@ -125,11 +124,10 @@ public class CommandManager {
 				case ADMIN:
 					if(member.hasPermission(Permission.MANAGE_SERVER) || member.hasPermission(Permission.ADMINISTRATOR)) {
 						cmd.performSlashCommand(member, channel, guild, guildentity, event);
-						return true;
 					}else {
 						Messenger.sendErrorSlashMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "user-no-permmisions", "MANAGE_SERVER"));
 					}
-					break;
+					return true;
 				case DJ:
 					if(guildentity.isMemberDJ(member)) {
 						cmd.performSlashCommand(member, channel, guild, guildentity, event);

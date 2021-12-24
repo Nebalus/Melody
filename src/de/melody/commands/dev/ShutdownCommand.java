@@ -1,7 +1,5 @@
 package de.melody.commands.dev;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import de.melody.core.Constants;
@@ -18,33 +16,16 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
-public class RestartCommand implements ServerCommand{
+public class ShutdownCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		try {
-			channel.sendMessage("Preparing Restart.sh").queue();
+			channel.sendMessage("Preparing Shutdown.sh").queue();
 			TimeUnit.SECONDS.sleep(2);
-			final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-			File currentJar = new File(Melody.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-			/* is it a jar file? */
-			if(!currentJar.getName().endsWith(".jar"))
-			   return;
-			channel.sendMessage("Boot path found: "+currentJar.toString()).queue();
-			TimeUnit.SECONDS.sleep(1);
-			/* Build command: java -jar application.jar */
-			final ArrayList<String> command = new ArrayList<String>();
-			command.add(javaBin);
-			command.add("-jar");
-			command.add(currentJar.getPath());
-
-			final ProcessBuilder builder = new ProcessBuilder(command);
-			channel.sendMessage("Start Command: "+builder.command().toString()).queue();
-			TimeUnit.SECONDS.sleep(1);
-			channel.sendMessage("Succes "+Constants.BUILDNAME+" will restart in 10 Seconds").queue();
+			channel.sendMessage("Succes "+Constants.BUILDNAME+" will shutdown in 10 Seconds").queue();
 			TimeUnit.SECONDS.sleep(10);
-			builder.start();
-			System.exit(0);
+			Melody.INSTANCE.shutdown();
 		} catch (Exception e) {
 			channel.sendMessage("Error Something failed: "+e.getMessage()).queue();
 			e.printStackTrace();
@@ -57,7 +38,7 @@ public class RestartCommand implements ServerCommand{
 
 	@Override
 	public String[] getCommandPrefix() {
-		return new String[] {"restartbot"};
+		return new String[] {"shutdownbot"};
 	}
 
 	@Override
@@ -72,7 +53,7 @@ public class RestartCommand implements ServerCommand{
 
 	@Override
 	public String getCommandDescription() {
-		return "Restarts the bot";
+		return "Shutdowns the bot";
 	}
 	@Override
 	public CommandPermission getMainPermmision() {

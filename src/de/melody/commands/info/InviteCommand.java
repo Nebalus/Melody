@@ -3,9 +3,10 @@ package de.melody.commands.info;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+
 import de.melody.utils.messenger.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -46,7 +47,7 @@ public class InviteCommand implements ServerCommand{
 		return null;
 	}
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.EVERYONE;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.EVERYONE;
 	}
 }

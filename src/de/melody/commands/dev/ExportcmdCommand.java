@@ -4,18 +4,17 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.datamanager.GenerateFile;
 import de.melody.entities.GuildEntity;
-import de.melody.utils.Utils.ConsoleLogger;
 import de.melody.utils.commandbuilder.CommandManager;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public class ExportcmdCommand implements ServerCommand {
 	
@@ -117,17 +116,8 @@ public class ExportcmdCommand implements ServerCommand {
 		String content = "";
 		CommandManager cmdman = Melody.INSTANCE.getCmdMan();
 		for(ServerCommand scmd : cmdman.getRawCommands()) {
-			ConsoleLogger.info(scmd.getCommandPrefix()[0], scmd.getCommandOptions());
-			if(scmd.getCommandOptions() != null) {
-				if(scmd.getCommandOptions().length == 1) {
-					addCommand(scmd.getCommandPrefix()[0],scmd.getCommandDescription(),scmd.getCommandPrefix());
-				}else {
-					for(OptionData od : scmd.getCommandOptions()) {
-						
-					}
-				}
-			}else {
-				addCommand(scmd.getCommandPrefix()[0],scmd.getCommandDescription(),scmd.getCommandPrefix());
+			if(!scmd.getMainPermmision().equals(CommandPermission.DEVELOPER)) {
+				content = content + addCommand(scmd.getCommandPrefix()[0],scmd.getCommandDescription(),scmd.getCommandPrefix());
 			}
 		}
 		GenerateFile gfile = new GenerateFile("html");
@@ -136,12 +126,12 @@ public class ExportcmdCommand implements ServerCommand {
 		
 	}
 	
-	private String addCommand(String cmd, String cmddiscript, String[] prefixe) {
+	private String addCommand(String cmd, String cmddiscript, String[] prefix) {
 		String aliases = null;
-		if(prefixe != null) {
+		if(prefix != null) {
 			try {
 				int time = 1;
-				for(String cmdp : prefixe) {
+				for(String cmdp : prefix) {
 					if(time != 1) {
 						if(time == 2) {
 							aliases = cmdp;
@@ -185,7 +175,7 @@ public class ExportcmdCommand implements ServerCommand {
 		return "Exports all commands in a HTML format";
 	}
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.DEVELOPER;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.DEVELOPER;
 	}
 }

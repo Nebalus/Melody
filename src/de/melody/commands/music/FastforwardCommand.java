@@ -9,9 +9,10 @@ import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils;
 import de.melody.utils.Utils.Emoji;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -29,6 +30,8 @@ public class FastforwardCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
+	private final String usagemsg = "<amount sec|min|hour>";
+	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		GuildVoiceState state;
@@ -36,22 +39,23 @@ public class FastforwardCommand implements ServerCommand{
 			String[] args = message.getContentDisplay().split(" ");
 			MusicController controller = melody.playerManager.getController(guild.getIdLong());
 			if(controller.isPlayingTrack()) {
-				AudioPlayer player = controller.getPlayer();
-				Long fastforwardmillis;
 				if(args.length <= 1) {
-					fastforwardmillis = 10000l;
-					AudioTrack track = player.getPlayingTrack();
-					track.setPosition(player.getPlayingTrack().getPosition()+fastforwardmillis);
+					Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix()[0]+" "+usagemsg));	
 				}else {
+					Long fastforwardmillis;
 					String subTime = "";
 					for(int i = 1; i < args.length; i++) {
 						subTime = subTime +" "+args[i];
 					}
-					AudioTrack track = player.getPlayingTrack();
-					fastforwardmillis = Utils.decodeTimeMillisFromString(subTime);
-					track.setPosition(player.getPlayingTrack().getPosition()+fastforwardmillis);
+					if((fastforwardmillis = Utils.decodeTimeMillisFromString(subTime)) > 0) {
+						AudioPlayer player = controller.getPlayer();
+						AudioTrack track = player.getPlayingTrack();
+						track.setPosition(player.getPlayingTrack().getPosition()+fastforwardmillis);
+						Messenger.sendMessageEmbed(channel, Emoji.FAST_FORWARD+" "+mf.format(guild, "command.fastforward.set",Utils.decodeStringFromTimeMillis(fastforwardmillis))).queue();
+					}else {
+						Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix()[0]+" "+usagemsg));	
+					}
 				}
-				Messenger.sendMessageEmbed(channel, Emoji.FAST_FORWARD+" "+mf.format(guild, "command.fastforward.set",Utils.decodeStringFromTimeMillis(fastforwardmillis,false))).queue();
 			}else {
 				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.currently-playing-null"));
 			}
@@ -86,7 +90,7 @@ public class FastforwardCommand implements ServerCommand{
 		return null;
 	}
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.DJ;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.DJ;
 	}
 }

@@ -17,9 +17,10 @@ import de.melody.music.MusicUtil;
 import de.melody.music.Service;
 import de.melody.music.audioloader.AudioLoadResult;
 import de.melody.utils.Utils;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
+
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -128,8 +129,8 @@ public class PlayCommand implements ServerCommand{
 		return null;
 	}
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.EVERYONE;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.EVERYONE;
 	}
 }
 /*else if(url.toLowerCase().startsWith("https://open.spotify.com/playlist/")){

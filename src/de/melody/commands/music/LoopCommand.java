@@ -8,7 +8,7 @@ import de.melody.music.LoopMode;
 import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
 import de.melody.utils.Utils.Emoji;
-import de.melody.utils.commandbuilder.CommandPermissions;
+import de.melody.utils.commandbuilder.CommandPermission;
 import de.melody.utils.commandbuilder.CommandType;
 import de.melody.utils.commandbuilder.ServerCommand;
 import de.melody.utils.messenger.Messenger;
@@ -23,7 +23,6 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command.Choice;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-
 
 public class LoopCommand implements ServerCommand{
 
@@ -149,7 +148,7 @@ public class LoopCommand implements ServerCommand{
 	}
 	
 	@Override
-	public CommandPermissions getMainPermmision() {
-		return CommandPermissions.DJ;
+	public CommandPermission getMainPermmision() {
+		return CommandPermission.DJ;
 	}
 }
