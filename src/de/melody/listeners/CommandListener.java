@@ -6,7 +6,7 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.Utils.ConsoleLogger;
+import de.melody.utils.ConsoleLogger;
 import de.melody.utils.messenger.Messenger;
 import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;

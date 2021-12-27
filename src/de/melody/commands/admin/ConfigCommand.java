@@ -26,7 +26,7 @@ public class ConfigCommand implements ServerCommand{
 	private Melody melody = Melody.INSTANCE;
 	private MessageFormatter mf = melody.getMessageFormatter();
 	
-	@Override
+	@Override 
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		String[] args = message.getContentDisplay().split(" ");
 		if(args.length == 1) {
@@ -53,7 +53,7 @@ public class ConfigCommand implements ServerCommand{
 						break;
 				}
 			}catch(IllegalArgumentException e){
-				sendMainMenu(channel,guildentity.getPrefix());
+				sendMainMenu(channel,guildentity.getPrefix()); 
 			}
 		}else if(args.length >= 3) {
 			try {

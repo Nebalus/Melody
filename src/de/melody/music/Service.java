@@ -4,7 +4,7 @@ import java.util.List;
 
 public enum Service {
 	YOUTUBE(1, List.of("youtube.com","youtu.be"), "https://www.youtube.com/watch?v="),
-	DISCORD(2, List.of("discordapp.com"), null),
+	//DISCORD(2, List.of("discordapp.com"), null),
 	SPOTIFY(3, List.of("spotify.com"), null);
 	//TWITCH(List.of("twitch.tv"));
 	//("vimeo.com");		
