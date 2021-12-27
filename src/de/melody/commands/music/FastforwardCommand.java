@@ -50,8 +50,8 @@ public class FastforwardCommand implements ServerCommand{
 					if((fastforwardmillis = Utils.decodeTimeMillisFromString(subTime)) > 0) {
 						AudioPlayer player = controller.getPlayer();
 						AudioTrack track = player.getPlayingTrack();
-						track.setPosition(player.getPlayingTrack().getPosition()+fastforwardmillis);
-						Messenger.sendMessageEmbed(channel, Emoji.FAST_FORWARD+" "+mf.format(guild, "command.fastforward.set",Utils.decodeStringFromTimeMillis(fastforwardmillis))).queue();
+						Messenger.sendMessageEmbed(channel, Emoji.FAST_FORWARD+" "+mf.format(guild, "command.fastforward.set",Utils.decodeStringFromTimeMillis(Utils.countupUntil(fastforwardmillis, track.getDuration() - player.getPlayingTrack().getPosition())))).queue();
+						track.setPosition(Utils.countupUntil(fastforwardmillis + player.getPlayingTrack().getPosition(), track.getDuration()));
 					}else {
 						Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix()[0]+" "+usagemsg));	
 					}
