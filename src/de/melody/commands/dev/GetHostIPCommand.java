@@ -19,7 +19,7 @@ public class GetHostIPCommand implements ServerCommand{
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		channel.sendMessage("Scanning for the IP Address please wait...").queue();
 		try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
-			channel.sendMessage("Curently the IP Address from my host is `"+s.next()+"`").queue();
+			channel.sendMessage("Currently the IP Address from my host is `"+s.next()+"`").queue();
 		} catch (java.io.IOException e) {
 			channel.sendMessage("IP Request failed... Please try again later :(").queue();
 		    e.printStackTrace();

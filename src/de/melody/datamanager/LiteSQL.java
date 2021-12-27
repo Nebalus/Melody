@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import de.melody.core.Constants;
-import de.melody.utils.Utils.ConsoleLogger;
+import de.melody.utils.ConsoleLogger;
 
 public class LiteSQL {
 	

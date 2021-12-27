@@ -5,13 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Random;
 
 import org.json.JSONObject;
 
-import de.melody.core.Constants;
 import de.melody.core.Melody;
 
 public class Utils {
@@ -67,17 +64,17 @@ public class Utils {
 		if(uptime == 0) {
 			uptimeSuffix = "0sec";
 		}
-		if(sekunden >= 1) {
+		if(sekunden > 0) {
 			uptimeSuffix = sekunden +"sec";
 		}
-		if(uptime >= 60) {
-			uptimeSuffix = minuten +"min "+(uptimeSuffix != null ? uptimeSuffix : "");
+		if(minuten > 0) {
+			uptimeSuffix = minuten +"min "+uptimeSuffix;
 		}
-		if(uptime >= 3600) {
-			uptimeSuffix = stunden +"hour "+(uptimeSuffix != null ? uptimeSuffix : "");
+		if(stunden > 0) {
+			uptimeSuffix = stunden +"hour"+(stunden == 1 ? "s " : " ")+uptimeSuffix;
 		}
-		if(uptime >= 86400) {
-			uptimeSuffix = tage +"day "+(uptimeSuffix != null ? uptimeSuffix : "");
+		if(tage > 0) {
+			uptimeSuffix = tage +"day"+(tage == 1 ? "s " : " ")+uptimeSuffix;
 		}
 		return uptimeSuffix;
 	}
@@ -274,52 +271,6 @@ public class Utils {
 			}
 			return generatedid;
 		}
-	}
-
-	public static class ConsoleLogger {
-
-	    final static SimpleDateFormat time = new SimpleDateFormat("<HH:mm:ss> ");
-	   
-	    //info
-	    public static void info(Object className, Object message) {
-	        System.out.println(time.format(new Date())+ "[Info] " + className + " : " + message);
-	    }
-	    
-	    public static void info(Object message) {
-	        System.out.println(time.format(new Date())+ "[Info] : " + message);
-	    }
-
-	    //error
-	    public static void error(Object className, Object message) {
-	        System.out.println(time.format(new Date()) + "[Error] " + className + " : " + message);
-	    }
-	    
-	    public static void error( Object message) {
-	        System.out.println(time.format(new Date()) + "[Error] : " + message);
-	    }
-
-	    //debug
-	    public static void debug(Object className, Object message) {
-	    	if(Constants.DEBUGMODE) {
-	    		System.out.println(time.format(new Date()) + "[Debug] " + className + " : " + message);
-	    	}
-	    }
-	    
-	    public static void debug(Object message) {
-	    	if(Constants.DEBUGMODE) {
-	    		System.out.println(time.format(new Date()) + "[Debug] : " + message);
-	    	}
-	    }
-
-	    //warning
-	    public static void warning(Object className, Object message) {
-	        System.out.println(time.format(new Date()) + "[Warning] " + className + " : " + message);
-	    }
-	    
-	    public static void warning(Object message) {
-	        System.out.println(time.format(new Date()) + "[Warning] : " + message);
-	    }
-
 	}
 	
 	public static class Emoji {
