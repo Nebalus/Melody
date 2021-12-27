@@ -117,6 +117,22 @@ public class Utils {
 		}
 	}
 	
+	public static Long countupUntil(Long value, Long max) {
+		if(value > max) {
+			return max;
+		}else {
+			return value;
+		}
+	}
+	
+	public static Long countdownUntil(Long value, Long min) {
+		if(value < min) {
+			return min;
+		}else {
+			return value;
+		}
+	}
+	
 	public static String getTimeFormat(Long time) {		
 		if(time >= 1000) {
 			long sekunden = time/1000;

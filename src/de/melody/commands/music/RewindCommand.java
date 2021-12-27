@@ -46,10 +46,9 @@ public class RewindCommand implements ServerCommand{
 					}
 					if((rewindmillis = Utils.decodeTimeMillisFromString(subTime)) > 0) {
 						AudioPlayer player = controller.getPlayer();
-						AudioTrack track = player.getPlayingTrack();
-						rewindmillis = Utils.decodeTimeMillisFromString(subTime);
-						track.setPosition(player.getPlayingTrack().getPosition()-rewindmillis);	
-						Messenger.sendMessageEmbed(channel, Emoji.REWIND+" "+mf.format(guild, "command.rewind.set",Utils.decodeStringFromTimeMillis(rewindmillis))).queue();
+						AudioTrack track = player.getPlayingTrack();					
+						Messenger.sendMessageEmbed(channel, Emoji.REWIND+" "+mf.format(guild, "command.rewind.set",Utils.decodeStringFromTimeMillis(Utils.countupUntil(rewindmillis, player.getPlayingTrack().getPosition())))).queue();
+						track.setPosition(Utils.countdownUntil(player.getPlayingTrack().getPosition()-rewindmillis, 0l));	
 					}else {
 						Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix()[0]+" "+usagemsg));	
 					}
