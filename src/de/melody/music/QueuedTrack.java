@@ -45,8 +45,7 @@ public class QueuedTrack {
 		return imageUrl;
 	}
 	
-	public QueuedTrack refreshTrack() {
+	public void refreshTrack() {
 		track = track.makeClone();
-		return this;
 	}
 }

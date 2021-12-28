@@ -5,12 +5,11 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicUtil;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.commandbuilder.CommandPermission;
-import de.melody.utils.commandbuilder.CommandType;
-import de.melody.utils.commandbuilder.ServerCommand;
-
-import de.melody.utils.messenger.Messenger;
-import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
+import de.melody.tools.commandbuilder.CommandPermission;
+import de.melody.tools.commandbuilder.CommandType;
+import de.melody.tools.commandbuilder.ServerCommand;
+import de.melody.tools.messenger.Messenger;
+import de.melody.tools.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;

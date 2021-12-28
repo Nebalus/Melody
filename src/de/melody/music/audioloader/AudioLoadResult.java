@@ -13,7 +13,7 @@ import de.melody.music.Queue;
 import de.melody.music.QueuedTrack;
 import de.melody.music.Service;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
+import de.melody.tools.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;

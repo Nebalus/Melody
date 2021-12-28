@@ -16,13 +16,12 @@ import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.music.Service;
 import de.melody.music.audioloader.AudioLoadResult;
-import de.melody.utils.Utils;
-import de.melody.utils.commandbuilder.CommandPermission;
-import de.melody.utils.commandbuilder.CommandType;
-import de.melody.utils.commandbuilder.ServerCommand;
-
-import de.melody.utils.messenger.Messenger;
-import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
+import de.melody.tools.Utils;
+import de.melody.tools.commandbuilder.CommandPermission;
+import de.melody.tools.commandbuilder.CommandType;
+import de.melody.tools.commandbuilder.ServerCommand;
+import de.melody.tools.messenger.Messenger;
+import de.melody.tools.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -58,7 +57,7 @@ public class PlayCommand implements ServerCommand{
 					isytsearch = true;
 				}
 				Service service;
-				if((service = MusicUtil.isUrlVerified(url)) != null || isytsearch) {
+				if((service = MusicUtil.isDomainVerified(url)) != null || isytsearch) {
 					if(isytsearch) {
 						service = Service.YOUTUBE;
 					}

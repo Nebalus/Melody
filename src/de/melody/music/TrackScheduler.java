@@ -11,7 +11,7 @@ import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.messenger.Messenger;
+import de.melody.tools.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -75,11 +75,15 @@ public class TrackScheduler extends AudioEventAdapter{
 			if((state = guild.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
 				switch(controller.getLoopMode()) {
 					case QUEUE:
-						queue.addTrackToQueue(queue.currentlyPlaying().refreshTrack());
+						queue.currentlyPlaying().refreshTrack();
+						queue.addTrackToQueue(queue.currentlyPlaying());
 						return;
 					case SONG:
-						controller.play(track.makeClone());
+						queue.currentlyPlaying().refreshTrack();
+						controller.play(queue.currentlyPlaying().getTrack());
 						return;
+						
+						
 					case NONE:
 						if(queue.next(1) != 1) { 
 							if(vc.getMembers().size() > 1) {
