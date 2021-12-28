@@ -52,7 +52,7 @@ public class CommandManager {
 		}
 		for(JDA jda : melody.shardMan.getShards()) {
 			CommandListUpdateAction slashcommands = jda.updateCommands();
-			if(Constants.ALLOWSLASHCOMMANDS) {
+			if(Melody.INSTANCE.config._allowslashcommands) {
 				for(ServerCommand sc : cmd) {
 					if(sc.getCommandType().isSlash()) {
 						if(sc.getCommandOptions() == null) {

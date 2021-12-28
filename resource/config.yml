@@ -1,1 +1,7 @@
-VERSION: 1.0
+{
+	"bottoken" : "INSERT BOTTOKEN",
+	"debugmode" : true,
+	"defaultprefix" : "m!",
+    "allowslashcommands" : true,
+    "autoupdate" : true
+}

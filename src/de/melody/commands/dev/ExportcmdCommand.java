@@ -1,6 +1,5 @@
 package de.melody.commands.dev;
 
-import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.datamanagment.GenerateFile;
 import de.melody.entities.GuildEntity;
@@ -144,7 +143,7 @@ public class ExportcmdCommand implements ServerCommand {
 			}catch (Exception e) {}
 		}
 		return "<div class=\"cmd w-full bg-darker-gray rounded-lg\"> \n"
-				+ "<h2>"+Constants.DEFAULTPREFIX+cmd+"</h2>  \n"
+				+ "<h2>"+Melody.INSTANCE.config._defaultprefix+cmd+"</h2>  \n"
 				+ "<div class=\"cmddescription bg-dark-gray rounded-lg\">  \n"
 				+ (cmddiscript != null ? "<p>"+cmddiscript+"</p>" : "")+ "  \n"
 				+ (aliases != null ? "<p class=\"opacity-75\">Aliases: "+aliases.toString().replace("[", " ").replace("]", " ")+"</p>" : "")+ " \n"

@@ -16,7 +16,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
-import de.melody.Secure;
 import de.melody.commands.admin.CleanCommand;
 import de.melody.commands.admin.ConfigCommand;
 import de.melody.commands.admin.StayCommand;
@@ -45,6 +44,7 @@ import de.melody.commands.music.StopCommand;
 import de.melody.commands.music.TrackinfoCommand;
 import de.melody.commands.music.VolumeCommand;
 import de.melody.commands.slash.PrefixCommand;
+import de.melody.datamanagment.Config;
 import de.melody.datamanagment.LiteSQL;
 import de.melody.entities.EntityManager;
 import de.melody.entities.GuildEntity;
@@ -83,17 +83,18 @@ public class Melody{
 	public EntityManager entityManager;
 	public LiteSQL database;
 	private CommandManager cmdManager;
+	public Config config;
 	
 	public SpotifyUtils spotifyutils;
 	
 	public final Long startup; 
 	
-	public static void main(String[] args) {		
-		
+	public static void main(String[] args) {
 		try {
 			new Melody();
 		} catch (LoginException | IllegalArgumentException | InterruptedException | IOException e) {
 			e.printStackTrace();
+			System.exit(0);
 		}
 		
 		//System.out.println(args[0]);
@@ -108,15 +109,16 @@ public class Melody{
 		}else {
 			Constants.TEMP_DIRECTORY.mkdir();
 		}
+		config = new Config(INSTANCE);
 		//Loads the local SQL database
 		database = new LiteSQL();
 		//Connects to the Spotify API to retriev track information
-		spotifyutils = new SpotifyUtils(Secure.SPOTIFY_CLIENTID, Secure.SPOTIFY_CLIENTSECRET);
+		spotifyutils = new SpotifyUtils(Constants.SPOTIFY_CLIENTID, Constants.SPOTIFY_CLIENTSECRET);
 		//Loads the language system
 		messageformatter = new MessageFormatter();
 		
 		//builds the bot 
-		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(Secure.TOKEN);
+		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(config._bottoken);
 		configureMemoryUsage(builder); 
 	
 		builder.addEventListeners(new CommandListener() , new MusicUtil(), new ReactListener());
@@ -282,7 +284,7 @@ public class Melody{
 		}
 	}
 	
-	public void shutdown() {
+	public void safeshutdown() {
 		if(loop != null) {
 			loop.interrupt();
 		}	
@@ -307,7 +309,7 @@ public class Melody{
 			try {
 				while((line = reader.readLine()) != null) {
 					if(line.equalsIgnoreCase("stop")) {
-						shutdown();
+						safeshutdown();
 						reader.close();
 						break;
 					}else {

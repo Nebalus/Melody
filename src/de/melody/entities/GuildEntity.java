@@ -23,7 +23,7 @@ public class GuildEntity{
 	
 	private Guild guild;
 	private int volume = 50;
-	private String prefix = Constants.DEFAULTPREFIX;
+	private String prefix = Melody.INSTANCE.config._defaultprefix;
 	private int playtime = 0;
 	private Long lastaudiochannelid = 0l;
 	
