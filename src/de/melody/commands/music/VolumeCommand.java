@@ -22,7 +22,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class VolumeCommand implements ServerCommand{
 
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
+	private MessageFormatter mf = melody._messageformatter;
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
@@ -33,7 +33,7 @@ public class VolumeCommand implements ServerCommand{
 			try {
 				int amount = Integer.parseInt(args[1]);			
 				if(amount <= Constants.MAXVOLUME && amount >= 1) {
-					melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
+					melody._playerManager.getController(guild.getIdLong()).getPlayer().setVolume(amount);
 					guildentity.setVolume(amount);
 					Messenger.sendMessage(channel, mf.format(guild, "command.volume.set",amount)).queue();
 				}else {
@@ -50,7 +50,7 @@ public class VolumeCommand implements ServerCommand{
 		if(event.getOption("amount") == null) {
 			event.reply(mf.format(guild, "command.volume.show",guildentity.getVolume())).queue();
 		}else {
-			melody.playerManager.getController(guild.getIdLong()).getPlayer().setVolume((int) event.getOption("amount").getAsLong());
+			melody._playerManager.getController(guild.getIdLong()).getPlayer().setVolume((int) event.getOption("amount").getAsLong());
 			guildentity.setVolume((int) event.getOption("amount").getAsLong());
 			event.reply(mf.format(guild, "command.volume.set",(int) event.getOption("amount").getAsLong())).queue();
 		}

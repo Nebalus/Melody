@@ -25,7 +25,7 @@ public class ShutdownCommand implements ServerCommand{
 			TimeUnit.SECONDS.sleep(2);
 			channel.sendMessage("Succes "+Constants.BUILDNAME+" will shutdown in 10 Seconds").queue();
 			TimeUnit.SECONDS.sleep(10);
-			Melody.INSTANCE.safeshutdown();
+			Melody.INSTANCE.safeShutdown();
 		} catch (Exception e) {
 			channel.sendMessage("Error Something failed: "+e.getMessage()).queue();
 			e.printStackTrace();

@@ -20,11 +20,11 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class ShuffleCommand implements ServerCommand{
 
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
+	private MessageFormatter mf = melody._messageformatter;
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
-		MusicController controller = melody.playerManager.getController(guild.getIdLong());
+		MusicController controller = melody._playerManager.getController(guild.getIdLong());
 		Queue queue = controller.getQueue();
 		if(queue.getQueuelist().size() > 1) {
 			queue.shuffle(); 
@@ -36,7 +36,7 @@ public class ShuffleCommand implements ServerCommand{
 	
 	@Override
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
-		MusicController controller = melody.playerManager.getController(guild.getIdLong());
+		MusicController controller = melody._playerManager.getController(guild.getIdLong());
 		Queue queue = controller.getQueue();
 		if(queue.getQueuelist().size() > 1) {
 			queue.shuffle(); 

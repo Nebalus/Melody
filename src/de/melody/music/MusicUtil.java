@@ -29,7 +29,7 @@ public class MusicUtil extends ListenerAdapter{
 			MusicKiller(guild);
 		}else {
 			if(vc.getMembers().contains(guild.getSelfMember()) && vc.getMembers().size() == 1) {
-				Melody.INSTANCE.playerManager.getController(guild.getIdLong()).setAfkTime(240);
+				Melody.INSTANCE._playerManager.getController(guild.getIdLong()).setAfkTime(240);
 			}
 		}
 	}
@@ -38,28 +38,28 @@ public class MusicUtil extends ListenerAdapter{
 	public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
 		Guild guild = event.getGuild();
 		if(event.getMember() == guild.getSelfMember()) {
-			AudioPlayer player = Melody.INSTANCE.playerManager.getController(guild.getIdLong()).getPlayer();
+			AudioPlayer player = Melody.INSTANCE._playerManager.getController(guild.getIdLong()).getPlayer();
 			player.setPaused(false);
 		}
 	}
 	
 	public static void sendEmbled(Guild guild, EmbedBuilder builder) {		
 		TextChannel channel;
-		if((channel = Melody.INSTANCE.playerManager.getAnounceChannel(guild)) != null) {
+		if((channel = Melody.INSTANCE._playerManager.getAnounceChannel(guild)) != null) {
 			Messenger.sendMessageEmbed(channel, builder).queue();
 		}			
 	}
 	
 	public static void sendEmbled(Guild guild, String content) {		
 		TextChannel channel;
-		if((channel = Melody.INSTANCE.playerManager.getAnounceChannel(guild)) != null) {
+		if((channel = Melody.INSTANCE._playerManager.getAnounceChannel(guild)) != null) {
 			Messenger.sendMessageEmbed(channel, content).queue();
 		}			
 	}
 	
 	public static void sendEmbledError(Guild guild, ErrorMessageBuilder builder) {
 		TextChannel channel;
-		if((channel = Melody.INSTANCE.playerManager.getAnounceChannel(guild)) != null) {
+		if((channel = Melody.INSTANCE._playerManager.getAnounceChannel(guild)) != null) {
 			Messenger.sendErrorMessage(channel, builder);
 		}				
 	}
@@ -70,7 +70,7 @@ public class MusicUtil extends ListenerAdapter{
 				GuildVoiceState state;
 				VoiceChannel vc;
 				if((state = g.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
-					AudioPlayer player = Melody.INSTANCE.playerManager.getController(g.getIdLong()).getPlayer();
+					AudioPlayer player = Melody.INSTANCE._playerManager.getController(g.getIdLong()).getPlayer();
 					if(player.getPlayingTrack() != null) {
 						if(vc.getMembers().size() == 1) {
 							AFKManager(g);
@@ -84,8 +84,8 @@ public class MusicUtil extends ListenerAdapter{
 	}
 	
 	public static void AFKManager(Guild g) {
-		if(Melody.INSTANCE.entityManager.getGuildEntity(g).is24_7() == false) {
-			MusicController controller = Melody.INSTANCE.playerManager.getController(g.getIdLong());
+		if(Melody.INSTANCE._entityManager.getGuildEntity(g).is24_7() == false) {
+			MusicController controller = Melody.INSTANCE._playerManager.getController(g.getIdLong());
 			int time = controller.getAfkTime();
 			if(time > 0) {
 				time--;
@@ -97,7 +97,7 @@ public class MusicUtil extends ListenerAdapter{
 	}
 	
 	public static void MusicKiller(Guild g) {
-		AudioPlayer player = Melody.INSTANCE.playerManager.getController(g.getIdLong()).getPlayer();
+		AudioPlayer player = Melody.INSTANCE._playerManager.getController(g.getIdLong()).getPlayer();
 		GuildVoiceState state;
 		VoiceChannel vc;
 		
@@ -105,7 +105,7 @@ public class MusicUtil extends ListenerAdapter{
 		if((state = g.getSelfMember().getVoiceState()) != null && (vc = state.getChannel()) != null) {
 			vc.getGuild().getAudioManager().closeAudioConnection();
 		}
-		Melody.INSTANCE.playerManager.clearController(g.getIdLong());
+		Melody.INSTANCE._playerManager.clearController(g.getIdLong());
 	}
 	
 	public static String getTime(AudioTrackInfo trackinfo, Long time) {

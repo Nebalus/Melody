@@ -26,14 +26,14 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class SkipCommand implements ServerCommand{
 
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
+	private MessageFormatter mf = melody._messageformatter;
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {	
 		GuildVoiceState state;
 		EmbedBuilder builder = new EmbedBuilder();
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
-			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			MusicController controller = melody._playerManager.getController(guild.getIdLong());
 			String[] args = message.getContentDisplay().split(" ");
 			AudioPlayer player = controller.getPlayer();
 			Queue queue = controller.getQueue();

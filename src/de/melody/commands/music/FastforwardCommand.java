@@ -7,7 +7,6 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.tools.Utils;
 import de.melody.tools.Utils.Emoji;
 import de.melody.tools.commandbuilder.CommandPermission;
 import de.melody.tools.commandbuilder.CommandType;
@@ -28,7 +27,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class FastforwardCommand implements ServerCommand{
 	
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
+	private MessageFormatter mf = melody._messageformatter;
 	
 	private final String usagemsg = "<amount sec|min|hour>";
 	
@@ -37,7 +36,7 @@ public class FastforwardCommand implements ServerCommand{
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			String[] args = message.getContentDisplay().split(" ");
-			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			MusicController controller = melody._playerManager.getController(guild.getIdLong());
 			if(controller.isPlayingTrack()) {
 				if(args.length <= 1) {
 					Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix()[0]+" "+usagemsg));	

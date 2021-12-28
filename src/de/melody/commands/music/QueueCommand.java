@@ -28,7 +28,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class QueueCommand implements ServerCommand{
 
 	private static Melody melody = Melody.INSTANCE;
-	private static MessageFormatter mf = melody.getMessageFormatter();
+	private static MessageFormatter mf = melody._messageformatter;
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {	
@@ -37,14 +37,14 @@ public class QueueCommand implements ServerCommand{
 			queuemessage.addReaction(Emoji.RESUME).queue();	
 			queuemessage.addReaction(Emoji.REFRESH).queue();
 
-			QueueReaction qe = new QueueReaction(melody.playerManager.getController(guild.getIdLong()).getQueue());
-			melody.getEntityManager().getGuildEntity(guild).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
+			QueueReaction qe = new QueueReaction(melody._playerManager.getController(guild.getIdLong()).getQueue());
+			melody._entityManager.getGuildEntity(guild).getReactionManager().addReactionMessage(queuemessage.getIdLong(), qe);
 			queuemessage.editMessageEmbeds(Messenger.getMessageEmbed(loadQueueEmbed(guild,qe))).queue();
 		});		
 	}
 	
 	public static EmbedBuilder loadQueueEmbed(Guild guild, QueueReaction qe) {
-		MusicController controller = melody.playerManager.getController(guild.getIdLong());
+		MusicController controller = melody._playerManager.getController(guild.getIdLong());
 		Queue queue = controller.getQueue();
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setTitle(mf.format(guild, "music.queue.from-guild",guild.getName()));

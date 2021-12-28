@@ -29,14 +29,14 @@ public class StopCommand implements ServerCommand{
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		GuildVoiceState state;
 		if((state = member.getVoiceState()) != null && state.getChannel() != null) {
-			MusicController controller = melody.playerManager.getController(guild.getIdLong());
-			melody.playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
+			MusicController controller = melody._playerManager.getController(guild.getIdLong());
+			melody._playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
 			AudioPlayer player = controller.getPlayer();
 			if(player.getPlayingTrack() != null) {
 				Queue queue = controller.getQueue();
 				player.stopTrack();
 				queue.clear();
-				melody.playerManager.getController(guild.getIdLong()).setAfkTime(600);
+				melody._playerManager.getController(guild.getIdLong()).setAfkTime(600);
 				message.addReaction(Emoji.OK_HAND).queue();
 			}else {
 				Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "music.currently-playing-null"));
@@ -50,14 +50,14 @@ public class StopCommand implements ServerCommand{
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
 		GuildVoiceState state;
 		if((state = member.getVoiceState()) != null && state.getChannel() != null) {
-			MusicController controller = melody.playerManager.getController(guild.getIdLong());
-			melody.playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
+			MusicController controller = melody._playerManager.getController(guild.getIdLong());
+			melody._playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
 			AudioPlayer player = controller.getPlayer();
 			if(player.getPlayingTrack() != null) {
 				Queue queue = controller.getQueue();
 				player.stopTrack();
 				queue.clear();
-				melody.playerManager.getController(guild.getIdLong()).setAfkTime(600);
+				melody._playerManager.getController(guild.getIdLong()).setAfkTime(600);
 			}else {
 				Messenger.sendErrorSlashMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "music.currently-playing-null"));
 			}

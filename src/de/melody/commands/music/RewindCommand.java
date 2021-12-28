@@ -26,14 +26,14 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class RewindCommand implements ServerCommand{
 	
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
+	private MessageFormatter mf = melody._messageformatter;
 	private final String usagemsg = "<amount sec|min|hour>";
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			String[] args = message.getContentDisplay().split(" ");
-			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			MusicController controller = melody._playerManager.getController(guild.getIdLong());
 			if(controller.isPlayingTrack()) {
 				if(args.length <= 1) {
 					Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.command-usage", getCommandPrefix()[0]+" "+usagemsg));	

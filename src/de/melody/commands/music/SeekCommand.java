@@ -6,7 +6,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.music.MusicController;
-import de.melody.tools.Utils;
 import de.melody.tools.commandbuilder.CommandPermission;
 import de.melody.tools.commandbuilder.CommandType;
 import de.melody.tools.commandbuilder.ServerCommand;
@@ -31,7 +30,7 @@ public class SeekCommand implements ServerCommand{
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			String[] args = message.getContentDisplay().split(" ");
-			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			MusicController controller = melody._playerManager.getController(guild.getIdLong());
 			if(controller.isPlayingTrack()) {
 				AudioPlayer player = controller.getPlayer();
 				if(args.length <= 1) {

@@ -88,7 +88,7 @@ public class Messenger {
 		public ErrorMessageBuilder() {}
 		
 		public ErrorMessageBuilder setMessageFormat(Guild g, String formatid, Object... args) {
-			MessageFormatter mf = Melody.INSTANCE.getMessageFormatter();
+			MessageFormatter mf = Melody.INSTANCE._messageformatter;
 			HEADER_TEXT = mf.format(g, "error."+formatid+".header",args);
 			BODY_TEXT = mf.format(g, "error."+formatid+".body",args);
 			FOOTER_TEXT = formatid.replace(".", " > ").toUpperCase();

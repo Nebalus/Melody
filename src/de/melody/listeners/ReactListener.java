@@ -29,12 +29,12 @@ public class ReactListener extends ListenerAdapter{
 				Long messageid = event.getMessageIdLong();
 				String emoji = event.getReactionEmote().getEmoji();
 				TextChannel channel = event.getTextChannel();
-				ReactionManager reactionManager = Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getReactionManager();
+				ReactionManager reactionManager = Melody.INSTANCE._entityManager.getGuildEntity(guild).getReactionManager();
 				TrackReaction tr = (TrackReaction) reactionManager.getReacton(messageid, ReactionTypes.TRACKREACTION);
 				
 				if(tr != null) {
 					if(emoji.equals(Emoji.SPARKLING_HEART)) {
-						if(Melody.INSTANCE.getEntityManager().getUserEntity(user).getFavoritePlaylistId() > 0) {
+						if(Melody.INSTANCE._entityManager.getUserEntity(user).getFavoritePlaylistId() > 0) {
 				
 							
 							

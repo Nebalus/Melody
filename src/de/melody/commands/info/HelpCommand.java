@@ -40,7 +40,7 @@ public class HelpCommand implements ServerCommand{
 			ArrayList<String> djcmds = new ArrayList<String>();
 			ArrayList<String> everyonecmds = new ArrayList<String>();
 			
-			for(ServerCommand scmd : Melody.INSTANCE.getCmdMan().getRawCommands()) {
+			for(ServerCommand scmd : Melody.INSTANCE._cmdManager.getRawCommands()) {
 				switch(scmd.getMainPermmision()) {
 					case ADMIN:
 						admincmds.add("`"+scmd.getCommandPrefix()[0]+"`");

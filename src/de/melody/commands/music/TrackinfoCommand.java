@@ -21,7 +21,7 @@ public class TrackinfoCommand implements ServerCommand{
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
-		MusicController controller = Melody.INSTANCE.playerManager.getController(guild.getIdLong());
+		MusicController controller = Melody.INSTANCE._playerManager.getController(guild.getIdLong());
 		
 		channel.sendMessage("Loading...").queue((chatmessage) ->{
 			if(controller.isPlayingTrack()) {
@@ -37,7 +37,7 @@ public class TrackinfoCommand implements ServerCommand{
 
 	@Override
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
-		MusicController controller = Melody.INSTANCE.playerManager.getController(guild.getIdLong());
+		MusicController controller = Melody.INSTANCE._playerManager.getController(guild.getIdLong());
 		event.reply("Loading...").queue((slashmessage)->{
 			if(controller.isPlayingTrack()) {
 				AudioTrack at = controller.getPlayer().getPlayingTrack();

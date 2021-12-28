@@ -3,6 +3,7 @@ package de.melody.commands.info;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
+import de.melody.speechpackets.MessageFormatter;
 import de.melody.tools.commandbuilder.CommandPermission;
 import de.melody.tools.commandbuilder.CommandType;
 import de.melody.tools.commandbuilder.ServerCommand;
@@ -18,20 +19,24 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public class InviteCommand implements ServerCommand{
 
+	private Melody melody = Melody.INSTANCE;
+	private MessageFormatter mf = melody._messageformatter;
+	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
-		Messenger.sendMessage(channel,Melody.INSTANCE.getMessageFormatter().format(channel.getGuild(), "feedback.info.invite", Constants.INVITE_URL)).queue();
+		Messenger.sendMessage(channel,mf.format(channel.getGuild(), "feedback.info.invite", Constants.INVITE_URL)).queue();
 	}
 
 	@Override
 	public void performSlashCommand(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
-		event.reply(Melody.INSTANCE.getMessageFormatter().format(guild, "feedback.info.invite", Constants.INVITE_URL)).queue();
+		event.reply(mf.format(guild, "feedback.info.invite", Constants.INVITE_URL)).queue();
 	}
 	
 	@Override
 	public String[] getCommandPrefix() {
 		return new String[] {"invite"};
 	}
+	
 	@Override
 	public CommandType getCommandType() {
 		return CommandType.BOTH;
@@ -41,6 +46,7 @@ public class InviteCommand implements ServerCommand{
 	public String getCommandDescription() {
 		return "Invite "+Constants.BUILDNAME+" to your own Discord Server";
 	}
+	
 	@Override
 	public OptionData[] getCommandOptions() {
 		return null;

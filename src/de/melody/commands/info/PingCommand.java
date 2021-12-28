@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class PingCommand implements ServerCommand{
 	
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
+	private MessageFormatter mf = melody._messageformatter;
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {		
