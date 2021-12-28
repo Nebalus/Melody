@@ -4,9 +4,10 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import de.melody.core.Melody;
-import de.melody.utils.Utils;
-import de.melody.utils.messenger.Messenger;
-import de.melody.utils.messenger.Messenger.ErrorMessageBuilder;
+import de.melody.tools.Utils;
+import de.melody.tools.helper.MathHelper;
+import de.melody.tools.messenger.Messenger;
+import de.melody.tools.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -109,21 +110,11 @@ public class MusicUtil extends ListenerAdapter{
 	
 	public static String getTime(AudioTrackInfo trackinfo, Long time) {
 		if(trackinfo != null) {
-			long sekunden = trackinfo.length/1000;
-			long minuten = sekunden/60;
-			long stunden = minuten/60;
-			sekunden %= 60;
-			minuten %= 60;	
-			return trackinfo.isStream ? ":red_circle: STREAM" : (stunden > 0 ? stunden +"h " : "")+(minuten == 0 && stunden == 0? "" : minuten +"min ")+sekunden+"s";
+			return trackinfo.isStream ? ":red_circle: STREAM" : MathHelper.decodeStringFromTimeMillis(trackinfo.length);
 		}else if(time >= 1){
-			long sekunden = time/1000;
-			long minuten = sekunden/60;
-			long stunden = minuten/60;
-			sekunden %= 60;
-			minuten %= 60;	
-			return (stunden > 0 ? stunden +"h " : "")+(minuten == 0 && stunden == 0? "" : minuten +"min ")+sekunden+"s";
+			return MathHelper.decodeStringFromTimeMillis(time);
 		}
-		return null;
+		return "NO DURATION FOUND";
 	}
 	
 	public static String getTrackImageURL(String url) {
@@ -146,7 +137,7 @@ public class MusicUtil extends ListenerAdapter{
 		return timeUntil;
 	}
 	
-	public static Service isUrlVerified(String url) {
+	public static Service isDomainVerified(String url) {
 		String domain = Utils.getDomain(url);
 		Service service;
 		if(domain != null) {

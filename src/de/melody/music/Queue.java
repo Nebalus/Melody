@@ -67,7 +67,7 @@ public class Queue {
 	}
 	
 	public boolean clear() {
-		if(this.queuelist.size() >= 1) {
+		if(this.queuelist.size() > 0) {
 			queuelist.clear();	
 			playedlist.clear();
 			return true;
@@ -76,7 +76,7 @@ public class Queue {
 	}
 	
 	public boolean nextexist() {
-		if(this.queuelist.size() >= 1) {
+		if(this.queuelist.size() > 0) {
 			return true;
 		}
 		return false;

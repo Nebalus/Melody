@@ -2,12 +2,12 @@ package de.melody.commands.dev;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
-import de.melody.datamanager.GenerateFile;
+import de.melody.datamanagment.GenerateFile;
 import de.melody.entities.GuildEntity;
-import de.melody.utils.commandbuilder.CommandManager;
-import de.melody.utils.commandbuilder.CommandPermission;
-import de.melody.utils.commandbuilder.CommandType;
-import de.melody.utils.commandbuilder.ServerCommand;
+import de.melody.tools.commandbuilder.CommandManager;
+import de.melody.tools.commandbuilder.CommandPermission;
+import de.melody.tools.commandbuilder.CommandType;
+import de.melody.tools.commandbuilder.ServerCommand;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;

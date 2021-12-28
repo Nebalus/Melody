@@ -45,7 +45,7 @@ import de.melody.commands.music.StopCommand;
 import de.melody.commands.music.TrackinfoCommand;
 import de.melody.commands.music.VolumeCommand;
 import de.melody.commands.slash.PrefixCommand;
-import de.melody.datamanager.LiteSQL;
+import de.melody.datamanagment.LiteSQL;
 import de.melody.entities.EntityManager;
 import de.melody.entities.GuildEntity;
 import de.melody.entities.UserEntity;
@@ -55,8 +55,9 @@ import de.melody.music.MusicController;
 import de.melody.music.MusicUtil;
 import de.melody.music.PlayerManager;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.utils.ConsoleLogger;
-import de.melody.utils.SpotifyUtils;
+import de.melody.tools.ConsoleLogger;
+import de.melody.tools.SpotifyUtils;
+import de.melody.tools.commandbuilder.CommandManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -70,7 +71,6 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import de.melody.utils.commandbuilder.CommandManager;
 
 public class Melody{
 	public static Melody INSTANCE;

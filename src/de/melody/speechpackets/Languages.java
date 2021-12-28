@@ -1,6 +1,6 @@
 package de.melody.speechpackets;
 
-import de.melody.utils.Utils.Emoji;
+import de.melody.tools.Utils.Emoji;
 
 public enum Languages {
 

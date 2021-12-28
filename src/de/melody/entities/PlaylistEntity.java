@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
-import de.melody.datamanager.LiteSQL;
-import de.melody.utils.Utils.IDGenerator;
+import de.melody.datamanagment.LiteSQL;
+import de.melody.tools.Utils.IDGenerator;
 
 public class PlaylistEntity {
 

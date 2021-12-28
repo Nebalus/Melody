@@ -7,11 +7,11 @@ import java.util.List;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
-import de.melody.datamanager.LiteSQL;
+import de.melody.datamanagment.LiteSQL;
 import de.melody.entities.reacts.ReactionManager;
 import de.melody.speechpackets.Languages;
-import de.melody.utils.ConsoleLogger;
-import de.melody.utils.Utils.Emoji;
+import de.melody.tools.ConsoleLogger;
+import de.melody.tools.Utils.Emoji;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;

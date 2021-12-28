@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
-import de.melody.utils.Utils;
+import de.melody.tools.Utils;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class MessageFormatter {

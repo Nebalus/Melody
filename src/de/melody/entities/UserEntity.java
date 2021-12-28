@@ -6,8 +6,8 @@ import java.sql.SQLException;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
-import de.melody.datamanager.LiteSQL;
-import de.melody.utils.ConsoleLogger;
+import de.melody.datamanagment.LiteSQL;
+import de.melody.tools.ConsoleLogger;
 import net.dv8tion.jda.api.entities.User;
 
 public class UserEntity {
