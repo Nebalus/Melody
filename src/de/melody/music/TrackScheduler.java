@@ -20,8 +20,8 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 public class TrackScheduler extends AudioEventAdapter{
 	
 	private Melody melody = Melody.INSTANCE;
-	private PlayerManager playerManager = melody.playerManager;
-	private MessageFormatter mf = melody.getMessageFormatter();
+	private PlayerManager playerManager = melody._playerManager;
+	private MessageFormatter mf = melody._messageformatter;
 	
 	@Override
 	public void onPlayerPause(AudioPlayer player) {}
@@ -31,10 +31,10 @@ public class TrackScheduler extends AudioEventAdapter{
 	
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track_UNUSED) {
-		Guild guild = melody.shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
+		Guild guild = melody._shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
 		MusicController controller = playerManager.getController(guild.getIdLong());
 		Queue queue = controller.getQueue();
-		GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
+		GuildEntity ge = melody._entityManager.getGuildEntity(guild);
 		if(controller.getLoopMode().equals(LoopMode.NONE) && ge.canAnnounceSongs()) {
 			EmbedBuilder builder = new EmbedBuilder();
 			QueuedTrack queuedtrack = queue.currentlyPlaying();
@@ -66,8 +66,8 @@ public class TrackScheduler extends AudioEventAdapter{
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {	
 		long guildid = playerManager.getGuildByPlayerHash(player.hashCode());
-		Guild guild = melody.shardMan.getGuildById(guildid);
-		MusicController controller = melody.playerManager.getController(guildid);
+		Guild guild = melody._shardMan.getGuildById(guildid);
+		MusicController controller = melody._playerManager.getController(guildid);
 		Queue queue = controller.getQueue();
 		if(endReason.mayStartNext) {
 			GuildVoiceState state;
@@ -102,7 +102,7 @@ public class TrackScheduler extends AudioEventAdapter{
 	  
 	  @Override
 	  public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-		 Guild guild = melody.shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
+		 Guild guild = melody._shardMan.getGuildById(playerManager.getGuildByPlayerHash(player.hashCode()));
 		 EmbedBuilder builder = new EmbedBuilder();
 		 builder.setDescription("An error occured.");
 		 builder.addField("Errormessage",exception.getMessage(), false);

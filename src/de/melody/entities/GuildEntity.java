@@ -23,7 +23,7 @@ public class GuildEntity{
 	
 	private Guild guild;
 	private int volume = 50;
-	private String prefix = Melody.INSTANCE.config._defaultprefix;
+	private String prefix = Melody.INSTANCE._config._defaultprefix;
 	private int playtime = 0;
 	private Long lastaudiochannelid = 0l;
 	
@@ -40,7 +40,7 @@ public class GuildEntity{
 	
 	private ReactionManager reactionmanager;
 	private Melody melody = Melody.INSTANCE;
-	private LiteSQL database = melody.getDatabase();
+	private LiteSQL database = melody._database;
 	
 	public GuildEntity(Guild guild) {
 		this.guild = guild;

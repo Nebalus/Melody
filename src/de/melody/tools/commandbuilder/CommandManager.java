@@ -50,9 +50,9 @@ public class CommandManager {
 				}	
 			}
 		}
-		for(JDA jda : melody.shardMan.getShards()) {
+		for(JDA jda : melody._shardMan.getShards()) {
 			CommandListUpdateAction slashcommands = jda.updateCommands();
-			if(Melody.INSTANCE.config._allowslashcommands) {
+			if(Melody.INSTANCE._config._allowslashcommands) {
 				for(ServerCommand sc : cmd) {
 					if(sc.getCommandType().isSlash()) {
 						if(sc.getCommandOptions() == null) {

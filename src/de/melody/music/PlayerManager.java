@@ -23,7 +23,7 @@ public class PlayerManager {
 		if(this.controller.containsKey(guildid)) {
 			mc = this.controller.get(guildid);
 		}else {
-			mc = new MusicController(Melody.INSTANCE.shardMan.getGuildById(guildid));
+			mc = new MusicController(Melody.INSTANCE._shardMan.getGuildById(guildid));
 			this.controller.put(guildid, mc);
 		}
 		return mc;

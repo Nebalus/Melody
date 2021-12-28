@@ -27,7 +27,7 @@ public class AudioLoadResult implements AudioLoadResultHandler{
 	private final String imageUrl;
 	private final Service service;
 	
-	private MessageFormatter mf = Melody.INSTANCE.getMessageFormatter();
+	private MessageFormatter mf = Melody.INSTANCE._messageformatter;
 	
     public AudioLoadResult(MusicController controller, String uri, Service service) {
     	this.controller = controller;

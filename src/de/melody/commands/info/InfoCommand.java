@@ -44,7 +44,7 @@ public class InfoCommand implements ServerCommand{
 		String smallmemory = new String(r.totalMemory()+"");
 		String bigmemory = new String(r.totalMemory()/ 1048576+"");
 		
-		builder.setDescription(Melody.INSTANCE.getMessageFormatter().format(guild, "feedback.info.botinfo",
+		builder.setDescription(Melody.INSTANCE._messageformatter.format(guild, "feedback.info.botinfo",
 			"JDA",
 			Constants.BUILDVERSION,
 			Constants.BUILDDATE,
@@ -57,7 +57,7 @@ public class InfoCommand implements ServerCommand{
 			+ "Cores: "+r.availableProcessors()+"\n"
 			+ "CPU Arch: "+prop.getProperty("os.arch")+"\n"
 			+ "Memory Usage: "+bigmemory+"."+smallmemory.substring(bigmemory.length())+"MB\n"
-			+ "Uptime: "+MathHelper.decodeStringFromTimeMillis(System.currentTimeMillis() - Melody.INSTANCE.startup)+"```");
+			+ "Uptime: "+MathHelper.decodeStringFromTimeMillis(System.currentTimeMillis() - Melody.INSTANCE._startupmillis)+"```");
 		builder.setFooter("Made by Nebalus#1665 with <3");
 		
 		return builder;

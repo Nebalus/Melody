@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
-import de.melody.datamanagment.LiteSQL;
 import de.melody.tools.ConsoleLogger;
 import net.dv8tion.jda.api.entities.User;
 
@@ -22,22 +21,21 @@ public class UserEntity {
 	private Boolean needtoexport = false;
 	
 	private Melody melody = Melody.INSTANCE;
-	private LiteSQL database = melody.getDatabase();
 	
 	public UserEntity(User user) {
 		this.userid = user.getIdLong();
 		this.lasttimeheard = System.currentTimeMillis();
 		this.firsttimeheard = System.currentTimeMillis();
-		if(database.isConnected()) {
+		if(melody._database.isConnected()) {
 			try {
-				ResultSet rs = database.onQuery("SELECT * FROM userdata WHERE PK_userid = " + userid);	
+				ResultSet rs = melody._database.onQuery("SELECT * FROM userdata WHERE PK_userid = " + userid);	
 				if(rs.next()) {
 					favoriteplaylistid = rs.getInt("favoriteplaylist");
 					heardtime = rs.getInt("heardtime");
 					firsttimeheard = rs.getLong("firsttimeheard");
 					lasttimeheard = rs.getLong("lasttimeheard");
 				}else {
-					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO userdata(PK_userid,firsttimeheard) VALUES(?,?)");
+					PreparedStatement ps = melody._database.getConnection().prepareStatement("INSERT INTO userdata(PK_userid,firsttimeheard) VALUES(?,?)");
 					ps.setLong(1, userid);
 					ps.setLong(2, firsttimeheard);
 					ps.executeUpdate();
@@ -92,10 +90,10 @@ public class UserEntity {
 	}
 	
 	public boolean export() {
-		if(database.isConnected()) {
+		if(melody._database.isConnected()) {
 			if(needtoexport) {
 				try {
-					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE userdata SET "
+					PreparedStatement ps = melody._database.getConnection().prepareStatement("UPDATE userdata SET "
 							+ "favoriteplaylist = ?,"
 							+ "heardtime = ?,"
 							+ "lasttimeheard = ? WHERE PK_userid = ?");

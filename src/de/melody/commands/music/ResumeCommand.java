@@ -23,14 +23,14 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class ResumeCommand implements ServerCommand{
 
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
+	private MessageFormatter mf = melody._messageformatter;
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
-			AudioPlayer player = melody.playerManager.getController(guild.getIdLong()).getPlayer();
-			melody.playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
+			AudioPlayer player = melody._playerManager.getController(guild.getIdLong()).getPlayer();
+			melody._playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
 			if(player.isPaused()) {
 				Messenger.sendMessageEmbed(channel, Emoji.RESUME+" "+mf.format(guild, "music.track.resume")).queue();		
 				player.setPaused(false);

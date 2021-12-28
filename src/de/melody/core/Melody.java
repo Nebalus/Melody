@@ -74,20 +74,20 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Melody{
 	public static Melody INSTANCE;
-	public ShardManager shardMan;
-	private MessageFormatter messageformatter;
+	public ShardManager _shardMan;
+	public MessageFormatter _messageformatter;
+	public AudioPlayerManager _audioPlayerManager;
+	public PlayerManager _playerManager;
+	public EntityManager _entityManager;
+	public LiteSQL _database;
+	public CommandManager _cmdManager;
+	public Config _config;
+	public SpotifyUtils _spotifyutils;
+	
+	public final Long _startupmillis; 
+	
 	private Thread loop;
 	private Thread auto_save;
-	public AudioPlayerManager audioPlayerManager;
-	public PlayerManager playerManager;
-	public EntityManager entityManager;
-	public LiteSQL database;
-	private CommandManager cmdManager;
-	public Config config;
-	
-	public SpotifyUtils spotifyutils;
-	
-	public final Long startup; 
 	
 	public static void main(String[] args) {
 		try {
@@ -96,59 +96,56 @@ public class Melody{
 			e.printStackTrace();
 			System.exit(0);
 		}
-		
-		//System.out.println(args[0]);
 	}
 	
 	private Melody() throws LoginException, IllegalArgumentException, InterruptedException, IOException {
-		final Long startupMillis = System.currentTimeMillis();
-		startup = System.currentTimeMillis();
+		_startupmillis = System.currentTimeMillis();
 		INSTANCE = this;
 		if(Constants.TEMP_DIRECTORY.exists()) {
 			FileUtils.cleanDirectory(Constants.TEMP_DIRECTORY);
 		}else {
 			Constants.TEMP_DIRECTORY.mkdir();
 		}
-		config = new Config(INSTANCE);
+		_config = new Config(INSTANCE);
 		//Loads the local SQL database
-		database = new LiteSQL();
+		_database = new LiteSQL();
 		//Connects to the Spotify API to retriev track information
-		spotifyutils = new SpotifyUtils(Constants.SPOTIFY_CLIENTID, Constants.SPOTIFY_CLIENTSECRET);
+		_spotifyutils = new SpotifyUtils(Constants.SPOTIFY_CLIENTID, Constants.SPOTIFY_CLIENTSECRET);
 		//Loads the language system
-		messageformatter = new MessageFormatter();
+		_messageformatter = new MessageFormatter();
 		
 		//builds the bot 
-		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(config._bottoken);
+		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(_config._bottoken);
 		configureMemoryUsage(builder); 
 	
 		builder.addEventListeners(new CommandListener() , new MusicUtil(), new ReactListener());
 		builder.setActivity(Activity.playing("booting myself..."));
 		
-		this.audioPlayerManager = new DefaultAudioPlayerManager();
-		this.playerManager = new PlayerManager();
-		this.entityManager = new EntityManager();
-		this.cmdManager = new CommandManager(this);
-		this.shardMan = builder.build();
+		this._audioPlayerManager = new DefaultAudioPlayerManager();
+		this._playerManager = new PlayerManager();
+		this._entityManager = new EntityManager();
+		this._cmdManager = new CommandManager(this);
+		this._shardMan = builder.build();
 		
-		for(JDA jda : this.shardMan.getShards()) {
+		for(JDA jda : this._shardMan.getShards()) {
 			jda.awaitReady();
 		}
 		
-		cmdManager.registerCommands(new JoinCommand(), new FastforwardCommand(), new RewindCommand(), new SeekCommand(),
+		_cmdManager.registerCommands(new JoinCommand(), new FastforwardCommand(), new RewindCommand(), new SeekCommand(),
 				new PlayCommand(), new VolumeCommand(), new PauseCommand(), new ResumeCommand(),
 				new StopCommand(), new LeaveCommand(), new TrackinfoCommand(), new QueueCommand(), new SkipCommand(),
 				new InfoCommand(), new PingCommand(), new ConfigCommand(), new InviteCommand(), new ShuffleCommand(),
 				new LoopCommand(), new StayCommand(), new BackCommand(), new PrefixCommand(), new RestartCommand(),
 				new CleanCommand(), new GetHostIPCommand(), new ExportcmdCommand(), new HelpCommand(), new ShutdownCommand());
 		
-		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
-		AudioSourceManagers.registerLocalSource(audioPlayerManager);
-		audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
+		AudioSourceManagers.registerRemoteSources(_audioPlayerManager);
+		AudioSourceManagers.registerLocalSource(_audioPlayerManager);
+		_audioPlayerManager.getConfiguration().setFilterHotSwapEnabled(true);
 		
 		
 		runLoop();
 		//shutdown();
-		ConsoleLogger.info("Bot", "Melody online! ("+(System.currentTimeMillis() - startupMillis)+"ms)");
+		ConsoleLogger.info("Bot", "Melody online! ("+(System.currentTimeMillis() - _startupmillis)+"ms)");
 	}
 	
 	private void runLoop() {
@@ -158,8 +155,8 @@ public class Melody{
 				if(System.currentTimeMillis() > time) {
 					try{
 						time = System.currentTimeMillis()+1000;
-						MusicUtil.onRefreshAutoDisabler(shardMan);
-						spotifyutils.update();
+						MusicUtil.onRefreshAutoDisabler(_shardMan);
+						_spotifyutils.update();
 						onStatusUpdate();
 						onCaculatingPlayedMusik();
 					}catch(Exception e){
@@ -190,20 +187,20 @@ public class Melody{
 		ConsoleLogger.debug("Auto-Saver", "Starting to export cache");
 		try{
 			boolean export = false;
-			for(Entry<Long, GuildEntity> entry : entityManager.guildentity.entrySet()) {
+			for(Entry<Long, GuildEntity> entry : _entityManager.guildentity.entrySet()) {
 				GuildEntity value = entry.getValue();
 				if(value.getExpireTime() <= System.currentTimeMillis()) {
-					entityManager.removeGuildEntity(value);
+					_entityManager.removeGuildEntity(value);
 					export = true;
 				}else if(value.getNeedToExport()) {
 					value.export();
 					export = true;
 				}
 			}
-			for(Entry<Long, UserEntity> entry : entityManager.userentity.entrySet()) {
+			for(Entry<Long, UserEntity> entry : _entityManager.userentity.entrySet()) {
 				UserEntity value = entry.getValue();
 				if(value.getExpireTime() <= System.currentTimeMillis()) {
-					entityManager.removeUserEntity(value);
+					_entityManager.removeUserEntity(value);
 					export = true;
 				}else if(value.getNeedToExport()) {
 					value.export();
@@ -222,16 +219,16 @@ public class Melody{
 	}
 	
 	public void onCaculatingPlayedMusik() {
-		for(Guild g : shardMan.getGuilds()) {
+		for(Guild g : _shardMan.getGuilds()) {
 			GuildVoiceState state;
 			if(g.getSelfMember() != null && (state = g.getSelfMember().getVoiceState()) != null) {
 				VoiceChannel vc;
 				if((vc = state.getChannel()) != null) {
-					MusicController controller = playerManager.getController(vc.getGuild().getIdLong());	
+					MusicController controller = _playerManager.getController(vc.getGuild().getIdLong());	
 					AudioPlayer player = controller.getPlayer();
 					if(player.getPlayingTrack() != null && !player.isPaused()) {
 						
-						GuildEntity ge = entityManager.getGuildEntity(g);
+						GuildEntity ge = _entityManager.getGuildEntity(g);
 						int playdata = ge.getPlayTime();
 						playdata++;
 						ge.setPlayTime(playdata);
@@ -241,7 +238,7 @@ public class Melody{
 							if(!m.getUser().isBot()) {
 								
 								//onCaculatingHeardMusic
-								UserEntity ue = entityManager.getUserEntity(m.getUser());
+								UserEntity ue = _entityManager.getUserEntity(m.getUser());
 								int listendata = ue.getHeardTime();
 								listendata++;
 								ue.setHeardTime(listendata);
@@ -259,11 +256,11 @@ public class Melody{
 		if(nextStatusUpdate <= 0) {
 			Random rand = new Random();
 			int i = rand.nextInt(3);
-			shardMan.getShards().forEach(jda ->{
+			_shardMan.getShards().forEach(jda ->{
 				switch(i) {
 				case 0:
 					int musicguilds = 0;
-					for(Guild g : shardMan.getGuilds()) {
+					for(Guild g : _shardMan.getGuilds()) {
 						if(g.getSelfMember().getVoiceState().getChannel() != null) {
 							musicguilds++;
 						}
@@ -284,7 +281,7 @@ public class Melody{
 		}
 	}
 	
-	public void safeshutdown() {
+	public void safeShutdown() {
 		if(loop != null) {
 			loop.interrupt();
 		}	
@@ -292,10 +289,10 @@ public class Melody{
 			auto_save.interrupt();
 		}
 		exporttodatabase();
-		database.disconnect();		
-		if(shardMan != null) {
-			shardMan.setStatus(OnlineStatus.OFFLINE);
-			shardMan.shutdown();
+		_database.disconnect();		
+		if(_shardMan != null) {
+			_shardMan.setStatus(OnlineStatus.OFFLINE);
+			_shardMan.shutdown();
 		}
 		ConsoleLogger.info(Constants.BUILDNAME+" offline!");
 		System.exit(0);
@@ -309,7 +306,7 @@ public class Melody{
 			try {
 				while((line = reader.readLine()) != null) {
 					if(line.equalsIgnoreCase("stop")) {
-						safeshutdown();
+						safeShutdown();
 						reader.close();
 						break;
 					}else {
@@ -333,26 +330,6 @@ public class Melody{
 	    // Enable presence updates 
 	    builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
 	    builder.setLargeThreshold(50);
-	}
-	
-	public CommandManager getCmdMan() {
-		return this.cmdManager;
-	}
-
-    public MessageFormatter getMessageFormatter() {
-		return this.messageformatter;
-    }
-    
-    public LiteSQL getDatabase() {
-    	return this.database;
-    }
-    
-    public EntityManager getEntityManager() {
-    	return this.entityManager;
-    }
-
-	public ShardManager getShardManager() {
-		return this.shardMan;
 	}
 	
 	public static String getCurrentJarPath() {

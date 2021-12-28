@@ -8,7 +8,7 @@ import de.melody.datamanagment.LiteSQL;
 import de.melody.music.Service;
 
 public class TrackEntity {
-	private LiteSQL database = Melody.INSTANCE.getDatabase();
+	private LiteSQL database = Melody.INSTANCE._database;
 	
 	private Service service;
 	private String url;

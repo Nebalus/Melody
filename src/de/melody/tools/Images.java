@@ -22,7 +22,7 @@ import net.dv8tion.jda.api.entities.Member;
 
 public class Images {
 
-	private static MessageFormatter mf = Melody.INSTANCE.getMessageFormatter();
+	private static MessageFormatter mf = Melody.INSTANCE._messageformatter;
 	
 	public static File tracktopng(String trackname,long trackplaytime, long tracklength, String trackauthor, Guild guild, Member userqueued) {
 		try {

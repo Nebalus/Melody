@@ -15,7 +15,7 @@ public class Utils {
 	
 	public static boolean doesGuildExist(Long GuildId) {
 		try {
-			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT guildid FROM guilds WHERE guildid = " + GuildId);
+			ResultSet rs = Melody.INSTANCE._database.onQuery("SELECT guildid FROM guilds WHERE guildid = " + GuildId);
 			if(rs.next()) {
 				return true;
 			}
@@ -27,7 +27,7 @@ public class Utils {
 	
 	public static Long getUserInt() {
 		try {
-			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT COUNT(*) FROM userdata");
+			ResultSet rs = Melody.INSTANCE._database.onQuery("SELECT COUNT(*) FROM userdata");
 			if(rs.next()) {
 				return rs.getLong("COUNT(*)");
 			}
@@ -39,7 +39,7 @@ public class Utils {
 	
 	public static Long getAllUsersHeardTimeSec() {
 		try {
-			ResultSet rs = Melody.INSTANCE.getDatabase().onQuery("SELECT SUM(heardtime) FROM userdata");
+			ResultSet rs = Melody.INSTANCE._database.onQuery("SELECT SUM(heardtime) FROM userdata");
 			if(rs.next()) {
 				return rs.getLong("SUM(heardtime)");
 			}
@@ -186,26 +186,26 @@ public class Utils {
 		public final static Long HEY_GUYS = 801638731136237568l;
 		
 		public final static String REFRESH = "ðŸ”„";
-		public final static String NEXT_TITLE = "â?­";
-		public final static String PREVIOUS_TITLE = "â?®";
-		public final static String FAST_FORWARD = "â?©";
-		public final static String REWIND = "â?ª";
-		public final static String PAUSE = "â?¸";
-		public final static String RESUME = "â–¶ï¸?";
-		public final static String BACK = "â—€ï¸?";
-		public final static String STOP = "â?¹";
+		public final static String NEXT_TITLE = "ï¿½?ï¿½";
+		public final static String PREVIOUS_TITLE = "ï¿½?ï¿½";
+		public final static String FAST_FORWARD = "ï¿½?ï¿½";
+		public final static String REWIND = "ï¿½?ï¿½";
+		public final static String PAUSE = "ï¿½?ï¿½";
+		public final static String RESUME = "â–¶ï¿½?";
+		public final static String BACK = "â—€ï¿½?";
+		public final static String STOP = "ï¿½?ï¿½";
 		public final static String SINGLE_LOOP = "ðŸ”‚";
-		public final static String QUEUE_LOOP = "ðŸ”?";
+		public final static String QUEUE_LOOP = "ï¿½?";
 		public final static String MUSIC_NOTE = "ðŸŽ¶";
 		public final static String INFINITY = "âˆž";
-		public final static String EXIT = "â?Œ";
+		public final static String EXIT = "ï¿½?ï¿½";
 		public final static String SPARKLING_HEART = "ðŸ’–";
 		public final static String OK_HAND = "ðŸ‘Œ";
-		public final static String EXCLAMATION_MARK = "â?—ï¸?";
+		public final static String EXCLAMATION_MARK = "ï¿½?ï¿½ï¿½?";
 		public final static String CLIPBOARD = "ðŸ“‹";
-		public final static String PENCIL = "âœ?ï¸?";
+		public final static String PENCIL = "ï¿½?ï¿½?";
 		public final static String CHECK_MARK = "âœ…";
-		public final static String WHITE_FLAG = "ðŸ?³ï¸?";
+		public final static String WHITE_FLAG = "ï¿½?ï¿½ï¿½?";
 		public final static String FIRECRACKER = "ðŸ§¨";
 		public final static String BELL = "ðŸ””";
 		public final static String GERMANY_FLAG = "ðŸ‡©ðŸ‡ª";

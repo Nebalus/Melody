@@ -44,9 +44,9 @@ public class PlayCommand implements ServerCommand{
 			GuildVoiceState state;
 			VoiceChannel vc;
 			if((state = member.getVoiceState()) != null && (vc = state.getChannel()) != null) {
-				MusicController controller = melody.playerManager.getController(guild.getIdLong());
-				melody.playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
-				AudioPlayerManager apm = melody.audioPlayerManager;
+				MusicController controller = melody._playerManager.getController(guild.getIdLong());
+				melody._playerManager.setAnounceChannelID(guild.getIdLong(), channel.getIdLong());
+				AudioPlayerManager apm = melody._audioPlayerManager;
 				AudioManager manager = guild.getAudioManager();
 				StringBuilder strBuilder = new StringBuilder();
 				for (int i = 1; i < args.length; i++) strBuilder.append(args[i] + " ");
@@ -64,7 +64,7 @@ public class PlayCommand implements ServerCommand{
 					switch(service) {
 						case SPOTIFY:
 							SpotifyApi spotify = new SpotifyApi.Builder()
-							.setAccessToken(Melody.INSTANCE.spotifyutils.getToken())
+							.setAccessToken(Melody.INSTANCE._spotifyutils.getToken())
 							.build();
 							if(url.toLowerCase().startsWith("https://open.spotify.com/track/")){
 								String[] urlid = url.split("/");

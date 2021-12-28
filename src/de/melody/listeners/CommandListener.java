@@ -21,7 +21,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class CommandListener extends ListenerAdapter{
 
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
+	private MessageFormatter mf = melody._messageformatter;
 	
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
@@ -31,7 +31,7 @@ public class CommandListener extends ListenerAdapter{
 				List<User> MentionedUsers = event.getMessage().getMentionedUsers();
 				TextChannel channel = event.getTextChannel();
 				Guild guild = event.getGuild();
-				GuildEntity ge = melody.getEntityManager().getGuildEntity(guild);
+				GuildEntity ge = melody._entityManager.getGuildEntity(guild);
 				if(message.startsWith(ge.getPrefix())) {
 					int count = 0;
 					for (int i = 0; i < ge.getPrefix().length(); i++) {
@@ -40,7 +40,7 @@ public class CommandListener extends ListenerAdapter{
 					String[] args = message.substring(count).split(" ");
 					if(args.length > 0){
 						try {
-							if(!melody.getCmdMan().performServer(args[0], event.getMember(), channel, event.getMessage(), event.getGuild(), ge)) {	
+							if(!melody._cmdManager.performServer(args[0], event.getMember(), channel, event.getMessage(), event.getGuild(), ge)) {	
 								Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.unknown-command"));
 							}
 						}catch(InsufficientPermissionException e) {
@@ -57,10 +57,10 @@ public class CommandListener extends ListenerAdapter{
 	@Override
 	public void onSlashCommand(SlashCommandEvent event){
 		if (event.isFromGuild()) {
-			GuildEntity ge = melody.getEntityManager().getGuildEntity(event.getGuild());
+			GuildEntity ge = melody._entityManager.getGuildEntity(event.getGuild());
 			ConsoleLogger.info(event.getName());
 			try {
-		    	if(!melody.getCmdMan().performServerSlash(event.getName(), event.getMember(), event.getChannel(), event.getGuild(), ge, event)) {	
+		    	if(!melody._cmdManager.performServerSlash(event.getName(), event.getMember(), event.getChannel(), event.getGuild(), ge, event)) {	
 		    		event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
 				}
 			}catch(InsufficientPermissionException e) {

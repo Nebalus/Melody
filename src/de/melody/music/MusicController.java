@@ -18,14 +18,14 @@ public class MusicController {
 	
 	public MusicController(Guild guild) {
 		this.guild = guild;
-		this.player = Melody.INSTANCE.audioPlayerManager.createPlayer();
+		this.player = Melody.INSTANCE._audioPlayerManager.createPlayer();
 		this.player.setPaused(false);
 		this.queue = new Queue(this);
 		this.afktime = Constants.MUSIK_AFK_DEFAULT;
 		
 		this.guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 		this.player.addListener(new TrackScheduler());
-		this.player.setVolume(Melody.INSTANCE.getEntityManager().getGuildEntity(guild).getVolume());
+		this.player.setVolume(Melody.INSTANCE._entityManager.getGuildEntity(guild).getVolume());
 		this.loopmode = LoopMode.NONE;
 		
 		/*

@@ -27,14 +27,14 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class LoopCommand implements ServerCommand{
 
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
+	private MessageFormatter mf = melody._messageformatter;
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		String[] args = message.getContentDisplay().split(" ");
 		GuildVoiceState state;
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
-			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			MusicController controller = melody._playerManager.getController(guild.getIdLong());
 			if(args.length > 1) {
 				LoopMode mode = LoopMode.getFromString(args[1]);
 				if(mode != null) {
@@ -82,7 +82,7 @@ public class LoopCommand implements ServerCommand{
 		if((state = guild.getSelfMember().getVoiceState()) != null && state.getChannel() != null) {
 			LoopMode loopmode = LoopMode.getFromString(event.getOption("loopmode").getAsString());
 			
-				MusicController controller = melody.playerManager.getController(guild.getIdLong());
+				MusicController controller = melody._playerManager.getController(guild.getIdLong());
 				if(loopmode != null) {
 					controller.setLoopMode(loopmode);
 					switch(controller.getLoopMode()) {

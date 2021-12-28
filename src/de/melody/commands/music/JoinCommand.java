@@ -25,7 +25,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 public class JoinCommand implements ServerCommand{
 	
 	private Melody melody = Melody.INSTANCE;
-	private MessageFormatter mf = melody.getMessageFormatter();
+	private MessageFormatter mf = melody._messageformatter;
 	
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
@@ -33,7 +33,7 @@ public class JoinCommand implements ServerCommand{
 		VoiceChannel vc;
 		if((state = member.getVoiceState()) != null && (vc = state.getChannel()) != null) {
 			guild.getAudioManager().openAudioConnection(vc);
-			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			MusicController controller = melody._playerManager.getController(guild.getIdLong());
 			AudioPlayer player = controller.getPlayer();
 			Messenger.sendMessage(channel, mf.format(guild, "music.info.bot-join-vc", vc.getName())).queue();
 			if(player.getPlayingTrack() == null) {
@@ -50,7 +50,7 @@ public class JoinCommand implements ServerCommand{
 		VoiceChannel vc;
 		if((state = member.getVoiceState()) != null && (vc = state.getChannel()) != null) {
 			guild.getAudioManager().openAudioConnection(vc);
-			MusicController controller = melody.playerManager.getController(guild.getIdLong());
+			MusicController controller = melody._playerManager.getController(guild.getIdLong());
 			AudioPlayer player = controller.getPlayer();
 			event.reply(mf.format(guild, "music.info.bot-join-vc", vc.getName())).queue();
 			if(player.getPlayingTrack() == null) {
