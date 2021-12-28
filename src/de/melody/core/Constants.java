@@ -6,16 +6,9 @@ import java.util.List;
 
 public final class Constants{
 	
-	public static final boolean DEVMODE = false;
-	public static final boolean DEBUGMODE = true;
-	public static final boolean ALLOWSLASHCOMMANDS = true;
-	public static final boolean AUTOUPDATE = true;
-	
 	public static final String BUILDVERSION = "BETA 0.6.6";	
 	public static final String BUILDDATE = "2021-12-20";	
 	public static final String BUILDNAME = "Melody";
-	
-	public static final String DEFAULTPREFIX = "m!";
 	
 	public static final Long ENTITYEXPIRETIME = 1000l*60l*60l;
 	
@@ -44,4 +37,8 @@ public final class Constants{
 	public static final String PIC_TRACKINFO_URL = "/trackinfo.png";
 	
 	public static final String STORAGE_DATABASE_URL = "/database.db";
+	public static final String CONFIG_URL = "/config.yml";
+	
+	public static final String SPOTIFY_CLIENTID = "3b931823a91148bfb33844f902fc18d3";
+	public static final String SPOTIFY_CLIENTSECRET = "3ed6e6f3567a4deeabfc668caf182c2d";
 }

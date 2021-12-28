@@ -3,7 +3,7 @@ package de.melody.tools;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.melody.core.Constants;
+import de.melody.core.Melody;
 
 public class ConsoleLogger {
 
@@ -29,13 +29,13 @@ public class ConsoleLogger {
 
     //debug
     public static void debug(Object className, Object message) {
-    	if(Constants.DEBUGMODE) {
+    	if(Melody.INSTANCE.config._debugmode) {
     		System.out.println(time.format(new Date()) + "[Debug] " + className + " : " + message);
     	}
     }
     
     public static void debug(Object message) {
-    	if(Constants.DEBUGMODE) {
+    	if(Melody.INSTANCE.config._debugmode) {
     		System.out.println(time.format(new Date()) + "[Debug] : " + message);
     	}
     }
