@@ -11,6 +11,7 @@ import de.melody.datamanagment.LiteSQL;
 import de.melody.entities.reacts.ReactionManager;
 import de.melody.speechpackets.Languages;
 import de.melody.tools.ConsoleLogger;
+import de.melody.tools.DataType;
 import de.melody.tools.Utils.Emoji;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -22,17 +23,17 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 public class GuildEntity{
 	
 	private Guild guild;
+	
+	//Options
 	private int volume = 50;
 	private String prefix = Melody.INSTANCE._config._defaultprefix;
 	private int playtime = 0;
 	private Long lastaudiochannelid = 0l;
-	
 	private boolean djonly = false;
 	private boolean voteskip = false;
 	private boolean staymode = false;
 	private boolean announcesongs = true;
 	private boolean preventduplicates = false;
-	
 	private Languages language = Languages.ENGLISH;
 	
 	private Long expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
@@ -47,37 +48,19 @@ public class GuildEntity{
 		this.reactionmanager = new ReactionManager();
 		if(database.isConnected()) {
 			try {
-				ResultSet rs = database.onQuery("SELECT * FROM guilds WHERE PK_guildid = " + getGuildId());	
-				if(rs.next()) {
-					if(rs.getInt("volume") > 0) {
-						volume = rs.getInt("volume");
+				ResultSet rsguild = database.onQuery("SELECT * FROM guilds WHERE PK_guildid = " + getGuildId());	
+				if(rsguild.next()) {
+					if(rsguild.getString("prefix") != null) {
+						prefix = rsguild.getString("prefix");
 					}
-					if(rs.getString("prefix") != null) {
-						prefix = rs.getString("prefix");
+					if(rsguild.getString("language") != null) {
+						language = Languages.getLanguage(rsguild.getInt("language"));
 					}
-					if(rs.getString("djonly") != null) {
-						djonly = rs.getBoolean("djonly");	
+					if(rsguild.getInt("playtime") > 0) {
+						playtime = rsguild.getInt("playtime");
 					}
-					if(rs.getString("voteskip") != null) {
-						voteskip = rs.getBoolean("voteskip");	
-					}
-					if(rs.getString("staymode") != null) {
-						staymode = rs.getBoolean("staymode");	
-					}
-					if(rs.getString("announcesongs") != null) {
-						announcesongs = rs.getBoolean("announcesongs");	
-					}
-					if(rs.getString("preventduplicates") != null) {
-						preventduplicates = rs.getBoolean("preventduplicates");	
-					}
-					if(rs.getString("language") != null) {
-						language = Languages.getLanguage(rs.getInt("language"));
-					}
-					if(rs.getInt("playtime") > 0) {
-						playtime = rs.getInt("playtime");
-					}
-					if(rs.getLong("lastaudiochannel") > 0) {
-						lastaudiochannelid = rs.getLong("lastaudiochannel");
+					if(rsguild.getLong("lastaudiochannel") > 0) {
+						lastaudiochannelid = rsguild.getLong("lastaudiochannel");
 					}
 				}else {
 					boolean mentioned = false;
@@ -93,10 +76,10 @@ public class GuildEntity{
 										+ "**Otherwise have fun listening to the music from my service** "+ Emoji.MUSIC_NOTE+" \n"
 										+ "PS: Thanks a lot for your support, that you added me to your discord server! "+Emoji.SPARKLING_HEART).queue();
 								mentioned = true;
-								//loads the guild in the database
 							}catch(InsufficientPermissionException e) {}
 						}
 					}
+					//loads the guild in the database
 					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(PK_guildid,firsttimeloaded) VALUES(?,?)");
 					ps.setLong(1, getGuildId());
 					ps.setLong(2, System.currentTimeMillis());
@@ -104,6 +87,37 @@ public class GuildEntity{
 					update();
 				}
 			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				ResultSet rsoptions = database.onQuery("SELECT * FROM guildoptions WHERE PK_guildid = " + getGuildId());	
+				while(rsoptions.next()) {
+					if(rsoptions.getString("content") != null) {
+						switch(GuildOptions.getFromDatabaseID(rsoptions.getInt("typeid"))) {
+							case ANNOUNCESONGS:
+								announcesongs = rsoptions.getBoolean("content");
+								break;
+							case VOLUME:
+								volume = rsoptions.getInt("content");
+								break;
+							case PREVENTDUPLICATES:
+								preventduplicates = rsoptions.getBoolean("content");
+								break;
+							case STAYMODE:
+								staymode = rsoptions.getBoolean("content");
+								break;
+							case DJONLY:
+								djonly = rsoptions.getBoolean("content");
+								break;
+							case VOTESKIP:
+								voteskip = rsoptions.getBoolean("content");
+							default:
+								break;		
+						}
+					}
+				}
+			}catch(SQLException e) {	
 				e.printStackTrace();
 			}
 		}
@@ -144,15 +158,14 @@ public class GuildEntity{
 		if((channel = guild.getVoiceChannelById(this.lastaudiochannelid)) != null) {
 			return channel;
 		}
-		channel = guild.getVoiceChannels().get(0);
-		lastaudiochannelid = channel.getIdLong();
-		return channel;
+		return null;
 	}
 	
 	public void setLastAudioChannelId(Long lastaudiochannelid) {
 		this.lastaudiochannelid = lastaudiochannelid;
 		update();
 	}
+	
 	public int getVolume() {
 		renewExpireTime();
 		return this.volume;
@@ -286,5 +299,47 @@ public class GuildEntity{
 			return true;
 		}
 		return false;
+	}
+	
+	pu
+	
+	private enum GuildOptions {
+
+		DJROLE(1, DataType.LONG),
+		PREVENTDUPLICATES(2, DataType.BOOLEAN),
+		ANNOUNCESONGS(3, DataType.BOOLEAN),
+		VOTESKIP(4, DataType.BOOLEAN),
+		VOLUME(5, DataType.INT),
+		STAYMODE(6, DataType.BOOLEAN),
+		DJONLY(7, DataType.BOOLEAN),
+		LANGUAGE(8, DataType.INT),
+		PREFIX(9, DataType.VARCHAR),
+		PLAYTIME(10, DataType.INT),
+		LASTAUDIOCHANNELID(11, DataType.LONG);
+		
+		final int databaseid;
+		final DataType datatype;
+		
+		GuildOptions(int databaseid, DataType datatype){
+			this.databaseid = databaseid; 
+			this.datatype = datatype;
+		}
+		
+		public DataType getDataType() {
+			return datatype;
+		}
+		
+		public int getDatabaseID() {
+			return databaseid;
+		}
+		
+		public static GuildOptions getFromDatabaseID(int id) {
+			for(GuildOptions options : GuildOptions.values()) {
+				if(options.getDatabaseID() == id) {
+					return options;
+				}
+			}
+			return null;
+		}
 	}
 }

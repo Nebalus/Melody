@@ -87,7 +87,7 @@ public class MathHelper {
 
 		long sekunden = uptime;
 		long minuten = sekunden/60;
-		long stunden = minuten/60;
+		long stunden = (minuten/60);
 		long tage = stunden/24;
 		stunden %= 24;
 		minuten %= 60;
@@ -104,10 +104,10 @@ public class MathHelper {
 			uptimeSuffix = minuten +"min "+uptimeSuffix;
 		}
 		if(stunden > 0) {
-			uptimeSuffix = stunden +"hour"+(stunden == 1 ? "s " : " ")+uptimeSuffix;
+			uptimeSuffix = stunden +"hour"+(stunden == 1 ? " " : "s ")+uptimeSuffix;
 		}
 		if(tage > 0) {
-			uptimeSuffix = tage +"day"+(tage == 1 ? "s " : " ")+uptimeSuffix;
+			uptimeSuffix = tage +"day"+(tage == 1 ? " " : "s ")+uptimeSuffix;
 		}
 		return uptimeSuffix;
 	}
