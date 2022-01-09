@@ -3,16 +3,19 @@ package de.melody.entities;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.datamanagment.LiteSQL;
 import de.melody.entities.reacts.ReactionManager;
-import de.melody.speechpackets.Languages;
+import de.melody.speechpackets.Language;
 import de.melody.tools.ConsoleLogger;
-import de.melody.tools.DataType;
 import de.melody.tools.Utils.Emoji;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -34,7 +37,7 @@ public class GuildEntity{
 	private boolean staymode = false;
 	private boolean announcesongs = true;
 	private boolean preventduplicates = false;
-	private Languages language = Languages.ENGLISH;
+	private Language language = Language.ENGLISH;
 	
 	private Long expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
 	private Boolean needtoexport = false;
@@ -42,6 +45,8 @@ public class GuildEntity{
 	private ReactionManager reactionmanager;
 	private Melody melody = Melody.INSTANCE;
 	private LiteSQL database = melody._database;
+	
+	private HashMap<Integer, ArrayOptionContainer> arrayoptions = new HashMap<Integer, ArrayOptionContainer>();
 	
 	public GuildEntity(Guild guild) {
 		this.guild = guild;
@@ -54,14 +59,40 @@ public class GuildEntity{
 						prefix = rsguild.getString("prefix");
 					}
 					if(rsguild.getString("language") != null) {
-						language = Languages.getLanguage(rsguild.getInt("language"));
+						language = Language.getLanguage(rsguild.getInt("language"));
+					}		
+					if(rsguild.getString("volume") != null) {
+						volume = rsguild.getInt("volume");
 					}
-					if(rsguild.getInt("playtime") > 0) {
+					if(rsguild.getString("djonly") != null) {
+						djonly = rsguild.getBoolean("djonly");	
+					}
+					if(rsguild.getString("voteskip") != null) {
+						voteskip = rsguild.getBoolean("voteskip");	
+					}
+					if(rsguild.getString("staymode") != null) {
+						staymode = rsguild.getBoolean("staymode");	
+					}
+					if(rsguild.getString("announcesongs") != null) {
+						announcesongs = rsguild.getBoolean("announcesongs");	
+					}
+					if(rsguild.getString("preventduplicates") != null) {
+						preventduplicates = rsguild.getBoolean("preventduplicates");	
+					}
+					if(rsguild.getString("playtime") != null) {
 						playtime = rsguild.getInt("playtime");
 					}
-					if(rsguild.getLong("lastaudiochannel") > 0) {
+					if(rsguild.getString("lastaudiochannel") != null) {
 						lastaudiochannelid = rsguild.getLong("lastaudiochannel");
 					}
+					/*
+					ResultSet rsoptions = database.onQuery("SELECT * FROM guildoptions WHERE PK_guildid = " + getGuildId());	
+					while(rsoptions.next()) {
+						if(rsoptions.getString("content") != null && rsoptions.getString("typeid") != null) {						
+							new ArrayOptionContainer(rsoptions.getLong("content"), ArrayOptions.getFromDatabaseID(rsoptions.getInt("typeid")), true);				
+						}
+					}
+					*/
 				}else {
 					boolean mentioned = false;
 					for(TextChannel tc : guild.getTextChannels()) {
@@ -87,37 +118,6 @@ public class GuildEntity{
 					update();
 				}
 			}catch(SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				ResultSet rsoptions = database.onQuery("SELECT * FROM guildoptions WHERE PK_guildid = " + getGuildId());	
-				while(rsoptions.next()) {
-					if(rsoptions.getString("content") != null) {
-						switch(GuildOptions.getFromDatabaseID(rsoptions.getInt("typeid"))) {
-							case ANNOUNCESONGS:
-								announcesongs = rsoptions.getBoolean("content");
-								break;
-							case VOLUME:
-								volume = rsoptions.getInt("content");
-								break;
-							case PREVENTDUPLICATES:
-								preventduplicates = rsoptions.getBoolean("content");
-								break;
-							case STAYMODE:
-								staymode = rsoptions.getBoolean("content");
-								break;
-							case DJONLY:
-								djonly = rsoptions.getBoolean("content");
-								break;
-							case VOTESKIP:
-								voteskip = rsoptions.getBoolean("content");
-							default:
-								break;		
-						}
-					}
-				}
-			}catch(SQLException e) {	
 				e.printStackTrace();
 			}
 		}
@@ -166,6 +166,11 @@ public class GuildEntity{
 		update();
 	}
 	
+	public Boolean isVoteSkip() {
+		renewExpireTime();
+		return this.voteskip;
+	}
+	
 	public int getVolume() {
 		renewExpireTime();
 		return this.volume;
@@ -186,11 +191,6 @@ public class GuildEntity{
 		update();
 	}
 	
-	public Boolean isVoteSkip() {
-		renewExpireTime();
-		return this.voteskip;
-	}
-	
 	public Boolean is24_7() {
 		renewExpireTime();
 		return this.staymode;
@@ -201,12 +201,12 @@ public class GuildEntity{
 		update();
 	}
 	
-	public void setLanguage(Languages newlanguage) {
+	public void setLanguage(Language newlanguage) {
 		this.language = newlanguage;
 		update();
 	}
 	
-	public Languages getLanguage() {
+	public Language getLanguage() {
 		renewExpireTime();
 		return this.language;
 	}
@@ -226,13 +226,20 @@ public class GuildEntity{
 		return this.djonly;
 	}
 	
+	public void setDjOnly(boolean newdjonly) {
+		this.djonly = newdjonly;
+		update();
+	}
+	
 	public Boolean isMemberDJ(Member member) {
 		List<Role> roles = member.getRoles();
 		if(isDjOnly()) {
 			for(Role role : roles) {
-				/*if(role.getIdLong() == djroleid && member.hasPermission(Permission.MANAGE_SERVER)) {
-					return true;
-				}*/
+				for(Long djroleid : getDJRolesID()) {
+					if(djroleid == role.getIdLong() || member.hasPermission(Permission.MANAGE_SERVER)) {
+						return true;
+					}
+				}
 			}	
 			return false;
 		}else {
@@ -253,6 +260,50 @@ public class GuildEntity{
 		return this.needtoexport;
 	}
 	
+	public void setDJRoleID(Long id) {
+		if(!getDJRolesID().contains(id)) {
+			Role role;
+			if((role = guild.getRoleById(id)) != null) {
+				
+			}
+		}
+	}
+	
+	public void removeDJRoleID(Long id) {
+		
+	}
+	
+	public List<Long> getDJRolesID(){
+		List<Long> list = new ArrayList<Long>();
+		for(Role role : getDJRoles()) {
+			ConsoleLogger.info("test1");
+			list.add(role.getIdLong());
+		}
+		return list;
+	}
+	
+	public List<Role> getDJRoles(){
+		List<Role> list = new ArrayList<Role>();
+		for(ArrayOptionContainer aoc : getArrayOptions(ArrayOptions.DJROLES)) {
+			Role role;
+			if((role = guild.getRoleById(aoc.getContent())) != null) {
+				list.add(role);
+			}
+		}
+		return list;
+	}
+	
+	private List<ArrayOptionContainer> getArrayOptions(ArrayOptions option) {
+		List<ArrayOptionContainer> optionarray = new ArrayList<ArrayOptionContainer>();	
+		for(Entry<Integer, ArrayOptionContainer> aocentry : arrayoptions.entrySet()) {
+			ArrayOptionContainer ao = aocentry.getValue();
+			if(ao.getOption().equals(option) && !ao.isDeleted()) {
+				optionarray.add(ao);
+			}
+		}
+		return optionarray;
+	}
+	
 	private void update() {
 		this.needtoexport = true;
 		renewExpireTime();
@@ -264,77 +315,130 @@ public class GuildEntity{
 	
 	public boolean export() {
 		if(database.isConnected()) {
-			if(needtoexport) {
+			for(Entry<Integer, ArrayOptionContainer> aocentry : arrayoptions.entrySet()) {
 				try {
-					PreparedStatement ps = database.getConnection().prepareStatement("UPDATE guilds SET "
-							+ "volume = ?,"
-							+ "prefix = ?,"
-							+ "voteskip = ?,"
-							+ "staymode = ?,"
-							+ "language = ?,"
-							+ "announcesongs = ?,"
-							+ "preventduplicates = ?,"
-							+ "playtime = ?,"
-							+ "lastaudiochannel = ?,"
-							+ "djonly = ? WHERE PK_guildid = ?");
-					ps.setInt(1, volume);
-					ps.setString(2, prefix);			
-					ps.setBoolean(3, voteskip);
-					ps.setBoolean(4, staymode);
-					ps.setInt(5, language.getDatabaseID());
-					ps.setBoolean(6, announcesongs);
-					ps.setBoolean(7, preventduplicates);
-					ps.setInt(8, playtime);
-					ps.setLong(9, lastaudiochannelid);
-					ps.setBoolean(10, djonly);
-					ps.setLong(11, getGuildId());
-					ps.executeUpdate();
-					ConsoleLogger.debug("export guild", getGuildId());
+					ConsoleLogger.debug("export aoc", getGuildId());
+					aocentry.getValue().update();
+					if(aocentry.getValue().isDeleted()) {
+						arrayoptions.remove(aocentry.getValue().hashCode());
+					}
 				} catch (SQLException e) {
 					e.printStackTrace();
-					return false;
 				}
-				needtoexport = false;
 			}
-			return true;
+			try {
+				PreparedStatement ps = database.getConnection().prepareStatement("UPDATE guilds SET "
+						+ "volume = ?,"
+						+ "prefix = ?,"
+						+ "voteskip = ?,"
+						+ "staymode = ?,"
+						+ "language = ?,"
+						+ "announcesongs = ?,"
+						+ "preventduplicates = ?,"
+						+ "playtime = ?,"
+						+ "lastaudiochannel = ?,"
+						+ "djonly = ? WHERE PK_guildid = ?");
+				ps.setInt(1, volume);
+				ps.setString(2, prefix);			
+				ps.setBoolean(3, voteskip);
+				ps.setBoolean(4, staymode);
+				ps.setInt(5, language.getDatabaseID());
+				ps.setBoolean(6, announcesongs);
+				ps.setBoolean(7, preventduplicates);
+				ps.setInt(8, playtime);
+				ps.setLong(9, lastaudiochannelid);
+				ps.setBoolean(10, djonly);
+				ps.setLong(11, getGuildId());
+				ps.executeUpdate();
+				ConsoleLogger.debug("export guild", getGuildId());
+					
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return false;
+			}
+			needtoexport = false;
 		}
 		return false;
 	}
 	
-	pu
+	private class ArrayOptionContainer{
+		
+		private boolean loaded = false;
+		private boolean delete = false;
+		private final Long content;
+		private final ArrayOptions arrayoption;
+		
+		public ArrayOptionContainer(Long content, ArrayOptions arrayoption, boolean loaded) {
+			this.loaded = loaded;
+			this.content = content;
+			this.arrayoption = arrayoption;
+			arrayoptions.put(this.hashCode(), this);
+		}	
+		
+		public ArrayOptionContainer(Long content, ArrayOptions arrayoption) {
+			this.content = content;
+			this.arrayoption = arrayoption;
+			arrayoptions.put(this.hashCode(), this);
+		}	
+		
+		public void update() throws SQLException {
+			if(loaded) {
+				ConsoleLogger.debug("export oc", "Loaded");
+				if(delete) {
+					ConsoleLogger.debug("export oc", "Delete");
+					PreparedStatement ps = database.getConnection().prepareStatement("DELETE FROM guildoptions WHERE typeid = ? AND content = ? AND PK_guildid = ?");
+					ps.setInt(1, arrayoption.getDatabaseID());
+					ps.setLong(2, content);
+					ps.setLong(3, getGuildId());
+					ps.executeUpdate();
+				}
+			}else {
+				PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guildoptions(typeid,content,PK_guildid) VALUES(?,?,?)");
+				ps.setInt(1, arrayoption.getDatabaseID());
+				ps.setLong(2, content);
+				ps.setLong(3, getGuildId());
+				ps.executeUpdate();
+				ConsoleLogger.debug("export oc", "Update");
+				loaded = true;
+			}
+		}
+		
+		public void delete() {
+			delete = true;
+		}
+		
+		public boolean isDeleted() {
+			return delete;
+		}
+		
+		public ArrayOptions getOption() {
+			return arrayoption;
+		}
+		
+		public Long getContent() {
+			return content;
+		}
+	}
 	
-	private enum GuildOptions {
+	private enum ArrayOptions {
 
-		DJROLE(1, DataType.LONG),
-		PREVENTDUPLICATES(2, DataType.BOOLEAN),
-		ANNOUNCESONGS(3, DataType.BOOLEAN),
-		VOTESKIP(4, DataType.BOOLEAN),
-		VOLUME(5, DataType.INT),
-		STAYMODE(6, DataType.BOOLEAN),
-		DJONLY(7, DataType.BOOLEAN),
-		LANGUAGE(8, DataType.INT),
-		PREFIX(9, DataType.VARCHAR),
-		PLAYTIME(10, DataType.INT),
-		LASTAUDIOCHANNELID(11, DataType.LONG);
+		DJROLES(1),
+		BANNEDMEMBERS(2),
+		RESTRICTEDVC(3),
+		RESTRICTEDCHAT(4);
 		
 		final int databaseid;
-		final DataType datatype;
 		
-		GuildOptions(int databaseid, DataType datatype){
+		ArrayOptions(int databaseid){
 			this.databaseid = databaseid; 
-			this.datatype = datatype;
 		}
-		
-		public DataType getDataType() {
-			return datatype;
-		}
-		
+	
 		public int getDatabaseID() {
 			return databaseid;
 		}
 		
-		public static GuildOptions getFromDatabaseID(int id) {
-			for(GuildOptions options : GuildOptions.values()) {
+		public static ArrayOptions getFromDatabaseID(int id) {
+			for(ArrayOptions options : ArrayOptions.values()) {
 				if(options.getDatabaseID() == id) {
 					return options;
 				}

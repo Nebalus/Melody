@@ -6,7 +6,7 @@ import de.melody.entities.GuildEntity;
 import de.melody.tools.commandbuilder.CommandManager;
 import de.melody.tools.commandbuilder.CommandPermission;
 import de.melody.tools.commandbuilder.CommandType;
-import de.melody.tools.commandbuilder.ServerCommand;
+import de.melody.tools.commandbuilder.Command;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
-public class ExportcmdCommand implements ServerCommand {
+public class ExportcmdCommand implements Command {
 	
 	private final String htmlfile = "<!doctype html>\r\n"
 			+ "<html lang=\"en\">\r\n"
@@ -130,7 +130,7 @@ public class ExportcmdCommand implements ServerCommand {
 		channel.sendMessage("Generating commands.html please wait").queue();
 		String content = "";
 		CommandManager cmdman = Melody.INSTANCE._cmdManager;
-		for(ServerCommand scmd : cmdman.getRawCommands()) {
+		for(Command scmd : cmdman.getRawCommands()) {
 			if(!scmd.getMainPermmision().equals(CommandPermission.DEVELOPER)) {
 				content = content + addCommand(scmd.getCommandPrefix()[0],scmd.getCommandDescription(),scmd.getCommandPrefix());
 			}

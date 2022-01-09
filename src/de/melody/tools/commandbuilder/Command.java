@@ -9,8 +9,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-
-public interface ServerCommand {
+public interface Command {
 
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity);
 	

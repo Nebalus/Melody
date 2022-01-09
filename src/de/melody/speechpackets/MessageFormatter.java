@@ -16,10 +16,10 @@ import net.dv8tion.jda.api.entities.Guild;
 
 public class MessageFormatter {
 	
-	private HashMap<Languages, JSONObject> getJSONMessage = new HashMap<Languages, JSONObject>();
+	private HashMap<Language, JSONObject> getJSONMessage = new HashMap<Language, JSONObject>();
 	private Melody melody = Melody.INSTANCE;
 	public MessageFormatter() {
-		for (Languages language : Languages.values()) {
+		for (Language language : Language.values()) {
 			try {
 				InputStream link = getClass().getResourceAsStream("/de/melody/speechpackets/"+language.getFileName());
 				File file = new File(Constants.TEMP_DIRECTORY + "/" +language.getFileName());
@@ -33,12 +33,12 @@ public class MessageFormatter {
 	
 	public String format(Guild guild, String key, Object... args) {
 		GuildEntity guildentity = melody._entityManager.getGuildEntity(guild);
-		Languages language = guildentity.getLanguage();
-		String message = "JSON-Error {"+key+"} - "+language.code;
+		Language language = guildentity.getLanguage();
+		String message = "JSON-Error {"+key.toLowerCase()+"} - "+language.code;
 	    try {
 			JSONObject json = getJSONMessage.get(language);
-			message = json.getString(key);
-			if(language.equals(Languages.GERMAN)) {
+			message = json.getString(key.toLowerCase());
+			if(language.equals(Language.GERMAN)) {
 				message = message.replace("ss", "ß");
 				message = message.replace("ae", "ä");
 				message = message.replace("oe", "ö");

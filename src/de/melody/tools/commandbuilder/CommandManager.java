@@ -22,47 +22,45 @@ import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 public class CommandManager {
 
-	private ConcurrentHashMap<String, ServerCommand> chatcommands;
-	private ConcurrentHashMap<String, ServerCommand> slashcommands;
+	private ConcurrentHashMap<String, Command> commands;
 	
-	private ArrayList<ServerCommand> rawcommands;
+	private ArrayList<Command> rawcommands;
 	
 	private Melody melody;
 	public CommandManager(Melody melody) {
-		this.chatcommands = new ConcurrentHashMap<>();
+		this.commands = new ConcurrentHashMap<>();
 		this.melody = melody;
-		this.slashcommands = new ConcurrentHashMap<>();
-		this.rawcommands = new ArrayList<ServerCommand>();
+		this.rawcommands = new ArrayList<Command>();
 	}
 	
-	public ArrayList<ServerCommand> getRawCommands(){
+	public ArrayList<Command> getRawCommands(){
 		return rawcommands;
 	}
 	
 	//Versuche die beiden forschleifen zusammenfügen
-	public CommandManager registerCommands(ServerCommand... cmd) {
-		for(ServerCommand sc : cmd) {
+	public CommandManager registerCommands(Command... cmd) {
+		for(Command sc : cmd) {
 			rawcommands.add(sc);
 			if(sc.getCommandType().isChat()) {
 				for(String command : sc.getCommandPrefix()) {
 					ConsoleLogger.debug("COMMAND-REGISTER", "Loading Chat Command '"+command+"'");
-					this.chatcommands.put(command, sc);
+					this.commands.put(command, sc);
 				}	
 			}
 		}
 		for(JDA jda : melody._shardMan.getShards()) {
 			CommandListUpdateAction slashcommands = jda.updateCommands();
 			if(Melody.INSTANCE._config._allowslashcommands) {
-				for(ServerCommand sc : cmd) {
+				for(Command sc : cmd) {
 					if(sc.getCommandType().isSlash()) {
 						if(sc.getCommandOptions() == null) {
 							slashcommands.addCommands(new CommandData(sc.getCommandPrefix()[0], sc.getCommandDescription()));
 							ConsoleLogger.debug("SLASH-BUILDER", sc.getCommandPrefix()[0]+" added naked Slash Command");
-							this.slashcommands.put(sc.getCommandPrefix()[0], sc);
+							commands.put(sc.getCommandPrefix()[0], sc);
 						}else {
 							slashcommands.addCommands(new CommandData(sc.getCommandPrefix()[0], sc.getCommandDescription()).addOptions(sc.getCommandOptions()));
 							ConsoleLogger.debug("SLASH-BUILDER", sc.getCommandPrefix()[0]+" added Slash Command");
-							this.slashcommands.put(sc.getCommandPrefix()[0], sc);
+							commands.put(sc.getCommandPrefix()[0], sc);
 						}
 					}
 				}
@@ -80,8 +78,8 @@ public class CommandManager {
 	}
 	
 	public boolean performServer(String command, Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {	
-		ServerCommand cmd;
-		if((cmd = this.chatcommands.get(command.toLowerCase())) != null && cmd.getCommandType().isChat()) {
+		Command cmd;
+		if((cmd = this.commands.get(command.toLowerCase())) != null && cmd.getCommandType().isChat()) {
 			switch(cmd.getMainPermmision()) {
 				case DEVELOPER:
 					if(Constants.DEVELOPERIDS.contains(member.getIdLong())) {
@@ -112,8 +110,8 @@ public class CommandManager {
 	}
 	
 	public boolean performServerSlash(String name, Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
-		ServerCommand cmd;
-		if((cmd = this.slashcommands.get(name.toLowerCase())) != null && cmd.getCommandType().isSlash()) {
+		Command cmd;
+		if((cmd = this.commands.get(name.toLowerCase())) != null && cmd.getCommandType().isSlash()) {
 			switch(cmd.getMainPermmision()) {
 				case DEVELOPER:
 					if(Constants.DEVELOPERIDS.contains(member.getIdLong())) {

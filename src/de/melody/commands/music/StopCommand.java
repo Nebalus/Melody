@@ -9,7 +9,7 @@ import de.melody.music.Queue;
 import de.melody.tools.Utils.Emoji;
 import de.melody.tools.commandbuilder.CommandPermission;
 import de.melody.tools.commandbuilder.CommandType;
-import de.melody.tools.commandbuilder.ServerCommand;
+import de.melody.tools.commandbuilder.Command;
 import de.melody.tools.messenger.Messenger;
 import de.melody.tools.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -21,7 +21,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-public class StopCommand implements ServerCommand{
+public class StopCommand implements Command{
 
 	private Melody melody = Melody.INSTANCE;
 	

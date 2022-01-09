@@ -2,7 +2,7 @@ package de.melody.speechpackets;
 
 import de.melody.tools.Utils.Emoji;
 
-public enum Languages {
+public enum Language {
 
 	ENGLISH("English","English.json","US",Emoji.UNITED_STATES_FLAG,0),
 	GERMAN("Deutsch","German.json","DE",Emoji.GERMANY_FLAG,1);
@@ -13,7 +13,7 @@ public enum Languages {
 	String icon;
 	int databaseid;
 	
-	private Languages(String name,String file,String code,String icon,int databaseid) {
+	private Language(String name,String file,String code,String icon,int databaseid) {
 		this.name = name;
 		this.file = file;
 		this.code = code;	
@@ -37,8 +37,8 @@ public enum Languages {
 		return databaseid;
 	}
 	
-	public static Languages getLanguage(String code) {
-		 for (Languages language : values()) {
+	public static Language getLanguage(String code) {
+		 for (Language language : values()) {
 			 if(language.code.equalsIgnoreCase(code) || language.name.equalsIgnoreCase(code)) {
 				 return language;
 			 }
@@ -46,9 +46,9 @@ public enum Languages {
 		return ENGLISH;
 	}
 	
-	public static Languages getLanguage(int id) {
-		 for (Languages language : values()) {
-			 if(language.databaseid == id) {
+	public static Language getLanguage(int databaseid) {
+		 for (Language language : values()) {
+			 if(language.databaseid == databaseid) {
 				 return language;
 			 }
         }

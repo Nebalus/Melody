@@ -87,7 +87,7 @@ public class MathHelper {
 
 		long sekunden = uptime;
 		long minuten = sekunden/60;
-		long stunden = (minuten/60);
+		long stunden = minuten/60;
 		long tage = stunden/24;
 		stunden %= 24;
 		minuten %= 60;

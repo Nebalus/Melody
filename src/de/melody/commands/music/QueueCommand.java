@@ -12,7 +12,7 @@ import de.melody.speechpackets.MessageFormatter;
 import de.melody.tools.Utils.Emoji;
 import de.melody.tools.commandbuilder.CommandPermission;
 import de.melody.tools.commandbuilder.CommandType;
-import de.melody.tools.commandbuilder.ServerCommand;
+import de.melody.tools.commandbuilder.Command;
 import de.melody.tools.helper.MathHelper;
 import de.melody.tools.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -25,7 +25,7 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 
-public class QueueCommand implements ServerCommand{
+public class QueueCommand implements Command{
 
 	private static Melody melody = Melody.INSTANCE;
 	private static MessageFormatter mf = melody._messageformatter;
