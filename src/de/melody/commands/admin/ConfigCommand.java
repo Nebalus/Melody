@@ -18,6 +18,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
@@ -37,7 +38,7 @@ public class ConfigCommand implements Command{
 			try {
 				switch(SubCommand.valueOf(args[1].toUpperCase())) {
 					case PREFIX:
-						sendSubCommandMenu(guildentity.getPrefix(), channel, SubCommand.PREFIX, guildentity.getPrefix());
+						sendSubCommandMenu(guildentity.getPrefix(), channel, SubCommand.PREFIX);
 						break;
 					case LANGUAGE:
 						String languagelist = "";
@@ -53,7 +54,11 @@ public class ConfigCommand implements Command{
 						sendSubCommandMenu(Utils.getStringFromBoolean(guildentity.isDjOnly()), channel, SubCommand.DJONLY, "on, off");
 						break;
 					case DJROLES:
-						sendSubCommandMenu(guildentity.getDJRolesID().toString(), channel, SubCommand.DJROLES, "@djrole");
+						String rolesmention = " ";
+						for(Role role : guildentity.getDJRoles()) {
+							rolesmention = rolesmention + "`" + role.getAsMention()+"` ";
+						}
+						sendSubCommandMenu(rolesmention, channel, SubCommand.DJROLES, "@djrole");
 						break;
 					default:
 						sendMainMenu(channel,guildentity.getPrefix());
@@ -128,6 +133,23 @@ public class ConfigCommand implements Command{
 						}
 						sendSubCommandMenu(Utils.getStringFromBoolean(guildentity.isDjOnly()), channel, SubCommand.DJONLY, "on, off");
 						break;
+						
+					case DJROLES:
+						if(Utils.isStringValidBoolean(args[2]) && args[3] != null) {
+							Long value = Long.decode(args[3]);
+							if(Utils.getBooleanFromString(args[2])) {
+								channel.sendMessage("add " + args[3]).queue();	
+								if(guildentity.addDJRoleID(value)) {
+									channel.sendMessage("succes").queue();	
+								}
+							}else {
+								channel.sendMessage("remove "+ args[3]).queue();	
+								if(guildentity.removeDJRoleID(value)) {
+									channel.sendMessage("succes").queue();	
+								}
+							}
+						}
+						break;
 					default:
 						sendMainMenu(channel,guildentity.getPrefix());
 						break;
@@ -147,23 +169,23 @@ public class ConfigCommand implements Command{
 		Messenger.sendMessageEmbed(channel, builder).queue();
 	}
 	
-	private void sendSubCommandMenu(Object currentvalue, TextChannel channel, SubCommand subcommand, String customvalidsettigs) {
+	private void sendSubCommandMenu(String currentvalue, TextChannel channel, SubCommand subcommand, String customvalidsettigs) {
 		Guild guild = channel.getGuild();
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setTitle(mf.format(guild, "config.info.submenu.title",Constants.BUILDNAME,subcommand.title));	
 		builder.setDescription(mf.format(guild, "config.sub."+subcommand.name()+".info"));
-		builder.addField(Emoji.CLIPBOARD+" "+mf.format(guild, "config.info.submenu.current-value"), "`"+currentvalue.toString()+"`", false);
+		builder.addField(Emoji.CLIPBOARD+" "+mf.format(guild, "config.info.submenu.current-value"), "`"+currentvalue+"`", false);
 		builder.addField(Emoji.PENCIL+" "+mf.format(guild, "config.info.submenu.usage"), "`"+melody._entityManager.getGuildEntity(guild).getPrefix()+"config " +subcommand.name().toLowerCase()+" "+subcommand.usage+"`", false);
 		builder.addField(Emoji.CHECK_MARK+" "+mf.format(guild, "config.info.submenu.valid-settings"), "`"+customvalidsettigs+"`", false);
 		Messenger.sendMessageEmbed(channel, builder).queue();
 	}
 	
-	private void sendSubCommandMenu(Object currentvalue, TextChannel channel, SubCommand subcommand) {
+	private void sendSubCommandMenu(String currentvalue, TextChannel channel, SubCommand subcommand) {
 		Guild guild = channel.getGuild();
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setTitle(mf.format(guild, "config.info.submenu.title",Constants.BUILDNAME,subcommand.title));	
 		builder.setDescription(mf.format(guild, "config.sub."+subcommand.name()+".info"));
-		builder.addField(Emoji.CLIPBOARD+" "+mf.format(guild, "config.info.submenu.current-value"), "`"+currentvalue.toString()+"`", false);
+		builder.addField(Emoji.CLIPBOARD+" "+mf.format(guild, "config.info.submenu.current-value"), "`"+currentvalue+"`", false);
 		builder.addField(Emoji.PENCIL+" "+mf.format(guild, "config.info.submenu.usage"), "`"+melody._entityManager.getGuildEntity(guild).getPrefix()+"config " +subcommand.name().toLowerCase()+" "+subcommand.usage+"`", false);
 		builder.addField(Emoji.CHECK_MARK+" "+mf.format(guild, "config.info.submenu.valid-settings"), "`"+mf.format(guild, "config.sub."+subcommand.name()+".valid-settings")+"`", false);
 		Messenger.sendMessageEmbed(channel, builder).queue();

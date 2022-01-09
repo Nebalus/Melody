@@ -1,19 +1,20 @@
 package de.melody.entities;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
 public class EntityManager {
 
-	public HashMap<Long, UserEntity> userentity;
-	public HashMap<Long, GuildEntity> guildentity;
-	public HashMap<Integer, PlaylistEntity> playlistentity;
+	public ConcurrentHashMap<Long, UserEntity> userentity;
+	public ConcurrentHashMap<Long, GuildEntity> guildentity;
+	public ConcurrentHashMap<Integer, PlaylistEntity> playlistentity;
 	
 	public EntityManager() {
-		this.userentity = new HashMap<Long, UserEntity>();
-		this.guildentity = new HashMap<Long, GuildEntity>();
-		this.playlistentity = new HashMap<Integer, PlaylistEntity>();
+		this.userentity = new ConcurrentHashMap<Long, UserEntity>();
+		this.guildentity = new ConcurrentHashMap<Long, GuildEntity>();
+		this.playlistentity = new ConcurrentHashMap<Integer, PlaylistEntity>();
 	}
 	
 	public UserEntity getUserEntity(User user) {

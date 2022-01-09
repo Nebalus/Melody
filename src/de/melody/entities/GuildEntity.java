@@ -4,9 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.melody.core.Constants;
 import de.melody.core.Melody;
@@ -46,7 +46,7 @@ public class GuildEntity{
 	private Melody melody = Melody.INSTANCE;
 	private LiteSQL database = melody._database;
 	
-	private HashMap<Integer, ArrayOptionContainer> arrayoptions = new HashMap<Integer, ArrayOptionContainer>();
+	private ConcurrentHashMap<Integer, ArrayOptionContainer> arrayoptions = new ConcurrentHashMap<Integer, ArrayOptionContainer>();
 	
 	public GuildEntity(Guild guild) {
 		this.guild = guild;
@@ -85,14 +85,14 @@ public class GuildEntity{
 					if(rsguild.getString("lastaudiochannel") != null) {
 						lastaudiochannelid = rsguild.getLong("lastaudiochannel");
 					}
-					/*
+					
 					ResultSet rsoptions = database.onQuery("SELECT * FROM guildoptions WHERE PK_guildid = " + getGuildId());	
 					while(rsoptions.next()) {
 						if(rsoptions.getString("content") != null && rsoptions.getString("typeid") != null) {						
 							new ArrayOptionContainer(rsoptions.getLong("content"), ArrayOptions.getFromDatabaseID(rsoptions.getInt("typeid")), true);				
 						}
 					}
-					*/
+	
 				}else {
 					boolean mentioned = false;
 					for(TextChannel tc : guild.getTextChannels()) {
@@ -260,23 +260,29 @@ public class GuildEntity{
 		return this.needtoexport;
 	}
 	
-	public void setDJRoleID(Long id) {
+	public boolean addDJRoleID(Long id) {
 		if(!getDJRolesID().contains(id)) {
-			Role role;
-			if((role = guild.getRoleById(id)) != null) {
-				
+			if(guild.getRoleById(id) != null) {
+				new ArrayOptionContainer(id, ArrayOptions.DJROLES);
+				return true;
 			}
 		}
+		return false;
 	}
 	
-	public void removeDJRoleID(Long id) {
-		
+	public boolean removeDJRoleID(Long id) {
+		for(ArrayOptionContainer aoc : getArrayOptions(ArrayOptions.DJROLES)) {
+			if(aoc.getContent().equals(id)) {
+				arrayoptions.get(aoc.hashCode()).delete();
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public List<Long> getDJRolesID(){
 		List<Long> list = new ArrayList<Long>();
 		for(Role role : getDJRoles()) {
-			ConsoleLogger.info("test1");
 			list.add(role.getIdLong());
 		}
 		return list;
@@ -314,18 +320,15 @@ public class GuildEntity{
 	}
 	
 	public boolean export() {
-		if(database.isConnected()) {
-			for(Entry<Integer, ArrayOptionContainer> aocentry : arrayoptions.entrySet()) {
+		if (database.isConnected()) {
+			arrayoptions.entrySet().forEach((aoc) -> {
 				try {
-					ConsoleLogger.debug("export aoc", getGuildId());
-					aocentry.getValue().update();
-					if(aocentry.getValue().isDeleted()) {
-						arrayoptions.remove(aocentry.getValue().hashCode());
-					}
+					ConsoleLogger.debug("export ArrayOptionContainer", getGuildId() + " " + aoc.getValue().getContent() + " " + aoc.getValue().getOption().name());
+					aoc.getValue().export();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			}
+			});
 			try {
 				PreparedStatement ps = database.getConnection().prepareStatement("UPDATE guilds SET "
 						+ "volume = ?,"
@@ -361,62 +364,71 @@ public class GuildEntity{
 		return false;
 	}
 	
-	private class ArrayOptionContainer{
-		
+	private class ArrayOptionContainer {
+
 		private boolean loaded = false;
 		private boolean delete = false;
-		private final Long content;
+		private Long content;
 		private final ArrayOptions arrayoption;
-		
+
 		public ArrayOptionContainer(Long content, ArrayOptions arrayoption, boolean loaded) {
+			// This Constructor will be executed when the data is taken from the Database
 			this.loaded = loaded;
 			this.content = content;
 			this.arrayoption = arrayoption;
 			arrayoptions.put(this.hashCode(), this);
-		}	
-		
+		}
+
 		public ArrayOptionContainer(Long content, ArrayOptions arrayoption) {
 			this.content = content;
 			this.arrayoption = arrayoption;
+			update();
 			arrayoptions.put(this.hashCode(), this);
-		}	
-		
-		public void update() throws SQLException {
-			if(loaded) {
-				ConsoleLogger.debug("export oc", "Loaded");
-				if(delete) {
-					ConsoleLogger.debug("export oc", "Delete");
+		}
+
+		public void export() throws SQLException {
+			if(this.loaded) {
+				if (this.delete) {
 					PreparedStatement ps = database.getConnection().prepareStatement("DELETE FROM guildoptions WHERE typeid = ? AND content = ? AND PK_guildid = ?");
-					ps.setInt(1, arrayoption.getDatabaseID());
-					ps.setLong(2, content);
+					ps.setInt(1, this.arrayoption.getDatabaseID());
+					ps.setLong(2, this.content);
 					ps.setLong(3, getGuildId());
+					ConsoleLogger.debug("export oc", "Delete");
 					ps.executeUpdate();
+					arrayoptions.remove(this.hashCode());
+					return;
 				}
 			}else {
-				PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guildoptions(typeid,content,PK_guildid) VALUES(?,?,?)");
-				ps.setInt(1, arrayoption.getDatabaseID());
-				ps.setLong(2, content);
-				ps.setLong(3, getGuildId());
-				ps.executeUpdate();
-				ConsoleLogger.debug("export oc", "Update");
-				loaded = true;
+				if (this.delete) {
+					arrayoptions.remove(this.hashCode());
+					ConsoleLogger.debug("export oc", "Delete");
+				}else {
+					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guildoptions(typeid,content,PK_guildid) VALUES(?,?,?)");
+					ps.setInt(1, this.arrayoption.getDatabaseID());
+					ps.setLong(2, this.content);
+					ps.setLong(3, getGuildId());
+					ps.executeUpdate();
+					ConsoleLogger.debug("export oc", "Update");
+					this.loaded = true;
+				}
 			}
 		}
-		
+
 		public void delete() {
-			delete = true;
+			this.delete = true;
+			update();
 		}
-		
+
 		public boolean isDeleted() {
-			return delete;
+			return this.delete;
 		}
-		
+
 		public ArrayOptions getOption() {
-			return arrayoption;
+			return this.arrayoption;
 		}
-		
+
 		public Long getContent() {
-			return content;
+			return this.content;
 		}
 	}
 	
