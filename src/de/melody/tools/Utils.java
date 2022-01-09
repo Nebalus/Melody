@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.json.JSONObject;
@@ -86,9 +87,19 @@ public class Utils {
 			return "off";
 		}
 	}
-	
+	/*
+	public static String formatArraytoString(ArrayList<Object> array) {
+		
+		if(array.isEmpty()) {
+			return null;
+		}else {
+			
+		}
+		
+		return null;
+	}
 
-	
+	*/
 	public static String getDomain(String url) {
 		if(url.startsWith("http://") || url.startsWith("https://")) {
 			String[] args = url.split("/");

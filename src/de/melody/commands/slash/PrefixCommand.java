@@ -1,12 +1,11 @@
 package de.melody.commands.slash;
 
-import de.melody.core.Constants;
 import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.MessageFormatter;
+import de.melody.tools.commandbuilder.Command;
 import de.melody.tools.commandbuilder.CommandPermission;
 import de.melody.tools.commandbuilder.CommandType;
-import de.melody.tools.commandbuilder.Command;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -40,7 +39,7 @@ public class PrefixCommand implements Command{
 
 	@Override
 	public String getCommandDescription() {
-		return "Gets the current prefix from "+Constants.BUILDNAME;
+		return "Gets the current prefix";
 	}
 	@Override
 	public OptionData[] getCommandOptions() {
