@@ -7,7 +7,7 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.tools.commandbuilder.CommandPermission;
 import de.melody.tools.commandbuilder.CommandType;
-import de.melody.tools.commandbuilder.ServerCommand;
+import de.melody.tools.commandbuilder.Command;
 import de.melody.tools.messenger.Messenger;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -19,7 +19,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
-public class HelpCommand implements ServerCommand{
+public class HelpCommand implements Command{
 
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
@@ -40,7 +40,7 @@ public class HelpCommand implements ServerCommand{
 			ArrayList<String> djcmds = new ArrayList<String>();
 			ArrayList<String> everyonecmds = new ArrayList<String>();
 			
-			for(ServerCommand scmd : Melody.INSTANCE._cmdManager.getRawCommands()) {
+			for(Command scmd : Melody.INSTANCE._cmdManager.getRawCommands()) {
 				switch(scmd.getMainPermmision()) {
 					case ADMIN:
 						admincmds.add("`"+scmd.getCommandPrefix()[0]+"`");

@@ -19,7 +19,7 @@ import de.melody.music.audioloader.AudioLoadResult;
 import de.melody.tools.Utils;
 import de.melody.tools.commandbuilder.CommandPermission;
 import de.melody.tools.commandbuilder.CommandType;
-import de.melody.tools.commandbuilder.ServerCommand;
+import de.melody.tools.commandbuilder.Command;
 import de.melody.tools.messenger.Messenger;
 import de.melody.tools.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -33,7 +33,7 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-public class PlayCommand implements ServerCommand{
+public class PlayCommand implements Command{
 
 	private Melody melody = Melody.INSTANCE;
 	

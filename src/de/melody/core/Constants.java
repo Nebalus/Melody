@@ -7,7 +7,7 @@ import java.util.List;
 public final class Constants{
 	
 	public static final String BUILDVERSION = "BETA 0.6.6";	
-	public static final String BUILDDATE = "2021-12-20";	
+	public static final String BUILDDATE = "2021-01-08";	
 	public static final String BUILDNAME = "Melody";
 	
 	public static final Long ENTITYEXPIRETIME = 1000l*60l*60l;

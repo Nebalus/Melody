@@ -208,6 +208,8 @@ public class Utils {
 		public final static String WHITE_FLAG = "🏳️";
 		public final static String FIRECRACKER = "🧨";
 		public final static String BELL = "🔔";
+		public final static String SILVERCD = "💿";
+		public final static String GOLDCD = "📀";
 		public final static String GERMANY_FLAG = "🇩🇪";
 		public final static String UNITED_STATES_FLAG = "🇺🇸";
 	}

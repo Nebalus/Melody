@@ -9,7 +9,7 @@ import de.melody.entities.GuildEntity;
 import de.melody.tools.Utils;
 import de.melody.tools.commandbuilder.CommandPermission;
 import de.melody.tools.commandbuilder.CommandType;
-import de.melody.tools.commandbuilder.ServerCommand;
+import de.melody.tools.commandbuilder.Command;
 import de.melody.tools.helper.MathHelper;
 import de.melody.tools.messenger.Messenger;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -22,7 +22,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 
-public class InfoCommand implements ServerCommand{
+public class InfoCommand implements Command{
 
 	@Override
 	public void performCommand(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
