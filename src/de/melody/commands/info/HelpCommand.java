@@ -61,7 +61,7 @@ public class HelpCommand implements Command{
 			builder.addField("**Admin Commands**", admincmds.toString().replace("[", "").replace("]", ""), false);
 			builder.addField("**DJ Commands**", djcmds.toString().replace("[", "").replace("]", ""), false);
 			builder.addField("**Everyone Commands**", everyonecmds.toString().replace("[", "").replace("]", ""), false);
-			builder.addField("**Web Dashboard**", "[View Commands]("+Constants.COMMAND_URL+")", false);
+			builder.addField("**Web Dashboard**", "[View Commands]("+Constants.COMMAND_URL+"?p="+guildentity.getPrefix()+")", false);
 			//builder.setFooter("Type '"+guildentity.getPrefix()+"help <CommandName>' for details on a command.");
 		}
 		return builder;

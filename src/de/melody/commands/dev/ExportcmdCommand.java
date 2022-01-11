@@ -48,6 +48,7 @@ public class ExportcmdCommand implements Command {
 			+ "    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{\"token\": \"c6a4cef6e7f14f58bb4f7b30c09261bf\"}'></script>\r\n"
 			+ "    <!-- End Cloudflare Web Analytics -->\r\n"
 			+ ""
+			+ "    <script language=\"JavaScript\" type=\"text/javascript\" src=\"assets/js/commands.js\"></script>"
 			+ "    <title>Melody - Commands</title>\r\n"
 			+ "   \r\n"
 			+ "    <style>\r\n"
@@ -78,10 +79,28 @@ public class ExportcmdCommand implements Command {
 			+ "            margin-top: 0rem;\r\n"
 			+ "            margin-bottom: 1rem;\r\n"
 			+ "        }\r\n"
+			+ "       #search-input{\r\n"
+			+ "            padding-left: 1rem;\r\n"
+			+ "            padding-right: 1rem;\r\n"
+			+ "            padding-top: 1rem;\r\n"
+			+ "            padding-bottom: 1rem;\r\n"
+			+ "            border-color: #23232e;\r\n"
+			+ "            box-decoration-break: slice;\r\n"
+			+ "            border-style: none;\r\n"
+			+ "            color: white;\r\n"
+			+ "            font-size: 2.5rem !important;\r\n"
+			+ "            line-height: 2rem !important;\r\n"
+			+ "        }\r\n"
 			+ "    </style>\r\n"
 			+ "  </head>\r\n"
 			+ "    \r\n"
 			+ "  <body>\r\n"
+			+ "      <main>\r\n"
+			+ "        <div class=\"cmdwrapper margin-center flex-col\">\r\n"
+			+ "            <input id=\"search-input\" placeholder=\"Search...\" autocomplete=\"off\" class=\"w-full bg-darker-gray rounded-lg\" maxlength=\"30\">\r\n"
+			+ "     		{CONTENT}\n"
+			+ "		 </div>\r\n"
+			+ "    </main>"
 			+ "   <nav class=\"navbar\">\r\n"
 			+ "      <ul class=\"navbar-nav\">\r\n"
 			+ "      <li class=\"logo\">\r\n"
@@ -117,11 +136,6 @@ public class ExportcmdCommand implements Command {
 			+ "        </li>\r\n"
 			+ "    </ul>\r\n"
 			+ "  </nav>\r\n"
-			+ "      <main>\r\n"
-			+ "        <div class=\"cmdwrapper margin-center flex-col\">\n"
-			+ "            {CONTENT}\n"
-			+ "        </div>\r\n"
-			+ "    </main>\r\n"
 			+ "  </body>\r\n"
 			+ "</html>";
 	
@@ -143,10 +157,12 @@ public class ExportcmdCommand implements Command {
 	
 	private String addCommand(String cmd, String cmddiscript, String[] prefix) {
 		String aliases = null;
+		String keywords = "";
 		if(prefix != null) {
 			try {
 				int time = 1;
 				for(String cmdp : prefix) {
+					keywords += cmdp+" ";
 					if(time != 1) {
 						if(time == 2) {
 							aliases = cmdp;
@@ -158,11 +174,14 @@ public class ExportcmdCommand implements Command {
 				}
 			}catch (Exception e) {}
 		}
-		return "<div class=\"cmd w-full bg-darker-gray rounded-lg\"> \n"
-				+ "<h2>"+Melody.INSTANCE._config._defaultprefix+cmd+"</h2>  \n"
+		
+		
+		
+		return "<div id=\"cmdcontainer\" class=\"cmd w-full bg-darker-gray rounded-lg\" keywords=\""+keywords+"\"> \n"
+				+ "<h2><span id=\"result-prefix\"></span>"+cmd+"</h2>  \n"
 				+ "<div class=\"cmddescription bg-dark-gray rounded-lg\">  \n"
 				+ (cmddiscript != null ? "<p>"+cmddiscript+"</p>" : "")+ "  \n"
-				+ (aliases != null ? "<p class=\"opacity-75\">Aliases: "+aliases.toString().replace("[", " ").replace("]", " ")+"</p>" : "")+ " \n"
+				+ (aliases != null ? "<p class=\"opacity-75\">Aliases: "+aliases+"</p>" : "")+ " \n"
 				+ "</div>\n"
 				+ "</div>\n";
 	}
