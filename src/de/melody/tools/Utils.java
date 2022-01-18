@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.json.JSONObject;
@@ -193,8 +192,7 @@ public class Utils {
 	}
 	
 	public static class Emoji {
-		
-		public final static Long HEY_GUYS = 801638731136237568l;
+public final static Long HEY_GUYS = 801638731136237568l;
 		
 		public final static String REFRESH = "🔄";
 		public final static String NEXT_TITLE = "⏭";

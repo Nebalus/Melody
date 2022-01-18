@@ -5,7 +5,6 @@ import de.melody.core.Melody;
 import de.melody.entities.GuildEntity;
 import de.melody.speechpackets.Language;
 import de.melody.speechpackets.MessageFormatter;
-import de.melody.tools.ConsoleLogger;
 import de.melody.tools.Utils;
 import de.melody.tools.Utils.Emoji;
 import de.melody.tools.commandbuilder.CommandPermission;
