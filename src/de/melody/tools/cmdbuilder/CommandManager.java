@@ -39,8 +39,11 @@ public final class CommandManager {
 	public boolean performServer(String command, Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {	
 		ServerCommand cmd;
 		ConsoleLogger.info(this.commandhash.get(command.toLowerCase()));
-		if((cmd = this.command.get(this.commandhash.get(command.toLowerCase()))) != null && cmd.getType().isChat()) {
-			return true;
+		if(this.commandhash.containsKey(command.toLowerCase())) {
+			if((cmd = this.command.get(this.commandhash.get(command.toLowerCase()))) != null && cmd.getType().isChat()) {
+				cmd.performMainCMD(member, channel, message, guild, guildentity);
+				return true;
+			}
 		}
 		return false;
 	}
