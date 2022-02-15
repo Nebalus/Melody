@@ -1,0 +1,7 @@
+{
+	"bottoken" : "INSERT TOKEN",
+	"debugmode" : true,
+	"defaultprefix" : "m!",
+    "allowslashcommands" : true,
+    "autoupdate" : true
+}
