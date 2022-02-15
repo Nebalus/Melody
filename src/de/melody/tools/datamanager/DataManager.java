@@ -41,6 +41,11 @@ public class DataManager {
 			File file = new File(getTempDirectory() + "/OLD_"+resource.getFileName());
 			Files.copy(link, file.getAbsoluteFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} else {
+			File parentfile = new File(DataHelper.getCurrentJarPath() + resource.parentfile);
+			if(!parentfile.exists()) {
+				parentfile.mkdirs();
+			}	
+			
 			InputStream link = getClass().getResourceAsStream(resource.getInternFilePath());
 			Files.copy(link, resource.getFile().getAbsoluteFile().toPath());
 		}
