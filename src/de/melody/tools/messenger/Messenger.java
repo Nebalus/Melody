@@ -1,13 +1,8 @@
 package de.melody.tools.messenger;
 
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import de.melody.core.Constants;
 import de.melody.core.Melody;
-import de.melody.speechpackets.MessageFormatter;
-import de.melody.tools.Images;
+import de.melody.tools.datamanager.FileResource;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -52,30 +47,18 @@ public class Messenger {
 	
 	@SuppressWarnings("deprecation")
 	public static void sendErrorMessage(TextChannel channel, ErrorMessageBuilder message) {
-		try {
-			channel.sendFile(Images.generateNewImage(ImageIO.read(Messenger.class.getResource(Constants.PIC_ERROR_LINE_URL))), "error-line.png").embed(message.build()).queue();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		channel.sendFile(FileResource.ERROR_LINE.getFile(), "error-line.png").embed(message.build()).queue();
 	}
 	
 	public static void sendErrorSlashMessage(SlashCommandEvent event, ErrorMessageBuilder message) {
 		event.replyEmbeds(message.build()).queue((picture)->{
-			try {
-				picture.editOriginal(Images.generateNewImage(ImageIO.read(Messenger.class.getResource(Constants.PIC_ERROR_LINE_URL))), "error-line.png").queue();
-			}catch (IOException e) {
-				e.printStackTrace();
-			}
+			picture.editOriginal(FileResource.ERROR_LINE.getFile(), "error-line.png").queue();
 		});
 	}
 	
 	@SuppressWarnings("deprecation")
 	public static void sendErrorMessage(MessageChannel channel, ErrorMessageBuilder message) {
-		try {
-			channel.sendFile(Images.generateNewImage(ImageIO.read(Messenger.class.getResource(Constants.PIC_ERROR_LINE_URL))), "error-line.png").embed(message.build()).queue();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		channel.sendFile(FileResource.ERROR_LINE.getFile(), "error-line.png").embed(message.build()).queue();
 	}
 	
 	public static class ErrorMessageBuilder{
@@ -88,7 +71,7 @@ public class Messenger {
 		public ErrorMessageBuilder() {}
 		
 		public ErrorMessageBuilder setMessageFormat(Guild g, String formatid, Object... args) {
-			MessageFormatter mf = Melody.INSTANCE._messageformatter;
+			MessageFormatter mf = Melody.INSTANCE.messageformatter;
 			HEADER_TEXT = mf.format(g, "error."+formatid+".header",args);
 			BODY_TEXT = mf.format(g, "error."+formatid+".body",args);
 			FOOTER_TEXT = formatid.replace(".", " > ").toUpperCase();

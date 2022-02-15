@@ -2,7 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>Melody</groupId>
   <artifactId>Melody</artifactId>
-  <version>Beta 0.6.6</version>
+  <version>BETA 0.6.6</version>
+  <name>Melody</name>
+  <description>An Opensource Musicbot for Discord!</description>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
@@ -15,7 +17,7 @@
       </plugin>
     </plugins>
   </build>
-  <repositories>
+ <repositories>
     <repository>
       <id>central</id>
       <name>bintray</name>
@@ -27,7 +29,7 @@
       <name>m2-dv8tion</name>
       <url>https://m2.dv8tion.net/releases</url>
   	</repository>
-  </repositories>
+  	</repositories>
   <dependencies>
     <dependency>
       <groupId>com.sedmelluq</groupId>
@@ -57,9 +59,9 @@
       <version>20210307</version>
 	</dependency>
 	<dependency>
-  <groupId>se.michaelthelin.spotify</groupId>
-  <artifactId>spotify-web-api-java</artifactId>
-  <version>6.5.4</version>
+  		<groupId>se.michaelthelin.spotify</groupId>
+  		<artifactId>spotify-web-api-java</artifactId>
+  		<version>6.5.4</version>
 </dependency>
   </dependencies>
 </project>

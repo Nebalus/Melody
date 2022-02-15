@@ -1,5 +1,5 @@
 {
-	"bottoken" : "INSERT BOTTOKEN",
+	"bottoken" : "INSERT TOKEN",
 	"debugmode" : true,
 	"defaultprefix" : "m!",
     "allowslashcommands" : true,
