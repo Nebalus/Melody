@@ -2,18 +2,19 @@ package de.melody.tools.audioplayer;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import de.melody.core.Melody;
 import de.melody.tools.audioplayer.enums.Service;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
 public final class QueuedTrack {
 
 	private AudioTrack track;
-	private final Member whoQueued;
+	private final Long whoQueuedId;
 	private final Service service;
 	
-	public QueuedTrack(AudioTrack track, Member whoQueued, Service service) {
+	public QueuedTrack(AudioTrack track, Long whoQueuedId, Service service) {
 		this.track = track;
-		this.whoQueued = whoQueued;
+		this.whoQueuedId = whoQueuedId;
 		this.service = service;
 	}
 
@@ -21,15 +22,16 @@ public final class QueuedTrack {
 		return service;
 	}
 	
-	public Member getWhoQueued() {
-		return whoQueued;
+	public User getWhoQueued() {
+		return Melody.INSTANCE.getUserById(whoQueuedId);
 	}
 	
 	public AudioTrack getTrack() {
 		return track;
 	}
 	
-	public void refreshTrack() {
+	public AudioTrack refreshTrack() {
 		track = track.makeClone();
+		return track;
 	}
 }

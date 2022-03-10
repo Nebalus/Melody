@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
@@ -92,5 +93,9 @@ public final class Melody {
 	
 	public Guild getGuildById(Long guildid) {
 		return shardMan.getGuildById(guildid);
+	}
+	
+	public User getUserById(Long userid) {
+		return shardMan.getUserById(userid);
 	}
 }

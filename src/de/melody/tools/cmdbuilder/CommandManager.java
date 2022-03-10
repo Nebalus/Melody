@@ -26,7 +26,11 @@ public final class CommandManager {
 		for(ServerCommand sc : cmd) {
 			final int hashcode = sc.hashCode();
 			
-			ConsoleLogger.debug("CMD-BUILDER", "HASH: " + hashcode +" / PREFIX: " + sc.getPrefixs()[0]);
+			ConsoleLogger.debug("CMD-BUILDER", 
+					"Loading CMD... "
+					+ "HASH: " + hashcode + " / "
+					+ "PREFIX: " + sc.getPrefixs()[0] + " / "
+					+ "TYPE: " + sc.getType().name());
 			
 			command.put(hashcode, sc);
 			
