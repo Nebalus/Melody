@@ -19,13 +19,9 @@ public final class Constants{
 	public static final String COMMAND_URL = "https://melodybot.ga/commands";
 	public static final String WEBSITE_URL = "https://melodybot.ga/";
 	
-	public static final int MUSIK_AFK_DEFAULT = 60;
+	public static final int MUSIK_AFK_DEFAULT = 30;
 	
 	public static final List<Long> DEVELOPERIDS = List.of(502213965485703168l);
 	
 	public static final int MAXVOLUME = 100;
-	
-	public static final String PIC_DEFAULT_AVATAR_URL = "/default-avatar.png";
-	public static final String PIC_ERROR_LINE_URL = "/error-line.png";
-	public static final String PIC_TRACKINFO_URL = "/trackinfo.png";
 }

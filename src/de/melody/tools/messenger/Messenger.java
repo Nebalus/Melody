@@ -47,18 +47,18 @@ public class Messenger {
 	
 	@SuppressWarnings("deprecation")
 	public static void sendErrorMessage(TextChannel channel, ErrorMessageBuilder message) {
-		channel.sendFile(FileResource.ERROR_LINE.getFile(), "error-line.png").embed(message.build()).queue();
+		channel.sendFile(FileResource.IMG_ERRORLINE.getFile(), "error-line.png").embed(message.build()).queue();
 	}
 	
 	public static void sendErrorSlashMessage(SlashCommandEvent event, ErrorMessageBuilder message) {
 		event.replyEmbeds(message.build()).queue((picture)->{
-			picture.editOriginal(FileResource.ERROR_LINE.getFile(), "error-line.png").queue();
+			picture.editOriginal(FileResource.IMG_ERRORLINE.getFile(), "error-line.png").queue();
 		});
 	}
 	
 	@SuppressWarnings("deprecation")
 	public static void sendErrorMessage(MessageChannel channel, ErrorMessageBuilder message) {
-		channel.sendFile(FileResource.ERROR_LINE.getFile(), "error-line.png").embed(message.build()).queue();
+		channel.sendFile(FileResource.IMG_ERRORLINE.getFile(), "error-line.png").embed(message.build()).queue();
 	}
 	
 	public static class ErrorMessageBuilder{

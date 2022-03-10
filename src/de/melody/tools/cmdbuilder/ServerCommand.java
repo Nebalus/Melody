@@ -1,5 +1,7 @@
 package de.melody.tools.cmdbuilder;
 
+import java.util.ArrayList;
+
 import de.melody.tools.entitymanager.entitys.GuildEntity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -14,7 +16,10 @@ public class ServerCommand {
 	private CommandPermission mainpermission;
 	private String[] prefixs;
 	
+	private ArrayList<SubCommand> subcommands;
+	
 	protected ServerCommand() {
+		this.subcommands = new ArrayList<SubCommand>();
 		this.type = CommandType.NULL;
 		this.description = "What will be here is written in the stars :P";
 		this.mainpermission = CommandPermission.DEVELOPER;
@@ -53,6 +58,14 @@ public class ServerCommand {
 		this.prefixs = prefixs;
 	}
 	
+	public ArrayList<SubCommand> getSubCommands(){
+		return this.subcommands;
+	}
+	
+	protected void addSubCommand(SubCommand subcommand) {
+		this.subcommands.add(subcommand);
+	}
+	
 	public void performMainCMD(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		
 	}
@@ -60,6 +73,8 @@ public class ServerCommand {
 	public void performMainSlashCMD(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
 		
 	}
+	
+	
 	/*
 	protected void finish() {
 		

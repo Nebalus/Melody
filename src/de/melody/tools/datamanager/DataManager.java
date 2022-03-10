@@ -35,10 +35,13 @@ public class DataManager {
 	}
 
 	private void loadFile(FileResource resource) throws IOException {
-		ConsoleLogger.info(resource.getFile().toPath());
+		ConsoleLogger.info("FileLoader", "Loading File: " + resource.getInternFilePath());
 		if(resource.getFile().exists()) {
 			InputStream link = new FileInputStream(resource.getFile());
-			File file = new File(getTempDirectory() + "/OLD_"+resource.getFileName());
+			File file = new File(getTempDirectory() + resource.parentfile + "OLD_"+resource.getFileName());
+			if(!file.exists()) {
+				file.mkdirs();
+			}	
 			Files.copy(link, file.getAbsoluteFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} else {
 			File parentfile = new File(DataHelper.getCurrentJarPath() + resource.parentfile);
