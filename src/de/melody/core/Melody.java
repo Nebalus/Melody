@@ -44,7 +44,9 @@ public final class Melody {
 	
 	private Melody() throws Exception {
 		this.startupmillis = System.currentTimeMillis();
+		
 		Melody.INSTANCE = this;
+		
 		this.dataMan = new DataManager();
 		this.messageformatter = new MessageFormatter();
 		
@@ -54,16 +56,19 @@ public final class Melody {
 
 		this.audioPlayerMan = new DefaultAudioPlayerManager();
 		this.entityMan = new EntityManager();
-		this.cmdMan = new CommandManager();
 		
 		this.shardMan = builder.build();
 		for(JDA jda : this.shardMan.getShards()) {
 			jda.awaitReady();
 		}
 		
+		this.cmdMan = new CommandManager(this);
+		
 		AudioSourceManagers.registerRemoteSources(audioPlayerMan);
 		AudioSourceManagers.registerLocalSource(audioPlayerMan);
 		audioPlayerMan.getConfiguration().setFilterHotSwapEnabled(true);
+		
+		ConsoleLogger.info(Constants.BUILDNAME + " is succesfully loaded ("+(System.currentTimeMillis()-startupmillis)+"ms)");
 	}
 
 	public void safeShutdown() {
@@ -83,19 +88,43 @@ public final class Melody {
 		
 	}
 	
-	public LiteSQL getDatabase() {
-		return dataMan.getDatabase();
+	public static String formatMessage(Guild guild, String key, Object... args) {
+		if(INSTANCE.messageformatter != null) {
+			return INSTANCE.messageformatter.format(guild, key, args);
+		}else {
+			throw new NullPointerException("The MessageFormater is not loaded!");
+		}
 	}
 	
-	public Config getConfig() {
-		return dataMan.getConfig();
+	public static LiteSQL getDatabase() {
+		if(INSTANCE.dataMan != null && INSTANCE.dataMan.getDatabase() != null) {
+			return INSTANCE.dataMan.getDatabase();
+		}else {
+			throw new NullPointerException("The Database is not loaded!");
+		}
 	}
 	
-	public Guild getGuildById(Long guildid) {
-		return shardMan.getGuildById(guildid);
+	public static Config getConfig() {
+		if(INSTANCE.dataMan != null && INSTANCE.dataMan.getConfig() != null) {
+			return INSTANCE.dataMan.getConfig();
+		}else {
+			throw new NullPointerException("The Config is not loaded!");
+		}
 	}
 	
-	public User getUserById(Long userid) {
-		return shardMan.getUserById(userid);
+	public static ShardManager getShardManager() {
+		if(INSTANCE.shardMan != null) {
+			return INSTANCE.shardMan;
+		}else {
+			throw new NullPointerException("The ShardManager is not loaded!");
+		}
+	}
+	
+	public static Guild getGuildById(Long guildid) {
+		return getShardManager().getGuildById(guildid);
+	}
+	
+	public static User getUserById(Long userid) {
+		return getShardManager().getUserById(userid);
 	}
 }

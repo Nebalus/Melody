@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.requests.restaction.interactions.ReplyAction;
 
 public class Messenger {
 	
@@ -43,6 +44,10 @@ public class Messenger {
 	
 	public static MessageAction sendMessage(TextChannel channel, EmbedBuilder builder) {
 		return channel.sendMessage(builder.build().getDescription());
+	}
+	
+	public static ReplyAction sendMessage(SlashCommandEvent event, String message) {
+		return event.reply(message);
 	}
 	
 	@SuppressWarnings("deprecation")

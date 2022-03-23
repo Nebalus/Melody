@@ -28,13 +28,13 @@ public class ConsoleLogger {
 
 	    //debug
 	    public static void debug(Object className, Object message) {
-	    	if(Melody.INSTANCE.getConfig()._debugmode) {
+	    	if(Melody.getConfig()._debugmode) {
 	    		System.out.println(time.format(new Date()) + "[Debug] " + className + " : " + message);
 	    	}
 	    }
 	    
 	    public static void debug(Object message) {
-	    	if(Melody.INSTANCE.getConfig()._debugmode) {
+	    	if(Melody.getConfig()._debugmode) {
 	    		System.out.println(time.format(new Date()) + "[Debug] : " + message);
 	    	}
 	    }

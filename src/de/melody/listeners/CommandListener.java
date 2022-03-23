@@ -37,7 +37,7 @@ public final class CommandListener extends ListenerAdapter {
 					String[] args = message.substring(count).split(" ");
 					if(args.length > 0){
 						try {
-							if(!melody.cmdMan.performServer(args[0], event.getMember(), channel, event.getMessage(), event.getGuild(), ge)) {	
+							if(!melody.cmdMan.performServer(args, event.getMember(), channel, event.getMessage(), event.getGuild(), ge)) {	
 								Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.unknown-command"));
 							}
 						}catch(InsufficientPermissionException e) {
@@ -45,7 +45,7 @@ public final class CommandListener extends ListenerAdapter {
 						}
 					}
 				}else if(MentionedUsers.contains(channel.getJDA().getSelfUser())) {
-					channel.sendMessage(mf.format(guild, "feedback.info.prefix",ge.getPrefix())).queue();
+					channel.sendMessage(mf.format(guild, "feedback.info.prefix", ge.getPrefix())).queue();
 				}
 			}
 		}

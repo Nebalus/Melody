@@ -1,35 +1,32 @@
-package de.melody.commands;
+package de.melody.commands.info;
 
-import de.melody.tools.ConsoleLogger;
+import de.melody.core.Constants;
+import de.melody.core.Melody;
 import de.melody.tools.cmdbuilder.CommandPermission;
 import de.melody.tools.cmdbuilder.CommandType;
 import de.melody.tools.cmdbuilder.ServerCommand;
-import de.melody.tools.cmdbuilder.SubCommand;
 import de.melody.tools.entitymanager.entitys.GuildEntity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class TestCommand extends ServerCommand{
+public class PingCommand extends ServerCommand{
 
-	public TestCommand() {
+	public PingCommand() {
 		super();
-		setType(CommandType.CHAT);
+		setType(CommandType.BOTH);
 		setMainPermission(CommandPermission.EVERYONE);
-		setPrefixes("test");
-		addSubCommand(new SubCommand("hallo", CommandPermission.EVERYONE, CommandType.BOTH) {
-			@Override
-			public void execute(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
-				channel.sendMessage("Hey...").queue();
-			}
-		});
+		setDescription("See the response time of "+Constants.BUILDNAME+" to the Discord Gateway.");
+		setPrefixes("ping");
 	}
 	
 	@Override
 	public void performMainCMD(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
-		ConsoleLogger.info(message);
-		channel.sendMessage("HEHEHE...").queue();
+		long gatewayping = channel.getJDA().getGatewayPing();
+		channel.getJDA().getRestPing().queue( (time) ->
+			channel.sendMessageFormat(Melody.formatMessage(channel.getGuild(), "feedback.info.ping"), time, gatewayping).queue()
+		);
 	}
 	
 }
