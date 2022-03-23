@@ -17,7 +17,7 @@ public final class PlayerManager {
 		if(this.controller.containsKey(guildid)) {
 			ac = this.controller.get(guildid);
 		}else {
-			ac = new AudioController(Melody.INSTANCE.getGuildById(guildid));
+			ac = new AudioController(Melody.getGuildById(guildid));
 			this.controller.put(guildid, ac);
 		}
 		return ac;

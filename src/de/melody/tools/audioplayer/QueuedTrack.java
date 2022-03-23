@@ -23,7 +23,7 @@ public final class QueuedTrack {
 	}
 	
 	public User getWhoQueued() {
-		return Melody.INSTANCE.getUserById(whoQueuedId);
+		return Melody.getUserById(whoQueuedId);
 	}
 	
 	public AudioTrack getTrack() {

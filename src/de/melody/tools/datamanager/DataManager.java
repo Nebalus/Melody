@@ -20,6 +20,7 @@ public class DataManager {
 	private final LiteSQL database;
 	
 	public DataManager() throws Exception{
+		//Loads the temp_directory
 		if(temp_directory.exists()) {
 			FileUtils.cleanDirectory(temp_directory);
 		}else {

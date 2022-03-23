@@ -5,9 +5,11 @@ import java.io.File;
 public enum FileResource {
 	CONFIG("/", "config.yml"),
 	DATABASE("/" , "database.db"),
+	
 	IMG_ERRORLINE("/img/", "error-line.png"),
 	IMG_TRACKINFO("/img/", "trackinfo.png"),
 	IMG_DEFAULTAVATAR("/img/", "default-avatar.png"),
+	
 	LANG_GERMAN("/lang/", "german.json"),
 	LANG_ENGLISH("/lang/", "english.json");
 	

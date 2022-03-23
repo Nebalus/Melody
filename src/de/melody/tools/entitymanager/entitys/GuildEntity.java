@@ -6,11 +6,11 @@ import de.melody.tools.messenger.Language;
 
 public final class GuildEntity {
 
-	private Long guildid;
+	private final Long guildid;
 	
 	// Options
 	private int volume = 50;
-	private String prefix = Melody.INSTANCE.getConfig()._defaultprefix;
+	private String prefix = Melody.getConfig()._defaultprefix;
 	private int playtime = 0;
 	private Long lastaudiochannelid = 0l;
 	private boolean djonly = false;
@@ -20,8 +20,7 @@ public final class GuildEntity {
 	private boolean preventduplicates = false;
 	private Language language = Language.ENGLISH;
 	
-	private Melody melody = Melody.INSTANCE;
-	private LiteSQL database = melody.getDatabase();
+	private LiteSQL database = Melody.getDatabase();
 	
 	public GuildEntity(Long guildid) {
 		this.guildid = guildid;

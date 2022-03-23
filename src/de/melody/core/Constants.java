@@ -5,7 +5,7 @@ import java.util.List;
 
 public final class Constants{
 	
-	public static final String BUILDVERSION = "BETA 0.7.0";	
+	public static final String BUILDVERSION = "ALPHA 0.7.0";	
 	public static final String BUILDDATE = "2022-02-15";	
 	public static final String BUILDNAME = "Melody";
 	
