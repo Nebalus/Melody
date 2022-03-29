@@ -1,5 +1,7 @@
 package de.melody.core;
 
+import java.util.Map.Entry;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -12,6 +14,7 @@ import de.melody.tools.datamanager.DataManager;
 import de.melody.tools.datamanager.files.Config;
 import de.melody.tools.datamanager.files.LiteSQL;
 import de.melody.tools.entitymanager.EntityManager;
+import de.melody.tools.entitymanager.entitys.GuildEntity;
 import de.melody.tools.messenger.MessageFormatter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -33,6 +36,8 @@ public final class Melody {
 	
 	public final Long startupmillis; 
 	
+	private Thread auto_save_thread;
+	
 	public static void main(String[] args) {
 		try {
 			Melody.INSTANCE = new Melody();
@@ -43,6 +48,7 @@ public final class Melody {
 	}
 	
 	private Melody() throws Exception {
+		ConsoleLogger.info("Starting BOOT process for "+Constants.BUILDNAME);
 		this.startupmillis = System.currentTimeMillis();
 		
 		Melody.INSTANCE = this;
@@ -68,9 +74,51 @@ public final class Melody {
 		AudioSourceManagers.registerLocalSource(audioPlayerMan);
 		audioPlayerMan.getConfiguration().setFilterHotSwapEnabled(true);
 		
+		runThreadLoop();
+		
 		ConsoleLogger.info(Constants.BUILDNAME + " is succesfully loaded ("+(System.currentTimeMillis()-startupmillis)+"ms)");
 	}
 
+	private void runThreadLoop() {
+		this.auto_save_thread = new Thread(() -> {		
+			Long time = System.currentTimeMillis() + 150000;
+			while(true) {
+				if(System.currentTimeMillis() > time) {
+					exporttodatabase();
+					time = System.currentTimeMillis() + 150000;
+				}
+			}
+		});
+		this.auto_save_thread.setName("Auto-Saver");
+		this.auto_save_thread.setPriority(Thread.MAX_PRIORITY);
+		this.auto_save_thread.start();
+	}
+	
+	private void exporttodatabase() {
+		ConsoleLogger.debug("Auto-Saver", "Starting to export cache");
+		try{
+			boolean export = false;
+			for(Entry<Long, GuildEntity> entry : entityMan.guildentity.entrySet()) {
+				GuildEntity value = entry.getValue();
+				if(value.getExpireTime() <= System.currentTimeMillis()) {
+					entityMan.removeGuildEntity(value);
+					export = true;
+				}else if(value.needToExport()) {
+					value.export();
+					export = true;
+				}
+			}
+			if(export) {
+				ConsoleLogger.debug("Auto-Saver", "Export ended sucessfully");
+			}else {
+				ConsoleLogger.debug("Auto-Saver", "There is nothing to export to the database");
+			}
+		}catch(Exception e) {
+			ConsoleLogger.warning("Thread", "The current action from the Auto-Saver has been aborted");
+			e.printStackTrace();
+		}
+	}
+	
 	public void safeShutdown() {
 		//exporttodatabase();
 		if(dataMan != null) {

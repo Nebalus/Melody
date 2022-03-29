@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.vdurmont.emoji.EmojiParser;
@@ -34,40 +35,37 @@ public final class GuildEntity extends Entity {
 						if (rsguild.getString(option.name().toLowerCase()) != null) {
 							switch (option) {
 								case FIRSTTIMELOADED:
-									option.value = rsguild.getInt(option.databasename);
+									setValue(option, rsguild.getInt(option.databasename));
 									break;
 								case PREFIX:
-									option.value = rsguild.getString(option.databasename);
+									setValue(option, rsguild.getString(option.databasename));
 									break;
 								case LANGUAGE:
-									option.value = Language.getLanguage(rsguild.getInt(option.databasename));
+									setValue(option, Language.getLanguage(rsguild.getInt(option.databasename)));
 									break;
 								case VOLUME:
-									option.value = rsguild.getInt(option.databasename);
+									setValue(option, rsguild.getInt(option.databasename));
 									break;
 								case DJONLY:
-									option.value = rsguild.getBoolean(option.databasename);
+									setValue(option, rsguild.getBoolean(option.databasename));
 									break;
 								case ANNOUNCESONGS:
-									option.value = rsguild.getBoolean(option.databasename);
+									setValue(option, rsguild.getBoolean(option.databasename));
 									break;
 								case VOTESKIP:
-									option.value = rsguild.getBoolean(option.databasename);
+									setValue(option, rsguild.getBoolean(option.databasename));
 									break;
 								case STAYMODE:
-									option.value = rsguild.getBoolean(option.databasename);
+									setValue(option, rsguild.getBoolean(option.databasename));
 									break;
 								case LASTAUDIOCHANNEL:
-									option.value = rsguild.getLong(option.databasename);
+									setValue(option, rsguild.getLong(option.databasename));
 									break;
 							default:
 								break;
 							}
 						}
 					}
-					export();
-					Options.VOLUME.setValue(42);
-					export();
 				} else {
 					Guild guild = Melody.getGuildById(guildid);
 					for (TextChannel tc : guild.getTextChannels()) {
@@ -113,7 +111,7 @@ public final class GuildEntity extends Entity {
 	
 	public Long getLastAudioChannelId() {
 		renewExpireTime();
-		return (Long) Options.LASTAUDIOCHANNEL.value;
+		return (Long) getValue(Options.LASTAUDIOCHANNEL);
 	}
 	
 	public VoiceChannel getLastAudioChannel() {
@@ -126,77 +124,83 @@ public final class GuildEntity extends Entity {
 	}
 	
 	public void setLastAudioChannelId(Long lastaudiochannelid) {
-		Options.LASTAUDIOCHANNEL.setValue(lastaudiochannelid);
+		setValue(Options.LASTAUDIOCHANNEL, lastaudiochannelid);
 		update();
 	}
 	
 	public Boolean isVoteSkip() {
 		renewExpireTime();
-		return (Boolean) Options.VOTESKIP.value;
+		return (Boolean) getValue(Options.VOTESKIP);
 	}
 	
 	public void setVoteSkip(Boolean value) {
-		Options.VOTESKIP.setValue(value);
+		setValue(Options.VOTESKIP, value);
 		update();
 	}
 	
 	public int getVolume() {
 		renewExpireTime();
-		return (Integer) Options.VOLUME.value;
+		return (Integer) getValue(Options.VOLUME);
 	}
 	
 	public void setVolume(int volume) {
-		Options.VOLUME.setValue(volume);
+		ConsoleLogger.debug(getValue(Options.VOLUME));
+		
+		setValue(Options.VOLUME, volume);
+		
+		ConsoleLogger.debug(getValue(Options.VOLUME));
 		update();
 	}
 	
 	public String getPrefix() {
 		renewExpireTime();
-		return (String) Options.PREFIX.value;
+		return (String) getValue(Options.PREFIX);
 	}
 
 	public void setPrefix(String prefix) {
-		Options.PREFIX.setValue(prefix);
+		setValue(Options.PREFIX, prefix);
+		
 		update();
 	}
 	
 	public Boolean is24_7() {
 		renewExpireTime();
-		return (Boolean) Options.STAYMODE.value;
+		return (Boolean) getValue(Options.STAYMODE);
 	}
 	
 	public void set24_7(Boolean new24_7) {
-		Options.STAYMODE.setValue(new24_7);
+		setValue(Options.STAYMODE, new24_7);
 		update();
 	}
 	
 	public void setLanguage(Language newlanguage) {
-		Options.LANGUAGE.setValue(newlanguage.getDatabaseID());
+		setValue(Options.LANGUAGE, newlanguage.getDatabaseID());
 		update();
 	}
 	
 	public Language getLanguage() {
 		renewExpireTime();
-		return Language.getLanguage((Integer) Options.LANGUAGE.value);
+		return Language.getLanguage((Integer) getValue(Options.LANGUAGE));
+	}
+
+	public void setAnnounceSongs(Boolean newannouncesongs) {
+		setValue(Options.ANNOUNCESONGS, newannouncesongs);
+		update();
 	}
 	
 	public Boolean canAnnounceSongs() {
 		renewExpireTime();
-		return (Boolean) Options.ANNOUNCESONGS.value;
+		return (Boolean) getValue(Options.ANNOUNCESONGS);
 	}
-	
-	public void setAnnounceSongs(Boolean newannouncesongs) {
-		Options.ANNOUNCESONGS.setValue(newannouncesongs);
-		update();
-	}
+
 	
 	public Boolean isDjOnly() {
 		renewExpireTime();
-		return (Boolean) Options.DJONLY.value;
+		return (Boolean) getValue(Options.DJONLY);
 	}
 	
 	public void setDjOnly(boolean newdjonly) {
-		Options.DJONLY.setValue(newdjonly);
+		setValue(Options.DJONLY, newdjonly);
 		update();
 	}
 	
@@ -205,12 +209,12 @@ public final class GuildEntity extends Entity {
 
 	public boolean export() {
 		if (database.isConnected()) {
-			final String rawps = "UPDATE guilds SET %content% WHERE PK_guildid = ?";
+			final String rawps = "UPDATE guilds SET %CONTENT% WHERE PK_guildid = ?";
 			String rawoptions = "";
 			final List<Options> exportoptions = new ArrayList<Options>();
 			
 			for(Options options : Options.values()) {
-				if(options.needtoexport && options.canbeexported) {
+				if(getOptionContainer(options).needtoexport && options.canbeexported) {
 					exportoptions.add(options);
 					if(exportoptions.size() == 1) {
 						rawoptions = rawoptions + options.databasename + " = ?";
@@ -222,27 +226,33 @@ public final class GuildEntity extends Entity {
 			if(!exportoptions.isEmpty()) {
 				
 				try {
-					PreparedStatement ps = database.getConnection().prepareStatement(rawps.replace("%content%", rawoptions));
+					PreparedStatement ps = database.getConnection().prepareStatement(rawps.replace("%CONTENT%", rawoptions));
 					int ioption = 1;
 					for(Options option : exportoptions) {
-						if(option.value instanceof Integer) {
-							ps.setInt(ioption, (int) option.value);
+						Object ovalue = getValue(option);
+						
+						if(ovalue instanceof Integer) {
+							ps.setInt(ioption, (int) ovalue);
+							getOptionContainer(option).needtoexport = false;
 						}
-						else if(option.value instanceof String) {
-							ps.setString(ioption, (String) option.value);
+						else if(ovalue instanceof String) {
+							ps.setString(ioption, (String) ovalue);
+							getOptionContainer(option).needtoexport = false;
 						}
-						else if(option.value instanceof Boolean) {
-							ps.setBoolean(ioption, (Boolean) option.value);
+						else if(ovalue instanceof Boolean) {
+							ps.setBoolean(ioption, (Boolean) ovalue);
+							getOptionContainer(option).needtoexport = false;
 						}
-						else if(option.value instanceof Long) {
-							ps.setLong(ioption, (Long) option.value);
+						else if(ovalue instanceof Long) {
+							ps.setLong(ioption, (Long) ovalue);
+							getOptionContainer(option).needtoexport = false;
 						}
 						ioption++;
 					}
 					
 					ps.setLong(exportoptions.size() + 1, guildid);
 					ps.executeUpdate();
-					ConsoleLogger.debug("export guildentity ID:"+ guildid, rawps.replace("%content%", rawoptions));		
+					ConsoleLogger.debug("export guildentity ID:"+ guildid, rawps.replace("%CONTENT%", rawoptions));		
 						
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -255,35 +265,86 @@ public final class GuildEntity extends Entity {
 	}
 	
 	private enum Options {
-		FIRSTTIMELOADED(System.currentTimeMillis(), "firsttimeloaded", false, false),
-		PREFIX(Melody.getConfig()._defaultprefix, "prefix", false, true),
-		LANGUAGE(Language.ENGLISH.getDatabaseID(), "language", false, true),
-		VOLUME(50, "volume", true, true),
-		DJONLY(false, "djonly", false, true),
-		VOTESKIP(false, "voteskip", false, true),
-		STAYMODE(false, "staymode", false, true),
-		ANNOUNCESONGS(true, "announcesongs", false, true),
-		PREVENTDUPLICATES(false, "prefentduplicates", false, true),
-		LASTAUDIOCHANNEL(0l, "lastaudiochannel", false, true);
+		FIRSTTIMELOADED(System.currentTimeMillis(), "firsttimeloaded", false),
+		PREFIX(Melody.getConfig()._defaultprefix, "prefix", true),
+		LANGUAGE(Language.ENGLISH.getDatabaseID(), "language", true),
+		VOLUME(50, "volume", true),
+		DJONLY(false, "djonly", true),
+		VOTESKIP(false, "voteskip", true),
+		STAYMODE(false, "staymode", true),
+		ANNOUNCESONGS(true, "announcesongs", true),
+		PREVENTDUPLICATES(false, "prefentduplicates", true),
+		LASTAUDIOCHANNEL(0l, "lastaudiochannel", true);
 
-		Object value;
+		final Object defaultvalue;
 		final String databasename;
-		boolean needtoexport;
 		final boolean canbeexported;
 		
-		Options(Object value, String databasename, boolean needtoexport, boolean canbeexported) {
-			this.value = value;
+		Options(Object defaultvalue, String databasename, boolean canbeexported) {
+			this.defaultvalue = defaultvalue;
 			this.databasename = databasename;
-			this.needtoexport = needtoexport;
 			this.canbeexported = canbeexported;
-		}
-		
-		public void setValue(Object value) {
-			needtoexport = true;
-			this.value = value;
 		}
 	}
 
+	private HashMap<Options, OptionContainer> varoptions = new HashMap<Options, OptionContainer>();
+	
+	
+	private void setValue(Options option, Object value) {
+		if(varoptions.containsKey(option)) {
+			OptionContainer oc = varoptions.get(option);
+			oc.updateValue(value);
+		}else {
+			OptionContainer oc = new OptionContainer(option, value);
+			varoptions.put(option, oc);
+		}
+	}
+	
+	private Object getValue(Options option) {
+		if(varoptions.containsKey(option)) {
+			OptionContainer oc = varoptions.get(option);
+			if(oc.getValue() != null) {
+				return oc.getValue();
+			}else {
+				oc.updateValue(option.defaultvalue);
+			}
+		}else {
+			varoptions.put(option, new OptionContainer(option, option.defaultvalue));
+		}
+		return option.defaultvalue;
+	}
+	
+	private OptionContainer getOptionContainer(Options option) {
+		if(varoptions.containsKey(option)) {
+			OptionContainer oc = varoptions.get(option);
+			return oc;
+		}else {
+			OptionContainer oc = new OptionContainer(option, option.defaultvalue);
+			varoptions.put(option, oc);
+			return oc;
+		}
+	}
+	
+	private class OptionContainer{
+		
+		public Object value;
+		public boolean needtoexport = false;
+		final public Options option;
+		
+		public OptionContainer(Options option, Object value) {
+			this.value = value;
+			this.option = option;
+		}
+		
+		public void updateValue(Object value) {
+			needtoexport = true;
+			this.value = value;
+		}
+		
+		public Object getValue() {
+			return this.value;
+		}
+	}
 	/*
 	 * public enum GuildOptions{ VOLUME("volume"), PREFIX("prefix"),
 	 * LASTAUDIOCHANNEL("lastaudiochannel"), PLAYTIME("playtime");
