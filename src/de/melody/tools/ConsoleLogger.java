@@ -14,7 +14,7 @@ public class ConsoleLogger {
 	    }
 	    
 	    public static void info(Object message) {
-	        System.out.println(time.format(new Date())+ "[Info] : " + message);
+	        System.out.println(time.format(new Date())+ "[Info] " + message);
 	    }
 
 	    //error
@@ -23,7 +23,7 @@ public class ConsoleLogger {
 	    }
 	    
 	    public static void error( Object message) {
-	        System.out.println(time.format(new Date()) + "[Error] : " + message);
+	        System.out.println(time.format(new Date()) + "[Error] " + message);
 	    }
 
 	    //debug
@@ -35,7 +35,7 @@ public class ConsoleLogger {
 	    
 	    public static void debug(Object message) {
 	    	if(Melody.getConfig()._debugmode) {
-	    		System.out.println(time.format(new Date()) + "[Debug] : " + message);
+	    		System.out.println(time.format(new Date()) + "[Debug] " + message);
 	    	}
 	    }
 
@@ -45,6 +45,6 @@ public class ConsoleLogger {
 	    }
 	    
 	    public static void warning(Object message) {
-	        System.out.println(time.format(new Date()) + "[Warning] : " + message);
+	        System.out.println(time.format(new Date()) + "[Warning] " + message);
 	    }
 }

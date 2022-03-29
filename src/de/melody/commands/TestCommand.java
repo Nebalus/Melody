@@ -1,5 +1,7 @@
 package de.melody.commands;
 
+import java.util.Random;
+
 import de.melody.tools.ConsoleLogger;
 import de.melody.tools.cmdbuilder.CommandPermission;
 import de.melody.tools.cmdbuilder.CommandType;
@@ -29,7 +31,12 @@ public class TestCommand extends ServerCommand{
 	@Override
 	public void performMainCMD(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		ConsoleLogger.info(message);
-		channel.sendMessage("HEHEHE...").queue();
+		Random ran = new Random();
+		
+		final int test = ran.nextInt(99)+1;
+		
+		guildentity.setVolume(test);
+		channel.sendMessage("HEHEHE... "+test).queue();
 	}
 	
 }

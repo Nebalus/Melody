@@ -24,4 +24,10 @@ public final class EntityManager {
 		}
 		return ge;
 	}
+	
+	public void removeGuildEntity(GuildEntity ge) {
+		if(ge.export()) {
+			guildentity.remove(ge.getGuildId());
+		}
+	}
 }
