@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.melody.commands.TestCommand;
 import de.melody.commands.info.HelpCommand;
+import de.melody.commands.info.InfoCommand;
 import de.melody.commands.info.InviteCommand;
 import de.melody.commands.info.PingCommand;
 import de.melody.core.Constants;
@@ -33,7 +34,7 @@ public final class CommandManager {
 		this.command = new ConcurrentHashMap<Integer, ServerCommand>();
 		this.commandhash = new ConcurrentHashMap<String, Integer>();
 		
-		registerCommands(new TestCommand(), new HelpCommand(), new InviteCommand(), new PingCommand());
+		registerCommands(new TestCommand(), new HelpCommand(), new InviteCommand(), new PingCommand(), new InfoCommand());
 	}
 	
 	private void registerCommands(ServerCommand... cmd) {
@@ -70,7 +71,10 @@ public final class CommandManager {
 		if(Melody.getConfig()._allowslashcommands) {
 			for(JDA jda : Melody.getShardManager().getShards()) {
 				CommandListUpdateAction slashupdater = jda.updateCommands();
-				slashupdater.addCommands(slashcommands);
+				slashcommands.forEach((commanddata) ->{
+					slashupdater.addCommands(commanddata);
+				});
+				slashupdater.queue();
 				ConsoleLogger.debug("SLASH-BUILDER", "EXPORT generated Slash commands to Shard [ID:"+jda.getShardInfo().getShardId()+"]");
 			}
 		}
