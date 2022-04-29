@@ -1,19 +1,14 @@
 package de.nebalus.dcbots.melody.tools.cmdbuilder;
 
-import java.util.ArrayList;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-
 import de.nebalus.dcbots.melody.commands.TestCommand;
 import de.nebalus.dcbots.melody.commands.info.HelpCommand;
 import de.nebalus.dcbots.melody.commands.info.InviteCommand;
 import de.nebalus.dcbots.melody.commands.info.PingCommand;
-import de.nebalus.dcbots.melody.core.Constants;
 import de.nebalus.dcbots.melody.core.Melody;
+import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.tools.ConsoleLogger;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import de.nebalus.dcbots.melody.tools.messenger.Messenger;
-import de.nebalus.dcbots.melody.tools.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -22,6 +17,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class CommandManager {
 
@@ -92,7 +91,7 @@ public final class CommandManager {
 
 	public ArrayList<ServerCommand> getCommands() {
 		ArrayList<ServerCommand> rawcmd = new ArrayList<ServerCommand>();
-		for (Entry<Integer, ServerCommand> entry : command.entrySet()) {
+		for (Map.Entry<Integer, ServerCommand> entry : command.entrySet()) {
 			rawcmd.add(entry.getValue());
 		}
 		return rawcmd;
@@ -128,7 +127,7 @@ public final class CommandManager {
 		if (cmd != null) {
 			switch (cmd.getMainPermission()) {
 				case DEVELOPER:
-					if (Constants.DEVELOPERIDS.contains(member.getIdLong())) {
+					if (Settings.DEVELOPER_ID_LIST.contains(member.getIdLong())) {
 						cmd.performMainCMD(member, channel, guild, guildentity, event);
 						return true;
 					}
@@ -138,7 +137,7 @@ public final class CommandManager {
 					if (member.hasPermission(Permission.MANAGE_SERVER) || member.hasPermission(Permission.ADMINISTRATOR)) {
 						cmd.performMainCMD(member, channel, guild, guildentity, event);
 					} else {
-						Messenger.sendErrorMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "user-no-permmisions", "MANAGE_SERVER"), true);
+						Messenger.sendErrorMessage(event, new Messenger.ErrorMessageBuilder().setMessageFormat(guild, "user-no-permmisions", "MANAGE_SERVER"), true);
 					}
 					return true;
 				

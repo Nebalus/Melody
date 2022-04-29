@@ -1,6 +1,6 @@
 package de.nebalus.dcbots.melody.tools.entitymanager;
 
-import de.nebalus.dcbots.melody.core.Constants;
+import de.nebalus.dcbots.melody.core.constants.Settings;
 
 public class Entity {
 
@@ -8,7 +8,7 @@ public class Entity {
 	private Boolean needtoexport;
 	
 	protected Entity() {
-		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
+		this.expiretime = System.currentTimeMillis() + Settings.ENTITY_EXPIRE_TIME;
 		this.needtoexport = true;
 	}
 	
@@ -30,6 +30,6 @@ public class Entity {
 	}
 	
 	protected void renewExpireTime() {
-		this.expiretime = System.currentTimeMillis() + Constants.ENTITYEXPIRETIME;
+		this.expiretime = System.currentTimeMillis() + Settings.ENTITY_EXPIRE_TIME;
 	}
 }

@@ -2,8 +2,8 @@ package de.nebalus.dcbots.melody.commands.info;
 
 import java.util.ArrayList;
 
-import de.nebalus.dcbots.melody.core.Constants;
 import de.nebalus.dcbots.melody.core.Melody;
+import de.nebalus.dcbots.melody.core.constants.Url;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandPermission;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
@@ -38,7 +38,7 @@ public class HelpCommand extends ServerCommand{
 	private EmbedBuilder generateMenu(String searchquery, GuildEntity guildentity) {
 		EmbedBuilder builder = new EmbedBuilder();
 		if(searchquery == null) {
-			builder.setAuthor("Help Command", null, Constants.ICON_URL);
+			builder.setAuthor("Help Command", null, Url.ICON.toString());
 			
 			ArrayList<String> admincmds = new ArrayList<String>();
 			ArrayList<String> djcmds = new ArrayList<String>();
@@ -71,13 +71,13 @@ public class HelpCommand extends ServerCommand{
 			if(!everyonecmds.isEmpty()) {
 				builder.addField("**Everyone Commands**", everyonecmds.toString().replace("[", "").replace("]", ""), false);
 			}
-			builder.addField("**Web Dashboard**", "[View Commands]("+Constants.COMMAND_URL+"?p="+guildentity.getPrefix()+")", false);
+			builder.addField("**Web Dashboard**", "[View Commands]("+Url.COMMAND.toString()+"?p="+guildentity.getPrefix()+")", false);
 			builder.setFooter("Type '"+guildentity.getPrefix()+"help <CommandName>' for details on a command.");
 		}else {
 			ServerCommand cmd;
 			try {
 				cmd = Melody.INSTANCE.cmdMan.getCommand(searchquery);
-				builder.setAuthor("Help Command: "+searchquery, null, Constants.ICON_URL);
+				builder.setAuthor("Help Command: "+searchquery, null, Url.ICON.toString());
 				String description;
 				
 				builder.setDescription("This feature is still work and progress");

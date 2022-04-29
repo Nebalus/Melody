@@ -1,7 +1,8 @@
 package de.nebalus.dcbots.melody.tools.messenger;
 
-import de.nebalus.dcbots.melody.core.Constants;
 import de.nebalus.dcbots.melody.core.Melody;
+import de.nebalus.dcbots.melody.core.constants.Build;
+import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.tools.datamanager.FileResource;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -15,25 +16,25 @@ public class Messenger {
 	
 	public static MessageAction sendMessageEmbed(TextChannel channel, String message) {
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Constants.EMBEDCOLOR);
+		builder.setColor(Settings.EMBED_COLOR);
 		builder.setDescription(message);
 		return channel.sendMessageEmbeds(builder.build());
 	}
 	
 	public static MessageAction sendMessageEmbed(TextChannel channel, EmbedBuilder builder) {
-		builder.setColor(Constants.EMBEDCOLOR);
+		builder.setColor(Settings.EMBED_COLOR);
 		return channel.sendMessageEmbeds(builder.build());
 	}
 	
 	public static MessageEmbed getMessageEmbed(String message) {
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Constants.EMBEDCOLOR);
+		builder.setColor(Settings.EMBED_COLOR);
 		builder.setDescription(message);
 		return builder.build();
 	}
 	
 	public static MessageEmbed getMessageEmbed(EmbedBuilder builder) {
-		builder.setColor(Constants.EMBEDCOLOR);
+		builder.setColor(Settings.EMBED_COLOR);
 		return builder.build();
 	}
 	
@@ -60,7 +61,7 @@ public class Messenger {
 		private String BODY_TEXT;
 		private String FOOTER_TEXT;
 		
-		private final String PREFIX_FOOTER_TEXT = "· "+Constants.BUILDVERSION+" · ";
+		private final String PREFIX_FOOTER_TEXT = "ï¿½ " + Build.VERSION + " ï¿½ ";
 		
 		public ErrorMessageBuilder() {}
 		
@@ -101,7 +102,7 @@ public class Messenger {
 				HEADER_TEXT = "> **"+HEADER_TEXT+"**";
 				builder.setTitle(HEADER_TEXT);
 			}
-			builder.setColor(Constants.ERROREMBEDCOLOR);
+			builder.setColor(Settings.EMBED_COLOR);
 			return builder.build();
 		}
 	}

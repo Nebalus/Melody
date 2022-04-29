@@ -1,7 +1,7 @@
 package de.nebalus.dcbots.melody.commands.info;
 
-import de.nebalus.dcbots.melody.core.Constants;
 import de.nebalus.dcbots.melody.core.Melody;
+import de.nebalus.dcbots.melody.core.constants.Build;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandPermission;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
@@ -15,7 +15,7 @@ public class PingCommand extends ServerCommand{
 	public PingCommand() {
 		super();
 		setMainPermission(CommandPermission.EVERYONE);
-		setDescription("See the response time of "+Constants.BUILDNAME+" to the Discord Gateway.");
+		setDescription("See the response time of " + Build.NAME + " to the Discord Gateway.");
 		setPrefix("ping");
 	}
 	
