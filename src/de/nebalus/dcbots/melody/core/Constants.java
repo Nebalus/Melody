@@ -6,12 +6,14 @@ import java.util.List;
 public final class Constants{
 	
 	public static final String BUILDVERSION = "BETA v0.7.0";	
-	public static final String BUILDDATE = "2022-04-03";	
+	public static final String BUILDDATE = "2022-04-29";	
 	public static final String BUILDNAME = "Melody";
+	
+	public static final String CMDPREFIX = "/";
 	
 	public static final Long ENTITYEXPIRETIME = 1000l*60l*60l;
 	
-	public static final Color EMBEDCOLOR = Color.decode("#2eb8bf");
+	public static final Color EMBEDCOLOR = Color.decode("#47EFFF");
 	public static final Color ERROREMBEDCOLOR = Color.RED;
 	
 	public static final String ICON_URL = "https://melodybot.ga/assets/images/icon.png";

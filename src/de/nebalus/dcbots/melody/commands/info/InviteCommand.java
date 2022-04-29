@@ -5,11 +5,10 @@ import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandPermission;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
-import de.nebalus.dcbots.melody.tools.messenger.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class InviteCommand extends ServerCommand{
 
@@ -21,7 +20,7 @@ public class InviteCommand extends ServerCommand{
 	}
 	
 	@Override
-	public void performMainCMD(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
-		Messenger.sendMessage(event, Melody.formatMessage(guild, "feedback.info.invite", Constants.INVITE_URL)).queue();
+	public void performMainCMD(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
+		event.reply(Melody.formatMessage(guild, "feedback.info.invite", Constants.INVITE_URL)).queue();
 	}
 }

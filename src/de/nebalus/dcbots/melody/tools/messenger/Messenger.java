@@ -6,24 +6,9 @@ import de.nebalus.dcbots.melody.tools.datamanager.FileResource;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
-import net.dv8tion.jda.api.requests.restaction.interactions.ReplyAction;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class Messenger {
-	
-	public static MessageAction sendMessageEmbed(TextChannel channel, String message) {
-		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Constants.EMBEDCOLOR);
-		builder.setDescription(message);
-		return channel.sendMessageEmbeds(builder.build());
-	}
-	
-	public static MessageAction sendMessageEmbed(TextChannel channel, EmbedBuilder builder) {
-		builder.setColor(Constants.EMBEDCOLOR);
-		return channel.sendMessageEmbeds(builder.build());
-	}
 	
 	public static MessageEmbed getMessageEmbed(String message) {
 		EmbedBuilder builder = new EmbedBuilder();
@@ -37,19 +22,7 @@ public class Messenger {
 		return builder.build();
 	}
 	
-	public static MessageAction sendMessage(TextChannel channel, String message) {
-		return channel.sendMessage(message);
-	}
-	
-	public static MessageAction sendMessage(TextChannel channel, EmbedBuilder builder) {
-		return channel.sendMessage(builder.build().getDescription());
-	}
-	
-	public static ReplyAction sendMessage(SlashCommandEvent event, String message) {
-		return event.reply(message);
-	}
-	
-	public static void sendErrorMessage(SlashCommandEvent event, ErrorMessageBuilder message, boolean ephemeral) {
+	public static void sendErrorMessage(SlashCommandInteractionEvent event, ErrorMessageBuilder message, boolean ephemeral) {
 		event.replyEmbeds(message.build()).setEphemeral(ephemeral).queue((picture)->{
 			picture.editOriginal(FileResource.IMG_ERRORLINE.getFile(), "error-line.png").queue();
 		});

@@ -12,7 +12,6 @@ public final class Config {
 	// Values
 	public String _bottoken = null;
 	public Boolean _debugmode = false;
-	public String _defaultprefix = "m!";
 	public Boolean _allowslashcommands = true;
 	public Boolean _autoupdate = true;
 	public int _ratelimitmaxrequests = 3;
@@ -25,7 +24,6 @@ public final class Config {
 
 		this._bottoken = jsonobject.getString("bottoken");
 		this._debugmode = jsonobject.getBoolean("debugmode");
-		this._defaultprefix = jsonobject.getString("defaultprefix");
 		this._allowslashcommands = jsonobject.getBoolean("allowslashcommands");
 		this._autoupdate = jsonobject.getBoolean("autoupdate");
 		this._ratelimitmaxrequests = jsonobject.getInt("ratelimitmaxrequests");
