@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.vdurmont.emoji.EmojiParser;
 
+import de.nebalus.dcbots.melody.core.Constants;
 import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.tools.ConsoleLogger;
 import de.nebalus.dcbots.melody.tools.datamanager.files.LiteSQL;
@@ -40,9 +41,6 @@ public final class GuildEntity extends Entity {
 							switch (option) {
 								case FIRSTTIMELOADED:
 									setValue(option, rsguild.getInt(option.databasename));
-									break;
-								case PREFIX:
-									setValue(option, rsguild.getString(option.databasename));
 									break;
 								case LANGUAGE:
 									setValue(option, Language.getLanguage(rsguild.getInt(option.databasename)));
@@ -76,11 +74,11 @@ public final class GuildEntity extends Entity {
 						try {
 							tc.sendMessage(EmojiParser.parseToUnicode("Hello everybody, i'm "
 									+ guild.getSelfMember().getAsMention() + " \n" + " `-` My prefix on "
-									+ guild.getName() + " is `" + getPrefix() + "`\n"
+									+ guild.getName() + " is `"+Constants.CMDPREFIX+"`\n"
 									+ " `-` If you do not understand how I work then you can see all my commands by typing `"
-									+ getPrefix() + "help`\n"
+									+ Constants.CMDPREFIX+"help`\n"
 									+ " `-` When you dont like something in my config then you can easyly change it by typing `"
-									+ getPrefix() + "config help`\n" + " \n"
+									+ Constants.CMDPREFIX+"config help`\n" + " \n"
 									+ "**Otherwise have fun listening to the music from my service** " + ":notes: \n"
 									+ "PS: Thanks a lot for your support, that you added me to your discord server! :sparkling_heart:")).queue();
 							break;
@@ -174,17 +172,6 @@ public final class GuildEntity extends Entity {
 		setValue(Options.VOLUME, volume);
 		
 		ConsoleLogger.debug(getValue(Options.VOLUME));
-		update();
-	}
-	
-	public String getPrefix() {
-		renewExpireTime();
-		return (String) getValue(Options.PREFIX);
-	}
-
-	public void setPrefix(String prefix) {
-		setValue(Options.PREFIX, prefix);
-		
 		update();
 	}
 	
@@ -290,7 +277,6 @@ public final class GuildEntity extends Entity {
 	
 	private enum Options {
 		FIRSTTIMELOADED(System.currentTimeMillis(), "firsttimeloaded", false),
-		PREFIX(Melody.getConfig()._defaultprefix, "prefix", true),
 		LANGUAGE(Language.ENGLISH.getDatabaseID(), "language", true),
 		VOLUME(50, "volume", true),
 		DJONLY(false, "djonly", true),

@@ -2,11 +2,12 @@ package de.nebalus.dcbots.melody.listeners;
 
 import de.nebalus.dcbots.melody.core.Constants;
 import de.nebalus.dcbots.melody.core.Melody;
+import de.nebalus.dcbots.melody.tools.ConsoleLogger;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import de.nebalus.dcbots.melody.tools.messenger.Messenger;
 import de.nebalus.dcbots.melody.tools.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -16,7 +17,7 @@ public final class CommandListener extends ListenerAdapter {
 	//private MessageFormatter mf = melody.messageformatter;
 	
 	@Override
-	public void onSlashCommand(SlashCommandEvent event)
+	public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
 	{
 		if (event.isFromGuild()) 
 		{
@@ -48,7 +49,7 @@ public final class CommandListener extends ListenerAdapter {
 	    }
 		else 
 	    {
-	    	event.reply("The commands only work in a guild where im in :( \n"+Constants.INVITE_URL).setEphemeral(true).queue();
+	    	event.reply("My commands only work in a guild where im in :( \n"+Constants.INVITE_URL).setEphemeral(true).queue();
 	    }
 	}
 	

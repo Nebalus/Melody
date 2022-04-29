@@ -48,7 +48,7 @@ public class MessageFormatter {
 			}
 			
 			message = message.replace("%botname%", Constants.BUILDNAME);
-			message = message.replace("%prefix%", guildentity.getPrefix());
+			message = message.replace("%prefix%", Constants.CMDPREFIX);
 			
 			for(int i = 0; i < args.length; ++i) {
 				message = message.replace("{" + i + "}", String.valueOf(args[i]));
