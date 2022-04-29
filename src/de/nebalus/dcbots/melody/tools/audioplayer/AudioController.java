@@ -3,8 +3,8 @@ package de.nebalus.dcbots.melody.tools.audioplayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import de.nebalus.dcbots.melody.core.Constants;
 import de.nebalus.dcbots.melody.core.Melody;
+import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.tools.audioplayer.audioloader.AudioPlayerSendHandler;
 import de.nebalus.dcbots.melody.tools.audioplayer.enums.LoopMode;
 import net.dv8tion.jda.api.entities.Guild;
@@ -13,7 +13,7 @@ public final class AudioController {
 	
 	private final AudioPlayer player;
 	private final Queue queue;
-	private int timeouttime = Constants.MUSIK_AFK_DEFAULT;
+	private int timeouttime = Settings.MUSIC_AFK_DEFAULT;
 	private LoopMode loopmode = LoopMode.NONE;
 	private Long anouncechannelid;
 	

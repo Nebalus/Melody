@@ -9,6 +9,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
+import de.nebalus.dcbots.melody.core.constants.Build;
 import de.nebalus.dcbots.melody.listeners.CommandListener;
 import de.nebalus.dcbots.melody.tools.ConsoleLogger;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandManager;
@@ -52,10 +53,11 @@ public final class Melody {
 	}
 	
 	private Melody() throws Exception {
-		ConsoleLogger.info("Starting BOOT process for "+Constants.BUILDNAME);
+		ConsoleLogger.info("Starting BOOT process for " + Build.NAME + " " + Build.VERSION);
 		this.startupmillis = System.currentTimeMillis();
 		
 		Melody.INSTANCE = this;
+		new Build("BETA v0.7.0", "2022-04-03");
 		
 		this.dataMan = new DataManager();
 		this.messageformatter = new MessageFormatter();
@@ -80,7 +82,7 @@ public final class Melody {
 		
 		runThreadLoop();
 		
-		ConsoleLogger.info(Constants.BUILDNAME + " is succesfully loaded ("+(System.currentTimeMillis()-startupmillis)+"ms)");
+		ConsoleLogger.info(Build.NAME + " is successfully loaded (" + (System.currentTimeMillis() - startupmillis) + "ms)");
 	}
 
 	private void runThreadLoop() {
@@ -132,13 +134,13 @@ public final class Melody {
 			shardMan.setStatus(OnlineStatus.OFFLINE);
 			shardMan.shutdown();
 		}
-		ConsoleLogger.info(Constants.BUILDNAME+" offline!");
+		ConsoleLogger.info(Build.NAME + " " + Build.VERSION + " offline!");
 		System.exit(0);
 	}
 	
 	public void restart() {
 		try {
-			ConsoleLogger.info("Restarting "+Constants.BUILDNAME + " please wait!");
+			ConsoleLogger.info("Restarting " + Build.NAME + " " + Build.VERSION + ", please wait!");
 			final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 			File currentJar = new File(Melody.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			/* is it a jar file? */

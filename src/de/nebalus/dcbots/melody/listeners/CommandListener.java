@@ -1,7 +1,7 @@
 package de.nebalus.dcbots.melody.listeners;
 
-import de.nebalus.dcbots.melody.core.Constants;
 import de.nebalus.dcbots.melody.core.Melody;
+import de.nebalus.dcbots.melody.core.constants.Url;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import de.nebalus.dcbots.melody.tools.messenger.Messenger;
 import de.nebalus.dcbots.melody.tools.messenger.Messenger.ErrorMessageBuilder;
@@ -48,7 +48,7 @@ public final class CommandListener extends ListenerAdapter {
 	    }
 		else 
 	    {
-	    	event.reply("The commands only work in a guild where im in :( \n"+Constants.INVITE_URL).setEphemeral(true).queue();
+	    	event.reply("The commands only work in a guild where im in :( \n"+ Url.INVITE.toString()).setEphemeral(true).queue();
 	    }
 	}
 	
