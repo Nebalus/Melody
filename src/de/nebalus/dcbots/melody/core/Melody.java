@@ -2,6 +2,7 @@ package de.nebalus.dcbots.melody.core;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
@@ -39,7 +40,10 @@ public final class Melody {
 	
 	public final Long startupmillis; 
 	
+	private int nextStatusUpdate = 10;
+	
 	private Thread auto_save_thread;
+	private Thread loop_thread;
 	
 	public static void main(String[] args) {
 		try {
@@ -87,17 +91,43 @@ public final class Melody {
 
 	private void runThreadLoop() {
 		this.auto_save_thread = new Thread(() -> {		
-			Long time = System.currentTimeMillis() + 150000;
+			Long time = System.currentTimeMillis();
 			while(true) {
+				try {
+					TimeUnit.MILLISECONDS.sleep(150000);
+				} catch (InterruptedException e) {}
+				
 				if(System.currentTimeMillis() > time) {
 					exporttodatabase();
-					time = System.currentTimeMillis() + 150000;
+					time = System.currentTimeMillis() + 125000;
 				}
 			}
 		});
 		this.auto_save_thread.setName("Auto-Saver");
 		this.auto_save_thread.setPriority(Thread.MAX_PRIORITY);
 		this.auto_save_thread.start();
+		
+		
+		this.loop_thread = new Thread(() -> {		
+			
+			Long time = System.currentTimeMillis();
+			
+			while(true) {
+				try {
+					TimeUnit.MILLISECONDS.sleep(1000);
+				} catch (InterruptedException e) {}
+				
+				if(System.currentTimeMillis() > time) {
+						
+					updateStatus();					
+					
+					time = System.currentTimeMillis() + 1000;
+				}
+			}
+		});
+		this.loop_thread.setName("Loop-Thread");
+		this.loop_thread.setPriority(Thread.NORM_PRIORITY);
+		this.loop_thread.start();
 	}
 	
 	private void exporttodatabase() {
@@ -125,8 +155,36 @@ public final class Melody {
 		}
 	}
 	
+	private void updateStatus() {
+		if(nextStatusUpdate <= 0) {
+			Random rand = new Random();
+			int i = rand.nextInt(3);
+			shardMan.getShards().forEach(jda ->{
+				switch(i) {
+				case 0:
+					int musicguilds = 0;
+					for(Guild g : shardMan.getGuilds()) {
+						if(g.getSelfMember().getVoiceState().getChannel() != null) {
+							musicguilds++;
+						}
+					}
+					jda.getPresence().setActivity(Activity.streaming("music on " +musicguilds+" server"+(musicguilds < 1 ? "s": "") +"!","https://twitch.tv/nebalus"));
+					break;
+				case 1:
+					jda.getPresence().setActivity(Activity.watching(Constants.BUILDVERSION));
+					break;
+				case 2:
+					jda.getPresence().setActivity(Activity.listening("@"+jda.getSelfUser().getName()));
+					break;
+				}
+			});
+			nextStatusUpdate = 30;
+		}else {
+			nextStatusUpdate--;
+		}
+	}
 	public void shutdown() {
-		//exporttodatabase();
+		exporttodatabase();
 		if(dataMan != null) {
 			dataMan.getDatabase().disconnect();		
 		}
