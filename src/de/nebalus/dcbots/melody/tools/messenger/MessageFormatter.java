@@ -3,10 +3,9 @@ package de.nebalus.dcbots.melody.tools.messenger;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
-
-import de.nebalus.dcbots.melody.core.constants.Build;
 import org.json.JSONObject;
 
+import de.nebalus.dcbots.melody.core.Constants;
 import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.tools.datamanager.DataHelper;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
@@ -34,22 +33,22 @@ public class MessageFormatter {
 			JSONObject json = messagecache.get(language);
 			message = json.getString(key.toLowerCase());
 			if(language.equals(Language.GERMAN)) {
-				message = message.replace("ss", "ï¿½");
-				message = message.replace("ae", "ï¿½");
-				message = message.replace("oe", "ï¿½");
-				message = message.replace("ue", "ï¿½");
-				message = message.replace("AE", "ï¿½");
-				message = message.replace("OE", "ï¿½");
-				message = message.replace("UE", "ï¿½");
+				message = message.replace("ss", "ß");
+				message = message.replace("ae", "ä");
+				message = message.replace("oe", "ö");
+				message = message.replace("ue", "ü");
+				message = message.replace("AE", "Ä");
+				message = message.replace("OE", "Ö");
+				message = message.replace("UE", "Ü");
 				
-				message = message.replace("[ï¿½]", "ss");
-				message = message.replace("[ï¿½]", "ae");
-				message = message.replace("[ï¿½]", "oe");
-				message = message.replace("[ï¿½]", "ue");
+				message = message.replace("[ß]", "ss");
+				message = message.replace("[ä]", "ae");
+				message = message.replace("[ö]", "oe");
+				message = message.replace("[ü]", "ue");
 			}
 			
-			message = message.replace("%botname%", Build.NAME);
-			message = message.replace("%prefix%", guildentity.getPrefix());
+			message = message.replace("%botname%", Constants.BUILDNAME);
+			message = message.replace("%prefix%", Constants.CMDPREFIX);
 			
 			for(int i = 0; i < args.length; ++i) {
 				message = message.replace("{" + i + "}", String.valueOf(args[i]));
