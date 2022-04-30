@@ -57,11 +57,13 @@ public final class Melody {
 	}
 	
 	private Melody() throws Exception {
+		new Build("BETA v0.7.0", "2022-04-30");
+		
 		ConsoleLogger.info("Starting BOOT process for " + Build.NAME + " " + Build.VERSION);
+		
 		this.startupmillis = System.currentTimeMillis();
 		
 		Melody.INSTANCE = this;
-		new Build("BETA v0.7.0", "2022-04-03");
 		
 		this.dataMan = new DataManager();
 		this.messageformatter = new MessageFormatter();
@@ -86,7 +88,7 @@ public final class Melody {
 		
 		runThreadLoop();
 		
-		ConsoleLogger.info(Build.NAME + " is successfully loaded (" + (System.currentTimeMillis() - startupmillis) + "ms)");
+		ConsoleLogger.info(Build.NAME + " has been successfully loaded (" + (System.currentTimeMillis() - startupmillis) + "ms)");
 	}
 
 	private void runThreadLoop() {
@@ -171,7 +173,7 @@ public final class Melody {
 					jda.getPresence().setActivity(Activity.streaming("music on " +musicguilds+" server"+(musicguilds < 1 ? "s": "") +"!","https://twitch.tv/nebalus"));
 					break;
 				case 1:
-					jda.getPresence().setActivity(Activity.watching(Constants.BUILDVERSION));
+					jda.getPresence().setActivity(Activity.watching(Build.VERSION));
 					break;
 				case 2:
 					jda.getPresence().setActivity(Activity.listening("@"+jda.getSelfUser().getName()));
@@ -183,6 +185,7 @@ public final class Melody {
 			nextStatusUpdate--;
 		}
 	}
+	
 	public void shutdown() {
 		exporttodatabase();
 		if(dataMan != null) {

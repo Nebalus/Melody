@@ -5,8 +5,9 @@ import java.io.InputStream;
 import java.util.HashMap;
 import org.json.JSONObject;
 
-import de.nebalus.dcbots.melody.core.Constants;
 import de.nebalus.dcbots.melody.core.Melody;
+import de.nebalus.dcbots.melody.core.constants.Build;
+import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.tools.datamanager.DataHelper;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import net.dv8tion.jda.api.entities.Guild;
@@ -47,8 +48,8 @@ public class MessageFormatter {
 				message = message.replace("[ü]", "ue");
 			}
 			
-			message = message.replace("%botname%", Constants.BUILDNAME);
-			message = message.replace("%prefix%", Constants.CMDPREFIX);
+			message = message.replace("%botname%", Build.NAME);
+			message = message.replace("%prefix%", Settings.CMD_PREFIX);
 			
 			for(int i = 0; i < args.length; ++i) {
 				message = message.replace("{" + i + "}", String.valueOf(args[i]));

@@ -3,18 +3,16 @@ package de.nebalus.dcbots.melody.commands.info;
 import java.util.ArrayList;
 
 import de.nebalus.dcbots.melody.core.Melody;
+import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.core.constants.Url;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandPermission;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
-import de.nebalus.dcbots.melody.tools.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class HelpCommand extends ServerCommand{
 	
@@ -26,7 +24,7 @@ public class HelpCommand extends ServerCommand{
 	}
 	
 	@Override
-	public void performMainCMD(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandEvent event) {
+	public void performMainCMD(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
 //		String[] command = message.getContentDisplay().split(" ");
 //		if(command.length == 2) {
 //			Messenger.sendMessageEmbed(channel, generateMenu(command[1], guildentity)).queue();
@@ -71,8 +69,8 @@ public class HelpCommand extends ServerCommand{
 			if(!everyonecmds.isEmpty()) {
 				builder.addField("**Everyone Commands**", everyonecmds.toString().replace("[", "").replace("]", ""), false);
 			}
-			builder.addField("**Web Dashboard**", "[View Commands]("+Url.COMMAND.toString()+"?p="+guildentity.getPrefix()+")", false);
-			builder.setFooter("Type '"+guildentity.getPrefix()+"help <CommandName>' for details on a command.");
+			builder.addField("**Web Dashboard**", "[View Commands](" + Url.COMMAND.toString() + "?p=" + Settings.CMD_PREFIX + ")", false);
+			builder.setFooter("Type '" + Settings.CMD_PREFIX + "help <CommandName>' for details on a command.");
 		}else {
 			ServerCommand cmd;
 			try {
