@@ -14,4 +14,12 @@ public final class Utils {
 		return json;
 	}
 	
+	public static float getPercent(Long number, Long maxNumber){
+		return number*100/maxNumber;
+	}
+	
+	public static float getPercent(int number, int maxNumber){
+		return number*100/maxNumber;
+	}
+	
 }
