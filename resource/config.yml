@@ -1,7 +1,8 @@
 {
-	"bottoken" : "INSERT BOTTOKEN",
+	"bottoken" : "INSERT TOKEN",
 	"debugmode" : true,
-	"defaultprefix" : "m!",
     "allowslashcommands" : true,
-    "autoupdate" : true
+    "autoupdate" : true,
+    "ratelimitmaxrequests" : 3,
+    "ratelimititerationduration" : 5000
 }
