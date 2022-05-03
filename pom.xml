@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>Melody</groupId>
   <artifactId>Melody</artifactId>
-  <version>ALPHA 0.7.0</version>
+  <version>BETA 0.7.0</version>
   <name>Melody</name>
   <description>An Opensource Musicbot for Discord!</description>
   <build>
