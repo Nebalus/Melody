@@ -2,9 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>Melody</groupId>
   <artifactId>Melody</artifactId>
-  <version>ALPHA 0.7.0</version>
-  <name>Melody</name>
-  <description>An Opensource Musicbot for Discord!</description>
+  <version>Beta 0.6.6</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
@@ -17,21 +15,20 @@
       </plugin>
     </plugins>
   </build>
- <repositories>
-   <repository>
-     <id>central</id>
-     <name>bintray</name>
-     <url>https://jcenter.bintray.com</url>
-   </repository>
+  <repositories>
+    <repository>
+      <id>central</id>
+      <name>bintray</name>
+      <url>https://jcenter.bintray.com</url>
+  	</repository>
 
-   <repository>
-     <id>dv8tion</id>
-     <name>m2-dv8tion</name>
-     <url>https://m2.dv8tion.net/releases</url>
-   </repository>
- </repositories>
- <dependencies>
-
+  	<repository>
+      <id>dv8tion</id>
+      <name>m2-dv8tion</name>
+      <url>https://m2.dv8tion.net/releases</url>
+  	</repository>
+  </repositories>
+  <dependencies>
     <dependency>
       <groupId>com.sedmelluq</groupId>
       <artifactId>lavaplayer</artifactId>
@@ -39,15 +36,14 @@
     </dependency>
     
     <dependency>
-      <groupId>com.github.natanbc</groupId>
-      <artifactId>lavadsp</artifactId>
-      <version>0.7.4</version>
+        <groupId>com.github.natanbc</groupId>
+        <artifactId>lavadsp</artifactId>
+        <version>0.7.4</version>
     </dependency>
-
     <dependency>
    	  <groupId>net.dv8tion</groupId>
 	  <artifactId>JDA</artifactId>
-	  <version>5.0.0-alpha.11</version>
+	  <version>4.4.0_351</version>
 	</dependency>
 
 	<dependency>
@@ -55,24 +51,15 @@
 	  <artifactId>sqlite-jdbc</artifactId>
 	  <version>3.34.0</version>
 	</dependency>
-
 	<dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <version>20210307</version>
 	</dependency>
-
 	<dependency>
-  	  <groupId>se.michaelthelin.spotify</groupId>
-  	  <artifactId>spotify-web-api-java</artifactId>
-  	  <version>7.0.0</version>
-	</dependency>
-	
-	<dependency>
-	  <groupId>com.vdurmont</groupId>
-	  <artifactId>emoji-java</artifactId>
-	  <version>5.1.1</version>
-	</dependency>
-
+  <groupId>se.michaelthelin.spotify</groupId>
+  <artifactId>spotify-web-api-java</artifactId>
+  <version>6.5.4</version>
+</dependency>
   </dependencies>
 </project>
