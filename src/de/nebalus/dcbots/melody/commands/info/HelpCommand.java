@@ -17,9 +17,10 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class HelpCommand extends ServerCommand{
 	
 	public HelpCommand() {
-		super("help");
+		super();
 		setMainPermission(CommandPermission.EVERYONE);
 		setDescription("Shows the help menu.");
+		setPrefix("help");
 	}
 	
 	@Override

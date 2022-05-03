@@ -14,10 +14,10 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class InviteCommand extends ServerCommand{
 
 	public InviteCommand() {
-		super("invite");
+		super();
 		setMainPermission(CommandPermission.EVERYONE);
 		setDescription("Get an Invite link to invite " + Build.NAME + " to your own Discord Server.");
-
+		setPrefix("invite");
 	}
 	
 	@Override

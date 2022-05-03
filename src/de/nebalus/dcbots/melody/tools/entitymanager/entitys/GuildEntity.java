@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.vdurmont.emoji.EmojiParser;
@@ -12,7 +13,6 @@ import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.tools.ConsoleLogger;
 import de.nebalus.dcbots.melody.tools.datamanager.files.LiteSQL;
-import de.nebalus.dcbots.melody.tools.entitymanager.DatabaseValueContainer;
 import de.nebalus.dcbots.melody.tools.entitymanager.Entity;
 import de.nebalus.dcbots.melody.tools.messenger.Language;
 import net.dv8tion.jda.api.entities.Guild;
@@ -21,79 +21,57 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 public final class GuildEntity extends Entity {
-	
+
 	private final Long guildid;
 
-	private final LiteSQL database = Melody.getDatabase();
-		
-	//This is for the command Ratelimiting 
+	private LiteSQL database = Melody.getDatabase();
+	
 	private short cmdrequest = 0;
 	private Long ratelimitend = 0l;
 	public boolean ratelimitmsgsend = false;
 
-	public GuildEntity(Long guildid) 
-	{
+	public GuildEntity(Long guildid) {
 		this.guildid = guildid;
-		
-		if (database.isConnected()) 
-		{
-			try 
-			{
+		if (database.isConnected()) {
+			try {
 				ResultSet rsguild = database.onQuery("SELECT * FROM guilds WHERE PK_guildid = " + guildid);
-				if (rsguild.next()) 
-				{
-					for (GuildEntityDBOptions option : GuildEntityDBOptions.values()) 
-					{
-						final DatabaseValueContainer dvc = new DatabaseValueContainer(option.name(), option.canbeexported, option.defaultvalue);
-						final String databasename = option.databasename;	
-						
-						if (rsguild.getString(databasename) != null) 
-						{
+				if (rsguild.next()) {
+					for (Options option : Options.values()) {
+						if (rsguild.getString(option.name().toLowerCase()) != null) {
 							switch (option) {
 								case FIRSTTIMELOADED:
-									dvc.updateValue(rsguild.getInt(databasename));
+									setValue(option, rsguild.getInt(option.databasename));
 									break;
 								case LANGUAGE:
-									dvc.updateValue(Language.getLanguage(rsguild.getInt(databasename)).getDatabaseID());
+									setValue(option, Language.getLanguage(rsguild.getInt(option.databasename)));
 									break;
 								case VOLUME:
-									dvc.updateValue(rsguild.getInt(databasename));
+									setValue(option, rsguild.getInt(option.databasename));
 									break;
 								case DJONLY:
-									dvc.updateValue(rsguild.getBoolean(databasename));
+									setValue(option, rsguild.getBoolean(option.databasename));
 									break;
 								case ANNOUNCESONGS:
-									dvc.updateValue(rsguild.getBoolean(databasename));
+									setValue(option, rsguild.getBoolean(option.databasename));
 									break;
 								case VOTESKIP:
-									dvc.updateValue(rsguild.getBoolean(databasename));
+									setValue(option, rsguild.getBoolean(option.databasename));
 									break;
 								case STAYMODE:
-									dvc.updateValue(rsguild.getBoolean(databasename));
+									setValue(option, rsguild.getBoolean(option.databasename));
 									break;
 								case LASTAUDIOCHANNEL:
-									dvc.updateValue(rsguild.getLong(databasename));
+									setValue(option, rsguild.getLong(option.databasename));
 									break;
 							default:
 								break;
 							}
 						}
-						
-						createDatabaseValueContainer(dvc);
 					}
-					for (GuildEntityDBOptions option : GuildEntityDBOptions.values()) 
-					{
-						DatabaseValueContainer dvc = getDatabaseValueContainer(option.name());
-						ConsoleLogger.info(option.name() + " " + dvc.getValue() + " " + dvc.needtoexport);
-					}
-				} 
-				else 
-				{
+				} else {
 					Guild guild = Melody.getGuildById(guildid);
-					for (TextChannel tc : guild.getTextChannels()) 
-					{
-						try 
-						{
+					for (TextChannel tc : guild.getTextChannels()) {
+						try {
 							tc.sendMessage(EmojiParser.parseToUnicode("Hello everybody, i'm "
 									+ guild.getSelfMember().getAsMention() + " \n" + " `-` My prefix on "
 									+ guild.getName() + " is `"+Settings.CMD_PREFIX+"`\n"
@@ -104,52 +82,24 @@ public final class GuildEntity extends Entity {
 									+ "**Otherwise have fun listening to the music from my service** " + ":notes: \n"
 									+ "PS: Thanks a lot for your support, that you added me to your discord server! :sparkling_heart:")).queue();
 							break;
-						} 
-						catch (InsufficientPermissionException e) 
-						{}
+						} catch (InsufficientPermissionException e) {}
 					}
 					// loads the guild in the database
-					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(PK_guildid, firsttimeloaded) VALUES(?,?)");
+					PreparedStatement ps = database.getConnection()
+							.prepareStatement("INSERT INTO guilds(PK_guildid, firsttimeloaded) VALUES(?,?)");
 					ps.setLong(1, guildid);
 					ps.setLong(2, System.currentTimeMillis());
 					ps.executeUpdate();
+					update();
 				}
 
-			} 
-			catch (SQLException e)
-			{
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		else 
-		{
-			throw new NullPointerException("The Database is unreachable!");
-		}
 
 	}
 
-	private enum GuildEntityDBOptions {
-		FIRSTTIMELOADED(System.currentTimeMillis(), "firsttimeloaded", false),
-		LANGUAGE(Language.ENGLISH.getDatabaseID(), "language", true),
-		VOLUME(50, "volume", true),
-		DJONLY(false, "djonly", true),
-		VOTESKIP(false, "voteskip", true),
-		STAYMODE(false, "staymode", true),
-		ANNOUNCESONGS(true, "announcesongs", true),
-		PREVENTDUPLICATES(false, "preventduplicates", true),
-		LASTAUDIOCHANNEL(0l, "lastaudiochannel", true);
-
-		final Object defaultvalue;
-		final String databasename;
-		final boolean canbeexported;
-		
-		GuildEntityDBOptions(Object defaultvalue, String databasename, boolean canbeexported) {
-			this.defaultvalue = defaultvalue;
-			this.databasename = databasename;
-			this.canbeexported = canbeexported;
-		}
-	}
-	
 	//############################################################
 	
 	public boolean isRateLimited() {
@@ -184,7 +134,7 @@ public final class GuildEntity extends Entity {
 	
 	public Long getLastAudioChannelId() {
 		renewExpireTime();
-		return (Long) getDatabaseValue(GuildEntityDBOptions.LASTAUDIOCHANNEL.name());
+		return (Long) getValue(Options.LASTAUDIOCHANNEL);
 	}
 	
 	public VoiceChannel getLastAudioChannel() {
@@ -197,101 +147,117 @@ public final class GuildEntity extends Entity {
 	}
 	
 	public void setLastAudioChannelId(Long lastaudiochannelid) {
-		updateDatabaseValue(GuildEntityDBOptions.LASTAUDIOCHANNEL.name(), lastaudiochannelid);
+		setValue(Options.LASTAUDIOCHANNEL, lastaudiochannelid);
+		update();
 	}
 	
 	public Boolean isVoteSkip() {
 		renewExpireTime();
-		return (Boolean) getDatabaseValue(GuildEntityDBOptions.VOTESKIP.name());
+		return (Boolean) getValue(Options.VOTESKIP);
 	}
 	
 	public void setVoteSkip(Boolean value) {
-		updateDatabaseValue(GuildEntityDBOptions.VOTESKIP.name(), value);
+		setValue(Options.VOTESKIP, value);
+		update();
 	}
 	
 	public int getVolume() {
 		renewExpireTime();
-		return (Integer) getDatabaseValue(GuildEntityDBOptions.VOLUME.name());
+		return (Integer) getValue(Options.VOLUME);
 	}
 	
-	public void setVolume(int volume) {		
-		updateDatabaseValue(GuildEntityDBOptions.VOLUME.name(), volume);
+	public void setVolume(int volume) {
+		ConsoleLogger.debug(getValue(Options.VOLUME));
+		
+		setValue(Options.VOLUME, volume);
+		
+		ConsoleLogger.debug(getValue(Options.VOLUME));
+		update();
 	}
 	
 	public Boolean is24_7() {
 		renewExpireTime();
-		return (Boolean) getDatabaseValue(GuildEntityDBOptions.STAYMODE.name());
+		return (Boolean) getValue(Options.STAYMODE);
 	}
 	
 	public void set24_7(Boolean new24_7) {
-		updateDatabaseValue(GuildEntityDBOptions.STAYMODE.name(), new24_7);
+		setValue(Options.STAYMODE, new24_7);
+		update();
 	}
 	
 	public void setLanguage(Language newlanguage) {
-		updateDatabaseValue(GuildEntityDBOptions.LANGUAGE.name(), newlanguage.getDatabaseID());
+		setValue(Options.LANGUAGE, newlanguage.getDatabaseID());
+		update();
 	}
 	
 	public Language getLanguage() {
 		renewExpireTime();
-		return Language.getLanguage((Integer) getDatabaseValue(GuildEntityDBOptions.LANGUAGE.name()));
+		return Language.getLanguage((Integer) getValue(Options.LANGUAGE));
 	}
 
 	public void setAnnounceSongs(Boolean newannouncesongs) {
-		updateDatabaseValue(GuildEntityDBOptions.ANNOUNCESONGS.name(), newannouncesongs);
+		setValue(Options.ANNOUNCESONGS, newannouncesongs);
+		update();
 	}
 	
 	public Boolean canAnnounceSongs() {
 		renewExpireTime();
-		return (Boolean) getDatabaseValue(GuildEntityDBOptions.ANNOUNCESONGS.name());
+		return (Boolean) getValue(Options.ANNOUNCESONGS);
 	}
 	
 	public Boolean isDjOnly() {
 		renewExpireTime();
-		return (Boolean) getDatabaseValue(GuildEntityDBOptions.DJONLY.name());
+		return (Boolean) getValue(Options.DJONLY);
 	}
 	
 	public void setDjOnly(boolean newdjonly) {
-		updateDatabaseValue(GuildEntityDBOptions.DJONLY.name(), newdjonly);
+		setValue(Options.DJONLY, newdjonly);
+		update();
 	}
 	
 	//############################################################
 
 
-	public boolean export() 
-	{
-		if (database.isConnected()) 
-		{
+	public boolean export() {
+		if (database.isConnected()) {
 			final String rawps = "UPDATE guilds SET %CONTENT% WHERE PK_guildid = ?";
 			String rawoptions = "";
-			final List<GuildEntityDBOptions> exportoptions = new ArrayList<GuildEntityDBOptions>();
+			final List<Options> exportoptions = new ArrayList<Options>();
 			
-			for(GuildEntityDBOptions options : GuildEntityDBOptions.values()) 
-			{
-				if(getDatabaseValueContainer(options.name()).needtoexport && options.canbeexported) 
-				{
-					ConsoleLogger.info("1 " + options.name());
+			for(Options options : Options.values()) {
+				if(getOptionContainer(options).needtoexport && options.canbeexported) {
 					exportoptions.add(options);
-					if(exportoptions.size() == 1) 
-					{
+					if(exportoptions.size() == 1) {
 						rawoptions = rawoptions + options.databasename + " = ?";
-					}
-					else 
-					{
+					}else {
 						rawoptions = rawoptions + ", " + options.databasename + " = ?";
 					}
 				}
 			}
-			if(!exportoptions.isEmpty()) 
-			{
+			if(!exportoptions.isEmpty()) {
 				
-				try 
-				{
+				try {
 					PreparedStatement ps = database.getConnection().prepareStatement(rawps.replace("%CONTENT%", rawoptions));
 					int ioption = 1;
-					for(GuildEntityDBOptions option : exportoptions) 
-					{
-						DatabaseValueContainer dvc = getDatabaseValueContainer(option.name());
-						dvc.exportValueToDatabaseRequest(ps, ioption);
+					for(Options option : exportoptions) {
+						Object ovalue = getValue(option);
+						
+						if(ovalue instanceof Integer) {
+							ps.setInt(ioption, (int) ovalue);
+							getOptionContainer(option).needtoexport = false;
+						}
+						else if(ovalue instanceof String) {
+							ps.setString(ioption, (String) ovalue);
+							getOptionContainer(option).needtoexport = false;
+						}
+						else if(ovalue instanceof Boolean) {
+							ps.setBoolean(ioption, (Boolean) ovalue);
+							getOptionContainer(option).needtoexport = false;
+						}
+						else if(ovalue instanceof Long) {
+							ps.setLong(ioption, (Long) ovalue);
+							getOptionContainer(option).needtoexport = false;
+						}
 						ioption++;
 					}
 					
@@ -299,9 +265,7 @@ public final class GuildEntity extends Entity {
 					ps.executeUpdate();
 					ConsoleLogger.debug("export guildentity ID:"+ guildid, rawps.replace("%CONTENT%", rawoptions));		
 						
-				} 
-				catch (SQLException e)
-				{
+				} catch (SQLException e) {
 					e.printStackTrace();
 					return false;
 				}
@@ -310,4 +274,99 @@ public final class GuildEntity extends Entity {
 		}
 		return false;
 	}
+	
+	private enum Options {
+		FIRSTTIMELOADED(System.currentTimeMillis(), "firsttimeloaded", false),
+		LANGUAGE(Language.ENGLISH.getDatabaseID(), "language", true),
+		VOLUME(50, "volume", true),
+		DJONLY(false, "djonly", true),
+		VOTESKIP(false, "voteskip", true),
+		STAYMODE(false, "staymode", true),
+		ANNOUNCESONGS(true, "announcesongs", true),
+		PREVENTDUPLICATES(false, "prefentduplicates", true),
+		LASTAUDIOCHANNEL(0l, "lastaudiochannel", true);
+
+		final Object defaultvalue;
+		final String databasename;
+		final boolean canbeexported;
+		
+		Options(Object defaultvalue, String databasename, boolean canbeexported) {
+			this.defaultvalue = defaultvalue;
+			this.databasename = databasename;
+			this.canbeexported = canbeexported;
+		}
+	}
+
+	private HashMap<Options, OptionContainer> varoptions = new HashMap<Options, OptionContainer>();
+	
+	private void setValue(Options option, Object value) {
+		if(varoptions.containsKey(option)) {
+			OptionContainer oc = varoptions.get(option);
+			oc.updateValue(value);
+		}else {
+			OptionContainer oc = new OptionContainer(option, value);
+			varoptions.put(option, oc);
+		}
+	}
+	
+	private Object getValue(Options option) {
+		if(varoptions.containsKey(option)) {
+			OptionContainer oc = varoptions.get(option);
+			if(oc.getValue() != null) {
+				return oc.getValue();
+			}else {
+				oc.updateValue(option.defaultvalue);
+			}
+		}else {
+			varoptions.put(option, new OptionContainer(option, option.defaultvalue));
+		}
+		return option.defaultvalue;
+	}
+	
+	private OptionContainer getOptionContainer(Options option) {
+		if(varoptions.containsKey(option)) {
+			OptionContainer oc = varoptions.get(option);
+			return oc;
+		}else {
+			OptionContainer oc = new OptionContainer(option, option.defaultvalue);
+			varoptions.put(option, oc);
+			return oc;
+		}
+	}
+	
+	private class OptionContainer{
+		
+		public Object value;
+		public boolean needtoexport = false;
+		final public Options option;
+		
+		public OptionContainer(Options option, Object value) {
+			this.value = value;
+			this.option = option;
+		}
+		
+		public void updateValue(Object value) {
+			needtoexport = true;
+			this.value = value;
+		}
+		
+		public Object getValue() {
+			return this.value;
+		}
+		
+		@SuppressWarnings("unused")
+		public Options getOption() {
+			return option;
+		}
+	}
+	/*
+	 * public enum GuildOptions{ VOLUME("volume"), PREFIX("prefix"),
+	 * LASTAUDIOCHANNEL("lastaudiochannel"), PLAYTIME("playtime");
+	 * 
+	 * final String databasename;
+	 * 
+	 * GuildOptions(String databasename){ this.databasename = databasename; }
+	 * 
+	 * public String getDatabaseName() { return databasename; } }
+	 */
 }

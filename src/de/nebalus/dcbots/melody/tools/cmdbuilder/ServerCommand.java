@@ -16,11 +16,11 @@ public class ServerCommand {
 	
 	private ArrayList<SubCommand> subcommands;
 	
-	protected ServerCommand(String prefix) {
+	protected ServerCommand() {
 		this.subcommands = new ArrayList<SubCommand>();
 		this.description = "What will be here is written in the stars :P";
 		this.mainpermission = CommandPermission.DEVELOPER;
-		this.prefix = prefix.toLowerCase();
+		this.prefix = null;
 	}
 	
 	public String getDescription() {
@@ -44,7 +44,7 @@ public class ServerCommand {
 	}
 	
 	protected void setPrefix(String prefix) {
-		this.prefix = prefix.toLowerCase();
+		this.prefix = prefix;
 	}
 	
 	public ArrayList<SubCommand> getSubCommands(){

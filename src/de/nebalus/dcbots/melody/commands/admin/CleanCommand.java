@@ -1,16 +1,17 @@
 package de.nebalus.dcbots.melody.commands.admin;
 
-import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandPermission;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
 
 public class CleanCommand extends ServerCommand{
-	
+	/*
 	public CleanCommand() {
-		super("cleanup");
+		super();
 		setMainPermission(CommandPermission.ADMIN);
+		setPrefixes("cleanup", "clean");
+		setType(CommandType.CHAT);
 		setDescription("Clears command and bot messages.");
 	}
-	/*
+	
 	@Override
 	public void performMainCMD(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 		int i = Constants.MAXCLEANMESSAGES;
