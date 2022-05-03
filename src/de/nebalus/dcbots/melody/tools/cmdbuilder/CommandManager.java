@@ -20,8 +20,12 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 public final class CommandManager {
@@ -45,10 +49,24 @@ public final class CommandManager {
 			command.put(sc.getPrefix().toLowerCase(), sc);
 
 			// Muss noch bearbeitet werden
-			if (sc.getSubCommands().isEmpty()) {
-				slashcommands.add(Commands.slash(sc.getPrefix(), sc.getDescription()));
-			}
+//			if (sc.getSubCommands().isEmpty()) {
+//				slashcommands.add(Commands.slash(sc.getPrefix(), sc.getDescription()));
+//			}
 			
+				slashcommands.add(Commands.slash(sc.getPrefix(), sc.getDescription())
+						.addSubcommands(new SubcommandData("test", "Test")
+								.addOptions(new OptionData(OptionType.INTEGER, "requierd_autocompleteno", "?", true, false)
+										.addChoice("choice0", 0L)
+										.addChoice("choice1", 1L)
+										.addChoice("choice2", 2L)
+										.addChoice("choice3", 3L)
+										)
+								.addOption(OptionType.INTEGER, "requierd", "??", true, false)
+								.addOption(OptionType.INTEGER, "autocomplete", "???", false, true)
+								.addOption(OptionType.INTEGER, "none", "????", false, false))
+						.addSubcommands(new SubcommandData("test1", "Test1"))
+						.addSubcommandGroups(new SubcommandGroupData("lul", "Krasse gruppe")
+								.addSubcommands(new SubcommandData("omegalul", "oooomeeegalul"))));
 		}
 
 		if (Melody.getConfig()._allowslashcommands) {

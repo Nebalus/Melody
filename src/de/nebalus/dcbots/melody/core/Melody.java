@@ -3,7 +3,6 @@ package de.nebalus.dcbots.melody.core;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -18,7 +17,6 @@ import de.nebalus.dcbots.melody.tools.datamanager.DataManager;
 import de.nebalus.dcbots.melody.tools.datamanager.files.Config;
 import de.nebalus.dcbots.melody.tools.datamanager.files.LiteSQL;
 import de.nebalus.dcbots.melody.tools.entitymanager.EntityManager;
-import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import de.nebalus.dcbots.melody.tools.messenger.MessageFormatter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -135,18 +133,7 @@ public final class Melody {
 	private void exporttodatabase() {
 		ConsoleLogger.debug("Auto-Saver", "Starting to export cache");
 		try{
-			boolean export = false;
-			for(Entry<Long, GuildEntity> entry : entityMan.guildentity.entrySet()) {
-				GuildEntity value = entry.getValue();
-				if(value.getExpireTime() <= System.currentTimeMillis()) {
-					entityMan.removeGuildEntity(value);
-					export = true;
-				}else if(value.needToExport()) {
-					value.export();
-					export = true;
-				}
-			}
-			if(export) {
+			if(entityMan.exportToDatabase()) {
 				ConsoleLogger.debug("Auto-Saver", "Export ended sucessfully");
 			}else {
 				ConsoleLogger.debug("Auto-Saver", "There is nothing to export to the database");
@@ -250,6 +237,14 @@ public final class Melody {
 			return INSTANCE.shardMan;
 		}else {
 			throw new NullPointerException("The ShardManager is not loaded!");
+		}
+	}
+	
+	public static EntityManager getEntityManager() {
+		if(INSTANCE.entityMan != null) {
+			return INSTANCE.entityMan;
+		}else {
+			throw new NullPointerException("The EntityManager is not loaded!");
 		}
 	}
 	
