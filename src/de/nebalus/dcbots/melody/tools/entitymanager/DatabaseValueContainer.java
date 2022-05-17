@@ -3,7 +3,7 @@ package de.nebalus.dcbots.melody.tools.entitymanager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class DatabaseValueContainer 
+public class DatabaseValueContainer implements Cloneable
 {
 
 	private Object value;
@@ -85,12 +85,7 @@ public class DatabaseValueContainer
 		}
 		return false;
 	}
-	
-	public DatabaseValueContainer clone() 
-	{
-		return new DatabaseValueContainer(this.key, this.canbeexported, this.defaultvalue, this.value);
-	}
-	
+
 	public void exportValueToDatabaseRequest(PreparedStatement ps, int ioption) throws SQLException 
 	{	
 		if(this.value instanceof Integer) 
