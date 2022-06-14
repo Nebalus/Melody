@@ -2,6 +2,7 @@ package de.nebalus.dcbots.melody.commands;
 
 import java.util.Random;
 
+import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandPermission;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.SubCommand;
@@ -60,7 +61,8 @@ public class TestCommand extends ServerCommand{
 		final int test = ran.nextInt(99)+1;
 		
 		guildentity.setVolume(test);
-		channel.sendMessage("HEHEHE... "+test).queue();
+		Melody.getEntityManager().getUserEntity(member.getUser());
+		event.reply(test+"").queue();
 	}
 	
 }

@@ -13,40 +13,52 @@ import de.nebalus.dcbots.melody.tools.ConsoleLogger;
 import de.nebalus.dcbots.melody.tools.datamanager.files.Config;
 import de.nebalus.dcbots.melody.tools.datamanager.files.LiteSQL;
 
-public class DataManager {
+public class DataManager 
+{
 	
-	private final File temp_directory = new File(DataHelper.getCurrentJarPath()+"/temp/");
+	private final File temp_directory = new File(DataHelper.getCurrentJarPath() + "/temp/");
 	private final Config config;
 	private final LiteSQL database;
 	
-	public DataManager() throws Exception{
+	public DataManager() throws Exception
+	{
 		//Loads the temp_directory
-		if(temp_directory.exists()) {
+		if(temp_directory.exists()) 
+		{
 			FileUtils.cleanDirectory(temp_directory);
-		}else {
+		}
+		else
+		{
 			temp_directory.mkdir();
 		}
 		
-		for(FileResource resource : FileResource.values()) {
-			loadFile(resource);
+		for(FileResource resource : FileResource.values()) 
+		{
+			loadLocalFile(resource);
 		}
 		
 		this.config = new Config(this);
 		this.database = new LiteSQL(this);
 	}
 
-	private void loadFile(FileResource resource) throws IOException {
+	private void loadLocalFile(FileResource resource) throws IOException 
+	{
 		ConsoleLogger.info("FileLoader", "Loading File: " + resource.getInternFilePath());
-		if(resource.getFile().exists()) {
+		if(resource.getFile().exists()) 
+		{
 			InputStream link = new FileInputStream(resource.getFile());
 			File file = new File(getTempDirectory() + resource.parentfile + "OLD_"+resource.getFileName());
-			if(!file.exists()) {
+			if(!file.exists()) 
+			{
 				file.mkdirs();
 			}	
 			Files.copy(link, file.getAbsoluteFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
-		} else {
+		} 
+		else 
+		{
 			File parentfile = new File(DataHelper.getCurrentJarPath() + resource.parentfile);
-			if(!parentfile.exists()) {
+			if(!parentfile.exists()) 
+			{
 				parentfile.mkdirs();
 			}	
 			
@@ -55,15 +67,19 @@ public class DataManager {
 		}
 	}
 	
-	public Config getConfig() {
+	
+	public Config getConfig() 
+	{
 		return config;
 	}
 	
-	public LiteSQL getDatabase() {
+	public LiteSQL getDatabase() 
+	{
 		return database;
 	}
 	
-	public File getTempDirectory() {
+	public File getTempDirectory() 
+	{
 		return temp_directory;
 	}
 }

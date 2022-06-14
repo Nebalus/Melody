@@ -36,6 +36,21 @@ public final class EntityManager {
 		return ge;
 	}
 	
+	public GuildEntity getGuildEntity(Long guildid) 
+	{
+		GuildEntity ge = null;
+		if(this.guildentity.containsKey(guildid)) 
+		{
+			ge = this.guildentity.get(guildid);
+		}
+		else 
+		{
+			ge = new GuildEntity(guildid);
+			this.guildentity.put(guildid, ge);
+		}
+		return ge;
+	}
+	
 	public UserEntity getUserEntity(User user) 
 	{
 		UserEntity ue = null;

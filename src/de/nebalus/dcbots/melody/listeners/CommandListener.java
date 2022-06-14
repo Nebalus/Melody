@@ -4,7 +4,6 @@ import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.core.constants.Url;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import de.nebalus.dcbots.melody.tools.messenger.Messenger;
-import de.nebalus.dcbots.melody.tools.messenger.Messenger.ErrorMessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -29,12 +28,12 @@ public final class CommandListener extends ListenerAdapter {
 				{
 			    	if(!melody.cmdMan.performServer(ge, event)) 
 			    	{	
-			    		event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
+			    		event.reply("This command is currently not available.").setEphemeral(true).queue();
 					}
 				}
 				catch(InsufficientPermissionException e) 
 				{
-					Messenger.sendErrorMessage(event, new ErrorMessageBuilder().setMessageFormat(event.getGuild(), "bot-no-permmisions", e.getPermission()), true);
+					Messenger.sendErrorMessage(event, "bot-no-permmisions", e.getPermission());
 				}
 			}
 			else 
@@ -42,7 +41,7 @@ public final class CommandListener extends ListenerAdapter {
 				if(!ge.ratelimitmsgsend) 
 				{
 					ge.ratelimitmsgsend = true;
-					Messenger.sendErrorMessage(event, new ErrorMessageBuilder().setMessageFormat(guild, "info.ratelimit", Melody.getConfig()._ratelimitmaxrequests, Melody.getConfig()._ratelimititerationduration), true);
+					Messenger.sendErrorMessage(event, "info.ratelimit", Melody.getConfig()._ratelimitmaxrequests, Melody.getConfig()._ratelimititerationduration);
 				}
 			}
 	    }
@@ -51,6 +50,8 @@ public final class CommandListener extends ListenerAdapter {
 	    	event.reply("My commands only work in a guild where im in :( \n" + Url.INVITE.toString()).setEphemeral(true).queue();
 	    }
 	}
+	
+	//OLD command methode
 	
 //	@Override
 //	public void onMessageReceived(MessageReceivedEvent event) {

@@ -11,25 +11,24 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class PingCommand extends ServerCommand{
+public class PingCommand extends ServerCommand
+{
 
-	public PingCommand() {
+	public PingCommand() 
+	{
 		super("ping");
 		setMainPermission(CommandPermission.EVERYONE);
 		setDescription("See the response time of " + Build.NAME + " to the Discord Gateway.");
 	}
 	
 	@Override
-	public void performMainCMD(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
+	public void performMainCMD(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) 
+	{
 		long gatewayping = channel.getJDA().getGatewayPing();
 		ConsoleLogger.info("Gateway Ping: " + gatewayping);
 		channel.getJDA().getRestPing().queue( (time) ->
-			//event.replyFormat(Melody.formatMessage(guild, "feedback.info.ping"), time, gatewayping).queue()
-			ConsoleLogger.info("Gateway Ping: " + time)
+			event.replyFormat(Melody.formatMessage(guild, "feedback.info.ping"), time, gatewayping).queue()
 		);
-		guildentity.setVolume(30);
-		
-		Melody.getEntityManager().getUserEntity(member.getUser());
 	}
 	
 }
