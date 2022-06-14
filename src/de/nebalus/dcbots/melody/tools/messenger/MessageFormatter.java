@@ -26,35 +26,56 @@ public class MessageFormatter {
         }
 	}
 	
-	public String format(Guild guild, String key, Object... args) {
+	public String format(Guild guild, String key, Object... args) 
+	{
 		GuildEntity guildentity = melody.entityMan.getGuildEntity(guild);
-		Language language = guildentity.getLanguage();
-		String message = "JSON-Error {"+key.toLowerCase()+"} - "+language.code;
-	    try {
-			JSONObject json = messagecache.get(language);
+		Language lang = guildentity.getLanguage();
+		
+		return format(lang, key, args);
+	}
+	
+	public String format(String key, Object... args) 
+	{
+	    return format(Language.ENGLISH, key, args);
+	}
+	
+	@SuppressWarnings("incomplete-switch")
+	public String format(Language lang, String key, Object... args) 
+	{
+		String message = "JSON-Error {"+key.toLowerCase()+"} - " + lang.code;
+	    try 
+	    {
+			JSONObject json = messagecache.get(lang);
 			message = json.getString(key.toLowerCase());
-			if(language.equals(Language.GERMAN)) {
-				message = message.replace("ss", "ß");
-				message = message.replace("ae", "ä");
-				message = message.replace("oe", "ö");
-				message = message.replace("ue", "ü");
-				message = message.replace("AE", "Ä");
-				message = message.replace("OE", "Ö");
-				message = message.replace("UE", "Ü");
-				
-				message = message.replace("[ß]", "ss");
-				message = message.replace("[ä]", "ae");
-				message = message.replace("[ö]", "oe");
-				message = message.replace("[ü]", "ue");
+			
+			switch(lang) 
+			{
+				case GERMAN:
+					message = message.replace("ss", "ß");
+					message = message.replace("ae", "ä");
+					message = message.replace("oe", "ö");
+					message = message.replace("ue", "ü");
+					message = message.replace("AE", "Ä");
+					message = message.replace("OE", "Ö");
+					message = message.replace("UE", "Ü");
+					
+					message = message.replace("[ß]", "ss");
+					message = message.replace("[ä]", "ae");
+					message = message.replace("[ö]", "oe");
+					message = message.replace("[ü]", "ue");
+					break;
 			}
 			
 			message = message.replace("%botname%", Build.NAME);
 			message = message.replace("%prefix%", Settings.CMD_PREFIX);
 			
-			for(int i = 0; i < args.length; ++i) {
+			for(int i = 0; i < args.length; ++i) 
+			{
 				message = message.replace("{" + i + "}", String.valueOf(args[i]));
 		    }
-		} catch (Exception e) {
+		} 
+	    catch (Exception e)
+	    {
 			e.printStackTrace();
 		}
 	    return message;

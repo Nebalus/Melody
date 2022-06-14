@@ -73,7 +73,7 @@ public final class UserEntity extends Entity
                 }
 				else 
 				{
-					ConsoleLogger.info("UserEntity", "Loading user ID:" + userid + " for the first time!");
+					ConsoleLogger.info("UserEntity", "Loading USERID:" + userid + " for the first time!");
 					// loads the guild in the database
 					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO userdata(PK_userid, " + UserEntityDBOptions.FIRSTTIMELOADED.databasename + ") VALUES(?,?)");
 					ps.setLong(1, userid);

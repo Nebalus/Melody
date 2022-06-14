@@ -52,12 +52,12 @@
     "error.info.command-usage.header": "Wrong Usage",
     "error.info.unknown-command.body": "Hmm, it looks like I don't know this command. Please use `%prefix%help` to see the command list.",
     "error.info.unknown-command.header": "Unknown Command",
-    "error.info.ratelimit.body": "This server has been rate limited! You can execute a maximum of **{0}** commands every **{1}ms**.",
+    "error.info.ratelimit.body": "This server has been rate limited! All server members can only execute a maximum of **{0}** commands every **{1}ms**.",
     "error.info.ratelimit.header": "Rate Limited",
     
     "feedback.info.invite": "Here is my invite link which you can add me to your Discord server:\n{0}",
     "feedback.info.ping": "The latency of %botname% is %dms",
-    "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nBuilddate: {2}\nRunning on servers: {3}\n\n{4} Users listened for {5} to music thru {6}!",
+    "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nBuilddate: {2}\nRunning on {3} servers\n\n{4} users listened for {5} to music thru {6}!",
     "feedback.info.prefix": "**My prefix on this server is `{0}`**",
     
     "music.info.loopmode-queue": " **Loopmode: `Queue`**",

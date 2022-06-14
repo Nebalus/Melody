@@ -9,6 +9,12 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
+import de.nebalus.dcbots.melody.commands.TestCommand;
+import de.nebalus.dcbots.melody.commands.info.HelpCommand;
+import de.nebalus.dcbots.melody.commands.info.InfoCommand;
+import de.nebalus.dcbots.melody.commands.info.InviteCommand;
+import de.nebalus.dcbots.melody.commands.info.PingCommand;
+import de.nebalus.dcbots.melody.commands.music.PlayCommand;
 import de.nebalus.dcbots.melody.core.constants.Build;
 import de.nebalus.dcbots.melody.listeners.CommandListener;
 import de.nebalus.dcbots.melody.tools.ConsoleLogger;
@@ -55,7 +61,7 @@ public final class Melody {
 	}
 	
 	private Melody() throws Exception {
-		new Build("BETA v0.7.0", "2022-04-30");
+		new Build("BETA v0.7.0", "2022-06-14");
 		
 		ConsoleLogger.info("Starting BOOT process for " + Build.NAME + " " + Build.VERSION);
 		
@@ -79,6 +85,7 @@ public final class Melody {
 		}
 		
 		this.cmdMan = new CommandManager(this);
+		this.cmdMan.registerCommands(new TestCommand(), new InviteCommand(), new PingCommand(), new HelpCommand(), new PlayCommand(), new InfoCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioPlayerMan);
 		AudioSourceManagers.registerLocalSource(audioPlayerMan);
@@ -229,6 +236,14 @@ public final class Melody {
 			return INSTANCE.dataMan.getConfig();
 		}else {
 			throw new NullPointerException("The Config is not loaded!");
+		}
+	}
+	
+	public static DataManager getDataManager() {
+		if(INSTANCE.dataMan != null) {
+			return INSTANCE.dataMan;
+		}else {
+			throw new NullPointerException("The DataManager is not loaded!");
 		}
 	}
 	

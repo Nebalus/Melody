@@ -5,7 +5,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.core.constants.Settings;
-import de.nebalus.dcbots.melody.tools.audioplayer.audioloader.AudioPlayerSendHandler;
 import de.nebalus.dcbots.melody.tools.audioplayer.enums.LoopMode;
 import net.dv8tion.jda.api.entities.Guild;
 

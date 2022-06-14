@@ -302,7 +302,7 @@ public final class GuildEntity extends Entity {
 					
 					ps.setLong(exportoptions.size() + 1, guildid);
 					ps.executeUpdate();
-					ConsoleLogger.debug("export guildentity ID:"+ guildid, rawps.replace("%CONTENT%", rawoptions));		
+					ConsoleLogger.debug("EXPORT guildentity ID:"+ guildid, rawps.replace("%CONTENT%", rawoptions));		
 						
 				} 
 				catch (SQLException e)

@@ -9,7 +9,7 @@ public class Settings {
     public static final Color EMBED_COLOR = Color.decode("#47EFFF");
     public static final Color ERROR_EMBED_COLOR = Color.RED;
 
-    public static final int MUSIC_AFK_DEFAULT = 30;
+    public static final int MUSIC_AFK_DEFAULT = 30; //In Seconds 
 
 	public static final String CMD_PREFIX = "/";
     

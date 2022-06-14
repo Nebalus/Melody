@@ -9,5 +9,4 @@ public class ConfigCommand extends ServerCommand{
 		super("config");
 		setMainPermission(CommandPermission.ADMIN);
 	}
-	
 }

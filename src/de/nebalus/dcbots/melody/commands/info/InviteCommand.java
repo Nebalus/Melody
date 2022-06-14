@@ -17,7 +17,6 @@ public class InviteCommand extends ServerCommand{
 		super("invite");
 		setMainPermission(CommandPermission.EVERYONE);
 		setDescription("Get an Invite link to invite " + Build.NAME + " to your own Discord Server.");
-
 	}
 	
 	@Override

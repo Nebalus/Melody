@@ -52,12 +52,12 @@
     "error.info.command-usage.header": "Falsche benutzung",
     "error.info.unknown-command.body": "Hmm, es sieht so aus als wenn ich diesen Befehl nicht kennen wuerde. Bitte nutze um die Befehls liste zu sehen `%prefix]help`.",
     "error.info.unknown-command.header": "Unbekannter Befehl",
-    "error.info.ratelimit.body": "Dieser Server ist ratenbegrenzt! Du kannst maximal **{0}** Befehle jede **{1}ms** ausführen.",
+    "error.info.ratelimit.body": "Dieser Server ist ratenbegrenzt! Alle Servermitglieder können maximal **{0}** Befehle jede **{1}ms** ausführen.",
     "error.info.ratelimit.header": "Ratenbegrenzt",
     
     "feedback.info.invite": "Hier ist mein Einladungslink wo du mich zu deinem Server hinzufuegen kannst:\n{0}",
     "feedback.info.ping": "Die Latenz von %botname% ist %dms",
-    "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nErstellungsdatum: {2}\nLaeuft auf Servern: {3}\n\n{4} Benutzer hoerten insgesammt {5} lang Musik ueber {6}!",
+    "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nVeröffentlichung: {2}\nIst auf {3} Servern\n\n{4} Benutzer hoerten insgesammt {5} lang Musik ueber {6}!",
     "feedback.info.prefix": "**Mein Praefix auf diesem Server ist `{0}`**",
     
   	"music.info.loopmode-queue": " **Wiederholungs Modus: `Wiedergabeliste`**",
