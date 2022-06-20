@@ -15,7 +15,6 @@ import net.dv8tion.jda.api.entities.Guild;
 public class MessageFormatter {
 	
 	private HashMap<Language, JSONObject> messagecache; 
-	private Melody melody = Melody.INSTANCE;
 	
 	public MessageFormatter() throws Exception {
 		this.messagecache = new HashMap<Language, JSONObject>();
@@ -28,7 +27,7 @@ public class MessageFormatter {
 	
 	public String format(Guild guild, String key, Object... args) 
 	{
-		GuildEntity guildentity = melody.entityMan.getGuildEntity(guild);
+		GuildEntity guildentity = Melody.getEntityManager().getGuildEntity(guild);
 		Language lang = guildentity.getLanguage();
 		
 		return format(lang, key, args);

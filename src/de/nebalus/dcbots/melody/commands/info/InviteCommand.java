@@ -11,16 +11,19 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public class InviteCommand extends ServerCommand{
+public class InviteCommand extends ServerCommand
+{
 
-	public InviteCommand() {
+	public InviteCommand()
+	{
 		super("invite");
 		setMainPermission(CommandPermission.EVERYONE);
 		setDescription("Get an Invite link to invite " + Build.NAME + " to your own Discord Server.");
 	}
 	
 	@Override
-	public void performMainCMD(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
+	public void performMainCmd(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) 
+	{
 		event.reply(Melody.formatMessage(guild, "feedback.info.invite", Url.INVITE.toString())).queue();
 	}
 }

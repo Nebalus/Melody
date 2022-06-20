@@ -6,6 +6,7 @@ import java.net.URL;
 public class Url {
 
     public static URL ICON;
+    public static URL ERROR_ICON;
     public static URL INVITE;
     public static URL COMMANDS;
     public static URL PLAYLIST;
@@ -14,6 +15,7 @@ public class Url {
     static {
         try {
             ICON = new URL("https://nebalus.github.io/MelodyWeb/assets/images/icon.png");
+            ERROR_ICON = new URL("https://nebalus.github.io/MelodyWeb/assets/images/error-icon.png");
             INVITE = new URL("https://nebalus.github.io/MelodyWeb/invite");
             COMMANDS = new URL("https://nebalus.github.io/MelodyWeb/commands");
             PLAYLIST = new URL("https://nebalus.github.io/MelodyWeb/playlist?list=");

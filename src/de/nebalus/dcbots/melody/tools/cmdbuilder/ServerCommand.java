@@ -26,7 +26,7 @@ public class ServerCommand
 		this.description = "What will be here is written in the stars :P";
 		this.mainpermission = CommandPermission.DEVELOPER;
 		this.prefix = prefix.toLowerCase();
-		this.slashcommanddata = Commands.slash(prefix, prefix);
+		this.slashcommanddata = Commands.slash(prefix, description);
 	}
 	
 	public String getDescription() 
@@ -61,14 +61,14 @@ public class ServerCommand
 	
 	public SlashCommandData getSlashCommandData()
 	{
+		slashcommanddata.setDescription(this.description);
+		slashcommanddata.setName(this.prefix);
+		
 		return this.slashcommanddata;
 	}
 	
 	protected void setSlashCommandData(SlashCommandData slashcommanddata) 
 	{
-		slashcommanddata.setDescription(this.description);
-		slashcommanddata.setName(this.prefix);
-		
 		this.slashcommanddata = slashcommanddata;
 	}
 	
@@ -82,7 +82,7 @@ public class ServerCommand
 		this.subcommands.add(subcommand);
 	}
 	
-	public void performMainCMD(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) 
+	public void performMainCmd(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) 
 	{
 		
 	}

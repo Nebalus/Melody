@@ -1,9 +1,10 @@
 package de.nebalus.dcbots.melody.tools.messenger;
 
-import java.awt.Color;
-
 import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.core.constants.Settings;
+import de.nebalus.dcbots.melody.core.constants.Url;
+import de.nebalus.dcbots.melody.tools.messenger.embedbuilders.ColorLineEmbedBuilder;
+import de.nebalus.dcbots.melody.tools.messenger.embedbuilders.DefaultEmbedBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -14,23 +15,19 @@ public class Messenger
 	
 	public static MessageEmbed getMessageEmbed(String message) 
 	{
-		EmbedBuilder builder = new EmbedBuilder();
-		builder.setColor(Settings.EMBED_COLOR);
-		builder.setDescription(message);
-		return builder.build();
+		return getEmbedBuilder(message).build();
 	}
 	
-	public static MessageEmbed getMessageEmbed(EmbedBuilder builder) 
+	public static EmbedBuilder getEmbedBuilder(String message) 
 	{
-		builder.setColor(Settings.EMBED_COLOR);
-		return builder.build();
+		DefaultEmbedBuilder builder = new DefaultEmbedBuilder();
+		builder.setDescription(message);
+		return builder;
 	}
-	
 	
 	public static void sendErrorMessage(SlashCommandInteractionEvent event, String formatid, Object... args) 
 	{
-		MessageFormatter mf = Melody.INSTANCE.messageformatter;
-		ReworkMessageBuilder rmb = new ReworkMessageBuilder();
+		ColorLineEmbedBuilder cleb = new ColorLineEmbedBuilder();
 		
 		final String headerid = "error." + formatid + ".header";
 		final String bodyid = "error." + formatid + ".body";
@@ -41,34 +38,40 @@ public class Messenger
 		{
 			final Guild g = event.getGuild();
 			
-			rmb.setHeader(mf.format(g, headerid, args));
-			rmb.setBody(mf.format(g, bodyid, args));
+			cleb.setHeader(Melody.formatMessage(g, headerid, args));
+			cleb.setBody(Melody.formatMessage(g, bodyid, args));
 		}
 		else
 		{
-			rmb.setHeader(mf.format(defaultlang, headerid, args));
-			rmb.setBody(mf.format(defaultlang, bodyid, args));
+			cleb.setHeader(Melody.formatMessage(defaultlang, headerid, args));
+			cleb.setBody(Melody.formatMessage(defaultlang, bodyid, args));
 		}
 		
-		rmb.setFooter(formatid.replace(".", " > ").toUpperCase());
-		rmb.setColor(Settings.ERROR_EMBED_COLOR);
+		cleb.setFooter(formatid.replace(".", " > ").toUpperCase());
+		cleb.setColor(Settings.ERROR_EMBED_COLOR);
+		cleb.setThumbnail(Url.ERROR_ICON.toString());
 		//Color.decode("#C6B0FF")
 		
-		sendReworkMessage(event, rmb, true);
+		sendReworkMessage(event, cleb, true);
 	}
 	
-	public static void sendReworkMessage(SlashCommandInteractionEvent event, ReworkMessageBuilder rmb, boolean ephemeral) 
+	public static void sendReworkMessage(SlashCommandInteractionEvent event, ColorLineEmbedBuilder cleb, boolean ephemeral) 
 	{
-		if(rmb.isColorLineEnabled())
+		if(cleb.isColorLineEnabled())
 		{
-			event.replyEmbeds(rmb.build()).setEphemeral(ephemeral).queue((picture) -> 
+			event.replyEmbeds(cleb.build()).setEphemeral(ephemeral).queue((picture) -> 
 			{
-				picture.editOriginal(rmb.getImageFile(), "colorline.png").queue();
+				picture.editOriginal(cleb.getImageFile(), "colorline.png").queue();
 			});
 		}
 		else
 		{
-			event.replyEmbeds(rmb.build()).setEphemeral(ephemeral).queue();
+			event.replyEmbeds(cleb.build()).setEphemeral(ephemeral).queue();
 		}
+	}
+	
+	public static void sendReworkMessage(SlashCommandInteractionEvent event, ColorLineEmbedBuilder cleb) 
+	{
+		sendReworkMessage(event, cleb, false);
 	}
 }
