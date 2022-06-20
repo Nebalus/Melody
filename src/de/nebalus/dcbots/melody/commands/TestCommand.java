@@ -55,7 +55,7 @@ public class TestCommand extends ServerCommand{
 	}
 	
 	@Override
-	public void performMainCMD(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
+	public void performMainCmd(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
 		Random ran = new Random();
 		
 		final int test = ran.nextInt(99)+1;

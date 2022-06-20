@@ -6,35 +6,55 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
-public final class TrackScheduler extends AudioEventAdapter {
+import de.nebalus.dcbots.melody.core.Melody;
+import de.nebalus.dcbots.melody.tools.audioplayer.enums.LoopMode;
+import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
+import net.dv8tion.jda.api.entities.Guild;
 
-	@Override
-	public void onPlayerPause(AudioPlayer player) {
+public final class TrackScheduler extends AudioEventAdapter 
+{
 	
+	@Override
+	public final void onPlayerPause(AudioPlayer player) {}
+
+	@Override
+	public final void onPlayerResume(AudioPlayer player) {}
+
+	@Override
+	public final void onTrackStart(AudioPlayer player, AudioTrack track) 
+	{
+		final long guildid = Melody.getPlayerManager().getGuildIdByPlayerHash(player.hashCode());
+		final Guild guild = Melody.getGuildById(guildid);
+		final AudioController controller = Melody.getPlayerManager().getController(guildid);
+		final GuildEntity guildentity = Melody.getEntityManager().getGuildEntity(guild);
+		final Queue queue = controller.getQueue();
+		
+		if(controller.getLoopMode().equals(LoopMode.NONE) && guildentity.canAnnounceSongs()) 
+		{
+			
+		}
 	}
 
 	@Override
-	public void onPlayerResume(AudioPlayer player) {
-	
+	public final void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endreason) 
+	{
+		final long guildid = Melody.getPlayerManager().getGuildIdByPlayerHash(player.hashCode());
+		final AudioController acontroller = Melody.getPlayerManager().getController(guildid);
+		final Guild guild = Melody.getGuildById(guildid);
+		final Queue queue = acontroller.getQueue();
+		
+		if(endreason.mayStartNext)
+		{
+			
+		}
 	}
 
 	@Override
-	public void onTrackStart(AudioPlayer player, AudioTrack track_UNUSED) {
-
-	}
+	public final void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {}
 
 	@Override
-	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-
-	}
-
-	@Override
-	public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
-	
-	}
-
-	@Override
-	public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
+	public final void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception)
+	{
 
 	}
 }

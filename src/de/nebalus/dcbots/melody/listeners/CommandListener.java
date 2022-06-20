@@ -9,10 +9,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public final class CommandListener extends ListenerAdapter {
-	
-	private Melody melody = Melody.INSTANCE;
-	//private MessageFormatter mf = melody.messageformatter;
+public final class CommandListener extends ListenerAdapter 
+{
 	
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
@@ -20,13 +18,13 @@ public final class CommandListener extends ListenerAdapter {
 		if (event.isFromGuild()) 
 		{
 			Guild guild = event.getGuild();
-			GuildEntity ge = melody.entityMan.getGuildEntity(guild);
+			GuildEntity ge = Melody.getEntityManager().getGuildEntity(guild);
 			if(!ge.isRateLimited()) 
 			{
 				ge.addRateRequest();
 				try 
 				{
-			    	if(!melody.cmdMan.performServer(ge, event)) 
+			    	if(!Melody.getCommandManager().performServer(ge, event)) 
 			    	{	
 			    		event.reply("This command is currently not available.").setEphemeral(true).queue();
 					}
@@ -50,48 +48,4 @@ public final class CommandListener extends ListenerAdapter {
 	    	event.reply("My commands only work in a guild where im in :( \n" + Url.INVITE.toString()).setEphemeral(true).queue();
 	    }
 	}
-	
-	//OLD command methode
-	
-//	@Override
-//	public void onMessageReceived(MessageReceivedEvent event) {
-//		String message = event.getMessage().getContentDisplay();
-//		if(event.isFromType(ChannelType.TEXT)) {
-//			if(!event.getAuthor().isBot()) {
-//				List<User> MentionedUsers = event.getMessage().getMentionedUsers();
-//				TextChannel channel = event.getTextChannel();
-//				Guild guild = event.getGuild();
-//				GuildEntity ge = melody.entityMan.getGuildEntity(guild);
-//				if(!ge.isRateLimited()) {
-//					if(message.startsWith(ge.getPrefix())) {
-//						
-//						ge.addRateRequest();
-//						
-//						int count = 0;
-//						for (int i = 0; i < ge.getPrefix().length(); i++) {
-//							count++;
-//						}
-//						String[] args = message.substring(count).split(" ");
-//						if(args.length > 0){
-//							try {
-//								if(!melody.cmdMan.performServer(args, event.getMember(), channel, event.getMessage(), event.getGuild(), ge)) {	
-//									Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.unknown-command"));
-//								}
-//							}catch(InsufficientPermissionException e) {
-//								Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "bot-no-permmisions", e.getPermission()));
-//							}
-//						}
-//					}else if(MentionedUsers.contains(channel.getJDA().getSelfUser())) {
-//						ge.addRateRequest();
-//						channel.sendMessage(mf.format(guild, "feedback.info.prefix", ge.getPrefix())).queue();
-//					}
-//				}else {
-//					if(!ge.ratelimitmsgsend) {
-//						ge.ratelimitmsgsend = true;
-//						Messenger.sendErrorMessage(channel, new ErrorMessageBuilder().setMessageFormat(guild, "info.ratelimit", Melody.getConfig()._ratelimitmaxrequests, Melody.getConfig()._ratelimititerationduration));
-//					}
-//				}
-//			}
-//		}
-//	}
 }

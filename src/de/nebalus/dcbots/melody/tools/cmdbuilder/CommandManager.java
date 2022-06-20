@@ -22,7 +22,7 @@ public final class CommandManager
 
 	private final ConcurrentHashMap<String, ServerCommand> commandlist;
 
-	public CommandManager(Melody melody) 
+	public CommandManager() 
 	{
 		this.commandlist = new ConcurrentHashMap<String, ServerCommand>();
 	}
@@ -118,7 +118,7 @@ public final class CommandManager
 				case DEVELOPER:
 					if (Settings.DEVELOPER_ID_LIST.contains(member.getIdLong())) 
 					{
-						cmd.performMainCMD(member, channel, guild, guildentity, event);
+						cmd.performMainCmd(member, channel, guild, guildentity, event);
 						return true;
 					}
 					break;
@@ -126,7 +126,7 @@ public final class CommandManager
 				case ADMIN:
 					if (member.hasPermission(Permission.MANAGE_SERVER) || member.hasPermission(Permission.ADMINISTRATOR)) 
 					{
-						cmd.performMainCMD(member, channel, guild, guildentity, event);
+						cmd.performMainCmd(member, channel, guild, guildentity, event);
 					}
 					else 
 					{
@@ -135,7 +135,7 @@ public final class CommandManager
 					return true;
 				
 				case EVERYONE:
-					cmd.performMainCMD(member, channel, guild, guildentity, event);
+					cmd.performMainCmd(member, channel, guild, guildentity, event);
 					return true;
 			}
 		}
