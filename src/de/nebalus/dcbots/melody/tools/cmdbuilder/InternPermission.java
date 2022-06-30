@@ -1,6 +1,6 @@
 package de.nebalus.dcbots.melody.tools.cmdbuilder;
 
-public enum CommandPermission {
+public enum InternPermission {
 	DEVELOPER,
 	ADMIN,
 	DJ,
