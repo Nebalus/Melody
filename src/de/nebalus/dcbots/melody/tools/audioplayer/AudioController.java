@@ -11,9 +11,9 @@ import net.dv8tion.jda.api.entities.Guild;
 public final class AudioController 
 {
 	
-	private final AudioPlayer PLAYER;
-	private final Queue QUEUE;
-	private final long GUILDID;
+	private final AudioPlayer player;
+	private final Queue queue;
+	private final long guildid;
 	
 	private int timeouttime = Settings.MUSIC_AFK_DEFAULT;
 	private LoopMode loopmode = LoopMode.NONE;
@@ -21,31 +21,31 @@ public final class AudioController
 	
 	public AudioController(Guild guild) 
 	{
-		this.PLAYER = Melody.INSTANCE.audioplayerMan.createPlayer();
-		this.GUILDID = guild.getIdLong();
+		this.player = Melody.getAudioPlayerManager().createPlayer();
+		this.guildid = guild.getIdLong();
+		this.queue = new Queue(this);
 		
-		guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(PLAYER));
-		this.QUEUE = new Queue(this);
+		guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 		
-		this.PLAYER.setPaused(false);
-		this.PLAYER.setVolume(50);
-		this.PLAYER.addListener(new TrackScheduler());
+		this.player.setPaused(false);
+		this.player.setVolume(50);
+		this.player.addListener(new TrackScheduler());
 	}
 	
 	public Boolean isPlayingTrack() 
 	{
-		return PLAYER.getPlayingTrack() != null;	
+		return player.getPlayingTrack() != null;	
 	}
 	
 	public void play(AudioTrack at) 
 	{
-		this.PLAYER.stopTrack();
-		this.PLAYER.playTrack(at);
+		this.player.stopTrack();
+		this.player.playTrack(at);
 	}
 	
 	public AudioPlayer getPlayer() 
 	{
-		return this.PLAYER;
+		return this.player;
 	}
 	
 	public void setAnounceChannelId(Long anouncechannelid) 
@@ -80,11 +80,11 @@ public final class AudioController
 	
 	public Queue getQueue() 
 	{
-		return this.QUEUE;
+		return this.queue;
 	}
 	
 	public long getGuildId()
 	{
-		return this.GUILDID;
+		return this.guildid;
 	}
 }

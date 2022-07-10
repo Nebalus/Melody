@@ -2,14 +2,16 @@ package de.nebalus.dcbots.melody.commands.admin;
 
 import java.util.ArrayList;
 import java.util.List;
-import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandPermission;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.InternPermission;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -20,14 +22,14 @@ public class CleanCommand extends ServerCommand
 	public CleanCommand() 
 	{
 		super("clean");
-		setMainPermission(CommandPermission.ADMIN);
+		setInternPermission(InternPermission.ADMIN);
 		setDescription("Clears command and bot messages.");
 		setSlashCommandData(
 				Commands.slash(getPrefix(), getDescription())
 					.addOptions(new OptionData(OptionType.INTEGER, "amount", "Enter an amount between 1-200")
 							.setRequiredRange(1, 200)
 							.setRequired(true))
-					
+					.setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE))
 		);
 	}
 	

@@ -14,7 +14,7 @@ public class ServerCommand
 {
 	
 	private String description;
-	private CommandPermission mainpermission;
+	private InternPermission internpermission;
 	private String prefix;
 	
 	private SlashCommandData slashcommanddata;
@@ -24,7 +24,7 @@ public class ServerCommand
 	{
 		this.subcommands = new ArrayList<SubCommand>();
 		this.description = "What will be here is written in the stars :P";
-		this.mainpermission = CommandPermission.DEVELOPER;
+		this.internpermission = InternPermission.DEVELOPER;
 		this.prefix = prefix.toLowerCase();
 		this.slashcommanddata = Commands.slash(prefix, description);
 	}
@@ -39,14 +39,14 @@ public class ServerCommand
 		this.description = description;
 	}
 	
-	public CommandPermission getMainPermission() 
+	public InternPermission getInternPermission() 
 	{
-		return this.mainpermission;
+		return this.internpermission;
 	}
 	
-	protected void setMainPermission(CommandPermission mainpermission) 
+	protected void setInternPermission(InternPermission internpermission) 
 	{
-		this.mainpermission = mainpermission;
+		this.internpermission = internpermission;
 	}
 	 
 	public String getPrefix()
@@ -63,6 +63,7 @@ public class ServerCommand
 	{
 		slashcommanddata.setDescription(this.description);
 		slashcommanddata.setName(this.prefix);
+		slashcommanddata.setGuildOnly(true);
 		
 		return this.slashcommanddata;
 	}

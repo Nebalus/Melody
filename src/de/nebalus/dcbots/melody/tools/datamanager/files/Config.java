@@ -10,23 +10,23 @@ import de.nebalus.dcbots.melody.tools.datamanager.FileResource;
 public final class Config {
 
 	// Values
-	public String _bottoken = null;
-	public Boolean _debugmode = false;
-	public Boolean _allowslashcommands = true;
-	public Boolean _autoupdate = true;
-	public int _ratelimitmaxrequests = 3;
-	public Long _ratelimititerationduration = 5000l;
+	public final String BOTTOKEN;
+	public final Boolean DEBUGMODE;
+	public final Boolean AUTOUPDATE;
+	public final int RATELIMITREQUEST;
+	public final Long RATELIMITITERATIONDURATION;
+	public final Long MAINDISCORDGUILD;
 
 	public Config(DataManager manager) throws Exception {
 		File configfile = FileResource.CONFIG.getFile();
-	
+
 		final JSONObject jsonobject = Utils.getJsonObject(configfile);
 
-		this._bottoken = jsonobject.getString("bottoken");
-		this._debugmode = jsonobject.getBoolean("debugmode");
-		this._allowslashcommands = jsonobject.getBoolean("allowslashcommands");
-		this._autoupdate = jsonobject.getBoolean("autoupdate");
-		this._ratelimitmaxrequests = jsonobject.getInt("ratelimitmaxrequests");
-		this._ratelimititerationduration = jsonobject.getLong("ratelimititerationduration");
+		this.BOTTOKEN = jsonobject.optString("bottoken", null);
+		this.DEBUGMODE = jsonobject.optBoolean("debugmode", false);
+		this.AUTOUPDATE = jsonobject.optBoolean("autoupdate", true);
+		this.RATELIMITREQUEST = jsonobject.optInt("ratelimitmaxrequests", 3);
+		this.RATELIMITITERATIONDURATION = jsonobject.optLong("ratelimititerationduration", 5000l);
+		this.MAINDISCORDGUILD = jsonobject.optLong("maindiscordguild", -1l);
 	}
 }

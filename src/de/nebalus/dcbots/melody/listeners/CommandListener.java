@@ -39,7 +39,7 @@ public final class CommandListener extends ListenerAdapter
 				if(!ge.ratelimitmsgsend) 
 				{
 					ge.ratelimitmsgsend = true;
-					Messenger.sendErrorMessage(event, "info.ratelimit", Melody.getConfig()._ratelimitmaxrequests, Melody.getConfig()._ratelimititerationduration);
+					Messenger.sendErrorMessage(event, "info.ratelimit", Melody.getConfig().RATELIMITREQUEST, Melody.getConfig().RATELIMITITERATIONDURATION);
 				}
 			}
 	    }

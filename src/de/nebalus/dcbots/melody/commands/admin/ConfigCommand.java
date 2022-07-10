@@ -1,6 +1,6 @@
 package de.nebalus.dcbots.melody.commands.admin;
 
-import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandPermission;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.InternPermission;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
 import de.nebalus.dcbots.melody.tools.messenger.Language;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -13,7 +13,7 @@ public class ConfigCommand extends ServerCommand
 	public ConfigCommand() 
 	{
 		super("config");
-		setMainPermission(CommandPermission.ADMIN);
+		setInternPermission(InternPermission.ADMIN);
 		setDescription(getDescription());
 		setSlashCommandData(
 				Commands.slash(getPrefix(), getDescription())	

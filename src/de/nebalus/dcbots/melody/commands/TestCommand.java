@@ -3,7 +3,7 @@ package de.nebalus.dcbots.melody.commands;
 import java.util.Random;
 
 import de.nebalus.dcbots.melody.core.Melody;
-import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandPermission;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.InternPermission;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.SubCommand;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
@@ -22,8 +22,8 @@ public class TestCommand extends ServerCommand{
 
 	public TestCommand() {
 		super("test");
-		setMainPermission(CommandPermission.EVERYONE);
-		addSubCommand(new SubCommand("hallo hds sd wew weda", CommandPermission.EVERYONE) {
+		setInternPermission(InternPermission.EVERYONE);
+		addSubCommand(new SubCommand("hallo hds sd wew weda", InternPermission.EVERYONE) {
 			@Override
 			public void execute(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 				TextInput email = TextInput.create("header1", "Header1", TextInputStyle.SHORT)
@@ -46,7 +46,7 @@ public class TestCommand extends ServerCommand{
 		        
 			}
 		});
-		addSubCommand(new SubCommand("hallo sd wew weda", CommandPermission.EVERYONE) {
+		addSubCommand(new SubCommand("hallo sd wew weda", InternPermission.EVERYONE) {
 			@Override
 			public void execute(Member member, TextChannel channel, Message message, Guild guild, GuildEntity guildentity) {
 				channel.sendMessage("Hey.s..").queue();

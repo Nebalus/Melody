@@ -137,7 +137,8 @@ public final class GuildEntity extends Entity {
 
 	}
 
-	private enum GuildEntityDBOptions {
+	private enum GuildEntityDBOptions 
+	{
 		FIRSTTIMELOADED(System.currentTimeMillis(), "firsttimeloaded", false),
 		LASTTIMELOADED(System.currentTimeMillis(), "lasttimeloaded", true),
 		LANGUAGE(Language.ENGLISH.getDatabaseID(), "language", true),
@@ -153,7 +154,8 @@ public final class GuildEntity extends Entity {
 		final String databasename;
 		final boolean canbeexported;
 		
-		GuildEntityDBOptions(Object defaultvalue, String databasename, boolean canbeexported) {
+		GuildEntityDBOptions(Object defaultvalue, String databasename, boolean canbeexported) 
+		{
 			this.defaultvalue = defaultvalue;
 			this.databasename = databasename;
 			this.canbeexported = canbeexported;
@@ -162,99 +164,124 @@ public final class GuildEntity extends Entity {
 	
 	//############################################################
 	
-	public boolean isRateLimited() {
-		if(System.currentTimeMillis() < ratelimitend) {
-			if(cmdrequest >= Melody.getConfig()._ratelimitmaxrequests) {
+	public boolean isRateLimited()
+	{
+		if(System.currentTimeMillis() < ratelimitend) 
+		{
+			if(cmdrequest >= Melody.getConfig().RATELIMITREQUEST)
+			{
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public void addRateRequest() {
-		if(System.currentTimeMillis() > ratelimitend) {
-			ratelimitend = System.currentTimeMillis() + Melody.getConfig()._ratelimititerationduration;
+	public void addRateRequest() 
+	{
+		if(System.currentTimeMillis() > ratelimitend) 
+		{
+			ratelimitend = System.currentTimeMillis() + Melody.getConfig().RATELIMITITERATIONDURATION;
 			cmdrequest = 1;
 			ratelimitmsgsend = false;
-		}else {
+		}
+		else
+		{
 			cmdrequest++;
 		}
 	}
 	
 	//############################################################
-	public Long getGuildId() {
+	public Long getGuildId()
+	{
 		renewExpireTime();
 		return this.guildid;
 	}
 	
-	public Guild getGuild() {
+	public Guild getGuild()
+	{
 		renewExpireTime();
 		return Melody.getGuildById(guildid);
 	}
 	
-	public Long getLastAudioChannelId() {
+	public Long getLastAudioChannelId() 
+	{
 		return (Long) getDatabaseValue(GuildEntityDBOptions.LASTAUDIOCHANNEL.name());
 	}
 	
-	public VoiceChannel getLastAudioChannel() {
+	public VoiceChannel getLastAudioChannel()
+	{
 		VoiceChannel channel;
 		final Long channelid = getLastAudioChannelId();
-		if((channel = getGuild().getVoiceChannelById(channelid)) != null) {
+		if((channel = getGuild().getVoiceChannelById(channelid)) != null) 
+		{
 			return channel;
 		}
 		throw new NullPointerException("The VoiceChannel ID:"+ channelid +" cannot be loaded because it has been deleted or is unavalibale!");
 	}
 	
-	public void setLastAudioChannelId(Long lastaudiochannelid) {
+	public void setLastAudioChannelId(Long lastaudiochannelid) 
+	{
 		updateDatabaseValue(GuildEntityDBOptions.LASTAUDIOCHANNEL.name(), lastaudiochannelid);
 	}
 	
-	public Boolean isVoteSkip() {
+	public Boolean isVoteSkip() 
+	{
 		return (Boolean) getDatabaseValue(GuildEntityDBOptions.VOTESKIP.name());
 	}
 	
-	public void setVoteSkip(Boolean value) {
+	public void setVoteSkip(Boolean value) 
+	{
 		updateDatabaseValue(GuildEntityDBOptions.VOTESKIP.name(), value);
 	}
 	
-	public int getVolume() {
+	public int getVolume() 
+	{
 		return (Integer) getDatabaseValue(GuildEntityDBOptions.VOLUME.name());
 	}
 	
-	public void setVolume(int volume) {		
+	public void setVolume(int volume) 
+	{		
 		updateDatabaseValue(GuildEntityDBOptions.VOLUME.name(), volume);
 	}
 	
-	public Boolean is24_7() {
+	public Boolean is24_7() 
+	{
 		return (Boolean) getDatabaseValue(GuildEntityDBOptions.STAYMODE.name());
 	}
 	
-	public void set24_7(Boolean new24_7) {
+	public void set24_7(Boolean new24_7) 
+	{
 		updateDatabaseValue(GuildEntityDBOptions.STAYMODE.name(), new24_7);
 	}
 	
-	public void setLanguage(Language newlanguage) {
+	public void setLanguage(Language newlanguage) 
+	{
 		updateDatabaseValue(GuildEntityDBOptions.LANGUAGE.name(), newlanguage.getDatabaseID());
 	}
 	
-	public Language getLanguage() {
+	public Language getLanguage() 
+	{
 		return Language.getLanguage((Integer) getDatabaseValue(GuildEntityDBOptions.LANGUAGE.name()));
 	}
 
-	public void setAnnounceSongs(Boolean newannouncesongs) {
+	public void setAnnounceSongs(Boolean newannouncesongs)
+	{
 		updateDatabaseValue(GuildEntityDBOptions.ANNOUNCESONGS.name(), newannouncesongs);
 	}
 	
-	public Boolean canAnnounceSongs() {
+	public Boolean canAnnounceSongs() 
+	{
 		
 		return (Boolean) getDatabaseValue(GuildEntityDBOptions.ANNOUNCESONGS.name());
 	}
 	
-	public Boolean isDjOnly() {
+	public Boolean isDjOnly() 
+	{
 		return (Boolean) getDatabaseValue(GuildEntityDBOptions.DJONLY.name());
 	}
 	
-	public void setDjOnly(boolean newdjonly) {
+	public void setDjOnly(boolean newdjonly)
+	{
 		updateDatabaseValue(GuildEntityDBOptions.DJONLY.name(), newdjonly);
 	}
 	
