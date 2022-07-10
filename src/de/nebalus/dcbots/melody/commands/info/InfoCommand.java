@@ -5,7 +5,7 @@ import java.util.Properties;
 import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.core.constants.Build;
 import de.nebalus.dcbots.melody.core.constants.Url;
-import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandPermission;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.InternPermission;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import de.nebalus.dcbots.melody.tools.messenger.embedbuilders.DefaultEmbedBuilder;
@@ -20,7 +20,7 @@ public class InfoCommand extends ServerCommand
 	public InfoCommand() 
 	{
 		super("info");
-		setMainPermission(CommandPermission.EVERYONE);
+		setInternPermission(InternPermission.EVERYONE);
 		setDescription("Shows some information about " + Build.NAME + ".");
 	}
 	

@@ -17,7 +17,7 @@
     "config.sub.announcesongs.info": "Schaltet man die Spielt grade nachrichten angezeigt werden soll oder nicht.",
     "config.sub.announcesongs.succes.on": "%botname% wird jetzt neue Songs ankuendigen.",
     "config.sub.announcesongs.succes.off": "%botname% wird jetzt nicht mehr neue Songs ankuendigen.",
-   	"config.sub.djonly.info": "Toggles %botname% if non DJs kann execute Music commands.",
+    "config.sub.djonly.info": "Toggles %botname% if non DJs kann execute Music commands.",
     "config.sub.djonly.succes.on": "%botname% wird nun die Musik Befehlen von nur die Benutzer die eine DJ rolle haben akzeptieren.",
     "config.sub.djonly.succes.off": "%botname% wird nun die Musik Befehlen von jedem akzeptieren.",
    
@@ -60,7 +60,7 @@
     "feedback.info.botinfo": "Framework: {0}\nVersion: {1}\nVeröffentlichung: {2}\nIst auf {3} Servern\n\n{4} Benutzer hoerten insgesammt {5} lang Musik ueber {6}!",
     "feedback.info.prefix": "**Mein Praefix auf diesem Server ist `{0}`**",
     
-  	"music.info.loopmode-queue": " **Wiederholungs Modus: `Wiedergabeliste`**",
+    "music.info.loopmode-queue": " **Wiederholungs Modus: `Wiedergabeliste`**",
     "music.info.loopmode-song": " **Wiederholungs Modus: `Akt[ue]ller Song`**",
     "music.info.loopmode-none": " **Wiederholungs Modus: `Deaktiviert`**",
     "music.info.bot-join-vc": "%botname% versucht `{0}` beizutreten",

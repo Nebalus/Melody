@@ -53,18 +53,15 @@ public final class CommandManager
 		}
 
 		//Exports all registered Slashcommands to the Discord Shards
-		if (Melody.getConfig()._allowslashcommands) 
+		for (JDA jda : Melody.getShardManager().getShards()) 
 		{
-			for (JDA jda : Melody.getShardManager().getShards()) 
+			CommandListUpdateAction slashupdater = jda.updateCommands();
+			for (ServerCommand sc : cmd) 
 			{
-				CommandListUpdateAction slashupdater = jda.updateCommands();
-				for (ServerCommand sc : cmd) 
-				{
-					slashupdater.addCommands(sc.getSlashCommandData());
-				}
-				slashupdater.queue();
-				ConsoleLogger.debug("SLASH-BUILDER", "EXPORT generated Slash commands to Shard [ID:" + jda.getShardInfo().getShardId() + "]");
+				slashupdater.addCommands(sc.getSlashCommandData());
 			}
+			slashupdater.queue();
+			ConsoleLogger.debug("SLASH-BUILDER", "EXPORT generated Slash commands to Shard [ID:" + jda.getShardInfo().getShardId() + "]");
 		}
 	}
 
@@ -113,7 +110,7 @@ public final class CommandManager
 		
 		if (cmd != null) 
 		{
-			switch (cmd.getMainPermission()) 
+			switch (cmd.getInternPermission()) 
 			{
 				case DEVELOPER:
 					if (Settings.DEVELOPER_ID_LIST.contains(member.getIdLong())) 

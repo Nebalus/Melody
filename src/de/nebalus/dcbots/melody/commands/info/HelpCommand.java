@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.core.constants.Url;
-import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandPermission;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.InternPermission;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import de.nebalus.dcbots.melody.tools.messenger.embedbuilders.DefaultEmbedBuilder;
@@ -23,7 +23,7 @@ public class HelpCommand extends ServerCommand
 	public HelpCommand() 
 	{
 		super("help");
-		setMainPermission(CommandPermission.EVERYONE);
+		setInternPermission(InternPermission.EVERYONE);
 		setDescription("Shows the help menu.");
 		setSlashCommandData(
 				Commands.slash(getPrefix(), getDescription())
@@ -59,7 +59,7 @@ public class HelpCommand extends ServerCommand
 			
 			for(ServerCommand scmd : Melody.getCommandManager().getCommands()) 
 			{
-				switch(scmd.getMainPermission()) 
+				switch(scmd.getInternPermission()) 
 				{
 					case ADMIN:
 						admincmds.add("`"+scmd.getPrefix()+"`");

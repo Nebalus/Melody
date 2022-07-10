@@ -1,8 +1,8 @@
 {
 	"bottoken" : "INSERT TOKEN",
 	"debugmode" : true,
-    "allowslashcommands" : true,
     "autoupdate" : true,
     "ratelimitmaxrequests" : 3,
-    "ratelimititerationduration" : 5000
+    "ratelimititerationduration" : 5000,
+    "maindiscordguild" : -1
 }

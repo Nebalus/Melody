@@ -16,20 +16,20 @@ import de.nebalus.dcbots.melody.tools.datamanager.files.LiteSQL;
 public class DataManager 
 {
 	
-	private final File temp_directory = new File(DataHelper.getCurrentJarPath() + "/temp/");
+	private final File tempdirectory = new File(DataHelper.getCurrentJarPath() + "/temp/");
 	private final Config config;
 	private final LiteSQL database;
 	
 	public DataManager() throws Exception
 	{
 		//Loads the temp_directory
-		if(temp_directory.exists()) 
+		if(tempdirectory.exists()) 
 		{
-			FileUtils.cleanDirectory(temp_directory);
+			FileUtils.cleanDirectory(tempdirectory);
 		}
 		else
 		{
-			temp_directory.mkdir();
+			tempdirectory.mkdir();
 		}
 		
 		for(FileResource resource : FileResource.values()) 
@@ -80,6 +80,6 @@ public class DataManager
 	
 	public File getTempDirectory() 
 	{
-		return temp_directory;
+		return tempdirectory;
 	}
 }

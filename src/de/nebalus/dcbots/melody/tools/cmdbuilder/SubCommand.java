@@ -10,15 +10,15 @@ public class SubCommand {
 	
 	private final String description;
 	private final String[] suffix;
-	private final CommandPermission permission;
+	private final InternPermission permission;
 	
-	public SubCommand(String prefix, CommandPermission permission) {
+	public SubCommand(String prefix, InternPermission permission) {
 		this.description = "What will be here is written in the stars :P";
 		this.permission = permission;
 		this.suffix = prefix.split(" ");
 	}
 	
-	public SubCommand(String prefix, CommandPermission permission, String discription) {
+	public SubCommand(String prefix, InternPermission permission, String discription) {
 		this.description = discription;
 		this.permission = permission;
 		this.suffix = prefix.split(" ");
@@ -36,7 +36,7 @@ public class SubCommand {
 		return suffix;
 	}
 	
-	public CommandPermission getPermission() {
+	public InternPermission getPermission() {
 		return permission;
 	}
 }

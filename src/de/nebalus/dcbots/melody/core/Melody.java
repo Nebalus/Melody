@@ -41,15 +41,16 @@ public final class Melody
 {
 	
 	public static Melody INSTANCE;
-	public final AudioPlayerManager audioplayerMan;
-	public final PlayerManager playerMan;
-	public final ShardManager shardMan;
-	public final DataManager dataMan;
-	public final EntityManager entityMan;
-	public final CommandManager cmdMan;
-	public final MessageFormatter messageformatter;
 	
-	public final Long startupmillis; 
+	private final AudioPlayerManager audioplayerMan;
+	private final PlayerManager playerMan;
+	private final ShardManager shardMan;
+	private final DataManager dataMan;
+	private final EntityManager entityMan;
+	private final CommandManager cmdMan;	
+	private final MessageFormatter messageformatter;
+	
+	private final Long startupmillis; 
 	
 	private int nextStatusUpdate = 10;
 	
@@ -85,7 +86,7 @@ public final class Melody
 		this.dataMan = new DataManager();
 		this.messageformatter = new MessageFormatter();
 		
-		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(dataMan.getConfig()._bottoken);
+		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(dataMan.getConfig().BOTTOKEN);
 		builder.addEventListeners(new CommandListener());
 		builder.setActivity(Activity.playing("booting myself..."));
 
@@ -101,7 +102,7 @@ public final class Melody
 		
 		this.cmdMan = new CommandManager();
 		this.cmdMan.registerCommands(new TestCommand(), new InviteCommand(), new PingCommand(), new HelpCommand(), new PlayCommand(),
-				new InfoCommand(), new ConfigCommand(), new CleanCommand(), new StayCommand());
+									 new InfoCommand(), new ConfigCommand(), new CleanCommand(), new StayCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioplayerMan);
 		AudioSourceManagers.registerLocalSource(audioplayerMan);
@@ -150,7 +151,7 @@ public final class Melody
 				if(System.currentTimeMillis() > time)
 				{
 						
-					updateStatus();					
+					updateActivityStatus();					
 					
 					time = System.currentTimeMillis() + 1000;
 				}
@@ -182,13 +183,15 @@ public final class Melody
 		}
 	}
 	
-	private void updateStatus() 
+	private void updateActivityStatus() 
 	{
 		if(nextStatusUpdate <= 0) 
 		{
-			Random rand = new Random();
-			int i = rand.nextInt(3);
-			shardMan.getShards().forEach(jda ->{
+			final Random rand = new Random();
+			final int i = rand.nextInt(3);
+			
+			shardMan.getShards().forEach(jda ->
+			{
 				switch(i) 
 				{
 					case 0:
