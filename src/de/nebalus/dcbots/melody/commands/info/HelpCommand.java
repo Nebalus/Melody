@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.core.constants.Url;
-import de.nebalus.dcbots.melody.tools.cmdbuilder.InternPermission;
-import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.PermissionGroup;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashCommand;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashExecuter;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import de.nebalus.dcbots.melody.tools.messenger.embedbuilders.DefaultEmbedBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -14,35 +15,39 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-public class HelpCommand extends ServerCommand
+public class HelpCommand extends SlashCommand
 {
 	
 	public HelpCommand() 
 	{
 		super("help");
-		setInternPermission(InternPermission.EVERYONE);
+		setPermissionGroup(PermissionGroup.EVERYONE);
 		setDescription("Shows the help menu.");
-		setSlashCommandData(
-				Commands.slash(getPrefix(), getDescription())
-					.addOption(OptionType.STRING, "query", "Enter the name of an Command to get more information", false)
-		);
-	}
-	
-	@Override
-	public void performMainCmd(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) 
-	{
-		if(event.getOption("query") != null) 
+		
+		setExecuter(new SlashExecuter()
 		{
-			final String searchquery = event.getOption("query").getAsString();
-			event.replyEmbeds(generateMenu(searchquery).build()).setEphemeral(true).queue();
-		}
-		else
-		{
-			event.replyEmbeds(generateMenu(null).build()).setEphemeral(true).queue();
-		}
+			@Override
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event, InteractionHook hook)
+			{
+				if(event.getOption("query") != null) 
+				{
+					final String searchquery = event.getOption("query").getAsString();
+					hook.sendMessageEmbeds(generateMenu(searchquery).build()).setEphemeral(true).queue();
+				}
+				else
+				{
+					hook.sendMessageEmbeds(generateMenu(null).build()).setEphemeral(true).queue();
+				}
+			}
+		});
+		
+		addOption(new OptionData(OptionType.STRING, "query", "Enter the name of an Command to get more information")
+			.setRequired(false));
+			
 	}
 	
 	private EmbedBuilder generateMenu(String searchquery) 
@@ -57,9 +62,9 @@ public class HelpCommand extends ServerCommand
 			final ArrayList<String> djcmds = new ArrayList<String>();
 			final ArrayList<String> everyonecmds = new ArrayList<String>();
 			
-			for(ServerCommand scmd : Melody.getCommandManager().getCommands()) 
+			for(SlashCommand scmd : Melody.getCommandManager().getCommands()) 
 			{
-				switch(scmd.getInternPermission()) 
+				switch(scmd.getPermissionGroup()) 
 				{
 					case ADMIN:
 						admincmds.add("`"+scmd.getPrefix()+"`");
@@ -99,7 +104,7 @@ public class HelpCommand extends ServerCommand
 		}
 		else
 		{
-			ServerCommand cmd;
+			SlashCommand cmd;
 			if((cmd = Melody.getCommandManager().getCommand(searchquery)) != null)
 			{
 				builder.setAuthor("Help Command: "+searchquery, null, Url.ICON.toString());

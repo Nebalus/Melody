@@ -75,7 +75,7 @@ public final class Melody
 	
 	private Melody() throws Exception 
 	{
-		new Build("BETA v0.7.0", "2022-06-14");
+		new Build("BETA v0.7.0", "2022-08-16");
 		
 		ConsoleLogger.info("Starting BOOT process for " + Build.NAME + " " + Build.VERSION);
 		
@@ -167,7 +167,7 @@ public final class Melody
 		ConsoleLogger.debug("Auto-Saver", "Starting to export cache");
 		try
 		{
-			if(entityMan.exportToDatabase()) 
+			if(getEntityManager().exportToDatabase()) 
 			{
 				ConsoleLogger.debug("Auto-Saver", "Export ended sucessfully");
 			}

@@ -15,10 +15,14 @@ public final class TrackScheduler extends AudioEventAdapter
 {
 	
 	@Override
-	public final void onPlayerPause(AudioPlayer player) {}
+	public final void onPlayerPause(AudioPlayer player) {
+		
+	}
 
 	@Override
-	public final void onPlayerResume(AudioPlayer player) {}
+	public final void onPlayerResume(AudioPlayer player) {
+		
+	}
 
 	@Override
 	public final void onTrackStart(AudioPlayer player, AudioTrack track) 

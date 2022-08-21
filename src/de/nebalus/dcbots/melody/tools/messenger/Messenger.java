@@ -74,4 +74,56 @@ public class Messenger
 	{
 		sendReworkMessage(event, cleb, false);
 	}
+//	
+//	public static void sendErrorMessage(InteractionHook hook, String formatid, Object... args) 
+//	{
+//		ColorLineEmbedBuilder cleb = new ColorLineEmbedBuilder();
+//		
+//		final String headerid = "error." + formatid + ".header";
+//		final String bodyid = "error." + formatid + ".body";
+//		
+//		final Language defaultlang = Language.ENGLISH;
+//		
+//		final Interaction interaction = hook.getInteraction();
+//		
+//		if(interaction.isFromGuild())
+//		{
+//			final Guild g = interaction.getGuild();
+//			
+//			cleb.setHeader(Melody.formatMessage(g, headerid, args));
+//			cleb.setBody(Melody.formatMessage(g, bodyid, args));
+//		}
+//		else
+//		{
+//			cleb.setHeader(Melody.formatMessage(defaultlang, headerid, args));
+//			cleb.setBody(Melody.formatMessage(defaultlang, bodyid, args));
+//		}
+//		
+//		cleb.setFooter(formatid.replace(".", " > ").toUpperCase());
+//		cleb.setColor(Settings.ERROR_EMBED_COLOR);
+//		cleb.setThumbnail(Url.ERROR_ICON.toString());
+//		//Color.decode("#C6B0FF")
+//		
+//		sendColorlineMessage(event, cleb, true);
+//	}
+//	
+//	public static void sendColorlineMessage(InteractionHook hook, ColorLineEmbedBuilder cleb, boolean ephemeral) 
+//	{
+//		if(cleb.isColorLineEnabled())
+//		{
+//			hook.sendMessageEmbeds(cleb.build()).setEphemeral(ephemeral).queue((picture) -> 
+//			{
+//				picture.(cleb.getImageFile(), "colorline.png").queue();
+//			});
+//		}
+//		else
+//		{
+//			event.replyEmbeds(cleb.build()).setEphemeral(ephemeral).queue();
+//		}
+//	}
+//	
+//	public static void sendColorlineMessage(InteractionHook hook, ColorLineEmbedBuilder cleb) 
+//	{
+//		sendColorlineMessage(hook, cleb, false);
+//	}
 }
