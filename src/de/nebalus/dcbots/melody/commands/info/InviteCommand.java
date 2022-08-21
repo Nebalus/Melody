@@ -20,14 +20,14 @@ public class InviteCommand extends SlashCommand
 	{
 		super("invite");
 		setPermissionGroup(PermissionGroup.EVERYONE);
-		setDescription("Get an Invite link to invite " + Build.NAME + " to your own Discord Server.");
+		setDescription("Shows the invitation link to invite " + Build.NAME + " to your own Discord server.");
 	
 		setExecuter(new SlashExecuter()
 		{
 			@Override
 			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event, InteractionHook hook) 
 			{
-				event.reply(Melody.formatMessage(guild, "feedback.info.invite", Url.INVITE.toString())).queue();
+				hook.sendMessage(Melody.formatMessage(guild, "command.info.invite", Url.INVITE.toString())).queue();
 			}
 		});
 	}
