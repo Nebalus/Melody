@@ -1,8 +1,8 @@
 package de.nebalus.dcbots.melody.commands.music;
 
-import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashCommand;
 
-public class FastforwardCommand extends ServerCommand 
+public class FastforwardCommand extends SlashCommand 
 {
 
 	public FastforwardCommand() 

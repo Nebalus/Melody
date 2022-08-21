@@ -1,7 +1,10 @@
 package de.nebalus.dcbots.melody.listeners;
 
 import de.nebalus.dcbots.melody.core.Melody;
-import de.nebalus.dcbots.melody.core.constants.Url;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandManager;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashCommand;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashExecuter;
+import de.nebalus.dcbots.melody.tools.entitymanager.EntityManager;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import de.nebalus.dcbots.melody.tools.messenger.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
@@ -15,16 +18,57 @@ public final class CommandListener extends ListenerAdapter
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
 	{
+		final CommandManager commandmanager = Melody.getCommandManager();
+		final EntityManager entitymanager = Melody.getEntityManager();
+		final String cmdprefix = event.getName().toLowerCase();
+		final String cmdpath = event.getCommandPath();
+		
+		final SlashCommand cmd;
+		
+		try 
+		{
+			cmd = commandmanager.getCommand(cmdprefix);
+		} 
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+			event.reply("This command is currently not available.").setEphemeral(true).queue();
+			return;
+		}
+
+		final SlashExecuter executer;
+		
+		final String[] subcmdrelations = cmdpath.split("/");
+		
+		switch(subcmdrelations.length)
+		{
+			case 1:
+				executer = cmd.getExecuter();
+				break;
+			
+			case 2:
+			case 3:
+				executer = cmd.getSubCommandByPath(cmdpath.substring(cmdprefix.length() + 1)).getExecuter();
+				break;
+			
+			default:
+				event.reply("The Executable from the CMDPATH:" + cmdpath + " could not be found!!!").setEphemeral(true).queue();
+				return;
+		}
+		
+		
+		
+		
 		if (event.isFromGuild()) 
 		{
 			Guild guild = event.getGuild();
-			GuildEntity ge = Melody.getEntityManager().getGuildEntity(guild);
+			GuildEntity ge = entitymanager.getGuildEntity(guild);
 			if(!ge.isRateLimited()) 
 			{
 				ge.addRateRequest();
 				try 
 				{
-			    	if(!Melody.getCommandManager().performServer(ge, event)) 
+			    	if(!commandmanager.performSlashGuild(executer, cmd.getPermissionGroup(), ge, event)) 
 			    	{	
 			    		event.reply("This command is currently not available.").setEphemeral(true).queue();
 					}
@@ -43,9 +87,14 @@ public final class CommandListener extends ListenerAdapter
 				}
 			}
 	    }
-		else 
+		else if(!cmd.isGuildOnly())
 	    {
-	    	event.reply("My commands only work in a guild where im in :( \n" + Url.INVITE.toString()).setEphemeral(true).queue();
+	    	
 	    }
+		else
+		{
+			event.reply("Hmm Something was not setup correctly!!!").setEphemeral(true).queue();
+			return;
+		}
 	}
 }

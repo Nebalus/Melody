@@ -1,8 +1,8 @@
 package de.nebalus.dcbots.melody.commands.music;
 
-import de.nebalus.dcbots.melody.tools.cmdbuilder.ServerCommand;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashCommand;
 
-public class StopCommand extends ServerCommand
+public class StopCommand extends SlashCommand
 {
 
 	public StopCommand()
