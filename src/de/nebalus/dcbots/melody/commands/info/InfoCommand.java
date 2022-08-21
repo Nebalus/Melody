@@ -38,20 +38,19 @@ public class InfoCommand extends SlashCommand
 				final DefaultEmbedBuilder builder = new DefaultEmbedBuilder();	
 				
 				builder.setThumbnail(Url.ICON.toString());
-				builder.setDescription(Melody.formatMessage(guild, "feedback.info.botinfo",
+				builder.setDescription(Melody.formatMessage(guild, "command.info.info",
 					"JDA",
 					Build.VERSION,
 					Build.DATE,
 					serversrunning,
 					"UNKNOWN",
 					"UNKNOWN",
-					guild.getSelfMember().getAsMention())
-							
-					+" \n \n```OS: " + prop.getProperty("os.name") + "\n"
-					+ "Cores: " + runtime.availableProcessors() + "\n"
-					+ "CPU Arch: " + prop.getProperty("os.arch") + "\n"
-					+ "Memory Usage: " + bigmemory + "." + smallmemory.substring(bigmemory.length()) + "MB\n"
-					+ "Uptime: UNKNOWN```");
+					guild.getSelfMember().getAsMention(),
+					prop.getProperty("os.name"),
+					runtime.availableProcessors(),
+					prop.getProperty("os.arch"),
+					bigmemory + "." + smallmemory.substring(bigmemory.length()),
+					"UNKNOWN"));
 				builder.setFooter("Made by " + Build.AUTHOR + " with <3");
 				
 				event.replyEmbeds(builder.build()).setEphemeral(true).queue();

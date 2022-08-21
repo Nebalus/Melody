@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class Messenger 
 {
@@ -32,8 +33,6 @@ public class Messenger
 		final String headerid = "error." + formatid + ".header";
 		final String bodyid = "error." + formatid + ".body";
 		
-		final Language defaultlang = Language.ENGLISH;
-		
 		if(event.isFromGuild())
 		{
 			final Guild g = event.getGuild();
@@ -43,8 +42,8 @@ public class Messenger
 		}
 		else
 		{
-			cleb.setHeader(Melody.formatMessage(defaultlang, headerid, args));
-			cleb.setBody(Melody.formatMessage(defaultlang, bodyid, args));
+			cleb.setHeader(Melody.formatMessage(Settings.DEFAULT_LANGUAGE, headerid, args));
+			cleb.setBody(Melody.formatMessage(Settings.DEFAULT_LANGUAGE, bodyid, args));
 		}
 		
 		cleb.setFooter(formatid.replace(".", " > ").toUpperCase());
@@ -52,27 +51,27 @@ public class Messenger
 		cleb.setThumbnail(Url.ERROR_ICON.toString());
 		//Color.decode("#C6B0FF")
 		
-		sendReworkMessage(event, cleb, true);
+		sendMessage(event, cleb, true);
 	}
 	
-	public static void sendReworkMessage(SlashCommandInteractionEvent event, ColorLineEmbedBuilder cleb, boolean ephemeral) 
+	public static void sendMessage(SlashCommandInteractionEvent event, ColorLineEmbedBuilder cleb, boolean ephemeral) 
 	{
+		final InteractionHook hook = event.getHook();
+		
 		if(cleb.isColorLineEnabled())
 		{
-			event.replyEmbeds(cleb.build()).setEphemeral(ephemeral).queue((picture) -> 
-			{
-				picture.editOriginal(cleb.getImageFile(), "colorline.png").queue();
-			});
+			hook.sendMessageEmbeds(cleb.build()).setEphemeral(ephemeral).queue();
+			hook.editOriginal(cleb.getImageFile(), "colorline.png").queue();
 		}
 		else
 		{
-			event.replyEmbeds(cleb.build()).setEphemeral(ephemeral).queue();
+			hook.sendMessageEmbeds(cleb.build()).setEphemeral(ephemeral).queue();
 		}
 	}
 	
-	public static void sendReworkMessage(SlashCommandInteractionEvent event, ColorLineEmbedBuilder cleb) 
+	public static void sendMessage(SlashCommandInteractionEvent event, ColorLineEmbedBuilder cleb) 
 	{
-		sendReworkMessage(event, cleb, false);
+		sendMessage(event, cleb, false);
 	}
 //	
 //	public static void sendErrorMessage(InteractionHook hook, String formatid, Object... args) 

@@ -97,14 +97,13 @@ public final class GuildEntity extends Entity {
 					{
 						try 
 						{
-							tc.sendMessage(EmojiParser.parseToUnicode("Hello everybody, i'm "
-									+ guild.getSelfMember().getAsMention() + " \n" + " `-` My prefix on "
-									+ guild.getName() + " is `"+Settings.CMD_PREFIX+"`\n"
-									+ " `-` If you do not understand how I work then you can see all my commands by typing `"
-									+ Settings.CMD_PREFIX+"help`\n"
-									+ " `-` When you dont like something in my config then you can easyly change it by typing `"
-									+ Settings.CMD_PREFIX+"config help`\n" + " \n"
-									+ "**Otherwise have fun listening to the music from my service** " + ":notes: \n"
+							tc.sendMessage(EmojiParser.parseToUnicode(
+									"Hello everybody, i'm " + guild.getSelfMember().getAsMention() + " \n" 
+									+ " `-` My prefix on " + guild.getName() + " is `" + Settings.CMD_PREFIX + "`\n"
+									+ " `-` If you do not understand how I work then you can see all my commands by typing `" + Settings.CMD_PREFIX + "help`\n"
+									+ " `-` When you dont like something in my config then you can easyly change it by typing `" + Settings.CMD_PREFIX + "config help`\n" 
+									+ " \n"
+									+ "**Otherwise have fun listening to the music from my service** :notes: \n"
 									+ "PS: Thanks a lot for your support, that you added me to your discord server! :sparkling_heart:")).queue();
 							break;
 						} 

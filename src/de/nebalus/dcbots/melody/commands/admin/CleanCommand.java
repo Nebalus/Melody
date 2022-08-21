@@ -2,6 +2,10 @@ package de.nebalus.dcbots.melody.commands.admin;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.nebalus.dcbots.melody.core.Melody;
+import de.nebalus.dcbots.melody.core.constants.Build;
+import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.PermissionGroup;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashCommand;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashExecuter;
@@ -25,7 +29,7 @@ public class CleanCommand extends SlashCommand
 		super("clean");
 		setPermissionGroup(PermissionGroup.ADMIN);
 		setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE));
-		setDescription("Clears command and bot messages.");
+		setDescription("Clears command and bot messages sent from " + Build.NAME + ".");
 		
 		setExecuter(new SlashExecuter() 
 		{
@@ -48,7 +52,7 @@ public class CleanCommand extends SlashCommand
 				}
 				
 				channel.purgeMessages(purgemessages);	
-				hook.sendMessage(purgemessages.size() + " from " + currentmessage + " Messages have been deleted.").queue();
+				hook.sendMessage(Melody.formatMessage(guild, "command.admin.clean.messagesdeleted", purgemessages.size(), currentmessage)).queue();
 			}
 		});
 		

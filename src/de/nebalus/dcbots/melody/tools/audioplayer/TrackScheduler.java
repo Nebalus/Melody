@@ -15,21 +15,23 @@ public final class TrackScheduler extends AudioEventAdapter
 {
 	
 	@Override
-	public final void onPlayerPause(AudioPlayer player) {
+	public final void onPlayerPause(AudioPlayer player) 
+	{
 		
 	}
 
 	@Override
-	public final void onPlayerResume(AudioPlayer player) {
+	public final void onPlayerResume(AudioPlayer player) 
+	{
 		
 	}
 
 	@Override
 	public final void onTrackStart(AudioPlayer player, AudioTrack track) 
 	{
-		final long guildid = Melody.getPlayerManager().getGuildIdByPlayerHash(player.hashCode());
+		final long guildid = Melody.getMusicManager().getGuildIdByPlayerHash(player.hashCode());
 		final Guild guild = Melody.getGuildById(guildid);
-		final AudioController controller = Melody.getPlayerManager().getController(guildid);
+		final AudioController controller = Melody.getMusicManager().getController(guildid);
 		final GuildEntity guildentity = Melody.getEntityManager().getGuildEntity(guild);
 		final Queue queue = controller.getQueue();
 		
@@ -42,8 +44,8 @@ public final class TrackScheduler extends AudioEventAdapter
 	@Override
 	public final void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endreason) 
 	{
-		final long guildid = Melody.getPlayerManager().getGuildIdByPlayerHash(player.hashCode());
-		final AudioController acontroller = Melody.getPlayerManager().getController(guildid);
+		final long guildid = Melody.getMusicManager().getGuildIdByPlayerHash(player.hashCode());
+		final AudioController acontroller = Melody.getMusicManager().getController(guildid);
 		final Guild guild = Melody.getGuildById(guildid);
 		final Queue queue = acontroller.getQueue();
 		

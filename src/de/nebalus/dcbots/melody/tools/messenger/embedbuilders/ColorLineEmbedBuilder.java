@@ -24,9 +24,7 @@ public class ColorLineEmbedBuilder
 	
 	private EmbedBuilder EMBEDBUILDER = new EmbedBuilder(); 
 	
-	public ColorLineEmbedBuilder() {
-		
-	}
+	public ColorLineEmbedBuilder() {}
 	
 	public ColorLineEmbedBuilder setHeader(@Nullable String header) 
 	{

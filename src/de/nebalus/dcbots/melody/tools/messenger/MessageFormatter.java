@@ -12,14 +12,17 @@ import de.nebalus.dcbots.melody.tools.datamanager.DataHelper;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import net.dv8tion.jda.api.entities.Guild;
 
-public class MessageFormatter {
+public class MessageFormatter 
+{
 	
 	private HashMap<Language, JSONObject> messagecache; 
 	
-	public MessageFormatter() throws Exception {
+	public MessageFormatter() throws Exception 
+	{
 		this.messagecache = new HashMap<Language, JSONObject>();
 		
-		for (Language language : Language.values()) {
+		for (Language language : Language.values()) 
+		{
 			InputStream input = new FileInputStream(language.getFilePath());
 			messagecache.put(language, new JSONObject(DataHelper.toString(input)));
         }
@@ -35,7 +38,7 @@ public class MessageFormatter {
 	
 	public String format(String key, Object... args) 
 	{
-	    return format(Language.ENGLISH, key, args);
+	    return format(Settings.DEFAULT_LANGUAGE, key, args);
 	}
 	
 	@SuppressWarnings("incomplete-switch")
@@ -66,7 +69,6 @@ public class MessageFormatter {
 			}
 			
 			message = message.replace("%botname%", Build.NAME);
-			message = message.replace("%prefix%", Settings.CMD_PREFIX);
 			
 			for(int i = 0; i < args.length; ++i) 
 			{

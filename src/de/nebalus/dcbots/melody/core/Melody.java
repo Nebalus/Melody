@@ -12,16 +12,17 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import de.nebalus.dcbots.melody.commands.TestCommand;
 import de.nebalus.dcbots.melody.commands.admin.CleanCommand;
 import de.nebalus.dcbots.melody.commands.admin.ConfigCommand;
-import de.nebalus.dcbots.melody.commands.admin.StayCommand;
+import de.nebalus.dcbots.melody.commands.admin.StaymodeCommand;
 import de.nebalus.dcbots.melody.commands.info.HelpCommand;
 import de.nebalus.dcbots.melody.commands.info.InfoCommand;
 import de.nebalus.dcbots.melody.commands.info.InviteCommand;
 import de.nebalus.dcbots.melody.commands.info.PingCommand;
+import de.nebalus.dcbots.melody.commands.music.JoinCommand;
 import de.nebalus.dcbots.melody.commands.music.PlayCommand;
 import de.nebalus.dcbots.melody.core.constants.Build;
 import de.nebalus.dcbots.melody.listeners.CommandListener;
 import de.nebalus.dcbots.melody.tools.ConsoleLogger;
-import de.nebalus.dcbots.melody.tools.audioplayer.PlayerManager;
+import de.nebalus.dcbots.melody.tools.audioplayer.MusicManager;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandManager;
 import de.nebalus.dcbots.melody.tools.datamanager.DataManager;
 import de.nebalus.dcbots.melody.tools.datamanager.files.Config;
@@ -43,7 +44,7 @@ public final class Melody
 	public static Melody INSTANCE;
 	
 	private final AudioPlayerManager audioplayerMan;
-	private final PlayerManager playerMan;
+	private final MusicManager musicMan;
 	private final ShardManager shardMan;
 	private final DataManager dataMan;
 	private final EntityManager entityMan;
@@ -75,7 +76,7 @@ public final class Melody
 	
 	private Melody() throws Exception 
 	{
-		new Build("BETA v0.7.0", "2022-08-16");
+		new Build("BETA v0.7.0", "2022-08-21");
 		
 		ConsoleLogger.info("Starting BOOT process for " + Build.NAME + " " + Build.VERSION);
 		
@@ -97,12 +98,12 @@ public final class Melody
 		}
 		
 		this.audioplayerMan = new DefaultAudioPlayerManager();
-		this.playerMan = new PlayerManager();
+		this.musicMan = new MusicManager();
 		this.entityMan = new EntityManager();
 		
 		this.cmdMan = new CommandManager();
 		this.cmdMan.registerCommands(new TestCommand(), new InviteCommand(), new PingCommand(), new HelpCommand(), new PlayCommand(),
-									 new InfoCommand(), new ConfigCommand(), new CleanCommand(), new StayCommand());
+									 new InfoCommand(), new ConfigCommand(), new CleanCommand(), new StaymodeCommand(), new JoinCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioplayerMan);
 		AudioSourceManagers.registerLocalSource(audioplayerMan);
@@ -332,10 +333,10 @@ public final class Melody
 		}
 	}
 	
-	public static PlayerManager getPlayerManager() 
+	public static MusicManager getMusicManager() 
 	{
-		if(INSTANCE.playerMan != null) {
-			return INSTANCE.playerMan;
+		if(INSTANCE.musicMan != null) {
+			return INSTANCE.musicMan;
 		}
 		else 
 		{

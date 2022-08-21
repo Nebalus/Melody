@@ -19,7 +19,7 @@ public class PingCommand extends SlashCommand
 	{
 		super("ping");
 		setPermissionGroup(PermissionGroup.EVERYONE);
-		setDescription("See the response time of " + Build.NAME + " to the Discord Gateway.");
+		setDescription("Shows the latency of " + Build.NAME + " to Discords gateway.");
 		
 		setExecuter(new SlashExecuter()
 		{
@@ -28,7 +28,7 @@ public class PingCommand extends SlashCommand
 			{
 				final long gatewayping = channel.getJDA().getGatewayPing();
 				channel.getJDA().getRestPing().queue((time) ->
-					hook.sendMessageFormat(Melody.formatMessage(guild, "feedback.info.ping"), time, gatewayping).queue()
+					hook.sendMessageFormat(Melody.formatMessage(guild, "command.info.ping"), time, gatewayping).queue()
 				);
 			}
 		});

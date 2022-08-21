@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public final class CommandListener extends ListenerAdapter 
 {
@@ -22,6 +23,7 @@ public final class CommandListener extends ListenerAdapter
 		final EntityManager entitymanager = Melody.getEntityManager();
 		final String cmdprefix = event.getName().toLowerCase();
 		final String cmdpath = event.getCommandPath();
+		final InteractionHook hook = event.getHook();
 		
 		final SlashCommand cmd;
 		
@@ -32,7 +34,7 @@ public final class CommandListener extends ListenerAdapter
 		catch (NullPointerException e)
 		{
 			e.printStackTrace();
-			event.reply("This command is currently not available.").setEphemeral(true).queue();
+			hook.sendMessage("This command is currently not available.").setEphemeral(true).queue();
 			return;
 		}
 
@@ -52,7 +54,7 @@ public final class CommandListener extends ListenerAdapter
 				break;
 			
 			default:
-				event.reply("The Executable from the CMDPATH:" + cmdpath + " could not be found!!!").setEphemeral(true).queue();
+				hook.sendMessage("The Executable from the CMDPATH:" + cmdpath + " could not be found!!!").setEphemeral(true).queue();
 				return;
 		}
 		
@@ -70,7 +72,7 @@ public final class CommandListener extends ListenerAdapter
 				{
 			    	if(!commandmanager.performSlashGuild(executer, cmd.getPermissionGroup(), ge, event)) 
 			    	{	
-			    		event.reply("This command is currently not available.").setEphemeral(true).queue();
+			    		hook.sendMessage("This command is currently not available.").setEphemeral(true).queue();
 					}
 				}
 				catch(InsufficientPermissionException e) 
@@ -83,7 +85,7 @@ public final class CommandListener extends ListenerAdapter
 				if(!ge.ratelimitmsgsend) 
 				{
 					ge.ratelimitmsgsend = true;
-					Messenger.sendErrorMessage(event, "info.ratelimit", Melody.getConfig().RATELIMITREQUEST, Melody.getConfig().RATELIMITITERATIONDURATION);
+					Messenger.sendErrorMessage(event, "ratelimit", Melody.getConfig().RATELIMITREQUEST, Melody.getConfig().RATELIMITITERATIONDURATION);
 				}
 			}
 	    }
@@ -93,7 +95,7 @@ public final class CommandListener extends ListenerAdapter
 	    }
 		else
 		{
-			event.reply("Hmm Something was not setup correctly!!!").setEphemeral(true).queue();
+			hook.sendMessage("Hmm Something was not setup correctly!!!").setEphemeral(true).queue();
 			return;
 		}
 	}
