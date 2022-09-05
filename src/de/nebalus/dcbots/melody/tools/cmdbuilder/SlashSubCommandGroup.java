@@ -1,4 +1,4 @@
-package de.nebalus.dcbots.melody.tools.cmdbuilder;
+ package de.nebalus.dcbots.melody.tools.cmdbuilder;
 
 import java.util.ArrayList;
 

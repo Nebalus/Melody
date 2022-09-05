@@ -1,8 +1,0 @@
-{
-    "bottoken" : "NzEyNzI4MDY0MDAxMzEwODM2.XsVxvA.F0WCW5351808iDNTOE8maAnoo4c",
-    "debugmode" : true,
-    "autoupdate" : true,
-    "ratelimitmaxrequests" : 3,
-    "ratelimititerationduration" : 5000,
-    "maindiscordguild" : -1
-}

@@ -3,13 +3,13 @@ package de.nebalus.dcbots.melody.commands.admin;
 import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.core.constants.Build;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashCommand;
-import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashExecuter;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.interactions.SlashInteractionExecuter;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
+import de.nebalus.dcbots.melody.tools.messenger.Messenger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class StaymodeCommand extends SlashCommand
 {
@@ -19,20 +19,20 @@ public class StaymodeCommand extends SlashCommand
 		super("24-7");
 		setDescription("Toggles " + Build.NAME + " to stay 24/7 in a audio channel.");
 		
-		setExecuter(new SlashExecuter()
+		setExecuter(new SlashInteractionExecuter()
 		{
 			@Override
-			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event, InteractionHook hook) 
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) 
 			{
 				if(guildentity.is24_7()) 
 				{
 					guildentity.set24_7(false);
-					hook.sendMessage(Melody.formatMessage(guild, "command.admin.staymode.disabled")).queue();
+					Messenger.sendInteractionMessage(event, Melody.formatMessage(guild, "command.admin.staymode.disabled"), false);
 				}
 				else 
 				{
 					guildentity.set24_7(true);
-					hook.sendMessage(Melody.formatMessage(guild, "command.admin.staymode.enabled")).queue();
+					Messenger.sendInteractionMessage(event, Melody.formatMessage(guild, "command.admin.staymode.enabled"), false);
 				}		
 			}
 		});
