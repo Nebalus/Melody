@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.tools.ConsoleLogger;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.interactions.SlashInteractionExecuter;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import de.nebalus.dcbots.melody.tools.messenger.Messenger;
 import net.dv8tion.jda.api.JDA;
@@ -89,21 +90,18 @@ public final class CommandManager
 		throw new NullPointerException("The Command (" + lower_prefix + ") does not exist!");
 	}
 
-	public final boolean performSlashGuild(SlashExecuter executer, PermissionGroup permgroup, GuildEntity guildentity, SlashCommandInteractionEvent event) 
+	public final boolean performSlashGuild(SlashInteractionExecuter executer, PermissionGroup permgroup, GuildEntity guildentity, SlashCommandInteractionEvent event) 
 	{	
-		event.deferReply(true).queue();
-		
 		final Member member = event.getMember();
 		final MessageChannelUnion channel = event.getChannel();
 		final Guild guild = event.getGuild();
-		final InteractionHook hook = event.getHook();
 		
 		switch (permgroup) 
 		{
 			case DEVELOPER:
 				if (Settings.DEVELOPER_ID_LIST.contains(member.getIdLong())) 
 				{
-					executer.executeGuild(member, channel, guild, guildentity, event, hook);
+					executer.executeGuild(member, channel, guild, guildentity, event);
 					return true;
 				}
 				break;
@@ -111,7 +109,7 @@ public final class CommandManager
 			case ADMIN:
 				if (member.hasPermission(Permission.MANAGE_SERVER) || member.hasPermission(Permission.ADMINISTRATOR)) 
 				{
-					executer.executeGuild(member, channel, guild, guildentity, event, hook);
+					executer.executeGuild(member, channel, guild, guildentity, event);
 				}
 				else 
 				{
@@ -120,11 +118,11 @@ public final class CommandManager
 				return true;
 			
 			case EVERYONE:
-				executer.executeGuild(member, channel, guild, guildentity, event, hook);
+				executer.executeGuild(member, channel, guild, guildentity, event);
 				return true;
 				
 			default:
-			 //Error Message Senden das keine PermissionGroup gefunden wurde
+				//Error Message Senden das keine PermissionGroup gefunden wurde
 				break;
 		
 		}

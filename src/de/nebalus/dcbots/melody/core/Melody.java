@@ -28,6 +28,8 @@ import de.nebalus.dcbots.melody.tools.datamanager.DataManager;
 import de.nebalus.dcbots.melody.tools.datamanager.files.Config;
 import de.nebalus.dcbots.melody.tools.datamanager.files.LiteSQL;
 import de.nebalus.dcbots.melody.tools.entitymanager.EntityManager;
+import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
+import de.nebalus.dcbots.melody.tools.entitymanager.entitys.UserEntity;
 import de.nebalus.dcbots.melody.tools.messenger.Language;
 import de.nebalus.dcbots.melody.tools.messenger.MessageFormatter;
 import net.dv8tion.jda.api.JDA;
@@ -76,7 +78,7 @@ public final class Melody
 	
 	private Melody() throws Exception 
 	{
-		new Build("BETA v0.7.0", "2022-08-21");
+		new Build("BETA v0.7.0", "2022-08-30");
 		
 		ConsoleLogger.info("Starting BOOT process for " + Build.NAME + " " + Build.VERSION);
 		
@@ -102,8 +104,9 @@ public final class Melody
 		this.entityMan = new EntityManager();
 		
 		this.cmdMan = new CommandManager();
-		this.cmdMan.registerCommands(new TestCommand(), new InviteCommand(), new PingCommand(), new HelpCommand(), new PlayCommand(),
-									 new InfoCommand(), new ConfigCommand(), new CleanCommand(), new StaymodeCommand(), new JoinCommand());
+//		this.cmdMan.registerCommands(new TestCommand(), new InviteCommand(), new PingCommand(), new HelpCommand(), new PlayCommand(),
+//									 new InfoCommand(), new ConfigCommand(), new CleanCommand(), new StaymodeCommand(), new JoinCommand());
+		this.cmdMan.registerCommands(new StaymodeCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioplayerMan);
 		AudioSourceManagers.registerLocalSource(audioplayerMan);
@@ -384,8 +387,28 @@ public final class Melody
 		return getShardManager().getGuildById(guildid);
 	}
 	
+	public static GuildEntity getGuildEntityById(Long guildid)
+	{
+		return getEntityManager().getGuildEntity(guildid);
+	}
+	
+	public static GuildEntity getGuildEntity(Guild guild)
+	{
+		return getEntityManager().getGuildEntity(guild);
+	}
+	
 	public static User getUserById(Long userid) 
 	{
 		return getShardManager().getUserById(userid);
+	}
+	
+	public static UserEntity getUserEntityById(Long userid)
+	{
+		return getEntityManager().getUserEntity(userid);
+	}
+	
+	public static UserEntity getUserEntity(User user)
+	{
+		return getEntityManager().getUserEntity(user);
 	}
 }

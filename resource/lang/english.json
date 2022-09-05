@@ -36,6 +36,9 @@
 	"command.admin.clean.messagesdeleted": "**{0}** out of **{1}** messages were deleted.",
 	"command.info.info": "Framework: {0}\nVersion: {1}\nBuilddate: {2}\nServers: {3}\n\n{4} users listened for {5} to music thru {6}!\n\n```OS: {7}\nCores: {8}\nCPU Arch: {9}\nMemory Usage: {10}MB\nUptime: {11}```",
 	"command.info.invite": "Here's my invitation link so you can add me to your own Discord server: {0}",
-	"command.info.ping": "The latency of %botname% is **%dms**"
+	"command.info.ping": "The latency of %botname% is **%dms**",
+	
+	"music.bot-join-vc": "%botname% joined `{0}`",
+	"music.bot-leave-vc": "%botname% disconnected from `{0}`"
 	
 }

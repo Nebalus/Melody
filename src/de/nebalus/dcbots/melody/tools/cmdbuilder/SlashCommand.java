@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import de.nebalus.dcbots.melody.tools.ConsoleLogger;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.interactions.SlashInteractionExecuter;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -19,7 +20,7 @@ public class SlashCommand
 	private PermissionGroup permissiongroup;	
 	private SlashCommandData slashcommanddata;
 	private HashMap<String, SlashSubCommand> subcommands;
-	private SlashExecuter executer;
+	private SlashInteractionExecuter executer;
 	
 	protected SlashCommand(String prefix) 
 	{
@@ -44,12 +45,12 @@ public class SlashCommand
 	}
 	
 	@Nonnull
-	protected void setExecuter(SlashExecuter executer)
+	protected void setExecuter(SlashInteractionExecuter executer)
 	{
 		this.executer = executer;
 	}
 	
-	public SlashExecuter getExecuter()
+	public SlashInteractionExecuter getExecuter()
 	{
 		return executer;
 	}

@@ -4,7 +4,7 @@ import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.core.constants.Build;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.PermissionGroup;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashCommand;
-import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashExecuter;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.interactions.SlashInteractionExecuter;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -21,10 +21,10 @@ public class PingCommand extends SlashCommand
 		setPermissionGroup(PermissionGroup.EVERYONE);
 		setDescription("Shows the latency of " + Build.NAME + " to Discords gateway.");
 		
-		setExecuter(new SlashExecuter()
+		setExecuter(new SlashInteractionExecuter()
 		{
 			@Override
-			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event, InteractionHook hook) 
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) 
 			{
 				final long gatewayping = channel.getJDA().getGatewayPing();
 				channel.getJDA().getRestPing().queue((time) ->

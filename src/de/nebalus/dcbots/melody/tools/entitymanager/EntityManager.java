@@ -22,18 +22,7 @@ public final class EntityManager {
 	
 	public GuildEntity getGuildEntity(Guild guild) 
 	{
-		GuildEntity ge = null;
-		Long guildid = guild.getIdLong();
-		if(this.guildentity.containsKey(guildid)) 
-		{
-			ge = this.guildentity.get(guildid);
-		}
-		else 
-		{
-			ge = new GuildEntity(guildid);
-			this.guildentity.put(guildid, ge);
-		}
-		return ge;
+		return getGuildEntity(guild.getIdLong());
 	}
 	
 	public GuildEntity getGuildEntity(Long guildid) 
@@ -53,8 +42,12 @@ public final class EntityManager {
 	
 	public UserEntity getUserEntity(User user) 
 	{
+		return getUserEntity(user.getIdLong());
+	}
+	
+	public UserEntity getUserEntity(Long userid) 
+	{
 		UserEntity ue = null;
-		Long userid = user.getIdLong();
 		if(this.userentity.containsKey(userid)) 
 		{
 			ue = this.userentity.get(userid);

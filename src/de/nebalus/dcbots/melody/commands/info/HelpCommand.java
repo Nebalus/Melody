@@ -7,17 +7,19 @@ import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.core.constants.Url;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.PermissionGroup;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashCommand;
-import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashExecuter;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.interactions.SlashInteractionExecuter;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
+import de.nebalus.dcbots.melody.tools.messenger.Messenger;
 import de.nebalus.dcbots.melody.tools.messenger.embedbuilders.DefaultEmbedBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 
 public class HelpCommand extends SlashCommand
 {
@@ -28,20 +30,22 @@ public class HelpCommand extends SlashCommand
 		setPermissionGroup(PermissionGroup.EVERYONE);
 		setDescription("Shows the help menu.");
 		
-		setExecuter(new SlashExecuter()
+		setExecuter(new SlashInteractionExecuter()
 		{
 			@Override
-			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event, InteractionHook hook)
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event)
 			{
 				if(event.getOption("query") != null) 
 				{
 					final String searchquery = event.getOption("query").getAsString();
-					hook.sendMessageEmbeds(generateMenu(searchquery).build()).setEphemeral(true).queue();
+					Messenger.sendInteractionMessage(event, , false);
 				}
 				else
 				{
-					hook.sendMessageEmbeds(generateMenu(null).build()).setEphemeral(true).queue();
+					mcb.setEmbeds(generateMenu(null));
 				}
+				
+				Messenger.sendMessage(event, mcb, true);
 			}
 		});
 		
@@ -50,9 +54,9 @@ public class HelpCommand extends SlashCommand
 			
 	}
 	
-	private EmbedBuilder generateMenu(String searchquery) 
+	private MessageEmbed generateMenu(String searchquery) 
 	{
-		final DefaultEmbedBuilder builder = new DefaultEmbedBuilder();
+		final EmbedBuilder builder = new EmbedBuilder();
 		
 		if(searchquery == null) 
 		{
@@ -67,15 +71,15 @@ public class HelpCommand extends SlashCommand
 				switch(scmd.getPermissionGroup()) 
 				{
 					case ADMIN:
-						admincmds.add("`"+scmd.getPrefix()+"`");
+						admincmds.add("`" + scmd.getPrefix() + "`");
 						break;
 						
 					case DJ:
-						djcmds.add("`"+scmd.getPrefix()+"`");
+						djcmds.add("`" + scmd.getPrefix() + "`");
 						break;
 						
 					case EVERYONE:
-						everyonecmds.add("`"+scmd.getPrefix()+"`");
+						everyonecmds.add("`" + scmd.getPrefix() + "`");
 						break;
 					
 					default:
@@ -118,6 +122,6 @@ public class HelpCommand extends SlashCommand
 			}
 			
 		}
-		return builder;
+		return builder.build();
 	}
 }

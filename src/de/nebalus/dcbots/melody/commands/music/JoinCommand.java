@@ -7,7 +7,7 @@ import de.nebalus.dcbots.melody.core.constants.Build;
 import de.nebalus.dcbots.melody.tools.audioplayer.AudioController;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.PermissionGroup;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashCommand;
-import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashExecuter;
+import de.nebalus.dcbots.melody.tools.cmdbuilder.interactions.SlashInteractionExecuter;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import de.nebalus.dcbots.melody.tools.messenger.Messenger;
 import net.dv8tion.jda.api.entities.AudioChannel;
@@ -27,10 +27,10 @@ public class JoinCommand extends SlashCommand
 		setDescription("Let " + Build.NAME + " join the audio channel your in.");
 		setPermissionGroup(PermissionGroup.DEVELOPER);
 		
-		setExecuter(new SlashExecuter() 
+		setExecuter(new SlashInteractionExecuter() 
 		{
 			@Override
-			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event, InteractionHook hook)
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event)
 			{
 				GuildVoiceState state;
 				AudioChannel ac;
@@ -40,7 +40,8 @@ public class JoinCommand extends SlashCommand
 					AudioPlayer player = controller.getPlayer();
 					
 					guild.getAudioManager().openAudioConnection(ac);
-					hook.sendMessage(Melody.formatMessage(guild, "music.info.bot-join-vc", ac.getName())).setEphemeral(false).queue();
+					Messenger.
+					hook.sendMessage(Melody.formatMessage(guild, "music.bot-join-vc", ac.getName())).setEphemeral(true).queue();
 					
 					if(player.getPlayingTrack() == null) 
 					{
@@ -50,7 +51,9 @@ public class JoinCommand extends SlashCommand
 				else
 				{
 					Messenger.sendErrorMessage(event, "music.user-not-in-vc");	
-				}	
+				}
+				
+				return 
 			}
 		});
 	}
