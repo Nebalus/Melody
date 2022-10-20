@@ -23,12 +23,12 @@ public class ConsoleLogger
 	// error
 	public static void error(Object className, Object message)
 	{
-		System.out.println(time.format(new Date()) + "[Error] " + className + " : " + message);
+		System.err.println(time.format(new Date()) + "[Error] " + className + " : " + message);
 	}
 
 	public static void error(Object message)
 	{
-		System.out.println(time.format(new Date()) + "[Error] " + message);
+		System.err.println(time.format(new Date()) + "[Error] " + message);
 	}
 
 	// debug

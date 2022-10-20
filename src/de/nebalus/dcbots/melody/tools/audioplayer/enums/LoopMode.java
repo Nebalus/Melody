@@ -18,7 +18,7 @@ public enum LoopMode
 		return textformat;
 	}
 	
-	public static LoopMode getFromString(String input)
+	public static LoopMode getFromTextFormat(String input)
 	{
 		for(LoopMode lm : LoopMode.values()) 
 		{

@@ -26,4 +26,45 @@ public final class Utils
 		return number * 100 / maxNumber;
 	}
 	
+	public static String decodeStringFromTimeMillis(long time) 
+	{
+		long uptime = time/1000;
+		long seconds = uptime;
+		long minutes = seconds/60;
+		long hours = minutes/60;
+		long days = hours/24;
+		hours %= 24;
+		minutes %= 60;
+		seconds %= 60;
+		
+		String decodedtime = "";
+		if(uptime == 0) 
+		{
+			decodedtime = time + "ms";
+		}
+		else 
+		{
+			if(seconds > 0) 
+			{
+				decodedtime = seconds + "sec";
+			}
+			
+			if(minutes > 0) 
+			{
+				decodedtime = minutes + "min " + decodedtime;
+			}
+			
+			if(hours > 0) 
+			{
+				decodedtime = hours + "hour" + (hours > 1 ? "s " : " ") + decodedtime;
+			}
+			
+			if(days > 0) 
+			{
+				decodedtime = days + "day" + (days > 1 ? "s " : " ") + decodedtime;
+			}
+		}
+		
+		return decodedtime;
+	}
 }

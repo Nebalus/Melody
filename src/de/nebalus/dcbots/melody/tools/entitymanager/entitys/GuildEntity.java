@@ -16,8 +16,8 @@ import de.nebalus.dcbots.melody.tools.entitymanager.DatabaseValueContainer;
 import de.nebalus.dcbots.melody.tools.entitymanager.Entity;
 import de.nebalus.dcbots.melody.tools.messenger.Language;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 public final class GuildEntity extends Entity {
