@@ -46,9 +46,15 @@ public class RemasteredEmbedBuilder
 		return this;
 	}
 	
-	public RemasteredEmbedBuilder enableColorLine(@Nullable boolean isenabled)
+	public RemasteredEmbedBuilder enableColorLine()
 	{
-		ISCOLORLINEENABLED = isenabled;
+		ISCOLORLINEENABLED = true;
+		return this;
+	}
+	
+	public RemasteredEmbedBuilder disableColorLine()
+	{
+		ISCOLORLINEENABLED = false;
 		return this;
 	}
 

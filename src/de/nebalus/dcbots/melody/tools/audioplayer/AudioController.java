@@ -1,5 +1,7 @@
 package de.nebalus.dcbots.melody.tools.audioplayer;
 
+import java.util.concurrent.TimeUnit;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
@@ -7,6 +9,7 @@ import de.nebalus.dcbots.melody.core.Melody;
 import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.tools.audioplayer.enums.LoopMode;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 
 public final class AudioController 
 {
@@ -15,7 +18,7 @@ public final class AudioController
 	private final Queue queue;
 	private final long guildid;
 	
-	private int timeouttime = Settings.MUSIC_AFK_DEFAULT;
+	private long timeouttime = System.currentTimeMillis() + Settings.MUSIC_AFK_DEFAULT;
 	private LoopMode loopmode = LoopMode.NONE;
 	private Long anouncechannelid;
 	
@@ -43,6 +46,15 @@ public final class AudioController
 		this.player.playTrack(at);
 	}
 	
+	public void join(AudioChannel ac)
+	{
+		Melody.getGuildById(guildid).getAudioManager().openAudioConnection(ac);
+		if(player.getPlayingTrack() == null) 
+		{
+			updateTimeOutTime(TimeUnit.MINUTES, 5);
+		}
+	}
+	
 	public AudioPlayer getPlayer() 
 	{
 		return this.player;
@@ -68,14 +80,14 @@ public final class AudioController
 		this.loopmode = loopmode;
 	}
 	
-	public int getTimeOutTime()
+	public long getTimeOutTime()
 	{
 		return this.timeouttime;
 	}
 	
-	public void setTimeOutTime(int timeouttime) 
+	public void updateTimeOutTime(TimeUnit timeunit, long duration) 
 	{
-		this.timeouttime = timeouttime;
+		this.timeouttime = System.currentTimeMillis() + timeunit.toMillis(duration);
 	}
 	
 	public Queue getQueue() 

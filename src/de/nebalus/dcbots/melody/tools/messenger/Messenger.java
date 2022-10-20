@@ -5,13 +5,10 @@ import de.nebalus.dcbots.melody.core.constants.Settings;
 import de.nebalus.dcbots.melody.core.constants.Url;
 import de.nebalus.dcbots.melody.tools.messenger.embedbuilders.RemasteredEmbedBuilder;
 import de.nebalus.dcbots.melody.tools.messenger.embedbuilders.RemasteredEmbedData;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.utils.FileUpload;
-import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
 public class Messenger 
@@ -39,7 +36,7 @@ public class Messenger
 		reb.setBody(Melody.formatMessage(lang, bodyid, args));
 		reb.setFooter(formatid.replace(".", " > ").toUpperCase());
 		reb.setColorScheme(Settings.ERROR_EMBED_COLOR);
-		reb.enableColorLine(true);
+		reb.enableColorLine();
 		reb.setThumbnail(Url.ERROR_ICON.toString());
 		//Color.decode("#C6B0FF")
 		
@@ -72,7 +69,12 @@ public class Messenger
 		hook.sendMessage(mcd).queue();
 	}
 	
-	public static void sendInteractionMessage(SlashCommandInteractionEvent event, String context, boolean isephemeral)
+	public static void sendInteractionMessage(SlashCommandInteractionEvent event, RemasteredEmbedData red, boolean isephemeral)
+	{
+		sendInteractionMessage(event, red.getAsMessageCreateData(), isephemeral);
+	}
+	
+	public static void sendInteractionMessage(SlashCommandInteractionEvent event, String text, boolean isephemeral)
 	{
 		final InteractionHook hook = event.getHook();
 		
@@ -81,20 +83,32 @@ public class Messenger
 			event.deferReply(isephemeral).queue();
 		}
 		
-		hook.sendMessage(context).queue();
+		hook.sendMessage(text).queue();
 	}
-//	
-//	public static void sendMessage(SlashCommandInteractionEvent event, MessageEmbed me, boolean isephemeral)
-//	{
-//		if(!event.isAcknowledged())
-//		{
-//			event.deferReply(isephemeral).queue();
-//		}
-//		
-//		final InteractionHook hook = event.getHook();
-//		
-//		hook.sendMessageEmbeds(me).queue();
-//	}
+	
+	public static void sendInteractionMessage(SlashCommandInteractionEvent event, MessageEmbed me, boolean isephemeral)
+	{
+		final InteractionHook hook = event.getHook();
+		
+		if(!event.isAcknowledged())
+		{
+			event.deferReply(isephemeral).queue();
+		}
+		
+		hook.sendMessageEmbeds(me).queue();
+	}
+
+	public static void sendInteractionMessageFormat(SlashCommandInteractionEvent event, String text, boolean isephemeral, Object... args)
+	{
+		final InteractionHook hook = event.getHook();
+		
+		if(!event.isAcknowledged())
+		{
+			event.deferReply(isephemeral).queue();
+		}
+		
+		hook.sendMessageFormat(text, args).queue();
+	}
 //	
 //	public static void sendMessage(SlashCommandInteractionEvent event, MessageCreateBuilder mcb, boolean isephemeral)
 //	{

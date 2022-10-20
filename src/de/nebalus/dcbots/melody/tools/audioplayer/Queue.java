@@ -26,7 +26,7 @@ public class Queue
 		if(!queuelist.isEmpty()) 
 		{
 			QueuedTrack qt;
-			for (int i = 0; i <= amount; ++i) 
+			for (int i = 0; i < amount; ++i) 
 			{
 				qt = queuelist.remove(0);
 				switch(controller.getLoopMode())

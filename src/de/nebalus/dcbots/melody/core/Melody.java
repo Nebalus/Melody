@@ -9,18 +9,17 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
-import de.nebalus.dcbots.melody.commands.TestCommand;
-import de.nebalus.dcbots.melody.commands.admin.CleanCommand;
-import de.nebalus.dcbots.melody.commands.admin.ConfigCommand;
-import de.nebalus.dcbots.melody.commands.admin.StaymodeCommand;
-import de.nebalus.dcbots.melody.commands.info.HelpCommand;
-import de.nebalus.dcbots.melody.commands.info.InfoCommand;
-import de.nebalus.dcbots.melody.commands.info.InviteCommand;
-import de.nebalus.dcbots.melody.commands.info.PingCommand;
-import de.nebalus.dcbots.melody.commands.music.JoinCommand;
-import de.nebalus.dcbots.melody.commands.music.PlayCommand;
 import de.nebalus.dcbots.melody.core.constants.Build;
-import de.nebalus.dcbots.melody.listeners.CommandListener;
+import de.nebalus.dcbots.melody.interactions.commands.admin.CleanCommand;
+import de.nebalus.dcbots.melody.interactions.commands.admin.StaymodeCommand;
+import de.nebalus.dcbots.melody.interactions.commands.info.FeedbackCommand;
+import de.nebalus.dcbots.melody.interactions.commands.info.HelpCommand;
+import de.nebalus.dcbots.melody.interactions.commands.info.InfoCommand;
+import de.nebalus.dcbots.melody.interactions.commands.info.InviteCommand;
+import de.nebalus.dcbots.melody.interactions.commands.info.PingCommand;
+import de.nebalus.dcbots.melody.interactions.commands.music.JoinCommand;
+import de.nebalus.dcbots.melody.interactions.commands.music.LoopCommand;
+import de.nebalus.dcbots.melody.listeners.InteractionListener;
 import de.nebalus.dcbots.melody.tools.ConsoleLogger;
 import de.nebalus.dcbots.melody.tools.audioplayer.MusicManager;
 import de.nebalus.dcbots.melody.tools.cmdbuilder.CommandManager;
@@ -53,7 +52,7 @@ public final class Melody
 	private final CommandManager cmdMan;	
 	private final MessageFormatter messageformatter;
 	
-	private final Long startupmillis; 
+	private final Long startuptimestamp; 
 	
 	private int nextStatusUpdate = 10;
 	
@@ -82,7 +81,7 @@ public final class Melody
 		
 		ConsoleLogger.info("Starting BOOT process for " + Build.NAME + " " + Build.VERSION);
 		
-		this.startupmillis = System.currentTimeMillis();
+		this.startuptimestamp = System.currentTimeMillis();
 		
 		Melody.INSTANCE = this;
 		
@@ -90,7 +89,7 @@ public final class Melody
 		this.messageformatter = new MessageFormatter();
 		
 		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(dataMan.getConfig().BOTTOKEN);
-		builder.addEventListeners(new CommandListener());
+		builder.addEventListeners(new InteractionListener());
 		builder.setActivity(Activity.playing("booting myself..."));
 
 		this.shardMan = builder.build();
@@ -104,9 +103,8 @@ public final class Melody
 		this.entityMan = new EntityManager();
 		
 		this.cmdMan = new CommandManager();
-//		this.cmdMan.registerCommands(new TestCommand(), new InviteCommand(), new PingCommand(), new HelpCommand(), new PlayCommand(),
-//									 new InfoCommand(), new ConfigCommand(), new CleanCommand(), new StaymodeCommand(), new JoinCommand());
-		this.cmdMan.registerCommands(new StaymodeCommand());
+		this.cmdMan.registerCommands(new StaymodeCommand(), new JoinCommand(), new CleanCommand(), new InfoCommand(), new HelpCommand(),
+									new PingCommand(), new InviteCommand(), new LoopCommand(), new FeedbackCommand());
 		
 		AudioSourceManagers.registerRemoteSources(audioplayerMan);
 		AudioSourceManagers.registerLocalSource(audioplayerMan);
@@ -114,7 +112,7 @@ public final class Melody
 		
 		runThreadLoop();
 		
-		ConsoleLogger.info(Build.NAME + " has been successfully loaded (" + (System.currentTimeMillis() - startupmillis) + "ms)");
+		ConsoleLogger.info(Build.NAME + " has been successfully loaded (" + (System.currentTimeMillis() - startuptimestamp) + "ms)");
 	}
 
 	private void runThreadLoop() 
@@ -207,13 +205,13 @@ public final class Melody
 								musicguilds++;
 							}
 						}
-						jda.getPresence().setActivity(Activity.streaming("music on " +musicguilds+" server"+(musicguilds < 1 ? "s": "") +"!","https://twitch.tv/nebalus"));
+						jda.getPresence().setActivity(Activity.streaming("music on " + musicguilds + " server" + (musicguilds < 1 ? "s": "") +"!","https://twitch.tv/nebalus"));
 						break;
 					case 1:
 						jda.getPresence().setActivity(Activity.watching(Build.VERSION));
 						break;
 					case 2:
-						jda.getPresence().setActivity(Activity.listening("@"+jda.getSelfUser().getName()));
+						jda.getPresence().setActivity(Activity.listening("@" + jda.getSelfUser().getName()));
 						break;
 				}
 			});
@@ -265,6 +263,18 @@ public final class Melody
 			e.printStackTrace();
 		}
 		shutdown();
+	}
+	
+	public static Long getStartUpTimeStamp()
+	{
+		if(INSTANCE != null) 
+		{
+			return INSTANCE.startuptimestamp;
+		}
+		else 
+		{
+			return System.currentTimeMillis();
+		}
 	}
 	
 	public static String formatMessage(Guild guild, String key, Object... args) 
