@@ -1,4 +1,4 @@
-# ⚠️WARNING!!!⚠️ This bot is still in heavy development **Beta** phase
+# ⚠️WARNING!!!⚠️ This bot is still in development **Beta** phase
 
 An Open Source discord music bot in Java
 
