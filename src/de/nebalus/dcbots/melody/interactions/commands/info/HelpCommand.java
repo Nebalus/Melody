@@ -13,108 +13,93 @@ import de.nebalus.dcbots.melody.tools.messenger.Messenger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-public class HelpCommand extends SlashCommand
-{
-	
-	public HelpCommand() 
-	{
+public class HelpCommand extends SlashCommand {
+
+	public HelpCommand() {
 		super("help");
 		setPermissionGroup(PermissionGroup.EVERYONE);
 		setDescription("Shows the help menu.");
-		
-		setExecuter(new SlashInteractionExecuter()
-		{
+
+		setExecuter(new SlashInteractionExecuter() {
 			@Override
-			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event)
-			{
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
 				String searchquery = null;
-				if(event.getOption("query") != null) 
+				if (event.getOption("query") != null) {
 					searchquery = event.getOption("query").getAsString();
-			
-				Messenger.sendInteractionMessage(event, generateMenu(searchquery) , true);
+				}
+
+				Messenger.sendInteractionMessage(event, generateMenu(searchquery), true);
 			}
 		});
-		
+
 		addOption(new OptionData(OptionType.STRING, "query", "Enter the name of an Command to get more information")
-			.setRequired(false));
-			
+				.setRequired(false));
+
 	}
-	
-	private MessageEmbed generateMenu(String searchquery) 
-	{
+
+	private MessageEmbed generateMenu(String searchquery) {
 		final EmbedBuilder builder = new EmbedBuilder();
-		
+
 		builder.setColor(Settings.EMBED_COLOR);
-		
-		if(searchquery == null) 
-		{
+
+		if (searchquery == null) {
 			builder.setAuthor("Help Command", null, Url.ICON.toString());
-			
-			final ArrayList<String> admincmds = new ArrayList<String>();
-			final ArrayList<String> djcmds = new ArrayList<String>();
-			final ArrayList<String> everyonecmds = new ArrayList<String>();
-			
-			for(SlashCommand scmd : Melody.getCommandManager().getCommands()) 
-			{
-				switch(scmd.getPermissionGroup()) 
-				{
-					case ADMIN:
-						admincmds.add("`" + scmd.getPrefix() + "`");
-						break;
-						
-					case DJ:
-						djcmds.add("`" + scmd.getPrefix() + "`");
-						break;
-						
-					case EVERYONE:
-						everyonecmds.add("`" + scmd.getPrefix() + "`");
-						break;
-					
-					default:
-						break;
+
+			final ArrayList<String> admincmds = new ArrayList<>();
+			final ArrayList<String> djcmds = new ArrayList<>();
+			final ArrayList<String> everyonecmds = new ArrayList<>();
+
+			for (SlashCommand scmd : Melody.getCommandManager().getCommands()) {
+				switch (scmd.getPermissionGroup()) {
+				case ADMIN:
+					admincmds.add("`" + scmd.getPrefix() + "`");
+					break;
+
+				case DJ:
+					djcmds.add("`" + scmd.getPrefix() + "`");
+					break;
+
+				case EVERYONE:
+					everyonecmds.add("`" + scmd.getPrefix() + "`");
+					break;
+
+				default:
+					break;
 				}
 			}
-			
-			if(!admincmds.isEmpty()) 
-			{
+
+			if (!admincmds.isEmpty()) {
 				builder.addField("**Admin Commands**", admincmds.toString().replace("[", "").replace("]", ""), false);
 			}
-			
-			if(!djcmds.isEmpty()) 
-			{
+
+			if (!djcmds.isEmpty()) {
 				builder.addField("**DJ Commands**", djcmds.toString().replace("[", "").replace("]", ""), false);
 			}
-			
-			if(!everyonecmds.isEmpty()) 
-			{
+
+			if (!everyonecmds.isEmpty()) {
 				builder.addField("**Everyone Commands**", everyonecmds.toString().replace("[", "").replace("]", ""), false);
 			}
-			
+
 			builder.addField("**Command Dashboard**", "[View Commands](" + Url.COMMANDS.toString() + "?p=" + Settings.CMD_PREFIX + ")", false);
 			builder.setFooter("Type '" + Settings.CMD_PREFIX + "help <CommandName>' for details on a command.");
-			
-		}
-		else
-		{
-			try
-			{
+
+		} else {
+			try {
 				SlashCommand cmd = Melody.getCommandManager().getCommand(searchquery);
-				
+
 				builder.setAuthor("Help Command: " + searchquery, null, Url.ICON.toString());
 				builder.setDescription("This feature is still work and progress");
-			}
-			catch(NullPointerException e)
-			{
+			} catch (NullPointerException e) {
 				return generateMenu(null);
 			}
 		}
-		
+
 		return builder.build();
 	}
 }

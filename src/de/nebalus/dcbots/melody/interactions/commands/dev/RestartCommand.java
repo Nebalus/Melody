@@ -1,6 +1,5 @@
 package de.nebalus.dcbots.melody.interactions.commands.dev;
 
-public class RestartCommand
-{
+public class RestartCommand {
 
 }

@@ -1,7 +1,6 @@
 package de.nebalus.dcbots.melody.tools.cmdbuilder;
 
-public enum PermissionGroup 
-{
+public enum PermissionGroup {
 	DEVELOPER,
 	ADMIN,
 	DJ,

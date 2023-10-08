@@ -2,11 +2,9 @@ package de.nebalus.dcbots.melody.interactions.commands.music;
 
 import de.nebalus.dcbots.melody.tools.cmdbuilder.SlashCommand;
 
-public class StopCommand extends SlashCommand
-{
+public class StopCommand extends SlashCommand {
 
-	public StopCommand()
-	{
+	public StopCommand() {
 		super("stop");
 		setDescription("Stops the player and clear the queue.");
 	}

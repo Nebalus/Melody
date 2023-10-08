@@ -3,6 +3,7 @@ package de.nebalus.dcbots.melody.tools.messenger;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
+
 import org.json.JSONObject;
 
 import de.nebalus.dcbots.melody.core.Melody;
@@ -12,73 +13,62 @@ import de.nebalus.dcbots.melody.tools.datamanager.DataHelper;
 import de.nebalus.dcbots.melody.tools.entitymanager.entitys.GuildEntity;
 import net.dv8tion.jda.api.entities.Guild;
 
-public class MessageFormatter 
-{
-	
-	private HashMap<Language, JSONObject> messagecache; 
-	
-	public MessageFormatter() throws Exception 
-	{
-		this.messagecache = new HashMap<Language, JSONObject>();
-		
-		for (Language language : Language.values()) 
-		{
+public class MessageFormatter {
+
+	private HashMap<Language, JSONObject> messagecache;
+
+	public MessageFormatter() throws Exception {
+		messagecache = new HashMap<>();
+
+		for (Language language : Language.values()) {
 			InputStream input = new FileInputStream(language.getFilePath());
 			messagecache.put(language, new JSONObject(DataHelper.toString(input)));
-        }
+		}
 	}
-	
-	public String format(Guild guild, String key, Object... args) 
-	{
+
+	public String format(Guild guild, String key, Object... args) {
 		GuildEntity guildentity = Melody.getEntityManager().getGuildEntity(guild);
 		Language lang = guildentity.getLanguage();
-		
+
 		return format(lang, key, args);
 	}
-	
-	public String format(String key, Object... args) 
-	{
-	    return format(Settings.DEFAULT_LANGUAGE, key, args);
+
+	public String format(String key, Object... args) {
+		return format(Settings.DEFAULT_LANGUAGE, key, args);
 	}
-	
+
 	@SuppressWarnings("incomplete-switch")
-	public String format(Language lang, String key, Object... args) 
-	{
-		String message = "JSON-Error {"+key.toLowerCase()+"} - " + lang.code;
-	    try 
-	    {
+	public String format(Language lang, String key, Object... args) {
+		String message = "JSON-Error {" + key.toLowerCase() + "} - " + lang.code;
+		try {
 			JSONObject json = messagecache.get(lang);
 			message = json.getString(key.toLowerCase());
-			
-			switch(lang) 
-			{
-				case GERMAN:
-					message = message.replace("ss", "ß");
-					message = message.replace("ae", "ä");
-					message = message.replace("oe", "ö");
-					message = message.replace("ue", "ü");
-					message = message.replace("AE", "Ä");
-					message = message.replace("OE", "Ö");
-					message = message.replace("UE", "Ü");
-					
-					message = message.replace("[ß]", "ss");
-					message = message.replace("[ä]", "ae");
-					message = message.replace("[ö]", "oe");
-					message = message.replace("[ü]", "ue");
-					break;
+
+			switch (lang) {
+			case GERMAN:
+				message = message.replace("ss", "ï¿½");
+				message = message.replace("ae", "ï¿½");
+				message = message.replace("oe", "ï¿½");
+				message = message.replace("ue", "ï¿½");
+				message = message.replace("AE", "ï¿½");
+				message = message.replace("OE", "ï¿½");
+				message = message.replace("UE", "ï¿½");
+
+				message = message.replace("[ï¿½]", "ss");
+				message = message.replace("[ï¿½]", "ae");
+				message = message.replace("[ï¿½]", "oe");
+				message = message.replace("[ï¿½]", "ue");
+				break;
 			}
-			
+
 			message = message.replace("%botname%", Build.NAME);
-			
-			for(int i = 0; i < args.length; ++i) 
-			{
+
+			for (int i = 0; i < args.length; ++i) {
 				message = message.replace("{" + i + "}", String.valueOf(args[i]));
-		    }
-		} 
-	    catch (Exception e)
-	    {
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	    return message;
+		return message;
 	}
 }

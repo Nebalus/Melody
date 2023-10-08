@@ -14,49 +14,44 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-public class CleanCommand extends SlashCommand
-{
-	
-	public CleanCommand() 
-	{
+public class CleanCommand extends SlashCommand {
+
+	public CleanCommand() {
 		super("clean");
 		setPermissionGroup(PermissionGroup.ADMIN);
 		setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE));
 		setDescription("Clears command and bot messages sent from " + Build.NAME + ".");
-		
-		setExecuter(new SlashInteractionExecuter() 
-		{
+
+		setExecuter(new SlashInteractionExecuter() {
 			@Override
-			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) 
-			{
-				final List<Message> purgemessages = new ArrayList<Message>();
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
+				final List<Message> purgemessages = new ArrayList<>();
 				final int purgeamount = event.getOption("amount").getAsInt();
 				int currentmessagecount = 0;
-				
-				for(Message cachemessage : channel.getIterableHistory().cache(false)) 
-				{
-					if(cachemessage.getAuthor() == channel.getJDA().getSelfUser()) 
-					{
+
+				for (Message cachemessage : channel.getIterableHistory().cache(false)) {
+					if (cachemessage.getAuthor() == channel.getJDA().getSelfUser()) {
 						purgemessages.add(cachemessage);
 					}
-					
-					if(++currentmessagecount >= purgeamount) 
+
+					if (++currentmessagecount >= purgeamount) {
 						break;
+					}
 				}
-				
+
 				channel.purgeMessages(purgemessages);
 				Messenger.sendInteractionMessage(event, Melody.formatMessage(guild, "command.admin.clean.messagesdeleted", purgemessages.size(), currentmessagecount), false);
 			}
 		});
-		
+
 		addOption(new OptionData(OptionType.INTEGER, "amount", "Enter an amount between 1-200")
-			.setRequiredRange(1, 200)
-			.setRequired(true));
+				.setRequiredRange(1, 200)
+				.setRequired(true));
 	}
 }

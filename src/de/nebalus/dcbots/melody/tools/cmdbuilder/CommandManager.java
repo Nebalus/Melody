@@ -18,21 +18,17 @@ import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
-public final class CommandManager 
-{
+public final class CommandManager {
 
 	private final ConcurrentHashMap<String, SlashCommand> commandlist;
 
-	public CommandManager() 
-	{
-		this.commandlist = new ConcurrentHashMap<String, SlashCommand>();
+	public CommandManager() {
+		commandlist = new ConcurrentHashMap<>();
 	}
 
-	public final void registerCommands(SlashCommand... cmd) 
-	{
-		for (SlashCommand sc : cmd) 
-		{
-			
+	public final void registerCommands(SlashCommand... cmd) {
+		for (SlashCommand sc : cmd) {
+
 			commandlist.put(sc.getPrefix().toLowerCase(), sc);
 
 //			slashcommands.add(Commands.slash(sc.getPrefix(), sc.getDescription())
@@ -51,12 +47,10 @@ public final class CommandManager
 //							.addSubcommands(new SubcommandData("omegalul", "oooomeeegalul"))));
 		}
 
-		//Exports all registered Slashcommands to the Discord Shards
-		for (JDA jda : Melody.getShardManager().getShards()) 
-		{
+		// Exports all registered Slashcommands to the Discord Shards
+		for (JDA jda : Melody.getShardManager().getShards()) {
 			CommandListUpdateAction slashupdater = jda.updateCommands();
-			for (SlashCommand sc : cmd) 
-			{
+			for (SlashCommand sc : cmd) {
 				slashupdater.addCommands(sc.getSlashCommandData());
 			}
 			slashupdater.queue();
@@ -64,66 +58,55 @@ public final class CommandManager
 		}
 	}
 
-	public final ArrayList<SlashCommand> getCommands() 
-	{
-		final ArrayList<SlashCommand> rawcmd = new ArrayList<SlashCommand>();
-		
-		for (Map.Entry<String, SlashCommand> entry : commandlist.entrySet()) 
-		{
+	public final ArrayList<SlashCommand> getCommands() {
+		final ArrayList<SlashCommand> rawcmd = new ArrayList<>();
+
+		for (Map.Entry<String, SlashCommand> entry : commandlist.entrySet()) {
 			rawcmd.add(entry.getValue());
 		}
 		return rawcmd;
 	}
 
-	public final SlashCommand getCommand(String prefix) throws NullPointerException 
-	{
+	public final SlashCommand getCommand(String prefix) throws NullPointerException {
 		final String lower_prefix = prefix.toLowerCase();
-		if (this.commandlist.containsKey(lower_prefix)) 
-		{
+		if (commandlist.containsKey(lower_prefix)) {
 			SlashCommand cmd;
-			if ((cmd = this.commandlist.get(lower_prefix)) != null)
-			{
+			if ((cmd = commandlist.get(lower_prefix)) != null) {
 				return cmd;
 			}
 		}
 		throw new NullPointerException("The Command (" + lower_prefix + ") does not exist!");
 	}
 
-	public final boolean performSlashGuild(SlashInteractionExecuter executer, PermissionGroup permgroup, GuildEntity guildentity, SlashCommandInteractionEvent event) 
-	{	
+	public final boolean performSlashGuild(SlashInteractionExecuter executer, PermissionGroup permgroup, GuildEntity guildentity, SlashCommandInteractionEvent event) {
 		final Member member = event.getMember();
 		final MessageChannelUnion channel = event.getChannel();
 		final Guild guild = event.getGuild();
-		
-		switch (permgroup) 
-		{
-			case DEVELOPER:
-				if (Settings.DEVELOPER_ID_LIST.contains(member.getIdLong())) 
-				{
-					executer.executeGuild(member, channel, guild, guildentity, event);
-					return true;
-				}
-				break;
 
-			case ADMIN:
-				if (member.hasPermission(Permission.MANAGE_SERVER) || member.hasPermission(Permission.ADMINISTRATOR)) 
-				{
-					executer.executeGuild(member, channel, guild, guildentity, event);
-				}
-				else 
-				{
-					Messenger.sendErrorMessage(event, "user-no-permmisions", "MANAGE_SERVER");
-				}
-				return true;
-			
-			case EVERYONE:
+		switch (permgroup) {
+		case DEVELOPER:
+			if (Settings.DEVELOPER_ID_LIST.contains(member.getIdLong())) {
 				executer.executeGuild(member, channel, guild, guildentity, event);
 				return true;
-				
-			default:
-				//Error Message Senden das keine PermissionGroup gefunden wurde
-				break;
-		
+			}
+			break;
+
+		case ADMIN:
+			if (member.hasPermission(Permission.MANAGE_SERVER) || member.hasPermission(Permission.ADMINISTRATOR)) {
+				executer.executeGuild(member, channel, guild, guildentity, event);
+			} else {
+				Messenger.sendErrorMessage(event, "user-no-permmisions", "MANAGE_SERVER");
+			}
+			return true;
+
+		case EVERYONE:
+			executer.executeGuild(member, channel, guild, guildentity, event);
+			return true;
+
+		default:
+			// Error Message Senden das keine PermissionGroup gefunden wurde
+			break;
+
 		}
 		return false;
 	}

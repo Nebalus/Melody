@@ -1,6 +1,7 @@
 package de.nebalus.dcbots.melody.tools.datamanager.files;
 
 import java.io.File;
+
 import org.json.JSONObject;
 
 import de.nebalus.dcbots.melody.tools.Utils;
@@ -22,11 +23,11 @@ public final class Config {
 
 		final JSONObject jsonobject = Utils.getJsonObject(configfile);
 
-		this.BOTTOKEN = jsonobject.optString("bottoken", null);
-		this.DEBUGMODE = jsonobject.optBoolean("debugmode", false);
-		this.AUTOUPDATE = jsonobject.optBoolean("autoupdate", true);
-		this.RATELIMITREQUEST = jsonobject.optInt("ratelimitmaxrequests", 3);
-		this.RATELIMITITERATIONDURATION = jsonobject.optLong("ratelimititerationduration", 5000l);
-		this.MAINDISCORDGUILD = jsonobject.optLong("maindiscordguild", -1l);
+		BOTTOKEN = jsonobject.optString("bottoken", null);
+		DEBUGMODE = jsonobject.optBoolean("debugmode", false);
+		AUTOUPDATE = jsonobject.optBoolean("autoupdate", true);
+		RATELIMITREQUEST = jsonobject.optInt("ratelimitmaxrequests", 3);
+		RATELIMITITERATIONDURATION = jsonobject.optLong("ratelimititerationduration", 5000l);
+		MAINDISCORDGUILD = jsonobject.optLong("maindiscordguild", -1l);
 	}
 }
