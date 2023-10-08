@@ -7,36 +7,31 @@ import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;
 
 import net.dv8tion.jda.api.audio.AudioSendHandler;
 
-public class AudioPlayerSendHandler implements AudioSendHandler 
-{
-	
+public class AudioPlayerSendHandler implements AudioSendHandler {
+
 	private final AudioPlayer audioPlayer;
 	private final ByteBuffer buffer;
 	private final MutableAudioFrame frame;
 
-	public AudioPlayerSendHandler(AudioPlayer audioPlayer) 
-	{
+	public AudioPlayerSendHandler(AudioPlayer audioPlayer) {
 		this.audioPlayer = audioPlayer;
-	    this.buffer = ByteBuffer.allocate(2048);
-	    this.frame = new MutableAudioFrame();
-	    this.frame.setBuffer(buffer);	    
+		buffer = ByteBuffer.allocate(2048);
+		frame = new MutableAudioFrame();
+		frame.setBuffer(buffer);
 	}
 
 	@Override
-	public boolean canProvide() 
-	{
-		return this.audioPlayer.provide(this.frame);
+	public boolean canProvide() {
+		return audioPlayer.provide(frame);
 	}
 
 	@Override
-	public ByteBuffer provide20MsAudio() 
-	{
-		return this.buffer.flip();
+	public ByteBuffer provide20MsAudio() {
+		return buffer.flip();
 	}
 
 	@Override
-	public boolean isOpus() 
-	{
+	public boolean isOpus() {
 		return true;
 	}
 }

@@ -39,386 +39,306 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
-public final class Melody 
-{
-	
+public final class Melody {
+
 	public static Melody INSTANCE;
-	
+
 	private final AudioPlayerManager audioplayerMan;
 	private final MusicManager musicMan;
 	private final ShardManager shardMan;
 	private final DataManager dataMan;
 	private final EntityManager entityMan;
-	private final CommandManager cmdMan;	
+	private final CommandManager cmdMan;
 	private final MessageFormatter messageformatter;
-	
-	private final Long startuptimestamp; 
-	
+
+	private final Long startuptimestamp;
+
 	private int nextStatusUpdate = 10;
-	
+
 	private Thread auto_save_thread;
 	private Thread loop_thread;
-	
-	public static void main(String[] args) 
-	{
-		try 
-		{
+
+	public static void main(String[] args) {
+		try {
 			INSTANCE = new Melody();
-		} 
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
-			if(INSTANCE != null) 
-			{
+			if (INSTANCE != null) {
 				INSTANCE.shutdown();
 			}
 		}
 	}
-	
-	private Melody() throws Exception 
-	{
+
+	private Melody() throws Exception {
 		new Build("BETA v0.7.0", "2022-08-30");
-		
+
 		ConsoleLogger.info("Starting BOOT process for " + Build.NAME + " " + Build.VERSION);
-		
-		this.startuptimestamp = System.currentTimeMillis();
-		
+
+		startuptimestamp = System.currentTimeMillis();
+
 		Melody.INSTANCE = this;
-		
-		this.dataMan = new DataManager();
-		this.messageformatter = new MessageFormatter();
-		
+
+		dataMan = new DataManager();
+		messageformatter = new MessageFormatter();
+
 		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(dataMan.getConfig().BOTTOKEN);
 		builder.addEventListeners(new InteractionListener());
 		builder.setActivity(Activity.playing("booting myself..."));
 
-		this.shardMan = builder.build();
-		for(JDA jda : this.shardMan.getShards()) 
-		{
+		shardMan = builder.build();
+		for (JDA jda : shardMan.getShards()) {
 			jda.awaitReady();
 		}
-		
-		this.audioplayerMan = new DefaultAudioPlayerManager();
-		this.musicMan = new MusicManager();
-		this.entityMan = new EntityManager();
-		
-		this.cmdMan = new CommandManager();
-		this.cmdMan.registerCommands(new StaymodeCommand(), new JoinCommand(), new CleanCommand(), new InfoCommand(), new HelpCommand(),
-									new PingCommand(), new InviteCommand(), new LoopCommand(), new FeedbackCommand());
-		
+
+		audioplayerMan = new DefaultAudioPlayerManager();
+		musicMan = new MusicManager();
+		entityMan = new EntityManager();
+
+		cmdMan = new CommandManager();
+		cmdMan.registerCommands(new StaymodeCommand(), new JoinCommand(), new CleanCommand(), new InfoCommand(), new HelpCommand(),
+				new PingCommand(), new InviteCommand(), new LoopCommand(), new FeedbackCommand());
+
 		AudioSourceManagers.registerRemoteSources(audioplayerMan);
 		AudioSourceManagers.registerLocalSource(audioplayerMan);
 		audioplayerMan.getConfiguration().setFilterHotSwapEnabled(true);
-		
+
 		runThreadLoop();
-		
+
 		ConsoleLogger.info(Build.NAME + " has been successfully loaded (" + (System.currentTimeMillis() - startuptimestamp) + "ms)");
 	}
 
-	private void runThreadLoop() 
-	{
-		this.auto_save_thread = new Thread(() -> {		
+	private void runThreadLoop() {
+		auto_save_thread = new Thread(() -> {
 			Long time = System.currentTimeMillis();
-			while(true) 
-			{
-				try 
-				{
+			while (true) {
+				try {
 					TimeUnit.MILLISECONDS.sleep(150000);
-				} 
-				catch (InterruptedException e) {}
-				
-				if(System.currentTimeMillis() > time) 
-				{
+				} catch (InterruptedException e) {
+				}
+
+				if (System.currentTimeMillis() > time) {
 					exportToDatabase();
 					time = System.currentTimeMillis() + 125000;
 				}
 			}
 		});
-		this.auto_save_thread.setName("Auto-Saver");
-		this.auto_save_thread.setPriority(Thread.MAX_PRIORITY);
-		this.auto_save_thread.start();
-		
-		
-		this.loop_thread = new Thread(() -> {		
-			
+		auto_save_thread.setName("Auto-Saver");
+		auto_save_thread.setPriority(Thread.MAX_PRIORITY);
+		auto_save_thread.start();
+
+		loop_thread = new Thread(() -> {
+
 			Long time = System.currentTimeMillis();
-			
-			while(true) 
-			{
-				try 
-				{
+
+			while (true) {
+				try {
 					TimeUnit.MILLISECONDS.sleep(1000);
-				} catch (InterruptedException e) {}
-				
-				if(System.currentTimeMillis() > time)
-				{
-						
-					updateActivityStatus();					
-					
+				} catch (InterruptedException e) {
+				}
+
+				if (System.currentTimeMillis() > time) {
+
+					updateActivityStatus();
+
 					time = System.currentTimeMillis() + 1000;
 				}
 			}
 		});
-		this.loop_thread.setName("Loop-Thread");
-		this.loop_thread.setPriority(Thread.NORM_PRIORITY);
-		this.loop_thread.start();
+		loop_thread.setName("Loop-Thread");
+		loop_thread.setPriority(Thread.NORM_PRIORITY);
+		loop_thread.start();
 	}
-	
-	private void exportToDatabase() 
-	{
+
+	private void exportToDatabase() {
 		ConsoleLogger.debug("Auto-Saver", "Starting to export cache");
-		try
-		{
-			if(getEntityManager().exportToDatabase()) 
-			{
+		try {
+			if (getEntityManager().exportToDatabase()) {
 				ConsoleLogger.debug("Auto-Saver", "Export ended sucessfully");
-			}
-			else 
-			{
+			} else {
 				ConsoleLogger.debug("Auto-Saver", "There is nothing to export to the database");
 			}
-		}
-		catch(Exception e) 
-		{
+		} catch (Exception e) {
 			ConsoleLogger.warning("Thread", "The current action from the Auto-Saver has been aborted");
 			e.printStackTrace();
 		}
 	}
-	
-	private void updateActivityStatus() 
-	{
-		if(nextStatusUpdate <= 0) 
-		{
+
+	private void updateActivityStatus() {
+		if (nextStatusUpdate <= 0) {
 			final Random rand = new Random();
 			final int i = rand.nextInt(3);
-			
-			shardMan.getShards().forEach(jda ->
-			{
-				switch(i) 
-				{
-					case 0:
-						int musicguilds = 0;
-						for(Guild g : shardMan.getGuilds()) 
-						{
-							if(g.getSelfMember().getVoiceState().getChannel() != null) 
-							{
-								musicguilds++;
-							}
+
+			shardMan.getShards().forEach(jda -> {
+				switch (i) {
+				case 0:
+					int musicguilds = 0;
+					for (Guild g : shardMan.getGuilds()) {
+						if (g.getSelfMember().getVoiceState().getChannel() != null) {
+							musicguilds++;
 						}
-						jda.getPresence().setActivity(Activity.streaming("music on " + musicguilds + " server" + (musicguilds < 1 ? "s": "") +"!","https://twitch.tv/nebalus"));
-						break;
-					case 1:
-						jda.getPresence().setActivity(Activity.watching(Build.VERSION));
-						break;
-					case 2:
-						jda.getPresence().setActivity(Activity.listening("@" + jda.getSelfUser().getName()));
-						break;
+					}
+					jda.getPresence().setActivity(Activity.streaming("music on " + musicguilds + " server" + (musicguilds < 1 ? "s" : "") + "!", "https://twitch.tv/nebalus"));
+					break;
+				case 1:
+					jda.getPresence().setActivity(Activity.watching(Build.VERSION));
+					break;
+				case 2:
+					jda.getPresence().setActivity(Activity.listening("@" + jda.getSelfUser().getName()));
+					break;
 				}
 			});
 			nextStatusUpdate = 30;
-		}
-		else 
-		{
+		} else {
 			nextStatusUpdate--;
 		}
 	}
-	
-	public void shutdown()
-	{
+
+	public void shutdown() {
 		exportToDatabase();
-		if(dataMan != null) 
-		{
-			dataMan.getDatabase().disconnect();		
+		if (dataMan != null) {
+			dataMan.getDatabase().disconnect();
 		}
-		if(shardMan != null) 
-		{
+		if (shardMan != null) {
 			shardMan.setStatus(OnlineStatus.OFFLINE);
 			shardMan.shutdown();
 		}
 		ConsoleLogger.info(Build.NAME + " " + Build.VERSION + " offline!");
 		System.exit(0);
 	}
-	
-	public void restart() 
-	{
-		try 
-		{
+
+	public void restart() {
+		try {
 			ConsoleLogger.info("Restarting " + Build.NAME + " " + Build.VERSION + ", please wait!");
 			final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 			File currentJar = new File(Melody.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			/* is it a jar file? */
-			if(!currentJar.getName().endsWith(".jar"))	return;
-			
+			if (!currentJar.getName().endsWith(".jar")) {
+				return;
+			}
+
 			/* Build command: java -jar application.jar */
-			final ArrayList<String> command = new ArrayList<String>();
+			final ArrayList<String> command = new ArrayList<>();
 			command.add(javaBin);
 			command.add("-jar");
 			command.add(currentJar.getPath());
 
 			final ProcessBuilder builder = new ProcessBuilder(command);
 			builder.start();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		shutdown();
 	}
-	
-	public static Long getStartUpTimeStamp()
-	{
-		if(INSTANCE != null) 
-		{
+
+	public static Long getStartUpTimeStamp() {
+		if (INSTANCE != null) {
 			return INSTANCE.startuptimestamp;
-		}
-		else 
-		{
+		} else {
 			return System.currentTimeMillis();
 		}
 	}
-	
-	public static String formatMessage(Guild guild, String key, Object... args) 
-	{
-		if(INSTANCE.messageformatter != null) 
-		{
+
+	public static String formatMessage(Guild guild, String key, Object... args) {
+		if (INSTANCE.messageformatter != null) {
 			return INSTANCE.messageformatter.format(guild, key, args);
-		}
-		else 
-		{
+		} else {
 			throw new NullPointerException("The MessageFormater is not loaded!");
 		}
 	}
-	
-	public static String formatMessage(Language lang, String key, Object... args) 
-	{
-		if(INSTANCE.messageformatter != null) 
-		{
+
+	public static String formatMessage(Language lang, String key, Object... args) {
+		if (INSTANCE.messageformatter != null) {
 			return INSTANCE.messageformatter.format(lang, key, args);
-		}
-		else 
-		{
+		} else {
 			throw new NullPointerException("The MessageFormater is not loaded!");
 		}
 	}
-	
-	public static LiteSQL getDatabase() 
-	{
-		if(INSTANCE.dataMan != null && INSTANCE.dataMan.getDatabase() != null) 
-		{
+
+	public static LiteSQL getDatabase() {
+		if (INSTANCE.dataMan != null && INSTANCE.dataMan.getDatabase() != null) {
 			return INSTANCE.dataMan.getDatabase();
-		}
-		else 
-		{
+		} else {
 			throw new NullPointerException("The Database is not loaded!");
 		}
 	}
-	
-	public static Config getConfig() 
-	{
-		if(INSTANCE.dataMan != null && INSTANCE.dataMan.getConfig() != null) {
+
+	public static Config getConfig() {
+		if (INSTANCE.dataMan != null && INSTANCE.dataMan.getConfig() != null) {
 			return INSTANCE.dataMan.getConfig();
-		}
-		else 
-		{
+		} else {
 			throw new NullPointerException("The Config is not loaded!");
 		}
 	}
-	
-	public static DataManager getDataManager() 
-	{
-		if(INSTANCE.dataMan != null) {
+
+	public static DataManager getDataManager() {
+		if (INSTANCE.dataMan != null) {
 			return INSTANCE.dataMan;
-		}
-		else 
-		{
+		} else {
 			throw new NullPointerException("The DataManager is not loaded!");
 		}
 	}
-	
-	public static CommandManager getCommandManager()
-	{
-		if(INSTANCE.cmdMan != null) {
+
+	public static CommandManager getCommandManager() {
+		if (INSTANCE.cmdMan != null) {
 			return INSTANCE.cmdMan;
-		}
-		else 
-		{
+		} else {
 			throw new NullPointerException("The CommandManager is not loaded!");
 		}
 	}
-	
-	public static MusicManager getMusicManager() 
-	{
-		if(INSTANCE.musicMan != null) {
+
+	public static MusicManager getMusicManager() {
+		if (INSTANCE.musicMan != null) {
 			return INSTANCE.musicMan;
-		}
-		else 
-		{
+		} else {
 			throw new NullPointerException("The PlayerManager is not loaded!");
 		}
 	}
-	
-	public static AudioPlayerManager getAudioPlayerManager() 
-	{
-		if(INSTANCE.audioplayerMan != null) {
+
+	public static AudioPlayerManager getAudioPlayerManager() {
+		if (INSTANCE.audioplayerMan != null) {
 			return INSTANCE.audioplayerMan;
-		}
-		else 
-		{
+		} else {
 			throw new NullPointerException("The AudioPlayerManager is not loaded!");
 		}
 	}
-	
-	public static ShardManager getShardManager() 
-	{
-		if(INSTANCE.shardMan != null) 
-		{
+
+	public static ShardManager getShardManager() {
+		if (INSTANCE.shardMan != null) {
 			return INSTANCE.shardMan;
-		}
-		else
-		{
+		} else {
 			throw new NullPointerException("The ShardManager is not loaded!");
 		}
 	}
-	
-	public static EntityManager getEntityManager() 
-	{
-		if(INSTANCE.entityMan != null) 
-		{
+
+	public static EntityManager getEntityManager() {
+		if (INSTANCE.entityMan != null) {
 			return INSTANCE.entityMan;
-		}
-		else
-		{
+		} else {
 			throw new NullPointerException("The EntityManager is not loaded!");
 		}
 	}
-	
-	public static Guild getGuildById(Long guildid) 
-	{
+
+	public static Guild getGuildById(Long guildid) {
 		return getShardManager().getGuildById(guildid);
 	}
-	
-	public static GuildEntity getGuildEntityById(Long guildid)
-	{
+
+	public static GuildEntity getGuildEntityById(Long guildid) {
 		return getEntityManager().getGuildEntity(guildid);
 	}
-	
-	public static GuildEntity getGuildEntity(Guild guild)
-	{
+
+	public static GuildEntity getGuildEntity(Guild guild) {
 		return getEntityManager().getGuildEntity(guild);
 	}
-	
-	public static User getUserById(Long userid) 
-	{
+
+	public static User getUserById(Long userid) {
 		return getShardManager().getUserById(userid);
 	}
-	
-	public static UserEntity getUserEntityById(Long userid)
-	{
+
+	public static UserEntity getUserEntityById(Long userid) {
 		return getEntityManager().getUserEntity(userid);
 	}
-	
-	public static UserEntity getUserEntity(User user)
-	{
+
+	public static UserEntity getUserEntity(User user) {
 		return getEntityManager().getUserEntity(user);
 	}
 }

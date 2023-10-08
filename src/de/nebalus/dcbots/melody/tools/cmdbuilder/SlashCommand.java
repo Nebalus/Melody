@@ -14,141 +14,119 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-public class SlashCommand
-{
-	
-	private PermissionGroup permissiongroup;	
+public class SlashCommand {
+
+	private PermissionGroup permissiongroup;
 	private SlashCommandData slashcommanddata;
 	private HashMap<String, SlashSubCommand> subcommands;
 	private SlashInteractionExecuter executer;
-	
-	protected SlashCommand(String prefix) 
-	{
+
+	protected SlashCommand(String prefix) {
 		ConsoleLogger.debug("CMD-BUILDER", "Loading CMD \"" + prefix.toLowerCase() + "\"");
-		
-		subcommands = new HashMap<String, SlashSubCommand>();
+
+		subcommands = new HashMap<>();
 		permissiongroup = PermissionGroup.DEVELOPER;
 		slashcommanddata = Commands.slash(prefix.toLowerCase(), "What will be here is written in the stars :P");
 		slashcommanddata.setGuildOnly(true);
 		executer = null;
 	}
-	
+
 	@Nonnull
-	protected void setGuildOnly(boolean isguildonly)
-	{
+	protected void setGuildOnly(boolean isguildonly) {
 		slashcommanddata.setGuildOnly(isguildonly);
 	}
-	
-	public boolean isGuildOnly()
-	{
+
+	public boolean isGuildOnly() {
 		return slashcommanddata.isGuildOnly();
 	}
-	
+
 	@Nonnull
-	protected void setExecuter(SlashInteractionExecuter executer)
-	{
+	protected void setExecuter(SlashInteractionExecuter executer) {
 		this.executer = executer;
 	}
-	
-	public SlashInteractionExecuter getExecuter()
-	{
+
+	public SlashInteractionExecuter getExecuter() {
 		return executer;
 	}
-	
-	//Gets the Command description
-	public String getDescription() 
-	{
+
+	// Gets the Command description
+	public String getDescription() {
 		return slashcommanddata.getDescription();
 	}
-	
+
 	@Nonnull
-	protected void setDescription(String description) 
-	{
+	protected void setDescription(String description) {
 		slashcommanddata.setDescription(description);
 	}
-	
-	public PermissionGroup getPermissionGroup() 
-	{
+
+	public PermissionGroup getPermissionGroup() {
 		return permissiongroup;
 	}
-	
+
 	@Nonnull
-	protected void setPermissionGroup(PermissionGroup permissiongroup) 
-	{
+	protected void setPermissionGroup(PermissionGroup permissiongroup) {
 		this.permissiongroup = permissiongroup;
 	}
-	 
-	public String getPrefix()
-	{
+
+	public String getPrefix() {
 		return slashcommanddata.getName();
 	}
-	
+
 	@Nonnull
-	protected void setPrefix(String prefix) 
-	{
+	protected void setPrefix(String prefix) {
 		slashcommanddata.setName(prefix.toLowerCase());
 	}
-	
-	public SlashCommandData getSlashCommandData()
-	{	
+
+	public SlashCommandData getSlashCommandData() {
 		return slashcommanddata;
 	}
-	
-	public ArrayList<SlashSubCommand> getSubCommands()
-	{
-		final ArrayList<SlashSubCommand> subcmd = new ArrayList<SlashSubCommand>();
-		
-		for (Map.Entry<String, SlashSubCommand> entry : subcommands.entrySet()) 
-		{
+
+	public ArrayList<SlashSubCommand> getSubCommands() {
+		final ArrayList<SlashSubCommand> subcmd = new ArrayList<>();
+
+		for (Map.Entry<String, SlashSubCommand> entry : subcommands.entrySet()) {
 			subcmd.add(entry.getValue());
 		}
 		return subcmd;
 	}
-	
+
 	@Nonnull
-	protected void addSubCommand(SlashSubCommand subcommand) 
-	{	
+	protected void addSubCommand(SlashSubCommand subcommand) {
 		final SubcommandData subcommanddata = subcommand.getSubCommandData();
-		
+
 		ConsoleLogger.debug("CMD-BUILDER", "Loading SUBCMD | PATH: " + getPrefix() + "/" + subcommanddata.getName() + " | NUMOPTIONSPROVIDED: " + subcommanddata.getOptions().size());
-		
+
 		subcommands.put(subcommanddata.getName(), subcommand);
 		slashcommanddata.addSubcommands(subcommanddata);
 	}
-	
-	public SlashSubCommand getSubCommandByPath(String path)
-	{
-		if(subcommands.containsKey(path))
-		{
+
+	public SlashSubCommand getSubCommandByPath(String path) {
+		if (subcommands.containsKey(path)) {
 			return subcommands.get(path);
 		}
 		throw new NullPointerException("The SubCommand (" + getPrefix() + "/" + path + ") does not exist!");
 	}
-	
+
 	@Nonnull
-	protected void addSubCommandGroup(SlashSubCommandGroup subcommandgroup) 
-	{
-		for(SlashSubCommand ssc : subcommandgroup.getServerSubCommands())
-		{
+	protected void addSubCommandGroup(SlashSubCommandGroup subcommandgroup) {
+		for (SlashSubCommand ssc : subcommandgroup.getServerSubCommands()) {
 			final String path = subcommandgroup.getName() + "/" + ssc.getSubCommandData().getName();
-			
+
 			ConsoleLogger.debug("CMD-BUILDER", "Loading SUBCMD | PATH: " + getPrefix() + "/" + path + " | NUMOPTIONSPROVIDED: " + ssc.getSubCommandData().getOptions().size());
-			
+
 			subcommands.put(path, ssc);
 		}
-		
+
 		slashcommanddata.addSubcommandGroups(subcommandgroup);
 	}
-	
+
 	@Nonnull
-	protected void addOption(OptionData optiondata)
-	{
+	protected void addOption(OptionData optiondata) {
 		slashcommanddata.addOptions(optiondata);
 	}
-	
+
 	@Nonnull
-	protected void setDefaultPermissions(DefaultMemberPermissions permission)
-	{
+	protected void setDefaultPermissions(DefaultMemberPermissions permission) {
 		slashcommanddata.setDefaultPermissions(permission);
 	}
 
