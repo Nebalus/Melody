@@ -1,6 +1,9 @@
 package de.nebalus.dcbots.melody;
 
+import java.time.Duration;
+
 import de.nebalus.framework.gfw.modules.dcbot.api.DCBotInstance;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -34,7 +37,13 @@ public class MelodyBotInstance extends DCBotInstance {
 
 	@Override
 	protected void onUnload() throws Exception {
-
+		JDA jda = getJDA();
+		if(jda != null) {
+			 jda.shutdown();
+			 if (!jda.awaitShutdown(Duration.ofSeconds(10))) {
+			     jda.shutdownNow();
+			     jda.awaitShutdown();
+			 }
+		}
 	}
-
 }
