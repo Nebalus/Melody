@@ -23,10 +23,10 @@ public class MelodyApp {
 
 		// Gets the own logger
 		Logger appLogger = logService.buildLogger(getClass().getSimpleName(), true);
-		
+
 		// Gets the DCBotModule
 		DCBotModule dcbot = (DCBotModule) moduleService.getModule(DCBotModule.class);
-		
+
 		appLogger.log("Hello World!");
 	}
 
