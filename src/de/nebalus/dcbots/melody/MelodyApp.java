@@ -15,7 +15,7 @@ public class MelodyApp {
 		this.gfw = gfw;
 	}
 
-	public void go() throws Exception {
+	protected void go() throws Exception {
 		// Gets some essential services from the GFW instance
 		FileService fileService = gfw.getFileService();
 		LogService logService = gfw.getLogService();

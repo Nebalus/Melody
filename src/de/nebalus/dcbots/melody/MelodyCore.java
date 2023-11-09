@@ -4,9 +4,11 @@ import de.nebalus.framework.gfw.api.GFW;
 
 public class MelodyCore {
 
+	private static MelodyApp melodyApp;
+	
 	public static void main(String[] args) {
 		// Generates the Melody Application
-		MelodyApp melodyApp = MelodyAppFactory.build(args);
+		melodyApp = MelodyAppFactory.build(args);
 
 		try {
 			melodyApp.go();
@@ -21,5 +23,9 @@ public class MelodyCore {
 			
 			Runtime.getRuntime().exit(-1);
 		}
+	}
+	
+	public static MelodyApp getMelodyApp() {
+		return melodyApp;
 	}
 }
