@@ -22,7 +22,7 @@ public class MelodyAppFactory {
 		// Generates a new GFW instance with the with the build data
 		GFW gfwInstance = new GFW(gfwBuildData);
 		gfwInstance.initialize();
-		
+
 		return new MelodyApp(gfwInstance);
 	}
 }
