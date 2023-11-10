@@ -27,7 +27,10 @@ public class MelodyApp {
 		// Gets the DCBotModule
 		DCBotModule dcbot = (DCBotModule) moduleService.getModule(DCBotModule.class);
 
-		appLogger.log("Hello World!");
+		// Creates an instance from the MelodyBot
+		MelodyBotInstance botInstance = new MelodyBotInstance();
+		
+		dcbot.loadBotInstance("melody", botInstance);
 	}
 
 	public GFW getGFW() {
