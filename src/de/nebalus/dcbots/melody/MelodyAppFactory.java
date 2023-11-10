@@ -20,9 +20,8 @@ public class MelodyAppFactory {
 		GFWBuildData gfwBuildData = gfwBuilder.build();
 
 		// Generates a new GFW instance with the with the build data
-		GFW gfwInstance = new GFW(gfwBuildData);
-		gfwInstance.initialize();
+		GFW.initialize(gfwBuildData);
 
-		return new MelodyApp(gfwInstance);
+		return new MelodyApp();
 	}
 }
