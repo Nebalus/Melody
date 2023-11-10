@@ -10,7 +10,7 @@ import de.nebalus.framework.gfw.modules.dcbot.DCBotModule;
 public class MelodyApp {
 
 	private Logger appLogger;
-	
+
 	public MelodyApp() {
 	}
 
@@ -27,11 +27,10 @@ public class MelodyApp {
 		DCBotModule dcbot = (DCBotModule) moduleService.getModule(DCBotModule.class);
 
 		// Creates an instance from the MelodyBot
-		MelodyBotInstance botInstance = new MelodyBotInstance();
-		
+		MelodyBotInstance botInstance = new MelodyBotInstance(this);
 		dcbot.loadBotInstance("melody", botInstance);
 	}
-	
+
 	public Logger getLogger() {
 		return appLogger;
 	}

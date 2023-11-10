@@ -20,8 +20,7 @@ public class ConfigCommand extends SlashCommand {
 		for (Language lang : Language.values()) {
 			languagechoices.add(new Choice(lang.name(), lang.getCode()));
 		}
-		addOption(new OptionData(OptionType.STRING, "language", "Enter a new language")
-				.setRequired(false)
+		addOption(new OptionData(OptionType.STRING, "language", "Enter a new language").setRequired(false)
 				.addChoices(languagechoices));
 	}
 }

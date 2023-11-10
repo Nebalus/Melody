@@ -9,7 +9,7 @@ import java.util.List;
 import com.vdurmont.emoji.EmojiParser;
 
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import old.de.nebalus.dcbots.melody.core.constants.Melody;
 import old.de.nebalus.dcbots.melody.core.constants.Settings;
@@ -37,7 +37,8 @@ public final class GuildEntity extends Entity {
 			try {
 
 				for (GuildEntityDBOptions option : GuildEntityDBOptions.values()) {
-					final DatabaseValueContainer dvc = new DatabaseValueContainer(option.name(), option.canbeexported, option.defaultvalue);
+					final DatabaseValueContainer dvc = new DatabaseValueContainer(option.name(), option.canbeexported,
+							option.defaultvalue);
 					createDatabaseValueContainer(dvc);
 				}
 
@@ -56,7 +57,8 @@ public final class GuildEntity extends Entity {
 								dvc.updateValue(rsguild.getLong(databasename), true);
 								break;
 							case LANGUAGE:
-								dvc.updateValue(Language.getLanguage(rsguild.getInt(databasename)).getDatabaseID(), true);
+								dvc.updateValue(Language.getLanguage(rsguild.getInt(databasename)).getDatabaseID(),
+										true);
 								break;
 							case VOLUME:
 								dvc.updateValue(rsguild.getInt(databasename), true);
@@ -85,21 +87,23 @@ public final class GuildEntity extends Entity {
 					Guild guild = Melody.getGuildById(guildid);
 					for (TextChannel tc : guild.getTextChannels()) {
 						try {
-							tc.sendMessage(EmojiParser.parseToUnicode(
-									"Hello everybody, i'm " + guild.getSelfMember().getAsMention() + " \n"
-											+ " `-` My prefix on " + guild.getName() + " is `" + Settings.CMD_PREFIX + "`\n"
-											+ " `-` If you do not understand how I work then you can see all my commands by typing `" + Settings.CMD_PREFIX + "help`\n"
-											+ " `-` When you dont like something in my config then you can easyly change it by typing `" + Settings.CMD_PREFIX + "config help`\n"
-											+ " \n"
-											+ "**Otherwise have fun listening to the music from my service** :notes: \n"
-											+ "PS: Thanks a lot for your support, that you added me to your discord server! :sparkling_heart:"))
+							tc.sendMessage(EmojiParser.parseToUnicode("Hello everybody, i'm "
+									+ guild.getSelfMember().getAsMention() + " \n" + " `-` My prefix on "
+									+ guild.getName() + " is `" + Settings.CMD_PREFIX + "`\n"
+									+ " `-` If you do not understand how I work then you can see all my commands by typing `"
+									+ Settings.CMD_PREFIX + "help`\n"
+									+ " `-` When you dont like something in my config then you can easyly change it by typing `"
+									+ Settings.CMD_PREFIX + "config help`\n" + " \n"
+									+ "**Otherwise have fun listening to the music from my service** :notes: \n"
+									+ "PS: Thanks a lot for your support, that you added me to your discord server! :sparkling_heart:"))
 									.queue();
 							break;
 						} catch (InsufficientPermissionException e) {
 						}
 					}
 					// loads the guild in the database
-					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO guilds(PK_guildid, firsttimeloaded) VALUES(?,?)");
+					PreparedStatement ps = database.getConnection()
+							.prepareStatement("INSERT INTO guilds(PK_guildid, firsttimeloaded) VALUES(?,?)");
 					ps.setLong(1, guildid);
 					ps.setLong(2, System.currentTimeMillis());
 					ps.executeUpdate();
@@ -107,7 +111,8 @@ public final class GuildEntity extends Entity {
 
 				for (GuildEntityDBOptions option : GuildEntityDBOptions.values()) {
 					DatabaseValueContainer dvc = getDatabaseValueContainer(option.name());
-					ConsoleLogger.debug("LOADED GuildEntity ID:" + guildid + " & VALUE -> " + option.name() + " " + dvc.getValue());
+					ConsoleLogger.debug(
+							"LOADED GuildEntity ID:" + guildid + " & VALUE -> " + option.name() + " " + dvc.getValue());
 				}
 
 			} catch (SQLException e) {
@@ -122,13 +127,9 @@ public final class GuildEntity extends Entity {
 	private enum GuildEntityDBOptions {
 		FIRSTTIMELOADED(System.currentTimeMillis(), "firsttimeloaded", false),
 		LASTTIMELOADED(System.currentTimeMillis(), "lasttimeloaded", true),
-		LANGUAGE(Language.ENGLISH.getDatabaseID(), "language", true),
-		VOLUME(50, "volume", true),
-		DJONLY(false, "djonly", true),
-		VOTESKIP(false, "voteskip", true),
-		STAYMODE(false, "staymode", true),
-		ANNOUNCESONGS(true, "announcesongs", true),
-		PREVENTDUPLICATES(false, "preventduplicates", true),
+		LANGUAGE(Language.ENGLISH.getDatabaseID(), "language", true), VOLUME(50, "volume", true),
+		DJONLY(false, "djonly", true), VOTESKIP(false, "voteskip", true), STAYMODE(false, "staymode", true),
+		ANNOUNCESONGS(true, "announcesongs", true), PREVENTDUPLICATES(false, "preventduplicates", true),
 		LASTAUDIOCHANNEL(0l, "lastaudiochannel", true);
 
 		final Object defaultvalue;
@@ -184,7 +185,8 @@ public final class GuildEntity extends Entity {
 		if ((channel = getGuild().getVoiceChannelById(channelid)) != null) {
 			return channel;
 		}
-		throw new NullPointerException("The VoiceChannel ID:" + channelid + " cannot be loaded because it has been deleted or is unavalibale!");
+		throw new NullPointerException("The VoiceChannel ID:" + channelid
+				+ " cannot be loaded because it has been deleted or is unavalibale!");
 	}
 
 	public void setLastAudioChannelId(Long lastaudiochannelid) {
@@ -263,7 +265,8 @@ public final class GuildEntity extends Entity {
 
 			if (!exportoptions.isEmpty()) {
 				try {
-					PreparedStatement ps = database.getConnection().prepareStatement(rawps.replace("%CONTENT%", rawoptions));
+					PreparedStatement ps = database.getConnection()
+							.prepareStatement(rawps.replace("%CONTENT%", rawoptions));
 					int ioption = 1;
 					for (GuildEntityDBOptions option : exportoptions) {
 						DatabaseValueContainer dvc = getDatabaseValueContainer(option.name());

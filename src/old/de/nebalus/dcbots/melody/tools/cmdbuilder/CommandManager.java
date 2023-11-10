@@ -54,7 +54,8 @@ public final class CommandManager {
 				slashupdater.addCommands(sc.getSlashCommandData());
 			}
 			slashupdater.queue();
-			ConsoleLogger.debug("SLASH-BUILDER", "EXPORT generated Slash commands to Shard [ID:" + jda.getShardInfo().getShardId() + "]");
+			ConsoleLogger.debug("SLASH-BUILDER",
+					"EXPORT generated Slash commands to Shard [ID:" + jda.getShardInfo().getShardId() + "]");
 		}
 	}
 
@@ -78,7 +79,8 @@ public final class CommandManager {
 		throw new NullPointerException("The Command (" + lower_prefix + ") does not exist!");
 	}
 
-	public final boolean performSlashGuild(SlashInteractionExecuter executer, PermissionGroup permgroup, GuildEntity guildentity, SlashCommandInteractionEvent event) {
+	public final boolean performSlashGuild(SlashInteractionExecuter executer, PermissionGroup permgroup,
+			GuildEntity guildentity, SlashCommandInteractionEvent event) {
 		final Member member = event.getMember();
 		final MessageChannelUnion channel = event.getChannel();
 		final Guild guild = event.getGuild();

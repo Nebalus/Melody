@@ -18,8 +18,7 @@ public class LoopCommand extends SlashCommand {
 		for (LoopMode loopmode : LoopMode.values()) {
 			loopchoices.add(new Choice(loopmode.getTextFormat(), loopmode.getTextFormat()));
 		}
-		addOption(new OptionData(OptionType.STRING, "loopmode", "Enter a new loopmode")
-				.setRequired(false)
+		addOption(new OptionData(OptionType.STRING, "loopmode", "Enter a new loopmode").setRequired(false)
 				.addChoices(loopchoices));
 	}
 

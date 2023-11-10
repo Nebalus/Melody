@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -30,7 +30,8 @@ public class CleanCommand extends SlashCommand {
 
 		setExecuter(new SlashInteractionExecuter() {
 			@Override
-			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity,
+					SlashCommandInteractionEvent event) {
 				final List<Message> purgemessages = new ArrayList<>();
 				final int purgeamount = event.getOption("amount").getAsInt();
 				int currentmessagecount = 0;
@@ -46,12 +47,12 @@ public class CleanCommand extends SlashCommand {
 				}
 
 				channel.purgeMessages(purgemessages);
-				Messenger.sendInteractionMessage(event, Melody.formatMessage(guild, "command.admin.clean.messagesdeleted", purgemessages.size(), currentmessagecount), false);
+				Messenger.sendInteractionMessage(event, Melody.formatMessage(guild,
+						"command.admin.clean.messagesdeleted", purgemessages.size(), currentmessagecount), false);
 			}
 		});
 
-		addOption(new OptionData(OptionType.INTEGER, "amount", "Enter an amount between 1-200")
-				.setRequiredRange(1, 200)
+		addOption(new OptionData(OptionType.INTEGER, "amount", "Enter an amount between 1-200").setRequiredRange(1, 200)
 				.setRequired(true));
 	}
 }

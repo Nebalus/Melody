@@ -6,8 +6,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -23,12 +23,12 @@ public class PlayCommand extends SlashCommand {
 	public PlayCommand() {
 		super("play");
 		setDescription("Plays a song.");
-		addOption(new OptionData(OptionType.STRING, "query", "Please enter a (song name/url)")
-				.setRequired(true));
+		addOption(new OptionData(OptionType.STRING, "query", "Please enter a (song name/url)").setRequired(true));
 
 		setExecuter(new SlashInteractionExecuter() {
 			@Override
-			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity,
+					SlashCommandInteractionEvent event) {
 				GuildVoiceState state;
 				AudioChannel ac;
 				if ((state = member.getVoiceState()) == null && (ac = state.getChannel()) == null) {

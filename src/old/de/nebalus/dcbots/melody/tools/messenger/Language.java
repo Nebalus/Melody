@@ -4,8 +4,7 @@ import old.de.nebalus.dcbots.melody.tools.datamanager.FileResource;
 
 public enum Language {
 
-	ENGLISH("English", "US", 0, FileResource.LANG_ENGLISH),
-	GERMAN("Deutsch", "DE", 1, FileResource.LANG_GERMAN);
+	ENGLISH("English", "US", 0, FileResource.LANG_ENGLISH), GERMAN("Deutsch", "DE", 1, FileResource.LANG_GERMAN);
 
 	final String name;
 	final String code;

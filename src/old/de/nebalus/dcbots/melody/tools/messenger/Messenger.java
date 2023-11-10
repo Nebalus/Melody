@@ -44,14 +44,19 @@ public class Messenger {
 	public static void sendErrorMessage(SlashCommandInteractionEvent event, String formatid, Object... args) {
 		if (event.isFromGuild()) {
 			final Guild guild = event.getGuild();
-			sendInteractionMessage(event, generateErrorMessage(Melody.getGuildEntity(guild).getLanguage(), formatid, args).getAsMessageCreateData(), true);
+			sendInteractionMessage(event,
+					generateErrorMessage(Melody.getGuildEntity(guild).getLanguage(), formatid, args)
+							.getAsMessageCreateData(),
+					true);
 		} else {
-			sendInteractionMessage(event, generateErrorMessage(Settings.DEFAULT_LANGUAGE, formatid, args).getAsMessageCreateData(), true);
+			sendInteractionMessage(event,
+					generateErrorMessage(Settings.DEFAULT_LANGUAGE, formatid, args).getAsMessageCreateData(), true);
 		}
 
 	}
 
-	public static void sendInteractionMessage(SlashCommandInteractionEvent event, MessageCreateData mcd, boolean isephemeral) {
+	public static void sendInteractionMessage(SlashCommandInteractionEvent event, MessageCreateData mcd,
+			boolean isephemeral) {
 		final InteractionHook hook = event.getHook();
 
 		if (!event.isAcknowledged()) {
@@ -61,7 +66,8 @@ public class Messenger {
 		hook.sendMessage(mcd).queue();
 	}
 
-	public static void sendInteractionMessage(SlashCommandInteractionEvent event, RemasteredEmbedData red, boolean isephemeral) {
+	public static void sendInteractionMessage(SlashCommandInteractionEvent event, RemasteredEmbedData red,
+			boolean isephemeral) {
 		sendInteractionMessage(event, red.getAsMessageCreateData(), isephemeral);
 	}
 
@@ -75,7 +81,8 @@ public class Messenger {
 		hook.sendMessage(text).queue();
 	}
 
-	public static void sendInteractionMessage(SlashCommandInteractionEvent event, MessageEmbed me, boolean isephemeral) {
+	public static void sendInteractionMessage(SlashCommandInteractionEvent event, MessageEmbed me,
+			boolean isephemeral) {
 		final InteractionHook hook = event.getHook();
 
 		if (!event.isAcknowledged()) {
@@ -85,7 +92,8 @@ public class Messenger {
 		hook.sendMessageEmbeds(me).queue();
 	}
 
-	public static void sendInteractionMessageFormat(SlashCommandInteractionEvent event, String text, boolean isephemeral, Object... args) {
+	public static void sendInteractionMessageFormat(SlashCommandInteractionEvent event, String text,
+			boolean isephemeral, Object... args) {
 		final InteractionHook hook = event.getHook();
 
 		if (!event.isAcknowledged()) {

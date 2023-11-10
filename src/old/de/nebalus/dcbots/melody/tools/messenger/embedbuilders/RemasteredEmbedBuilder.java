@@ -64,6 +64,7 @@ public class RemasteredEmbedBuilder {
 	}
 
 	public RemasteredEmbedData build() {
-		return new RemasteredEmbedData(HEADER_TEXT, BODY_TEXT, FOOTER_TEXT, THUMBNAIL_URL, COLOR_SCHEME, ISCOLORLINEENABLED);
+		return new RemasteredEmbedData(HEADER_TEXT, BODY_TEXT, FOOTER_TEXT, THUMBNAIL_URL, COLOR_SCHEME,
+				ISCOLORLINEENABLED);
 	}
 }
