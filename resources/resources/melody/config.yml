@@ -1,8 +1,20 @@
-{
-	"bottoken" : "INSERT TOKEN",
-	"debugmode" : true,
-	"autoupdate" : true,
-	"ratelimitmaxrequests" : 3,
-	"ratelimititerationduration" : 5000,
-	"maindiscordguild" : -1
-}
+# This is the Config for this bot
+
+# Insert your bot token here
+token: null
+
+maindiscordguild: -1
+
+debugmode: true
+
+ownerids:
+   - 801856678063898644
+
+mysql:
+   enabled: false
+   hostname: null
+   port: null
+   username: null
+   password: null
+   database: null
+   

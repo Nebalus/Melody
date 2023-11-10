@@ -94,7 +94,8 @@ public class SlashCommand {
 	protected void addSubCommand(SlashSubCommand subcommand) {
 		final SubcommandData subcommanddata = subcommand.getSubCommandData();
 
-		ConsoleLogger.debug("CMD-BUILDER", "Loading SUBCMD | PATH: " + getPrefix() + "/" + subcommanddata.getName() + " | NUMOPTIONSPROVIDED: " + subcommanddata.getOptions().size());
+		ConsoleLogger.debug("CMD-BUILDER", "Loading SUBCMD | PATH: " + getPrefix() + "/" + subcommanddata.getName()
+				+ " | NUMOPTIONSPROVIDED: " + subcommanddata.getOptions().size());
 
 		subcommands.put(subcommanddata.getName(), subcommand);
 		slashcommanddata.addSubcommands(subcommanddata);
@@ -112,7 +113,8 @@ public class SlashCommand {
 		for (SlashSubCommand ssc : subcommandgroup.getServerSubCommands()) {
 			final String path = subcommandgroup.getName() + "/" + ssc.getSubCommandData().getName();
 
-			ConsoleLogger.debug("CMD-BUILDER", "Loading SUBCMD | PATH: " + getPrefix() + "/" + path + " | NUMOPTIONSPROVIDED: " + ssc.getSubCommandData().getOptions().size());
+			ConsoleLogger.debug("CMD-BUILDER", "Loading SUBCMD | PATH: " + getPrefix() + "/" + path
+					+ " | NUMOPTIONSPROVIDED: " + ssc.getSubCommandData().getOptions().size());
 
 			subcommands.put(path, ssc);
 		}

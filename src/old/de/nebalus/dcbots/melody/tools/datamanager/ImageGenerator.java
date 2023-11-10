@@ -14,8 +14,10 @@ public class ImageGenerator {
 
 	public static File generateColorLine(Color color) {
 		try {
-			final String filename = String.format("#%02X%02X%02X.png", color.getRed(), color.getGreen(), color.getBlue());
-			final File colorlinefile = new File(Melody.getDataManager().getTempDirectory().getPath() + "/colorlines/" + filename);
+			final String filename = String.format("#%02X%02X%02X.png", color.getRed(), color.getGreen(),
+					color.getBlue());
+			final File colorlinefile = new File(
+					Melody.getDataManager().getTempDirectory().getPath() + "/colorlines/" + filename);
 
 			if (!colorlinefile.exists()) {
 				BufferedImage buffcolorline = ImageIO.read(FileResource.IMG_COLORLINE.getFile());

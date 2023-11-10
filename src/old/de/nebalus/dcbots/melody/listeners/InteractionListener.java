@@ -43,7 +43,8 @@ public final class InteractionListener extends ListenerAdapter {
 			break;
 
 		default:
-			event.reply("The Executable from the CMDPATH:" + cmdpath + " could not be found!!!").setEphemeral(true).queue();
+			event.reply("The Executable from the CMDPATH:" + cmdpath + " could not be found!!!").setEphemeral(true)
+					.queue();
 			return;
 		}
 
@@ -61,7 +62,8 @@ public final class InteractionListener extends ListenerAdapter {
 				}
 			} else if (!ge.ratelimitmsgsend) {
 				ge.ratelimitmsgsend = true;
-				Messenger.sendErrorMessage(event, "ratelimit", Melody.getConfig().RATELIMITREQUEST, Melody.getConfig().RATELIMITITERATIONDURATION);
+				Messenger.sendErrorMessage(event, "ratelimit", Melody.getConfig().RATELIMITREQUEST,
+						Melody.getConfig().RATELIMITITERATIONDURATION);
 			}
 		} else if (!cmd.isGuildOnly()) {
 

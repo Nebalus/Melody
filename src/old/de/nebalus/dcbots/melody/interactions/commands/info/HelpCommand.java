@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -28,7 +28,8 @@ public class HelpCommand extends SlashCommand {
 
 		setExecuter(new SlashInteractionExecuter() {
 			@Override
-			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity,
+					SlashCommandInteractionEvent event) {
 				String searchquery = null;
 				if (event.getOption("query") != null) {
 					searchquery = event.getOption("query").getAsString();
@@ -83,10 +84,12 @@ public class HelpCommand extends SlashCommand {
 			}
 
 			if (!everyonecmds.isEmpty()) {
-				builder.addField("**Everyone Commands**", everyonecmds.toString().replace("[", "").replace("]", ""), false);
+				builder.addField("**Everyone Commands**", everyonecmds.toString().replace("[", "").replace("]", ""),
+						false);
 			}
 
-			builder.addField("**Command Dashboard**", "[View Commands](" + Url.COMMANDS.toString() + "?p=" + Settings.CMD_PREFIX + ")", false);
+			builder.addField("**Command Dashboard**",
+					"[View Commands](" + Url.COMMANDS.toString() + "?p=" + Settings.CMD_PREFIX + ")", false);
 			builder.setFooter("Type '" + Settings.CMD_PREFIX + "help <CommandName>' for details on a command.");
 
 		} else {

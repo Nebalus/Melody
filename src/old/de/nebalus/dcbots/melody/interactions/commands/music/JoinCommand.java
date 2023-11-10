@@ -3,8 +3,8 @@ package old.de.nebalus.dcbots.melody.interactions.commands.music;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import old.de.nebalus.dcbots.melody.core.constants.Build;
 import old.de.nebalus.dcbots.melody.core.constants.Melody;
@@ -24,7 +24,8 @@ public class JoinCommand extends SlashCommand {
 
 		setExecuter(new SlashInteractionExecuter() {
 			@Override
-			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity,
+					SlashCommandInteractionEvent event) {
 				final GuildVoiceState mstate;
 				final AudioChannel mac;
 
@@ -36,7 +37,8 @@ public class JoinCommand extends SlashCommand {
 				AudioController controller = Melody.getMusicManager().getController(guild.getIdLong());
 
 				controller.join(mac);
-				Messenger.sendInteractionMessage(event, Melody.formatMessage(guild, "music.bot-join-vc", mac.getName()), false);
+				Messenger.sendInteractionMessage(event, Melody.formatMessage(guild, "music.bot-join-vc", mac.getName()),
+						false);
 			}
 		});
 	}

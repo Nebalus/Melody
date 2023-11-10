@@ -94,8 +94,8 @@ public final class Melody {
 		entityMan = new EntityManager();
 
 		cmdMan = new CommandManager();
-		cmdMan.registerCommands(new StaymodeCommand(), new JoinCommand(), new CleanCommand(), new InfoCommand(), new HelpCommand(),
-				new PingCommand(), new InviteCommand(), new LoopCommand(), new FeedbackCommand());
+		cmdMan.registerCommands(new StaymodeCommand(), new JoinCommand(), new CleanCommand(), new InfoCommand(),
+				new HelpCommand(), new PingCommand(), new InviteCommand(), new LoopCommand(), new FeedbackCommand());
 
 		AudioSourceManagers.registerRemoteSources(audioplayerMan);
 		AudioSourceManagers.registerLocalSource(audioplayerMan);
@@ -103,7 +103,8 @@ public final class Melody {
 
 		runThreadLoop();
 
-		ConsoleLogger.info(Build.NAME + " has been successfully loaded (" + (System.currentTimeMillis() - startuptimestamp) + "ms)");
+		ConsoleLogger.info(Build.NAME + " has been successfully loaded ("
+				+ (System.currentTimeMillis() - startuptimestamp) + "ms)");
 	}
 
 	private void runThreadLoop() {
@@ -176,7 +177,10 @@ public final class Melody {
 							musicguilds++;
 						}
 					}
-					jda.getPresence().setActivity(Activity.streaming("music on " + musicguilds + " server" + (musicguilds < 1 ? "s" : "") + "!", "https://twitch.tv/nebalus"));
+					jda.getPresence()
+							.setActivity(Activity.streaming(
+									"music on " + musicguilds + " server" + (musicguilds < 1 ? "s" : "") + "!",
+									"https://twitch.tv/nebalus"));
 					break;
 				case 1:
 					jda.getPresence().setActivity(Activity.watching(Build.VERSION));

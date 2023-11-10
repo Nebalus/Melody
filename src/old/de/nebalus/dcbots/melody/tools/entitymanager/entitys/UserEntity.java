@@ -22,7 +22,8 @@ public final class UserEntity extends Entity {
 		if (database.isConnected()) {
 			try {
 				for (UserEntityDBOptions option : UserEntityDBOptions.values()) {
-					final DatabaseValueContainer dvc = new DatabaseValueContainer(option.name(), option.canbeexported, option.defaultvalue);
+					final DatabaseValueContainer dvc = new DatabaseValueContainer(option.name(), option.canbeexported,
+							option.defaultvalue);
 					createDatabaseValueContainer(dvc);
 				}
 
@@ -65,7 +66,8 @@ public final class UserEntity extends Entity {
 				} else {
 					ConsoleLogger.info("UserEntity", "Loading USERID:" + userid + " for the first time!");
 					// loads the guild in the database
-					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO userdata(PK_userid, " + UserEntityDBOptions.FIRSTTIMELOADED.databasename + ") VALUES(?,?)");
+					PreparedStatement ps = database.getConnection().prepareStatement("INSERT INTO userdata(PK_userid, "
+							+ UserEntityDBOptions.FIRSTTIMELOADED.databasename + ") VALUES(?,?)");
 					ps.setLong(1, userid);
 					ps.setLong(2, System.currentTimeMillis());
 					ps.executeUpdate();
@@ -83,8 +85,7 @@ public final class UserEntity extends Entity {
 		FIRSTTIMEHEARD(System.currentTimeMillis(), "firsttimeheard", false),
 		LASTTIMELOADED(System.currentTimeMillis(), "lasttimeloaded", true),
 		LASTTIMEHEARD(System.currentTimeMillis(), "lasttimeheard", true),
-		FAVORITPLAYLISTID(0, "FK_favoriteplaylistid", true),
-		HEARDTIME(0, "heardtime", true);
+		FAVORITPLAYLISTID(0, "FK_favoriteplaylistid", true), HEARDTIME(0, "heardtime", true);
 
 		final Object defaultvalue;
 		final String databasename;

@@ -1,9 +1,7 @@
 package old.de.nebalus.dcbots.melody.tools.audioplayer.enums;
 
 public enum LoopMode {
-	QUEUE("queue"),
-	SONG("song"),
-	NONE("off");
+	QUEUE("queue"), SONG("song"), NONE("off");
 
 	final String textformat;
 

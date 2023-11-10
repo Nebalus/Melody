@@ -2,7 +2,7 @@ package old.de.nebalus.dcbots.melody.interactions.commands.info;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import old.de.nebalus.dcbots.melody.core.constants.Build;
 import old.de.nebalus.dcbots.melody.core.constants.Melody;
@@ -21,9 +21,11 @@ public class PingCommand extends SlashCommand {
 
 		setExecuter(new SlashInteractionExecuter() {
 			@Override
-			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity, SlashCommandInteractionEvent event) {
+			public void executeGuild(Member member, MessageChannel channel, Guild guild, GuildEntity guildentity,
+					SlashCommandInteractionEvent event) {
 				final long gatewayping = channel.getJDA().getGatewayPing();
-				channel.getJDA().getRestPing().queue((time) -> Messenger.sendInteractionMessageFormat(event, Melody.formatMessage(guild, "command.info.ping"), true, time, gatewayping));
+				channel.getJDA().getRestPing().queue((time) -> Messenger.sendInteractionMessageFormat(event,
+						Melody.formatMessage(guild, "command.info.ping"), true, time, gatewayping));
 			}
 		});
 	}

@@ -9,6 +9,7 @@ import de.nebalus.framework.gfw.modules.dcbot.DCBotModule;
 
 public class MelodyAppFactory {
 
+	@SuppressWarnings("unchecked")
 	public static MelodyApp build(String[] args) throws Exception {
 		// Loads and predefines some stuff for the GFW
 		GFWBuilder gfwBuilder = new GFWBuilder();

@@ -23,7 +23,8 @@ public class RemasteredEmbedData {
 	private final boolean ISCOLORLINEENABLED;
 	private final MessageEmbed MESSAGEEMBED;
 
-	public RemasteredEmbedData(String header, String body, String footer, String thumburl, Color colorscheme, boolean iscolorlineenabled) {
+	public RemasteredEmbedData(String header, String body, String footer, String thumburl, Color colorscheme,
+			boolean iscolorlineenabled) {
 		HEADER_TEXT = header;
 		BODY_TEXT = body;
 		FOOTER_TEXT = footer;
