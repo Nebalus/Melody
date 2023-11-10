@@ -7,18 +7,15 @@ public class MelodyCore {
 	private static MelodyApp melodyApp;
 
 	public static void main(String[] args) {
-		// Generates the Melody Application
-		melodyApp = MelodyAppFactory.build(args);
-
 		try {
+			// Generates the Melody Application
+			melodyApp = MelodyAppFactory.build(args);
 			melodyApp.go();
 		} catch (Exception e) {
 			e.printStackTrace();
 
-			GFW gFW = melodyApp.getGFW();
-
-			if (gFW != null && gFW.isInitialized()) {
-				gFW.getLogger().logError(e);
+			if (GFW.isInitialized()) {
+				GFW.getLogger().logError(e);
 			}
 
 			Runtime.getRuntime().exit(-1);
