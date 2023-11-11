@@ -6,12 +6,12 @@ import de.nebalus.dcbots.melody.MelodyBotInstance;
 import de.nebalus.framework.gfw.modules.dcbot.api.DCBotInstance;
 import net.dv8tion.jda.api.entities.Guild;
 
-public class AudioManager {
+public class MusicManager {
 
 	private final MelodyBotInstance botInstance;
 	private final ConcurrentHashMap<Long, GuildAudioController> controllers;
 	
-	public AudioManager(MelodyBotInstance botInstance) {
+	public MusicManager(MelodyBotInstance botInstance) {
 		this.botInstance = botInstance;
 		controllers = new ConcurrentHashMap<>();
 	}
