@@ -7,28 +7,23 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 public class AudioLoadResult implements AudioLoadResultHandler {
 
+	
+	
 	@Override
 	public void trackLoaded(AudioTrack track) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void playlistLoaded(AudioPlaylist playlist) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void noMatches() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void loadFailed(FriendlyException exception) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void loadFailed(FriendlyException exception) {}
 }

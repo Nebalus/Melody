@@ -1,5 +1,8 @@
 package de.nebalus.dcbots.melody.audioplayer;
 
+import java.util.Arrays;
+
+import com.github.natanbc.lavadsp.rotation.RotationPcmAudioFilter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import de.nebalus.dcbots.melody.MelodyBotInstance;
@@ -17,11 +20,18 @@ public class GuildAudioController {
 		player = botInstance.getAudioPlayerManager().createPlayer();
 		player.addListener(new TrackScheduler());
 		player.setVolume(50);
+		player.setPaused(false);
 		
 		trackQueue = new TrackQueue(this); 
 		guildId = guild.getIdLong();
 		
 		guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
+	
+		player.setFilterFactory(((track, format, output) ->{
+			RotationPcmAudioFilter rotation = new RotationPcmAudioFilter(output, format.sampleRate);
+			rotation.setRotationSpeed(0.25D);
+			return Arrays.asList(rotation);
+		}));
 	}
 	
 	public AudioPlayer getPlayer() {
