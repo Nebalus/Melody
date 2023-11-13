@@ -5,8 +5,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.track.AudioReference;
-
 import de.nebalus.dcbots.melody.audioplayer.GuildAudioController;
 import de.nebalus.dcbots.melody.audioplayer.MusicManager;
 import de.nebalus.dcbots.melody.audioplayer.handler.AudioLoadResult;
@@ -16,7 +14,6 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -81,15 +78,15 @@ public class MelodyBotInstance extends DCBotInstance {
 		
 		String input = "Very True, But Will Give".trim();
 		
-		//audioPlayerManager.loadItem("https://youtu.be/nwF3Kp6d-ls", alr);
-		audioPlayerManager.loadItem(input + "ytsearch:", alr);
+		audioPlayerManager.loadItem("https://youtu.be/nwF3Kp6d-ls", alr);
+		//audioPlayerManager.loadItem(input + "ytsearch:", alr);
 		//audioPlayerManager.loadItem("https://soundcloud.com/sweeetsour/rebuke-anyma-syren-extended-mix-afterlife", alr);
 		//audioPlayerManager.loadItem(refrence, alr);
 		//audioPlayerManager.loadItem("https://www.twitch.tv/bastighg", alr);
 		
-		TimeUnit.SECONDS.sleep(5);
+		melodyApp.getLogger().logInfo("MelodyBotInstance loaded");
 		
-		manager.closeAudioConnection();
+		TimeUnit.SECONDS.sleep(5);
 		
 		unload();
 	}
@@ -102,12 +99,15 @@ public class MelodyBotInstance extends DCBotInstance {
 		// Shutdowns the JDA Bot Client
 		JDA jda = getJDA();
 		if (jda != null) {
+			melodyApp.getLogger().logInfo("JDA is shuttingdown...");
 			jda.shutdown();
 			if (!jda.awaitShutdown(Duration.ofSeconds(10))) {
+				melodyApp.getLogger().logWarning("JDA took to long to shutdown. Executing force shutdown");
 				jda.shutdownNow();
 				jda.awaitShutdown();
 			}
 		}
+		melodyApp.getLogger().logInfo("MelodyBotInstance unloaded");
 	}
 
 	public AudioPlayerManager getAudioPlayerManager() {

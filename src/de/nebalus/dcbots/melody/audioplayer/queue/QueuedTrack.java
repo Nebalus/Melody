@@ -2,18 +2,18 @@ package de.nebalus.dcbots.melody.audioplayer.queue;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import de.nebalus.dcbots.melody.audioplayer.enums.Service;
+import de.nebalus.dcbots.melody.audioplayer.enums.StreamingService;
 
 public class QueuedTrack {
 
 	private AudioTrack audioTrack;
 	private Long requestorId;
-	private Service service;
+	private StreamingService streamingService;
 
-	public QueuedTrack(AudioTrack audioTrack, Long requestorId, Service service) {
+	public QueuedTrack(AudioTrack audioTrack, Long requestorId, StreamingService streamingService) {
 		this.audioTrack = audioTrack;
 		this.requestorId = requestorId;
-		this.service = service;
+		this.streamingService = streamingService;
 	}
 	
 	public AudioTrack getTrack() {
@@ -24,7 +24,7 @@ public class QueuedTrack {
 		return requestorId;
 	}
 	
-	public Service getService() {
-		return service;
+	public StreamingService getService() {
+		return streamingService;
 	}
 }

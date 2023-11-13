@@ -34,5 +34,7 @@ public class AudioLoadResult implements AudioLoadResultHandler {
 	}
 
 	@Override
-	public void loadFailed(FriendlyException exception) {}
+	public void loadFailed(FriendlyException exception) {
+		MelodyCore.getMelodyApp().getLogger().logError(exception);
+	}
 }
