@@ -27,11 +27,13 @@ public class GuildAudioController {
 		
 		guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 	
+		/*
 		player.setFilterFactory(((track, format, output) ->{
 			RotationPcmAudioFilter rotation = new RotationPcmAudioFilter(output, format.sampleRate);
 			rotation.setRotationSpeed(0.25D);
 			return Arrays.asList(rotation);
 		}));
+		*/
 	}
 	
 	public AudioPlayer getPlayer() {
