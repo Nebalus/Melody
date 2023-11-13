@@ -64,8 +64,8 @@ public class MelodyBotInstance extends DCBotInstance {
 //			}
 //		}
 		
-		long testGuild = 958332676023128095l;
-		long testVc = 1035155614566977576l;
+		Long testGuild = 958332676023128095l;
+		Long testVc = 1035155614566977576l;
 		Guild guild = getJDA().getGuildById(testGuild);
 		VoiceChannel vc = guild.getVoiceChannelById(testVc);
 		
