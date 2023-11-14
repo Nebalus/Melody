@@ -69,7 +69,7 @@ public class MelodyBotInstance extends DCBotInstance {
 //		}
 		
 		Long testGuild = 958332676023128095l;
-		Long testVc = 1035155614566977576l;
+		Long testVc = 1065300858193068052l;
 		Guild guild = getJDA().getGuildById(testGuild);
 		VoiceChannel vc = guild.getVoiceChannelById(testVc);
 		
@@ -88,7 +88,7 @@ public class MelodyBotInstance extends DCBotInstance {
 		//audioPlayerManager.loadItem(refrence, alr);
 		//audioPlayerManager.loadItem("https://www.twitch.tv/bastighg", alr);
 		
-		melodyApp.getLogger().logInfo("MelodyBotInstance loaded");
+		melodyApp.getLogger().logInfo("Melody loaded");
 		
 		TimeUnit.SECONDS.sleep(5);
 		
@@ -103,7 +103,7 @@ public class MelodyBotInstance extends DCBotInstance {
 		// Shutdowns the JDA Bot Client
 		JDA jda = getJDA();
 		if (jda != null) {
-			melodyApp.getLogger().logInfo("JDA is shuttingdown...");
+			melodyApp.getLogger().logInfo("Shutingdown JDA instance...");
 			jda.shutdown();
 			if (!jda.awaitShutdown(Duration.ofSeconds(10))) {
 				melodyApp.getLogger().logWarning("JDA took to long to shutdown. Executing force shutdown");
@@ -111,7 +111,8 @@ public class MelodyBotInstance extends DCBotInstance {
 				jda.awaitShutdown();
 			}
 		}
-		melodyApp.getLogger().logInfo("MelodyBotInstance unloaded");
+		
+		melodyApp.getLogger().logInfo("Melody unloaded");
 	}
 
 	public AudioPlayerManager getAudioPlayerManager() {
