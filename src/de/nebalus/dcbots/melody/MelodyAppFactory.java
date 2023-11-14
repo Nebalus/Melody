@@ -4,7 +4,6 @@ import java.io.File;
 
 import de.nebalus.framework.gfw.api.GFW;
 import de.nebalus.framework.gfw.api.GFWBuilder;
-import de.nebalus.framework.gfw.api.GFWBuilder.GFWBuildData;
 import de.nebalus.framework.gfw.modules.dcbot.DCBotModule;
 
 public class MelodyAppFactory {
@@ -17,11 +16,11 @@ public class MelodyAppFactory {
 		gfwBuilder.setModulesToInit(DCBotModule.class);
 		gfwBuilder.showTimestampInConsole(true);
 		gfwBuilder.showColouredTextInConsole(true);
+		gfwBuilder.allowCommandExecutionInConsole(true);
 		gfwBuilder.setExecutionDirectory(new File(MelodyApp.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getAbsoluteFile().getParentFile());
-		GFWBuildData gfwBuildData = gfwBuilder.build();
-
+		
 		// Generates a new GFW instance with the with the build data
-		GFW.initialize(gfwBuildData);
+		GFW.initialize(gfwBuilder.build());
 
 		return new MelodyApp();
 	}
