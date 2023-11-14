@@ -19,6 +19,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class MelodyBotInstance extends DCBotInstance {
 
@@ -36,10 +37,13 @@ public class MelodyBotInstance extends DCBotInstance {
 		
 		melodyApp.getLogger().logInfo("Building JDA instance...");
 		
-		JDABuilder builder = JDABuilder.create(GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MEMBERS,
-				GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_VOICE_STATES);
+		JDABuilder builder = JDABuilder.create(
+				GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MEMBERS,
+				GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_VOICE_STATES
+				);
 
 		builder.setToken("");
+		builder.disableCache(CacheFlag.EMOJI, CacheFlag.STICKER, CacheFlag.SCHEDULED_EVENTS);
 		builder.setStatus(OnlineStatus.OFFLINE);
 		builder.setActivity(Activity.playing("Relaunch coming soon!"));
 		builder.setMemberCachePolicy(MemberCachePolicy.VOICE.or(MemberCachePolicy.ONLINE));
