@@ -70,6 +70,14 @@
 		<scope>compile</scope>
 	</dependency>
 
+	 <!-- local Framework Module -->
+	 <dependency>	
+		<groupId>de.nebalus.framework.gfw.modules</groupId>
+		<artifactId>GraphicaModule</artifactId>
+		<version>dev</version>
+		<scope>compile</scope>
+	</dependency>
+
 	<!-- Unit Testing -->
 	<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 	<dependency>
