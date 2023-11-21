@@ -6,7 +6,8 @@
   <version>dev</version>
   <name>Melody</name>
   <description>An Opensource Musicbot for Discord!</description>
-  
+  <packaging>jar</packaging>
+	
   <developers>
     <developer>
       <name>Nebalus</name>
