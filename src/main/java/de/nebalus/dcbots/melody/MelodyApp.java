@@ -2,26 +2,24 @@ package de.nebalus.dcbots.melody;
 
 import de.nebalus.framework.gfw.api.GFW;
 import de.nebalus.framework.gfw.api.service.file.FileService;
-import de.nebalus.framework.gfw.api.service.logging.LogService;
 import de.nebalus.framework.gfw.api.service.logging.Logger;
 import de.nebalus.framework.gfw.api.service.module.ModuleService;
 import de.nebalus.framework.gfw.modules.dcbot.DCBotModule;
 
 public class MelodyApp {
 
+	private GFW gfw;
 	private Logger appLogger;
-
-	public MelodyApp() {
+	
+	public MelodyApp(GFW gfw, Logger appLogger) {
+		this.gfw = gfw;
+		this.appLogger = appLogger;
 	}
 
 	protected void go() throws Exception {
 		// Gets some essential services from the GFW instance
-		FileService fileService = GFW.getFileService();
-		LogService logService = GFW.getLogService();
-		ModuleService moduleService = GFW.getModuleService();
-
-		// Gets the own logger
-		appLogger = logService.buildLogger(getClass().getSimpleName(), true);
+		FileService fileService = gfw.getFileService();
+		ModuleService moduleService = gfw.getModuleService();
 
 		// Gets the DCBotModule
 		DCBotModule dcbot = (DCBotModule) moduleService.getModule(DCBotModule.class);
@@ -31,6 +29,10 @@ public class MelodyApp {
 		dcbot.loadBotInstance("melody", botInstance);
 	}
 
+	public GFW getGFW() {
+		return gfw;
+	}
+	
 	public Logger getLogger() {
 		return appLogger;
 	}
