@@ -15,7 +15,7 @@ public class MelodyCore {
 			e.printStackTrace();
 
 			if (melodyApp != null) {
-				GFW gfw = melodyApp.getGFW();	
+				GFW gfw = melodyApp.getGFW();
 				gfw.getLogger().logError(e);
 			}
 

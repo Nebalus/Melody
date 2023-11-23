@@ -24,23 +24,22 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 public class MelodyBotInstance extends DCBotInstance {
 
 	private final MelodyApp melodyApp;
-	
+
 	private AudioPlayerManager audioPlayerManager;
 	private MusicManager musicManager;
-	
+
 	public MelodyBotInstance(MelodyApp melodyApp) {
 		this.melodyApp = melodyApp;
 	}
 
 	@Override
 	protected void onLoad() throws Exception {
-		
+
 		melodyApp.getLogger().logInfo("Building JDA instance...");
-		
+
 		JDABuilder builder = JDABuilder.create(
 				GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MEMBERS,
-				GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_VOICE_STATES
-				);
+				GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_VOICE_STATES);
 
 		builder.setToken("");
 		builder.disableCache(CacheFlag.EMOJI, CacheFlag.STICKER, CacheFlag.SCHEDULED_EVENTS);
@@ -54,10 +53,10 @@ public class MelodyBotInstance extends DCBotInstance {
 		finalizeJDABuildProcess(builder);
 
 		melodyApp.getLogger().logInfo("JDA Succesfully build");
-		
+
 		audioPlayerManager = new DefaultAudioPlayerManager();
 		musicManager = new MusicManager(this);
-		
+
 		// Print some information about the bot
 //		melodyApp.getLogger().log("This bot is connected as '" + getJDA().getSelfUser().getAsTag() + "'");
 //		melodyApp.getLogger().log("The bot is present on these guilds:");
@@ -67,31 +66,32 @@ public class MelodyBotInstance extends DCBotInstance {
 //				melodyApp.getLogger().log("\t\t- " + member.getEffectiveName() + " ~ " + member.getIdLong());
 //			}
 //		}
-		
+
 		Long testGuild = 958332676023128095l;
 		Long testVc = 1065300858193068052l;
 		Guild guild = getJDA().getGuildById(testGuild);
 		VoiceChannel vc = guild.getVoiceChannelById(testVc);
-		
+
 		AudioManager manager = guild.getAudioManager();
 		manager.setSelfDeafened(true);
 		manager.openAudioConnection(vc);
-		
+
 		GuildAudioController gac = musicManager.getController(testGuild);
 		AudioLoadResult alr = new AudioLoadResult(gac);
-		
+
 		String input = "Very True, But Will Give".trim();
-		
+
 		audioPlayerManager.loadItem("https://youtu.be/nwF3Kp6d-ls", alr);
-		//audioPlayerManager.loadItem(input + "ytsearch:", alr);
-		//audioPlayerManager.loadItem("https://soundcloud.com/sweeetsour/rebuke-anyma-syren-extended-mix-afterlife", alr);
-		//audioPlayerManager.loadItem(refrence, alr);
-		//audioPlayerManager.loadItem("https://www.twitch.tv/bastighg", alr);
-		
+		// audioPlayerManager.loadItem(input + "ytsearch:", alr);
+		// audioPlayerManager.loadItem("https://soundcloud.com/sweeetsour/rebuke-anyma-syren-extended-mix-afterlife",
+		// alr);
+		// audioPlayerManager.loadItem(refrence, alr);
+		// audioPlayerManager.loadItem("https://www.twitch.tv/bastighg", alr);
+
 		melodyApp.getLogger().logInfo("Melody loaded");
-		
+
 		TimeUnit.SECONDS.sleep(5);
-		
+
 		unload();
 	}
 
@@ -99,7 +99,7 @@ public class MelodyBotInstance extends DCBotInstance {
 	protected void onUnload() throws Exception {
 		// Shutdowns the Audio Client
 		audioPlayerManager.shutdown();
-		
+
 		// Shutdowns the JDA Bot Client
 		JDA jda = getJDA();
 		if (jda != null) {
@@ -111,14 +111,14 @@ public class MelodyBotInstance extends DCBotInstance {
 				jda.awaitShutdown();
 			}
 		}
-		
+
 		melodyApp.getLogger().logInfo("Melody unloaded");
 	}
 
 	public AudioPlayerManager getAudioPlayerManager() {
 		return audioPlayerManager;
 	}
-	
+
 	public MusicManager getMusicManager() {
 		return musicManager;
 	}

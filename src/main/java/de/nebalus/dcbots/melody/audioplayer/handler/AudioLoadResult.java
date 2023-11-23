@@ -11,11 +11,11 @@ import de.nebalus.dcbots.melody.audioplayer.GuildAudioController;
 public class AudioLoadResult implements AudioLoadResultHandler {
 
 	public GuildAudioController controller;
-	
+
 	public AudioLoadResult(GuildAudioController controller) {
 		this.controller = controller;
 	}
-	
+
 	@Override
 	public void trackLoaded(AudioTrack track) {
 		MelodyCore.getMelodyApp().getLogger().log("trackLoaded");
