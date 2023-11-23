@@ -2,8 +2,10 @@ package de.nebalus.dcbots.melody;
 
 import java.io.File;
 
-import de.nebalus.framework.gfw.api.GFW;
+import de.nebalus.framework.gfw.api.service.logging.LogService;
+import de.nebalus.framework.gfw.api.service.logging.Logger;
 import de.nebalus.framework.gfw.api.GFWBuilder;
+import de.nebalus.framework.gfw.api.GFW;
 import de.nebalus.framework.gfw.modules.dcbot.DCBotModule;
 
 public class MelodyAppFactory {
@@ -20,8 +22,12 @@ public class MelodyAppFactory {
 		gfwBuilder.setExecutionDirectory(new File(MelodyApp.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getAbsoluteFile().getParentFile());
 		
 		// Generates a new GFW instance with the with the build data
-		GFW.initialize(gfwBuilder.build());
-
-		return new MelodyApp();
+		GFW gfw = gfwBuilder.build();
+		gfw.initialize();
+		
+		LogService logService = gfw.getLogService();
+		Logger appLogger = logService.buildLogger(MelodyApp.class.getSimpleName(), true);
+		
+		return new MelodyApp(gfw, appLogger);
 	}
 }

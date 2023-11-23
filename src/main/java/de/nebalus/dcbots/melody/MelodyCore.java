@@ -14,8 +14,9 @@ public class MelodyCore {
 		} catch (Exception e) {
 			e.printStackTrace();
 
-			if (GFW.isInitialized()) {
-				GFW.getLogger().logError(e);
+			if (melodyApp != null) {
+				GFW gfw = melodyApp.getGFW();	
+				gfw.getLogger().logError(e);
 			}
 
 			Runtime.getRuntime().exit(-1);
