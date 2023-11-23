@@ -10,7 +10,7 @@ public class MelodyApp {
 
 	private GFW gfw;
 	private Logger appLogger;
-	
+
 	public MelodyApp(GFW gfw, Logger appLogger) {
 		this.gfw = gfw;
 		this.appLogger = appLogger;
@@ -32,7 +32,7 @@ public class MelodyApp {
 	public GFW getGFW() {
 		return gfw;
 	}
-	
+
 	public Logger getLogger() {
 		return appLogger;
 	}

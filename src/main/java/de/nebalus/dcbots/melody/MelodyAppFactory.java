@@ -20,14 +20,14 @@ public class MelodyAppFactory {
 		gfwBuilder.showColouredTextInConsole(true);
 		gfwBuilder.allowCommandExecutionInConsole(true);
 		gfwBuilder.setExecutionDirectory(new File(MelodyApp.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getAbsoluteFile().getParentFile());
-		
+
 		// Generates a new GFW instance with the with the build data
 		GFW gfw = gfwBuilder.build();
 		gfw.initialize();
-		
+
 		LogService logService = gfw.getLogService();
 		Logger appLogger = logService.buildLogger(MelodyApp.class.getSimpleName(), true);
-		
+
 		return new MelodyApp(gfw, appLogger);
 	}
 }

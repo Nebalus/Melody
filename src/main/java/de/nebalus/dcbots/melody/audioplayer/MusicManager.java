@@ -10,32 +10,32 @@ public class MusicManager {
 
 	private final MelodyBotInstance botInstance;
 	private final ConcurrentHashMap<Long, GuildAudioController> controllers;
-	
+
 	public MusicManager(MelodyBotInstance botInstance) {
 		this.botInstance = botInstance;
 		controllers = new ConcurrentHashMap<>();
 	}
-	
+
 	public GuildAudioController getController(long guildid) {
 		if (controllers.containsKey(guildid)) {
 			return controllers.get(guildid);
-		} 
+		}
 
 		return createController(botInstance, guildid);
 	}
-	
+
 	public GuildAudioController createController(MelodyBotInstance botInstance, long guildId) {
 		Guild guild = botInstance.getJDA().getGuildById(guildId);
 		GuildAudioController gac = new GuildAudioController(botInstance, guild);
 		controllers.put(guildId, gac);
 		return gac;
 	}
-	
+
 	public boolean revokeController(long guildid) {
 		if (!controllers.containsKey(guildid)) {
 			return false;
 		}
-		
+
 		controllers.remove(guildid);
 		return true;
 	}

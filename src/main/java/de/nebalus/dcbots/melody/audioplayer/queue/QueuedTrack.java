@@ -15,15 +15,15 @@ public class QueuedTrack {
 		this.requestorId = requestorId;
 		this.streamingService = streamingService;
 	}
-	
+
 	public AudioTrack getTrack() {
 		return audioTrack;
 	}
-	
+
 	public Long getRequestorId() {
 		return requestorId;
 	}
-	
+
 	public StreamingService getService() {
 		return streamingService;
 	}
