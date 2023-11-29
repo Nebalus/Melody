@@ -49,9 +49,14 @@ public class MelodyBotInstance extends DCBotInstance {
 		builder.setChunkingFilter(ChunkingFilter.NONE);
 		builder.setLargeThreshold(50);
 		builder.addEventListeners();
-
 		finalizeJDABuildProcess(builder);
 
+        getJDA().getRestPing().queue(ping ->
+        	melodyApp.getLogger().logInfo("Logged in with ping: " + ping)
+        );
+		
+		getJDA().awaitReady();
+		
 		melodyApp.getLogger().logInfo("JDA Succesfully build");
 
 		audioPlayerManager = new DefaultAudioPlayerManager();
@@ -66,7 +71,7 @@ public class MelodyBotInstance extends DCBotInstance {
 //				melodyApp.getLogger().log("\t\t- " + member.getEffectiveName() + " ~ " + member.getIdLong());
 //			}
 //		}
-
+/*
 		Long testGuild = 958332676023128095l;
 		Long testVc = 1065300858193068052l;
 		Guild guild = getJDA().getGuildById(testGuild);
@@ -87,7 +92,8 @@ public class MelodyBotInstance extends DCBotInstance {
 		// alr);
 		// audioPlayerManager.loadItem(refrence, alr);
 		// audioPlayerManager.loadItem("https://www.twitch.tv/bastighg", alr);
-
+*/
+		
 		melodyApp.getLogger().logInfo("Melody loaded");
 
 		TimeUnit.SECONDS.sleep(5);
