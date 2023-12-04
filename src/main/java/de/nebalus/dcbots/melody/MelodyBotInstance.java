@@ -17,6 +17,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -37,7 +39,7 @@ public class MelodyBotInstance extends DCBotInstance {
 
 		melodyApp.getLogger().logInfo("Building JDA instance...");
 
-		JDABuilder builder = JDABuilder.create(
+		DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.create(
 				GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MEMBERS,
 				GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_VOICE_STATES);
 
@@ -51,11 +53,13 @@ public class MelodyBotInstance extends DCBotInstance {
 		builder.addEventListeners();
 		finalizeJDABuildProcess(builder);
 
-        getJDA().getRestPing().queue(ping ->
-        	melodyApp.getLogger().logInfo("Logged in with ping: " + ping)
-        );
-		
-		getJDA().awaitReady();
+		for (JDA jda : getShardManager().getShards()) {
+			try {
+				jda.awaitReady();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		melodyApp.getLogger().logInfo("JDA Succesfully build");
 
@@ -107,16 +111,17 @@ public class MelodyBotInstance extends DCBotInstance {
 		audioPlayerManager.shutdown();
 
 		// Shutdowns the JDA Bot Client
-		JDA jda = getJDA();
-		if (jda != null) {
-			melodyApp.getLogger().logInfo("Shutingdown JDA instance...");
-			jda.shutdown();
-			if (!jda.awaitShutdown(Duration.ofSeconds(10))) {
-				melodyApp.getLogger().logWarning("JDA took to long to shutdown. Executing force shutdown");
-				jda.shutdownNow();
-				jda.awaitShutdown();
-			}
-		}
+		ShardManager shardMan = getShardManager();
+		shardMan.shutdown();
+//		for (JDA jda : getShardManager().getShards()) {
+//			melodyApp.getLogger().logInfo("Shutingdown JDA instance...");
+//			jda.shutdown();
+//			if (!jda.awaitShutdown(Duration.ofSeconds(10))) {
+//				melodyApp.getLogger().logWarning("JDA took to long to shutdown. Executing force shutdown");
+//				jda.shutdownNow();
+//				jda.awaitShutdown();
+//			}
+//		}
 
 		melodyApp.getLogger().logInfo("Melody unloaded");
 	}

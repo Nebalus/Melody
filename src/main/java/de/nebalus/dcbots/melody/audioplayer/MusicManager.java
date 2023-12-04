@@ -3,7 +3,6 @@ package de.nebalus.dcbots.melody.audioplayer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.nebalus.dcbots.melody.MelodyBotInstance;
-import de.nebalus.framework.gfw.modules.dcbot.api.DCBotInstance;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class MusicManager {
@@ -25,7 +24,7 @@ public class MusicManager {
 	}
 
 	public GuildAudioController createController(MelodyBotInstance botInstance, long guildId) {
-		Guild guild = botInstance.getJDA().getGuildById(guildId);
+		Guild guild = botInstance.getShardManager().getGuildById(guildId);
 		GuildAudioController gac = new GuildAudioController(botInstance, guild);
 		controllers.put(guildId, gac);
 		return gac;
