@@ -4,7 +4,7 @@
 [codefactor]: https://www.codefactor.io/repository/github/nebalus/melody
 [license]: https://github.com/Nebalus/Melody/tree/master/LICENSE
 
-<img align="right" src="src/master/resources/melody/img/logo.png?raw=true" height="200" width="200">
+<img align="right" src="src/main/resources/melody/img/logo.png?raw=true" height="200" width="200">
 
 # **Melody** (WIP - ALPHA PHASE)
 
