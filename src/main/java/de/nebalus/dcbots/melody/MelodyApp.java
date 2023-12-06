@@ -1,8 +1,8 @@
 package de.nebalus.dcbots.melody;
 
 import de.nebalus.framework.gfw.api.GFW;
+import de.nebalus.framework.gfw.api.logging.Logger;
 import de.nebalus.framework.gfw.api.service.file.FileService;
-import de.nebalus.framework.gfw.api.service.logging.Logger;
 import de.nebalus.framework.gfw.api.service.module.ModuleService;
 import de.nebalus.framework.gfw.modules.dcbot.DCBotModule;
 
