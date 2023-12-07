@@ -1,5 +1,6 @@
 package de.nebalus.dcbots.melody;
 
+import de.nebalus.dcbots.melody.factory.MelodyAppFactory;
 import de.nebalus.framework.gfw.api.GFW;
 
 public class MelodyCore {
@@ -10,7 +11,7 @@ public class MelodyCore {
 		try {
 			// Generates the Melody Application
 			melodyApp = MelodyAppFactory.build(args);
-			melodyApp.go();
+			melodyApp.load();
 		} catch (Exception e) {
 			e.printStackTrace();
 

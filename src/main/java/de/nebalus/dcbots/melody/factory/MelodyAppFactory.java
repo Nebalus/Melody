@@ -1,10 +1,11 @@
-package de.nebalus.dcbots.melody;
+package de.nebalus.dcbots.melody.factory;
 
 import java.io.File;
 
 import de.nebalus.framework.gfw.api.GFWBuilder;
 import de.nebalus.framework.gfw.api.logging.LogService;
 import de.nebalus.framework.gfw.api.logging.Logger;
+import de.nebalus.dcbots.melody.MelodyApp;
 import de.nebalus.framework.gfw.api.GFW;
 import de.nebalus.framework.gfw.modules.dcbot.DCBotModule;
 

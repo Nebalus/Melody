@@ -51,7 +51,7 @@ public class MelodyBotInstance extends DCBotInstance {
 		builder.setChunkingFilter(ChunkingFilter.NONE);
 		builder.setLargeThreshold(50);
 		builder.addEventListeners();
-		finalizeJDABuildProcess(builder);
+		finalizeBuildProcess(builder);
 
 		for (JDA jda : getShardManager().getShards()) {
 			try {
