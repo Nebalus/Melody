@@ -24,7 +24,7 @@ public class MelodyAppFactory {
 
 		// Generates a new GFW instance with the with the build data
 		GFW gfw = gfwBuilder.build();
-		gfw.initialize();
+		gfw.load();
 
 		LogService logService = gfw.getLogService();
 		Logger appLogger = logService.buildLogger(MelodyApp.class.getSimpleName(), true);
